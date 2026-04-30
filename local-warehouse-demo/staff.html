@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>员工端 · 鸿基建材仓</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Noto+Serif+SC:wght@600;700;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --steel: #1e3a5f;
+    --steel-dark: #0f2540;
+    --orange: #ea580c;
+    --orange-light: #fb923c;
+  }
+  body { font-family: 'Inter', sans-serif; background: #0a0f17; color: #f5f5f5; }
+  .font-mono { font-family: 'JetBrains Mono', monospace; }
+  .font-serif { font-family: 'Noto Serif SC', serif; }
+
+  /* Desktop frame */
+  .desktop-frame {
+    display: none;
+    position: fixed; inset: 0;
+    background: linear-gradient(135deg, #1e3a5f 0%, #0a1628 50%, #1a0a05 100%);
+    align-items: center; justify-content: center; gap: 60px;
+    padding: 30px;
+  }
+  .phone-shell {
+    width: 393px; height: 852px;
+    background: #1a1a1a;
+    border-radius: 50px;
+    box-shadow: 0 0 0 12px #111, 0 0 0 14px #2a2a2a, 0 40px 80px rgba(0,0,0,.8);
+    overflow: hidden; position: relative; flex-shrink: 0;
+  }
+  .phone-notch {
+    position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+    width: 120px; height: 34px;
+    background: #111; border-radius: 20px; z-index: 100;
+  }
+  .phone-iframe { width: 100%; height: 100%; border: none; border-radius: 50px; }
+  .frame-side-panel { display: flex; flex-direction: column; gap: 16px; max-width: 280px; }
+  .frame-badge {
+    background: rgba(30,58,95,.4);
+    border: 1px solid rgba(234,88,12,.4);
+    border-radius: 12px; padding: 16px;
+    backdrop-filter: blur(10px);
+  }
+
+  /* Mobile app */
+  .app-bg { background: #0a0f17; min-height: 100vh; }
+  .status-bar {
+    height: 52px;
+    background: #1e3a5f;
+    display: flex; align-items: flex-end; justify-content: space-between;
+    padding: 0 20px 8px;
+    position: sticky; top: 0; z-index: 50;
+  }
+
+  /* Mode tabs (top) */
+  .mode-bar {
+    background: #0f2540;
+    padding: 12px 16px 4px;
+    display: flex; gap: 8px; overflow-x: auto;
+  }
+  .mode-tab {
+    flex-shrink: 0;
+    padding: 8px 16px;
+    border-radius: 99px;
+    font-size: 13px;
+    font-weight: 600;
+    border: 1.5px solid rgba(255,255,255,.15);
+    color: rgba(255,255,255,.6);
+    background: transparent;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .mode-tab.active {
+    background: var(--orange);
+    color: #fff;
+    border-color: var(--orange);
+    box-shadow: 0 4px 12px rgba(234,88,12,.4);
+  }
+
+  /* Scanner */
+  .scanner-wrap {
+    margin: 16px;
+    aspect-ratio: 1.4;
+    background: #000;
+    border-radius: 16px;
+    border: 2px solid rgba(234,88,12,.4);
+    position: relative;
+    overflow: hidden;
+  }
+  .scanner-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(234,88,12,.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(234,88,12,.08) 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
+  .scanner-corners::before,
+  .scanner-corners::after {
+    content: '';
+    position: absolute;
+    width: 30px; height: 30px;
+    border-color: var(--orange);
+    border-style: solid;
+  }
+  .scanner-corners::before { top: 12px; left: 12px; border-width: 3px 0 0 3px; }
+  .scanner-corners::after { bottom: 12px; right: 12px; border-width: 0 3px 3px 0; }
+  @keyframes scanLine {
+    0%, 100% { top: 12%; }
+    50% { top: 84%; }
+  }
+  .scan-line {
+    position: absolute;
+    left: 14px; right: 14px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #ea580c, transparent);
+    box-shadow: 0 0 12px rgba(234,88,12,.8);
+    animation: scanLine 2.4s ease-in-out infinite;
+  }
+  .scanner-text {
+    position: absolute;
+    bottom: 16px; left: 50%; transform: translateX(-50%);
+    color: rgba(234,88,12,.85);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+  }
+
+  /* Cards */
+  .card {
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 16px;
+  }
+
+  /* Mock scan buttons */
+  .mock-btn {
+    background: rgba(234,88,12,.12);
+    border: 1px solid rgba(234,88,12,.4);
+    color: #fdba74;
+    padding: 10px 12px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: left;
+    transition: all .15s;
+    cursor: pointer;
+    width: 100%;
+  }
+  .mock-btn:active { transform: scale(.98); background: rgba(234,88,12,.2); }
+
+  /* Result card */
+  @keyframes popIn {
+    from { transform: scale(.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  .result-card { animation: popIn .3s ease; }
+
+  /* Qty buttons */
+  .qty-btn {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    background: rgba(255,255,255,.08);
+    color: #fff;
+    font-size: 22px;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .qty-btn:active { transform: scale(.92); background: rgba(234,88,12,.3); }
+  .qty-btn.big { background: var(--orange); color: #fff; }
+
+  /* Bottom nav */
+  .bottom-nav {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: #0a0f17;
+    border-top: 1px solid rgba(255,255,255,.08);
+    display: flex; padding: 8px 0 20px;
+    z-index: 50;
+  }
+  .nav-item {
+    flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px;
+    padding: 4px 0; color: rgba(255,255,255,.4); font-size: 10px;
+    transition: color .2s; cursor: pointer;
+  }
+  .nav-item.active { color: #ea580c; }
+  .scroll-content { padding-bottom: 84px; }
+
+  /* Today summary */
+  .stat-pill {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px 4px;
+    background: rgba(255,255,255,.04);
+    border-radius: 10px;
+    flex: 1;
+  }
+  .stat-pill-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 18px;
+    color: #fdba74;
+  }
+  .stat-pill-label { font-size: 10px; color: rgba(255,255,255,.5); margin-top: 2px; }
+
+  /* Container task card */
+  .task-card {
+    background: linear-gradient(135deg, rgba(234,88,12,.15), rgba(234,88,12,.03));
+    border: 1px solid rgba(234,88,12,.4);
+    border-radius: 14px;
+    padding: 14px;
+    position: relative;
+  }
+  .task-card::before {
+    content: '紧急任务';
+    position: absolute;
+    top: -10px; right: 12px;
+    background: var(--orange);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 99px;
+    letter-spacing: 1px;
+  }
+
+  /* Pick task */
+  .pick-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px;
+    background: rgba(255,255,255,.04);
+    border-radius: 10px;
+    margin-bottom: 6px;
+  }
+
+  /* Success */
+  @keyframes checkPop {
+    0% { transform: scale(0) rotate(-180deg); opacity: 0; }
+    50% { transform: scale(1.2) rotate(0deg); }
+    100% { transform: scale(1) rotate(0deg); opacity: 1; }
+  }
+  .check-mark { animation: checkPop .5s ease; }
+
+  /* Toast */
+  @keyframes toastIn { from { transform: translate(-50%,60px); opacity: 0; } to { transform: translate(-50%,0); opacity: 1; } }
+  .toast {
+    position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%);
+    background: #22c55e; color: #fff;
+    padding: 10px 20px; border-radius: 20px; font-size: 13px; font-weight: 600;
+    z-index: 200; white-space: nowrap;
+    animation: toastIn .3s ease;
+    box-shadow: 0 4px 20px rgba(34,197,94,.4);
+  }
+
+  /* Hide tab content */
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* Unit picker */
+  .unit-chip {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 99px;
+    font-size: 11px;
+    font-weight: 700;
+    background: rgba(234,88,12,.15);
+    color: #fdba74;
+    border: 1px solid rgba(234,88,12,.3);
+  }
+
+  ::-webkit-scrollbar { width: 2px; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,.1); }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════
+     DESKTOP: 手机模拟器 + 说明
+═══════════════════════════════════════════════════ -->
+<div class="desktop-frame" id="desktopFrame">
+  <div class="frame-side-panel">
+    <div class="frame-badge">
+      <div class="text-xs text-orange-400 font-mono mb-2 uppercase tracking-widest">本地仓 · 员工端</div>
+      <div class="font-serif text-white text-lg font-bold leading-tight">仓库扫码 App</div>
+      <div class="text-orange-300 text-xs mt-1">Hongji Staff Scanner</div>
+      <div class="text-gray-400 text-xs mt-3 leading-relaxed">仓库工人手机版。建材大件多单位（箱/托/㎡/件），扫码即操作。</div>
+    </div>
+    <div class="frame-badge">
+      <div class="text-xs text-orange-400 mb-2 font-semibold">✦ 五种作业模式</div>
+      <div class="space-y-1.5 text-xs text-gray-300">
+        <div>📦 <b class="text-white">收柜</b>：集装箱卸柜验收（建材专属）</div>
+        <div>📥 <b class="text-white">入库</b>：扫码上架定位</div>
+        <div>📤 <b class="text-white">拣货</b>：按订单出库</div>
+        <div>🔄 <b class="text-white">移库</b>：货位调整</div>
+        <div>📋 <b class="text-white">盘点</b>：实物对账</div>
+      </div>
+    </div>
+    <div class="frame-badge">
+      <div class="text-xs text-orange-400 mb-2 font-semibold">✦ 当前在线员工</div>
+      <div class="space-y-2">
+        <div class="flex items-center gap-2 text-xs">
+          <div class="w-7 h-7 rounded-full bg-orange-600 flex items-center justify-center text-white font-bold text-xs">陈</div>
+          <span class="text-white">陈师傅 · A 区</span>
+          <span class="ml-auto text-green-400">●</span>
+        </div>
+        <div class="flex items-center gap-2 text-xs">
+          <div class="w-7 h-7 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-xs">李</div>
+          <span class="text-white">李工 · B 区收柜</span>
+          <span class="ml-auto text-green-400">●</span>
+        </div>
+        <div class="flex items-center gap-2 text-xs">
+          <div class="w-7 h-7 rounded-full bg-emerald-600 flex items-center justify-center text-white font-bold text-xs">王</div>
+          <span class="text-white">王师傅 · 出库区</span>
+          <span class="ml-auto text-green-400">●</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="phone-shell">
+    <div class="phone-notch"></div>
+    <iframe class="phone-iframe" src="staff.html?mobile=1"></iframe>
+  </div>
+
+  <div class="frame-side-panel">
+    <div class="frame-badge">
+      <div class="text-xs text-orange-400 mb-2 font-semibold">✦ 今日全仓任务</div>
+      <div class="space-y-2.5 text-xs">
+        <div class="flex justify-between">
+          <span class="text-gray-300">📦 收柜任务</span>
+          <span class="text-orange-400 font-mono font-bold">1 / 3</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-gray-300">📥 入库</span>
+          <span class="text-white font-mono font-bold">28 票</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-gray-300">📤 拣货出库</span>
+          <span class="text-white font-mono font-bold">42 票</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-gray-300">🔄 移库</span>
+          <span class="text-white font-mono font-bold">8 次</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-gray-300">📋 盘点</span>
+          <span class="text-white font-mono font-bold">A-12 进行中</span>
+        </div>
+      </div>
+    </div>
+    <div class="frame-badge">
+      <div class="text-xs text-orange-400 mb-2 font-semibold">✦ 建材专属设计</div>
+      <div class="space-y-1.5 text-xs text-gray-300 leading-relaxed">
+        <div>● <b class="text-white">多单位</b>：箱 / 托 / ㎡ / 件 / 卷自由切换</div>
+        <div>● <b class="text-white">大件标记</b>：超 50kg 自动提醒两人协作</div>
+        <div>● <b class="text-white">破损登记</b>：扫码即录入，自动通知财务</div>
+        <div>● <b class="text-white">语音输入</b>：戴手套时支持喊数量</div>
+      </div>
+    </div>
+    <div class="text-center text-xs text-gray-600 pt-2">
+      鸿基建材仓 · Dublin
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     MOBILE APP
+═══════════════════════════════════════════════════ -->
+<div id="mobileApp" class="app-bg">
+  <div class="status-bar">
+    <div class="flex items-center gap-2">
+      <div class="text-xs font-mono text-orange-200" id="statusTime">09:41</div>
+      <div class="w-1 h-1 rounded-full bg-orange-400"></div>
+      <div class="text-xs text-orange-200">陈师傅 · A 区</div>
+    </div>
+    <div class="flex items-center gap-3 text-xs text-orange-200 pb-0.5">
+      <span>📶</span><span class="font-mono">4G</span><span>🔋</span>
+    </div>
+  </div>
+
+  <!-- Mode Tabs -->
+  <div class="mode-bar">
+    <button class="mode-tab active" onclick="switchMode('inbound', this)">📥 入库</button>
+    <button class="mode-tab" onclick="switchMode('outbound', this)">📤 拣货</button>
+    <button class="mode-tab" onclick="switchMode('container', this)">📦 收柜</button>
+    <button class="mode-tab" onclick="switchMode('move', this)">🔄 移库</button>
+    <button class="mode-tab" onclick="switchMode('count', this)">📋 盘点</button>
+  </div>
+
+  <div class="scroll-content">
+
+    <!-- Today summary -->
+    <div class="px-4 mt-3">
+      <div class="card p-3 flex gap-2">
+        <div class="stat-pill">
+          <div class="stat-pill-num" id="todayIn">12</div>
+          <div class="stat-pill-label">入库</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-pill-num" id="todayOut">19</div>
+          <div class="stat-pill-label">拣货</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-pill-num">1</div>
+          <div class="stat-pill-label">收柜</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-pill-num">3</div>
+          <div class="stat-pill-label">移库</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Container task alert (for receiving mode) -->
+    <div class="tab-content active" id="mode-inbound">
+      <!-- Scanner -->
+      <div class="scanner-wrap">
+        <div class="scanner-grid"></div>
+        <div class="scanner-corners"></div>
+        <div class="scan-line"></div>
+        <div class="scanner-text">SCANNING · INBOUND MODE</div>
+      </div>
+
+      <div class="px-4">
+        <div class="text-orange-400 text-xs font-mono uppercase tracking-wider mb-2">📥 入库 · 模拟扫码</div>
+        <div class="grid grid-cols-1 gap-2 mb-4">
+          <button class="mock-btn" onclick="mockScan('F2103','SPC 锁扣地板 白橡木','箱','A-03')">
+            <div class="font-mono text-orange-400">SKU-F2103</div>
+            <div class="text-white text-sm mt-0.5">SPC 锁扣地板 白橡木</div>
+          </button>
+          <button class="mock-btn" onclick="mockScan('T0851','卡拉拉白瓷砖 800×800','箱','A-08')">
+            <div class="font-mono text-orange-400">SKU-T0851</div>
+            <div class="text-white text-sm mt-0.5">卡拉拉白瓷砖 800×800</div>
+          </button>
+          <button class="mock-btn" onclick="mockScan('B0445','隐藏式卫浴龙头 鎏金','件','C-15')">
+            <div class="font-mono text-orange-400">SKU-B0445</div>
+            <div class="text-white text-sm mt-0.5">隐藏式卫浴龙头 鎏金</div>
+          </button>
+        </div>
+
+        <!-- Pending receipt list -->
+        <div class="card p-3">
+          <div class="flex justify-between items-center mb-2">
+            <div class="text-orange-400 text-xs font-mono uppercase tracking-wider">待收 PO 单</div>
+            <span class="text-xs text-gray-500">3 单</span>
+          </div>
+          <div class="pick-row">
+            <div class="w-9 h-9 rounded-lg bg-orange-600 bg-opacity-20 flex items-center justify-center">📋</div>
+            <div class="flex-1 min-w-0">
+              <div class="text-white text-sm font-bold">PO-2026-04-T1</div>
+              <div class="text-xs text-gray-400">瓷砖柜 MSCU7281044 · 4 个 SKU</div>
+            </div>
+            <span class="text-xs text-orange-400 font-bold">待卸柜</span>
+          </div>
+          <div class="pick-row">
+            <div class="w-9 h-9 rounded-lg bg-blue-600 bg-opacity-20 flex items-center justify-center">📋</div>
+            <div class="flex-1 min-w-0">
+              <div class="text-white text-sm font-bold">PO-2026-04-F2</div>
+              <div class="text-xs text-gray-400">SPC 地板补货 · 6 个 SKU</div>
+            </div>
+            <span class="text-xs text-blue-400 font-bold">部分到货</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Outbound mode -->
+    <div class="tab-content" id="mode-outbound">
+      <div class="scanner-wrap">
+        <div class="scanner-grid"></div>
+        <div class="scanner-corners"></div>
+        <div class="scan-line"></div>
+        <div class="scanner-text">PICKING · ORDER OUTBOUND</div>
+      </div>
+
+      <div class="px-4">
+        <div class="text-orange-400 text-xs font-mono uppercase tracking-wider mb-2">📤 拣货任务</div>
+        <div class="card p-4 mb-3">
+          <div class="flex justify-between items-start mb-3">
+            <div>
+              <div class="text-orange-400 font-mono text-xs">ORDER #</div>
+              <div class="font-mono font-bold text-white">ORD-2026-0428-MJ</div>
+              <div class="text-xs text-gray-400 mt-0.5">马俊装修队 · 6 个 SKU</div>
+            </div>
+            <span class="bg-orange-500 text-white text-xs font-bold px-2 py-1 rounded-full">拣货中</span>
+          </div>
+          <div class="text-xs text-gray-400 mb-2">已拣 2 / 6</div>
+          <div class="h-2 rounded-full bg-white bg-opacity-10 overflow-hidden mb-3">
+            <div class="h-full bg-orange-500" style="width:33%"></div>
+          </div>
+          <div class="space-y-2">
+            <div class="pick-row">
+              <span class="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center text-white text-xs">✓</span>
+              <div class="flex-1 min-w-0">
+                <div class="text-white text-sm">SPC 白橡地板 × <b class="text-orange-400">8 箱</b></div>
+                <div class="text-xs text-gray-500">A-03 · 已扫</div>
+              </div>
+            </div>
+            <div class="pick-row">
+              <span class="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center text-white text-xs">✓</span>
+              <div class="flex-1 min-w-0">
+                <div class="text-white text-sm">卡拉拉白瓷砖 × <b class="text-orange-400">12 箱</b></div>
+                <div class="text-xs text-gray-500">A-08 · 已扫</div>
+              </div>
+            </div>
+            <div class="pick-row" style="border:1.5px solid rgba(234,88,12,.5);">
+              <span class="w-6 h-6 rounded-full bg-orange-500 flex items-center justify-center text-white text-xs animate-pulse">3</span>
+              <div class="flex-1 min-w-0">
+                <div class="text-white text-sm font-bold">隐藏龙头 鎏金 × <b class="text-orange-400">2 件</b></div>
+                <div class="text-xs text-orange-400">→ 去 C-15 扫码</div>
+              </div>
+              <button onclick="mockScan('B0445','隐藏龙头','件','C-15')" class="text-xs bg-orange-600 text-white px-2.5 py-1 rounded-full font-bold">扫</button>
+            </div>
+            <div class="pick-row opacity-50">
+              <span class="w-6 h-6 rounded-full bg-gray-600 flex items-center justify-center text-white text-xs">4</span>
+              <div class="flex-1 min-w-0">
+                <div class="text-white text-sm">实心门锁 × 4 套</div>
+                <div class="text-xs text-gray-500">D-02</div>
+              </div>
+            </div>
+            <div class="pick-row opacity-50">
+              <span class="w-6 h-6 rounded-full bg-gray-600 flex items-center justify-center text-white text-xs">5</span>
+              <div class="flex-1 min-w-0">
+                <div class="text-white text-sm">水曲柳实木复合 × 3 箱</div>
+                <div class="text-xs text-gray-500">A-11</div>
+              </div>
+            </div>
+            <div class="pick-row opacity-50">
+              <span class="w-6 h-6 rounded-full bg-gray-600 flex items-center justify-center text-white text-xs">6</span>
+              <div class="flex-1 min-w-0">
+                <div class="text-white text-sm">木纹砖 × 6 箱</div>
+                <div class="text-xs text-gray-500">A-14</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Container receiving mode -->
+    <div class="tab-content" id="mode-container">
+      <div class="px-4 pt-2">
+
+        <div class="task-card mb-3 mt-2">
+          <div class="flex items-start justify-between mb-2">
+            <div>
+              <div class="font-mono text-white font-bold">MSCU7281044</div>
+              <div class="text-xs text-gray-300">瓷砖柜 · 40' HQ · 836 箱</div>
+            </div>
+            <span class="text-xs text-orange-400 font-bold">已抵达</span>
+          </div>
+          <div class="text-xs text-gray-400 mb-3">佛山陶瓷工厂 · 货值 €18,420 · 4 个 SKU</div>
+          <div class="bg-black bg-opacity-40 rounded-lg p-3 mb-3">
+            <div class="text-orange-400 text-xs font-mono mb-2">装柜清单（按打开顺序）</div>
+            <div class="space-y-1.5 text-xs">
+              <div class="flex justify-between text-white">
+                <span>① T1145 厨卫小砖</span>
+                <span class="font-mono">96 箱</span>
+              </div>
+              <div class="flex justify-between text-white">
+                <span>② T0851 卡拉拉白瓷砖</span>
+                <span class="font-mono">180 箱</span>
+              </div>
+              <div class="flex justify-between text-white">
+                <span>③ T1021 木纹砖</span>
+                <span class="font-mono">320 箱</span>
+              </div>
+              <div class="flex justify-between text-white">
+                <span>④ T0823 西班牙仿古砖</span>
+                <span class="font-mono">240 箱</span>
+              </div>
+            </div>
+          </div>
+          <button onclick="startContainer()" class="w-full bg-orange-600 text-white font-bold py-3 rounded-xl">
+            🔓 开始卸柜验收
+          </button>
+        </div>
+
+        <div class="card p-3">
+          <div class="text-orange-400 text-xs font-mono uppercase tracking-wider mb-2">收柜操作流程</div>
+          <ol class="text-xs text-gray-300 space-y-2 leading-relaxed">
+            <li><b class="text-white">1.</b> 扫描柜门提单二维码 → 系统弹出装柜清单</li>
+            <li><b class="text-white">2.</b> 按顺序卸货，每个 SKU 扫码 → 输入实收数量</li>
+            <li><b class="text-white">3.</b> 数量与提单不符自动提醒（短码/破损登记）</li>
+            <li><b class="text-white">4.</b> 全部扫完点"完成卸柜" → 系统计算落地成本</li>
+            <li><b class="text-white">5.</b> 老板端实时收到验收报告 → 推荐上架货位</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- Move mode -->
+    <div class="tab-content" id="mode-move">
+      <div class="scanner-wrap">
+        <div class="scanner-grid"></div>
+        <div class="scanner-corners"></div>
+        <div class="scan-line"></div>
+        <div class="scanner-text">SCAN · MOVE LOCATION</div>
+      </div>
+      <div class="px-4">
+        <div class="text-orange-400 text-xs font-mono uppercase tracking-wider mb-2">🔄 货位调整</div>
+        <div class="card p-4 text-center text-sm text-gray-400">
+          <div class="text-3xl mb-2">📍</div>
+          <div>请扫描原货位 → 扫描新货位</div>
+          <div class="text-xs text-gray-500 mt-2">系统自动记录调整时间和操作员</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Count mode -->
+    <div class="tab-content" id="mode-count">
+      <div class="px-4 pt-3">
+        <div class="card p-4 mb-3">
+          <div class="flex justify-between items-center mb-3">
+            <div>
+              <div class="text-orange-400 text-xs font-mono">📋 进行中盘点</div>
+              <div class="text-white font-bold mt-0.5">A 区货架盘点</div>
+            </div>
+            <span class="text-xs bg-orange-500 text-white px-2 py-1 rounded-full font-bold">进行中</span>
+          </div>
+          <div class="grid grid-cols-3 gap-2 text-center">
+            <div class="bg-black bg-opacity-30 rounded-lg p-2">
+              <div class="text-2xl font-mono font-bold text-white">38</div>
+              <div class="text-xs text-gray-400">已盘 SKU</div>
+            </div>
+            <div class="bg-black bg-opacity-30 rounded-lg p-2">
+              <div class="text-2xl font-mono font-bold text-orange-400">14</div>
+              <div class="text-xs text-gray-400">未盘</div>
+            </div>
+            <div class="bg-black bg-opacity-30 rounded-lg p-2">
+              <div class="text-2xl font-mono font-bold text-red-400">2</div>
+              <div class="text-xs text-gray-400">差异</div>
+            </div>
+          </div>
+        </div>
+        <div class="card p-3">
+          <div class="text-orange-400 text-xs font-mono mb-2">差异预警</div>
+          <div class="alert-item space-y-2">
+            <div class="bg-red-900 bg-opacity-30 rounded-lg p-2 border-l-3 border-red-500">
+              <div class="text-white text-sm">SKU-T0823 仿古砖</div>
+              <div class="text-xs text-gray-400">系统：92 箱 · 实盘：90 箱 · <span class="text-red-400">短 2 箱</span></div>
+            </div>
+            <div class="bg-red-900 bg-opacity-30 rounded-lg p-2 border-l-3 border-red-500 mt-2">
+              <div class="text-white text-sm">SKU-H0203 实心门锁</div>
+              <div class="text-xs text-gray-400">系统：100 套 · 实盘：98 套 · <span class="text-red-400">短 2 套</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Nav -->
+  <div class="bottom-nav">
+    <div class="nav-item active">
+      <span style="font-size:20px">🏠</span>
+      <span>首页</span>
+    </div>
+    <div class="nav-item">
+      <span style="font-size:20px">📋</span>
+      <span>任务</span>
+    </div>
+    <div class="nav-item">
+      <span style="font-size:20px">🔍</span>
+      <span>查货</span>
+    </div>
+    <div class="nav-item">
+      <span style="font-size:20px">👤</span>
+      <span>我的</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     SCAN RESULT MODAL
+═══════════════════════════════════════════════════ -->
+<div id="resultOverlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.7); z-index:300; align-items:center; justify-content:center; padding:20px;" onclick="closeResult(event)">
+  <div class="result-card bg-gray-900 rounded-2xl p-5 max-w-sm w-full" style="border:1px solid rgba(234,88,12,.5)" onclick="event.stopPropagation()">
+    <div class="text-orange-400 text-xs font-mono mb-2 uppercase tracking-wider">扫码结果</div>
+    <div class="font-mono font-bold text-white text-lg" id="rsku">SKU-XXXX</div>
+    <div class="text-gray-300 text-sm mt-1" id="rname">商品名称</div>
+    <div class="grid grid-cols-2 gap-2 mt-3 mb-4">
+      <div class="bg-black bg-opacity-40 rounded-lg p-2">
+        <div class="text-xs text-gray-500">货位</div>
+        <div class="font-mono font-bold text-white" id="rloc">A-01</div>
+      </div>
+      <div class="bg-black bg-opacity-40 rounded-lg p-2">
+        <div class="text-xs text-gray-500">系统库存</div>
+        <div class="font-mono font-bold text-white" id="rstock">412 箱</div>
+      </div>
+    </div>
+
+    <div class="text-xs text-gray-400 mb-2">数量 + 单位</div>
+    <div class="flex items-center gap-3 mb-3">
+      <button onclick="changeQty(-1)" class="qty-btn">−</button>
+      <input id="rqty" type="number" value="10" class="flex-1 bg-black bg-opacity-50 text-white text-center text-3xl font-mono font-bold py-2 rounded-xl border border-white border-opacity-10">
+      <button onclick="changeQty(1)" class="qty-btn big">+</button>
+    </div>
+    <div class="flex gap-1.5 mb-4 flex-wrap">
+      <span class="unit-chip">📦 箱</span>
+      <span class="unit-chip" style="background:rgba(255,255,255,.05);color:rgba(255,255,255,.4); border-color:rgba(255,255,255,.1)">📐 ㎡</span>
+      <span class="unit-chip" style="background:rgba(255,255,255,.05);color:rgba(255,255,255,.4); border-color:rgba(255,255,255,.1)">🧱 件</span>
+      <span class="unit-chip" style="background:rgba(255,255,255,.05);color:rgba(255,255,255,.4); border-color:rgba(255,255,255,.1)">🚛 托盘</span>
+    </div>
+    <div class="flex gap-2 mb-3">
+      <button onclick="changeQty(10)" class="flex-1 py-2 rounded-lg bg-white bg-opacity-10 text-white text-sm font-bold">+10</button>
+      <button onclick="changeQty(50)" class="flex-1 py-2 rounded-lg bg-white bg-opacity-10 text-white text-sm font-bold">+50</button>
+      <button onclick="changeQty(-10)" class="flex-1 py-2 rounded-lg bg-white bg-opacity-10 text-white text-sm font-bold">−10</button>
+    </div>
+    <div class="flex gap-2">
+      <button onclick="closeResult()" class="flex-1 py-3 bg-gray-700 text-white rounded-xl font-bold">取消</button>
+      <button onclick="confirmOp()" class="flex-1 py-3 bg-orange-600 text-white rounded-xl font-bold">✓ 确认</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const params = new URLSearchParams(location.search);
+const ref = params.get('ref');
+if (ref && ref !== 'mobile') {
+  sessionStorage.setItem('ref', ref);
+  document.querySelectorAll('a[href$=".html"]').forEach(a => {
+    try {
+      const url = new URL(a.href, location.href);
+      url.searchParams.set('ref', ref);
+      a.href = url.toString();
+    } catch (e) {}
+  });
+}
+
+const isMobile = params.get('mobile') === '1' || window.innerWidth < 640 || window.frameElement;
+if (!isMobile) {
+  document.getElementById('mobileApp').style.display = 'none';
+  document.getElementById('desktopFrame').style.display = 'flex';
+} else {
+  document.getElementById('desktopFrame').style.display = 'none';
+}
+
+function updateTime() {
+  const now = new Date();
+  const h = now.getHours().toString().padStart(2,'0');
+  const m = now.getMinutes().toString().padStart(2,'0');
+  const el = document.getElementById('statusTime');
+  if (el) el.textContent = `${h}:${m}`;
+}
+setInterval(updateTime, 1000); updateTime();
+
+function switchMode(name, el) {
+  document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
+  if (el) el.classList.add('active');
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.getElementById('mode-' + name).classList.add('active');
+}
+
+let currentScan = null;
+function mockScan(sku, name, unit, loc) {
+  currentScan = { sku, name, unit, loc };
+  document.getElementById('rsku').textContent = 'SKU-' + sku;
+  document.getElementById('rname').textContent = name;
+  document.getElementById('rloc').textContent = loc;
+  document.getElementById('rstock').textContent = (Math.floor(Math.random() * 400) + 50) + ' ' + unit;
+  document.getElementById('rqty').value = 10;
+  document.getElementById('resultOverlay').style.display = 'flex';
+}
+
+function changeQty(d) {
+  const el = document.getElementById('rqty');
+  const v = parseInt(el.value) || 0;
+  el.value = Math.max(1, v + d);
+}
+
+function closeResult(e) {
+  if (e && e.target && !e.target.classList.contains('result-card') && e.target.id !== 'resultOverlay') return;
+  document.getElementById('resultOverlay').style.display = 'none';
+}
+
+function confirmOp() {
+  if (!currentScan) return;
+  const qty = document.getElementById('rqty').value;
+  const inEl = document.getElementById('todayIn');
+  if (inEl) inEl.textContent = +inEl.textContent + 1;
+  closeResult();
+  showToast(`✓ 入库 ${qty} ${currentScan.unit} @ ${currentScan.loc}`);
+}
+
+function startContainer() {
+  showToast('✓ 已开始卸柜，按清单顺序扫码');
+  switchMode('inbound', document.querySelector('.mode-tab'));
+}
+
+function showToast(msg) {
+  document.querySelectorAll('.toast').forEach(t => t.remove());
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2200);
+}
+</script>
+</body>
+</html>

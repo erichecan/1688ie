@@ -1,0 +1,2061 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>1688.ie 旺铺计划 — 爱尔兰华人生意平台</title>
+  <meta name="description" content="1688.ie 旺铺计划：专为爱尔兰华人小生意打造的定制开发平台。电商网站、会员积分、广告投放，全部一站搞定。">
+  <meta name="keywords" content="爱尔兰华人,爱尔兰中文,1688.ie,旺铺计划,爱尔兰生意,Irish Chinese business,电商网站,独立站">
+  <meta property="og:title" content="1688.ie 旺铺计划 — 爱尔兰华人生意平台">
+  <meta property="og:description" content="专为爱尔兰华人小生意打造的定制开发平台。电商网站、会员积分、广告投放，全部一站搞定。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://1688.ie">
+  <link rel="alternate" hreflang="zh-CN" href="https://1688.ie">
+  <link rel="alternate" hreflang="en-IE" href="https://1688.ie?lang=en">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --red: #C8102E;
+      --red-dark: #8B0A1F;
+      --gold: #D4AF37;
+      --gold-light: #E8C968;
+      --cream: #FAF6F0;
+      --paper: #F5EFE4;
+      --ink: #1C1C1C;
+      --ink-soft: #3A3A3A;
+      --ink-mute: #6B6B6B;
+      --line: #E0D6C2;
+      --green: #17844D;
+      --nav-h: 64px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      font-family: 'Noto Serif SC', serif;
+      background-color: var(--cream);
+      color: var(--ink);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.5;
+    }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+    h1, h2, h3 { font-weight: 700; line-height: 1.3; }
+
+    .section-title {
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-weight: 900;
+      color: var(--ink);
+      text-align: center;
+      margin-bottom: 12px;
+    }
+    .section-title span { color: var(--red); }
+    .section-sub {
+      text-align: center;
+      color: var(--ink-mute);
+      font-size: 1rem;
+      margin-bottom: 52px;
+    }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    /* ===== NAV ===== */
+    #nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      background: rgba(250,246,240,0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--line);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+    }
+    #nav .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+    .nav-logo {
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: var(--red);
+      text-decoration: none;
+      letter-spacing: -0.5px;
+    }
+    .nav-logo span { color: var(--gold); }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--ink-soft);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--red); }
+    .lang-toggle {
+      background: var(--ink);
+      color: var(--cream);
+      border: none;
+      padding: 6px 14px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-family: inherit;
+      transition: background 0.2s;
+    }
+    .lang-toggle:hover { background: var(--red); }
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--ink); }
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: var(--nav-h);
+      left: 0; right: 0;
+      background: var(--cream);
+      border-bottom: 1px solid var(--line);
+      padding: 16px 20px;
+      z-index: 999;
+    }
+    .mobile-menu.open { display: block; }
+    .mobile-menu a {
+      display: block;
+      padding: 12px 0;
+      color: var(--ink-soft);
+      text-decoration: none;
+      font-size: 1rem;
+      border-bottom: 1px solid var(--line);
+    }
+    .mobile-menu a:last-child { border-bottom: none; }
+
+    /* ===== HERO — 解决什么问题 ===== */
+    #hero {
+      min-height: 100vh;
+      padding-top: calc(var(--nav-h) + 60px);
+      padding-bottom: 80px;
+      background: linear-gradient(160deg, #FAF6F0 0%, #F0E8D8 100%);
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+    #hero::before {
+      content: '旺';
+      position: absolute;
+      right: -60px; top: 50%;
+      transform: translateY(-50%);
+      font-size: 50vw;
+      font-weight: 900;
+      color: var(--red);
+      opacity: 0.025;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--red);
+      color: white;
+      font-size: 0.75rem;
+      padding: 5px 14px;
+      border-radius: 2px;
+      margin-bottom: 24px;
+      letter-spacing: 1px;
+      font-weight: 600;
+    }
+    .hero-title {
+      font-size: clamp(2rem, 5.5vw, 3.6rem);
+      font-weight: 900;
+      line-height: 1.2;
+      margin-bottom: 20px;
+      font-family: 'Playfair Display', 'Noto Serif SC', serif;
+    }
+    .hero-title .red { color: var(--red); }
+    .hero-title .gold { color: var(--gold); }
+
+    .hero-desc {
+      font-size: 1.05rem;
+      color: var(--ink-soft);
+      margin-bottom: 48px;
+      max-width: 580px;
+      line-height: 1.85;
+    }
+
+    /* 痛点卡片组 */
+    .pain-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-bottom: 48px;
+    }
+    .pain-card {
+      background: white;
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--red);
+      border-radius: 4px;
+      padding: 18px 20px;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+    .pain-icon {
+      font-size: 1.6rem;
+      flex-shrink: 0;
+      line-height: 1;
+      margin-top: 2px;
+    }
+    .pain-card h4 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .pain-card p {
+      font-size: 0.8rem;
+      color: var(--ink-mute);
+      line-height: 1.6;
+    }
+
+    .hero-ctas {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .btn-primary {
+      background: var(--red);
+      color: white;
+      padding: 14px 28px;
+      border: none;
+      border-radius: 4px;
+      font-size: 1rem;
+      font-family: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: background 0.2s, transform 0.1s;
+      box-shadow: 4px 4px 0 var(--red-dark);
+    }
+    .btn-primary:hover {
+      background: var(--red-dark);
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0 var(--red-dark);
+    }
+    .btn-secondary {
+      background: transparent;
+      color: var(--ink);
+      padding: 13px 28px;
+      border: 2px solid var(--ink);
+      border-radius: 4px;
+      font-size: 1rem;
+      font-family: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.2s;
+    }
+    .btn-secondary:hover { background: var(--ink); color: var(--cream); }
+
+    /* ===== SOLUTIONS — 我们提供什么 ===== */
+    #solutions {
+      padding: 100px 0;
+      background: var(--ink);
+      color: var(--cream);
+    }
+    #solutions .section-title { color: var(--cream); }
+    #solutions .section-title span { color: var(--gold); }
+    #solutions .section-sub { color: rgba(250,246,240,0.55); }
+
+    .solutions-intro {
+      text-align: center;
+      max-width: 680px;
+      margin: 0 auto 60px;
+    }
+    .solutions-intro p {
+      color: rgba(250,246,240,0.7);
+      font-size: 1rem;
+      line-height: 1.9;
+    }
+
+    .solutions-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+    }
+    .solution-item {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      padding: 36px 28px;
+      position: relative;
+      transition: background 0.3s;
+    }
+    .solution-item:hover { background: rgba(255,255,255,0.08); }
+
+    .solution-item.highlight {
+      background: var(--red);
+      border-color: var(--red);
+    }
+    .solution-item.highlight:hover { background: var(--red-dark); }
+
+    .solution-num {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 2px;
+      margin-bottom: 14px;
+      display: block;
+    }
+    .solution-item.highlight .solution-num { color: rgba(255,255,255,0.6); }
+
+    .solution-icon {
+      font-size: 2rem;
+      margin-bottom: 14px;
+      display: block;
+    }
+    .solution-item h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--cream);
+    }
+    .solution-item p {
+      font-size: 0.82rem;
+      line-height: 1.75;
+      color: rgba(250,246,240,0.55);
+    }
+    .solution-item.highlight p { color: rgba(255,255,255,0.75); }
+
+    .solutions-note {
+      text-align: center;
+      margin-top: 48px;
+      padding: 24px;
+      border: 1px solid rgba(212,175,55,0.3);
+      border-radius: 4px;
+      max-width: 680px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .solutions-note p {
+      font-size: 0.9rem;
+      color: rgba(250,246,240,0.6);
+      line-height: 1.8;
+    }
+    .solutions-note strong { color: var(--gold); }
+
+    /* ===== INDUSTRIES ===== */
+    #industries {
+      padding: 100px 0;
+      background: var(--paper);
+    }
+    .industries-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+    .industry-card {
+      background: var(--cream);
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 28px 20px;
+      text-align: center;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .industry-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--red);
+      transform: scaleX(0);
+      transition: transform 0.3s;
+    }
+    .industry-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+      border-color: var(--gold);
+    }
+    .industry-card:hover::after { transform: scaleX(1); }
+    a.industry-card { display: block; color: inherit; text-decoration: none; }
+    .industry-demo-link {
+      display: inline-block;
+      margin-top: 12px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--red);
+      border-bottom: 1.5px solid var(--red);
+      padding-bottom: 1px;
+    }
+    .industry-emoji { font-size: 2.4rem; margin-bottom: 12px; display: block; }
+    .industry-card h3 { font-size: 1rem; margin-bottom: 8px; color: var(--ink); }
+    .industry-card p { font-size: 0.78rem; color: var(--ink-mute); line-height: 1.6; }
+    .industry-headline {
+      font-size: 0.85rem !important;
+      font-weight: 700;
+      color: var(--ink) !important;
+      margin-bottom: 8px !important;
+      line-height: 1.5 !important;
+    }
+    .industry-desc {
+      font-size: 0.76rem !important;
+      color: var(--ink-mute) !important;
+      line-height: 1.6 !important;
+      margin-bottom: 8px !important;
+    }
+    .industry-proof {
+      font-size: 0.73rem !important;
+      color: var(--red) !important;
+      font-style: italic;
+      line-height: 1.5 !important;
+      margin-bottom: 0 !important;
+      opacity: 0.85;
+    }
+
+    /* ===== STORIES ===== */
+    #stories {
+      padding: 100px 0;
+      background: var(--cream);
+    }
+    .stories-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .story-card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 32px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+    .story-card::before {
+      content: '"';
+      position: absolute;
+      top: 16px; left: 24px;
+      font-size: 4rem;
+      color: var(--gold);
+      opacity: 0.25;
+      line-height: 1;
+      font-family: 'Playfair Display', serif;
+    }
+    .story-text {
+      font-size: 0.9rem;
+      line-height: 1.9;
+      color: var(--ink-soft);
+      margin-bottom: 24px;
+      padding-top: 24px;
+      flex: 1;
+    }
+    .story-author { display: flex; align-items: center; gap: 12px; }
+    .story-avatar {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: var(--red);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem;
+      color: white;
+      flex-shrink: 0;
+    }
+    .story-author-info strong { display: block; font-size: 0.9rem; }
+    .story-author-info span { font-size: 0.78rem; color: var(--ink-mute); }
+    .story-result {
+      display: inline-block;
+      background: var(--red);
+      color: white;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 2px;
+      margin-top: 6px;
+    }
+
+    /* ===== PRICING ===== */
+    #pricing {
+      padding: 100px 0;
+      background: var(--paper);
+    }
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      align-items: stretch;
+    }
+    .pricing-card {
+      background: var(--cream);
+      border: 2px solid var(--line);
+      border-radius: 4px;
+      padding: 28px 18px;
+      position: relative;
+      transition: transform 0.3s, box-shadow 0.3s;
+      display: flex;
+      flex-direction: column;
+    }
+    .pricing-card.featured {
+      border-color: var(--gold);
+      background: var(--ink);
+      color: var(--cream);
+      transform: scale(1.04);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    }
+    .pricing-card:hover:not(.featured) {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+    }
+    .pricing-badge {
+      position: absolute;
+      top: -12px; left: 50%;
+      transform: translateX(-50%);
+      background: var(--gold);
+      color: var(--ink);
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 14px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+    .pricing-name { font-size: 1.3rem; font-weight: 900; margin-bottom: 4px; }
+    .pricing-card.featured .pricing-name { color: var(--gold); }
+    .pricing-tagline { font-size: 0.82rem; color: var(--ink-mute); margin-bottom: 24px; }
+    .pricing-card.featured .pricing-tagline { color: rgba(250,246,240,0.55); }
+    .pricing-price { font-size: 2.8rem; font-weight: 900; line-height: 1; margin-bottom: 4px; color: var(--red); }
+    .pricing-card.featured .pricing-price { color: var(--gold); }
+    .pricing-period { font-size: 0.78rem; color: var(--ink-mute); margin-bottom: 28px; }
+    .pricing-card.featured .pricing-period { color: rgba(250,246,240,0.45); }
+    .pricing-features { list-style: none; margin-bottom: 28px; }
+    .pricing-features li {
+      padding: 8px 0;
+      border-bottom: 1px solid var(--line);
+      font-size: 0.88rem;
+      display: flex;
+      gap: 10px;
+    }
+    .pricing-card.featured .pricing-features li {
+      border-color: rgba(255,255,255,0.1);
+      color: rgba(250,246,240,0.82);
+    }
+    .pricing-features li::before { content: '✓'; color: var(--green); font-weight: 700; flex-shrink: 0; }
+    .pricing-monthly {
+      font-size: 0.82rem;
+      color: var(--ink-mute);
+      text-align: center;
+      margin-top: -12px;
+      margin-bottom: 20px;
+    }
+    .pricing-card.featured .pricing-monthly { color: rgba(250,246,240,0.45); }
+
+    /* Enterprise 2-banner row */
+    .pricing-enterprise {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .pricing-ent-card {
+      background: var(--ink);
+      color: var(--cream);
+      border-radius: 4px;
+      padding: 28px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+    }
+    .pricing-ent-info { flex: 1; }
+    .pricing-ent-card h4 {
+      font-size: 1.05rem;
+      font-weight: 900;
+      color: var(--gold);
+      margin-bottom: 4px;
+    }
+    .pricing-ent-card p {
+      font-size: 0.78rem;
+      color: rgba(250,246,240,0.55);
+      line-height: 1.5;
+      margin-bottom: 8px;
+    }
+    .pricing-ent-price {
+      font-size: 1.3rem;
+      font-weight: 900;
+      color: var(--cream);
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+    .pricing-ent-price small { font-size: 0.75rem; color: rgba(250,246,240,0.45); font-weight: 400; }
+    .pricing-ent-btn {
+      flex-shrink: 0;
+      width: auto !important;
+      white-space: nowrap;
+      border-color: rgba(250,246,240,0.4) !important;
+      color: var(--cream) !important;
+    }
+    .pricing-ent-btn:hover { background: var(--cream) !important; color: var(--ink) !important; }
+    .pricing-more-link {
+      text-align: center;
+      margin-top: 32px;
+    }
+    .pricing-more-link a {
+      color: var(--red);
+      font-weight: 700;
+      font-size: 0.95rem;
+      text-decoration: none;
+      border-bottom: 2px solid var(--red);
+      padding-bottom: 2px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .pricing-more-link a:hover { color: var(--red-dark); border-color: var(--red-dark); }
+
+    /* ===== VALUE ===== */
+    #value {
+      padding: 100px 0;
+      background: var(--cream);
+    }
+    .value-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: stretch; }
+    .value-side { display: flex; flex-direction: column; }
+    .value-side .value-list { flex: 1; }
+    .value-side h3 {
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 3px solid var(--red);
+      display: inline-block;
+    }
+    .value-list { list-style: none; }
+    .value-list li {
+      padding: 12px 0;
+      border-bottom: 1px solid var(--line);
+      font-size: 0.9rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .value-list li .icon {
+      width: 28px; height: 28px;
+      background: var(--red);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 0.8rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .value-total {
+      margin-top: 20px;
+      background: var(--ink);
+      color: var(--cream);
+      padding: 16px 20px;
+      border-radius: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .value-total strong { font-size: 1.2rem; color: var(--gold); }
+
+    /* ===== SUBSIDY ===== */
+    #subsidy {
+      padding: 80px 0;
+      background: var(--green);
+      color: white;
+      text-align: center;
+    }
+    .subsidy-inner { max-width: 680px; margin: 0 auto; }
+    .subsidy-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.4);
+      color: white;
+      font-size: 0.8rem;
+      padding: 4px 14px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+      letter-spacing: 1px;
+    }
+    #subsidy .section-title { color: white; margin-bottom: 16px; }
+    #subsidy .section-title span { color: #FFE066; }
+    .subsidy-amount {
+      font-size: clamp(3rem, 8vw, 5rem);
+      font-weight: 900;
+      color: #FFE066;
+      line-height: 1;
+      margin: 24px 0;
+      font-family: 'Playfair Display', serif;
+    }
+    #subsidy p { font-size: 1rem; opacity: 0.85; line-height: 1.8; margin-bottom: 16px; }
+    .subsidy-steps {
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      margin: 32px 0;
+      flex-wrap: nowrap;
+    }
+    .subsidy-step { flex: 1 1 0; min-width: 0; text-align: center; padding: 0 8px; position: relative; }
+    .subsidy-step:not(:last-child)::after {
+      content: '→';
+      position: absolute; right: -8px; top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.2rem; opacity: 0.5;
+    }
+    .subsidy-step-num { display: block; font-size: 1.8rem; font-weight: 900; color: #FFE066; }
+    .subsidy-step-label { font-size: 0.72rem; opacity: 0.75; display: block; line-height: 1.3; word-break: keep-all; }
+
+    /* ===== FAQ ===== */
+    #faq {
+      padding: 100px 0;
+      background: var(--paper);
+    }
+    .faq-list { max-width: 760px; margin: 0 auto; }
+    .faq-item { border-bottom: 1px solid var(--line); }
+    .faq-question {
+      width: 100%;
+      text-align: left;
+      background: none;
+      border: none;
+      padding: 20px 0;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--ink);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      transition: color 0.2s;
+    }
+    .faq-question:hover { color: var(--red); }
+    .faq-icon {
+      width: 24px; height: 24px;
+      border: 2px solid var(--line);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+      color: var(--ink-mute);
+      transition: all 0.3s;
+    }
+    .faq-item.open .faq-icon {
+      background: var(--red); border-color: var(--red);
+      color: white; transform: rotate(45deg);
+    }
+    .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+    .faq-answer-inner {
+      padding-bottom: 20px;
+      color: var(--ink-mute);
+      font-size: 0.95rem;
+      line-height: 1.9;
+    }
+    .faq-item.open .faq-answer { max-height: 400px; }
+
+    /* ===== CONTACT ===== */
+    #contact {
+      padding: 100px 0;
+      background: var(--cream);
+    }
+    .contact-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+    .contact-card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 36px 28px;
+      text-align: center;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .contact-card:hover { transform: translateY(-4px); box-shadow: 0 8px 32px rgba(0,0,0,0.08); }
+    .contact-icon {
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      margin: 0 auto 16px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem;
+    }
+    .contact-card h3 { font-size: 1.1rem; margin-bottom: 8px; }
+    .contact-card p { font-size: 0.85rem; color: var(--ink-mute); margin-bottom: 20px; line-height: 1.6; }
+    .qr-placeholder {
+      width: 120px; height: 120px;
+      background: var(--line);
+      border-radius: 4px;
+      margin: 0 auto 16px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.7rem; color: var(--ink-mute); text-align: center; line-height: 1.6;
+    }
+    .contact-action {
+      display: inline-block;
+      background: var(--red);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 4px;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+    .contact-action:hover { background: var(--red-dark); }
+
+    /* ===== FOOTER ===== */
+    #footer {
+      background: var(--ink);
+      color: rgba(250,246,240,0.55);
+      padding: 48px 0 32px;
+    }
+    .footer-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+    .footer-brand p { font-size: 0.82rem; line-height: 1.8; margin-top: 12px; }
+    .footer-col h4 { color: var(--cream); font-size: 0.9rem; margin-bottom: 14px; font-weight: 700; }
+    .footer-col a {
+      display: block;
+      color: rgba(250,246,240,0.45);
+      text-decoration: none;
+      font-size: 0.82rem;
+      padding: 4px 0;
+      transition: color 0.2s;
+    }
+    .footer-col a:hover { color: var(--gold); }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding-top: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.78rem;
+    }
+
+    /* ===== FLOAT WA ===== */
+    #float-wa {
+      position: fixed;
+      bottom: 28px; right: 24px;
+      width: 58px; height: 58px;
+      background: #25D366;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: white;
+      text-decoration: none;
+      font-size: 1.6rem;
+      box-shadow: 0 4px 20px rgba(37,211,102,0.4);
+      z-index: 998;
+      animation: wobble 3s ease-in-out infinite;
+    }
+    #float-wa::before {
+      content: '免费咨询';
+      position: absolute;
+      right: calc(100% + 12px);
+      background: var(--ink);
+      color: var(--cream);
+      font-size: 0.75rem;
+      padding: 6px 10px;
+      border-radius: 4px;
+      white-space: nowrap;
+      opacity: 0;
+      transform: translateX(8px);
+      transition: all 0.2s;
+      font-family: 'Noto Serif SC', serif;
+    }
+    #float-wa:hover::before { opacity: 1; transform: translateX(0); }
+    @keyframes wobble {
+      0%,90%,100% { transform: rotate(0deg); }
+      92% { transform: rotate(-8deg); }
+      94% { transform: rotate(8deg); }
+      96% { transform: rotate(-6deg); }
+      98% { transform: rotate(4deg); }
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 900px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .pain-grid { grid-template-columns: 1fr; }
+      .solutions-grid { grid-template-columns: 1fr 1fr; }
+      .industries-grid { grid-template-columns: repeat(2, 1fr); }
+      .stories-grid { grid-template-columns: 1fr; }
+      .pricing-grid { grid-template-columns: repeat(2, 1fr); }
+      .pricing-enterprise { grid-template-columns: 1fr; }
+      .pricing-card.featured { transform: none; }
+      .value-grid { grid-template-columns: 1fr; }
+      .contact-grid { grid-template-columns: 1fr; }
+      .footer-inner { grid-template-columns: 1fr; gap: 24px; }
+      .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
+    }
+    @media (max-width: 540px) {
+      .solutions-grid { grid-template-columns: 1fr; }
+      .subsidy-steps { gap: 16px; }
+      .subsidy-step:not(:last-child)::after { display: none; }
+      .pricing-grid { grid-template-columns: 1fr; }
+      .pricing-ent-card { flex-direction: column; text-align: center; }
+      .pricing-ent-price { justify-content: center; }
+      .pricing-ent-btn { width: 100% !important; text-align: center; }
+    }
+
+    /* ===== SUBSIDY CTA BTN ===== */
+    .subsidy-cta-btn {
+      display: inline-block;
+      margin-top: 20px;
+      background: white;
+      color: var(--green);
+      box-shadow: 4px 4px 0 rgba(0,0,0,0.15);
+    }
+    .subsidy-cta-btn[data-lang="en"] { display: none; }
+    body.en .subsidy-cta-btn[data-lang="en"] { display: inline-block; }
+    body.en .subsidy-cta-btn[data-lang="zh"] { display: none; }
+
+    /* ===== LANG ===== */
+    [data-lang="en"] { display: none; }
+    body.en [data-lang="zh"] { display: none; }
+    /* Restore visible EN elements — default: block (covers h1–h6, p, div, etc.) */
+    body.en [data-lang="en"] { display: block; }
+    /* Spans are inline by default */
+    body.en span[data-lang="en"] { display: inline; }
+    /* Hero eyebrow badge needs inline-flex */
+    body.en span.hero-eyebrow[data-lang="en"] { display: inline-flex; }
+    /* Buttons and badges need inline-block */
+    body.en .subsidy-badge[data-lang="en"],
+    body.en .story-result[data-lang="en"],
+    body.en .btn-primary[data-lang="en"],
+    body.en .btn-secondary[data-lang="en"],
+    body.en .contact-action[data-lang="en"] { display: inline-block; }
+    /* List items in pricing and value sections need flex (for ✓ icon + text layout) */
+    /* Higher specificity hide rules — required because .pricing-features li sets display:flex */
+    .pricing-features > li[data-lang="en"],
+    .value-list > li[data-lang="en"] { display: none; }
+    body.en .pricing-features > li[data-lang="zh"],
+    body.en .value-list > li[data-lang="zh"] { display: none; }
+    body.en .pricing-features > li[data-lang="en"],
+    body.en .value-list > li[data-lang="en"] { display: flex; }
+    /* Value section heading needs inline-block (for bottom border decoration) */
+    body.en .value-side > h3[data-lang="en"] { display: inline-block; }
+    /* Pricing card full-width buttons — pushed to bottom of flex card */
+    .pricing-btn { display: block; width: 100%; text-align: center; margin-top: auto; }
+    /* Explicit hide: .pricing-btn specificity equals [data-lang="en"], so must be more specific */
+    .pricing-btn[data-lang="en"] { display: none; }
+    body.en .pricing-btn[data-lang="en"] { display: block; }
+    body.en .pricing-btn[data-lang="zh"] { display: none; }
+    /* Enterprise card price spans need inline display */
+    body.en .pricing-ent-price span[data-lang="en"],
+    body.en .pricing-ent-price small[data-lang="en"] { display: inline; }
+    /* Pricing more link */
+    .pricing-more-link a[data-lang="en"] { display: none; }
+    body.en .pricing-more-link a[data-lang="en"] { display: inline; }
+    body.en .pricing-more-link a[data-lang="zh"] { display: none; }
+    /* Float WA tooltip */
+    body.en #float-wa::before { content: 'Free consult'; }
+    /* Footer — class selectors override [data-lang], need explicit hide rules */
+    .footer-col a[data-lang="en"],
+    .footer-col h4[data-lang="en"],
+    .footer-brand p[data-lang="en"],
+    .footer-bottom span[data-lang="en"] { display: none; }
+    body.en .footer-col a[data-lang="zh"],
+    body.en .footer-col h4[data-lang="zh"],
+    body.en .footer-brand p[data-lang="zh"],
+    body.en .footer-bottom span[data-lang="zh"] { display: none; }
+    body.en .footer-col a[data-lang="en"],
+    body.en .footer-col h4[data-lang="en"],
+    body.en .footer-brand p[data-lang="en"] { display: block; }
+    body.en .footer-bottom span[data-lang="en"] { display: inline; }
+  </style>
+</head>
+<body>
+
+<!-- ===== NAV ===== -->
+<nav id="nav">
+  <div class="container">
+    <a href="#hero" class="nav-logo">1688<span>.ie</span></a>
+    <ul class="nav-links">
+      <li><a href="#solutions" data-lang="zh">解决方案</a><a href="#solutions" data-lang="en">Solutions</a></li>
+      <li><a href="#industries" data-lang="zh">行业覆盖</a><a href="#industries" data-lang="en">Industries</a></li>
+      <li><a href="#pricing" data-lang="zh">旺铺套餐</a><a href="#pricing" data-lang="en">Pricing</a></li>
+      <li><a href="flow.html" data-lang="zh">业务流程</a><a href="flow.html" data-lang="en">How It Works</a></li>
+      <li><a href="help.html" data-lang="zh">帮助中心</a><a href="help.html" data-lang="en">Help</a></li>
+      <li><a href="#contact" data-lang="zh">立即咨询</a><a href="#contact" data-lang="en">Contact</a></li>
+    </ul>
+    <button class="lang-toggle" id="langBtn">EN</button>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#solutions" data-lang="zh" onclick="closeMobile()">解决方案</a>
+  <a href="#solutions" data-lang="en" onclick="closeMobile()">Solutions</a>
+  <a href="#industries" data-lang="zh" onclick="closeMobile()">行业覆盖</a>
+  <a href="#industries" data-lang="en" onclick="closeMobile()">Industries</a>
+  <a href="#pricing" data-lang="zh" onclick="closeMobile()">旺铺套餐</a>
+  <a href="#pricing" data-lang="en" onclick="closeMobile()">Pricing</a>
+  <a href="flow.html" data-lang="zh" onclick="closeMobile()">业务流程</a>
+  <a href="flow.html" data-lang="en" onclick="closeMobile()">How It Works</a>
+  <a href="help.html" data-lang="zh" onclick="closeMobile()">帮助中心</a>
+  <a href="help.html" data-lang="en" onclick="closeMobile()">Help</a>
+  <a href="#contact" data-lang="zh" onclick="closeMobile()">立即咨询</a>
+  <a href="#contact" data-lang="en" onclick="closeMobile()">Contact</a>
+</div>
+
+<!-- ===== SCREEN 1：解决什么问题 ===== -->
+<section id="hero">
+  <div class="container">
+    <span class="hero-eyebrow" data-lang="zh">🇮🇪 专为爱尔兰华人小生意而生</span>
+    <span class="hero-eyebrow" data-lang="en">🇮🇪 Built for Chinese small businesses in Ireland</span>
+
+    <h1 class="hero-title" data-lang="zh">
+      你的生意够好，<br>
+      <span class="red">但没人知道</span><br>
+      <span class="gold">——这才是问题所在</span>
+    </h1>
+    <h1 class="hero-title" data-lang="en">
+      Your business is great.<br>
+      <span class="red">But nobody knows it.</span><br>
+      <span class="gold">That's the real problem.</span>
+    </h1>
+
+    <p class="hero-desc" data-lang="zh">
+      在爱尔兰做小生意，技术不差、服务不差，但生意就是难做大。
+      根源往往是同一件事：<strong>没有系统</strong>——没有稳定的获客渠道，没有留住老客户的方法，没有让生意自己跑起来的工具。
+    </p>
+    <p class="hero-desc" data-lang="en">
+      Running a small business in Ireland — good skills, good service, but growth stalls.
+      The root cause is almost always the same: <strong>no system</strong> — no reliable way to attract customers, no way to retain regulars, no tools to make the business run itself.
+    </p>
+
+    <div class="pain-grid">
+      <div class="pain-card">
+        <span class="pain-icon">😶</span>
+        <div>
+          <h4 data-lang="zh">搜不到你</h4>
+          <h4 data-lang="en">You're invisible online</h4>
+          <p data-lang="zh">Google 搜"附近美甲"，出来的全是竞争对手。你没有网站，没有 Google 地图标注，没人知道你在哪。</p>
+          <p data-lang="en">Search "nail salon nearby" and only competitors show up. No website, no Google Maps listing — you're invisible to new customers.</p>
+        </div>
+      </div>
+      <div class="pain-card">
+        <span class="pain-icon">📞</span>
+        <div>
+          <h4 data-lang="zh">全靠口口相传</h4>
+          <h4 data-lang="en">100% word of mouth</h4>
+          <p data-lang="zh">新客人全靠老客介绍，淡季一来生意就断。没有主动获客的方式，生意每年都在靠运气。</p>
+          <p data-lang="en">Every new customer comes from a referral. In slow seasons, business dries up completely. Growth depends entirely on luck.</p>
+        </div>
+      </div>
+      <div class="pain-card">
+        <span class="pain-icon">🔄</span>
+        <div>
+          <h4 data-lang="zh">老客来了就走，留不住</h4>
+          <h4 data-lang="en">One-time visitors, no repeat business</h4>
+          <p data-lang="zh">客人做完就走，下次来不来靠缘分。没有积分、没有会员、没有优惠券，没有任何理由让他们回来。</p>
+          <p data-lang="en">Customers visit once and disappear. No loyalty points, no membership, no coupons — nothing to bring them back.</p>
+        </div>
+      </div>
+      <div class="pain-card">
+        <span class="pain-icon">🌐</span>
+        <div>
+          <h4 data-lang="zh">接不了线上订单</h4>
+          <h4 data-lang="en">Can't take orders online</h4>
+          <p data-lang="zh">客人想网上下单、提前预约、买礼品卡，你给不了。每笔生意都要电话或者当面谈，错失大量收入。</p>
+          <p data-lang="en">Customers want to order online, book ahead, buy gift cards. You can't offer that — every sale requires a phone call or walk-in.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-ctas">
+      <a href="#solutions" class="btn-primary" data-lang="zh">看我们怎么解决 →</a>
+      <a href="#solutions" class="btn-primary" data-lang="en">See How We Solve It →</a>
+      <a href="#contact" class="btn-secondary" data-lang="zh">免费咨询</a>
+      <a href="#contact" class="btn-secondary" data-lang="en">Free Consultation</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SCREEN 2：我们提供什么解决方案 ===== -->
+<section id="solutions">
+  <div class="container">
+    <h2 class="section-title fade-in" data-lang="zh">我们提供的<span>解决方案</span></h2>
+    <h2 class="section-title fade-in" data-lang="en">Our <span>Solutions</span></h2>
+
+    <div class="solutions-intro fade-in">
+      <p data-lang="zh">
+        以下每一项都是针对爱尔兰华人生意的<strong style="color:var(--gold)">定制开发</strong>，不是模板套壳。
+        你选择套餐，我们根据你的生意量身打造——你的品牌、你的语言、你的客户群。
+      </p>
+      <p data-lang="en">
+        Every solution below is <strong style="color:var(--gold)">custom-built</strong> for your business — not a template.
+        You choose a plan, we build around your brand, your language, and your customers.
+      </p>
+    </div>
+
+    <div class="solutions-grid">
+
+      <div class="solution-item fade-in">
+        <span class="solution-num">01</span>
+        <span class="solution-icon">🌐</span>
+        <h3 data-lang="zh">中英双语商户网站</h3>
+        <h3 data-lang="en">Bilingual Business Website</h3>
+        <p data-lang="zh">定制开发的中英文网站，展示你的服务、价格、地址、客户评价。手机端优化，一搜就到，让爱尔兰本地人和华人都能找到你。</p>
+        <p data-lang="en">Custom-built site in Chinese and English. Services, prices, location, reviews — mobile-first, Google-ready, discoverable by both local Irish and Chinese customers.</p>
+      </div>
+
+      <div class="solution-item fade-in">
+        <span class="solution-num">02</span>
+        <span class="solution-icon">🛍️</span>
+        <h3 data-lang="zh">电商 &amp; 在线下单系统</h3>
+        <h3 data-lang="en">E-Commerce &amp; Online Ordering</h3>
+        <p data-lang="zh">让客人在手机上直接下单、支付、选取货时间。支持外卖接单、预约到店、礼品卡购买，24 小时替你做生意。</p>
+        <p data-lang="en">Customers order, pay, and schedule pickups directly from their phone. Supports takeaway, appointments, and gift card sales — your business works 24/7 without you.</p>
+      </div>
+
+      <div class="solution-item highlight fade-in">
+        <span class="solution-num">03</span>
+        <span class="solution-icon">🏆</span>
+        <h3 data-lang="zh">会员 &amp; 积分系统</h3>
+        <h3 data-lang="en">Membership &amp; Loyalty Points</h3>
+        <p data-lang="zh">客人消费自动累积积分，积分换折扣、换礼品。会员专属价格让老客感受到被重视，回头率直接翻倍。</p>
+        <p data-lang="en">Spending earns points. Points unlock discounts and gifts. Exclusive member pricing makes regulars feel valued — repeat visit rates typically double.</p>
+      </div>
+
+      <div class="solution-item fade-in">
+        <span class="solution-num">04</span>
+        <span class="solution-icon">🎟️</span>
+        <h3 data-lang="zh">优惠券 &amp; 折扣活动</h3>
+        <h3 data-lang="en">Coupons &amp; Discount Campaigns</h3>
+        <p data-lang="zh">数字优惠券一键生成，节假日限时折扣、首单优惠、老带新奖励——精准触达客人，比朋友圈发图效果强十倍。</p>
+        <p data-lang="en">Digital coupons created in minutes. Holiday deals, first-order discounts, referral rewards — targeted and trackable, far more effective than WeChat Moments posts.</p>
+      </div>
+
+      <div class="solution-item fade-in">
+        <span class="solution-num">05</span>
+        <span class="solution-icon">📅</span>
+        <h3 data-lang="zh">在线预约系统</h3>
+        <h3 data-lang="en">Online Booking System</h3>
+        <p data-lang="zh">客人自助选时间、选服务、在线付定金。自动发确认短信，减少爽约率，你不用守着电话接预约了。</p>
+        <p data-lang="en">Customers self-book, choose services, pay deposits online. Automated SMS confirmations reduce no-shows — no more waiting by the phone for bookings.</p>
+      </div>
+
+      <div class="solution-item fade-in">
+        <span class="solution-num">06</span>
+        <span class="solution-icon">📣</span>
+        <h3 data-lang="zh">广告投放管理</h3>
+        <h3 data-lang="en">Digital Ad Management</h3>
+        <p data-lang="zh">Google Ads、Facebook / Instagram 广告定向投放，针对爱尔兰华人社区和本地居民精准触达。我们帮你写文案、选受众、看数据、调优化。</p>
+        <p data-lang="en">Google Ads and Facebook/Instagram campaigns targeted at local Irish residents and the Chinese community. We write copy, select audiences, monitor data, and optimise continuously.</p>
+      </div>
+
+      <div class="solution-item fade-in">
+        <span class="solution-num">07</span>
+        <span class="solution-icon">🔍</span>
+        <h3 data-lang="zh">SEO 搜索排名优化</h3>
+        <h3 data-lang="en">SEO &amp; Google Rankings</h3>
+        <p data-lang="zh">持续优化你在 Google 的自然排名。关键词研究、内容更新、Google 地图标注管理——让你在"附近搜索"结果里长期靠前。</p>
+        <p data-lang="en">Ongoing improvement of your organic Google rankings. Keyword research, content updates, Google Maps management — maintaining your position at the top of local searches.</p>
+      </div>
+
+      <div class="solution-item fade-in">
+        <span class="solution-num">08</span>
+        <span class="solution-icon">💬</span>
+        <h3 data-lang="zh">WhatsApp / 微信营销</h3>
+        <h3 data-lang="en">WhatsApp &amp; WeChat Marketing</h3>
+        <p data-lang="zh">建立客户联系人列表，定期发优惠信息、新品上市、节日问候。让沉睡客户重新活跃，让老客人想起你。</p>
+        <p data-lang="en">Build a customer contact list and send targeted offers, new service announcements, and seasonal greetings. Re-activate dormant customers and stay top of mind.</p>
+      </div>
+
+      <div class="solution-item fade-in">
+        <span class="solution-num">09</span>
+        <span class="solution-icon">📊</span>
+        <h3 data-lang="zh">数据分析 &amp; 月度报告</h3>
+        <h3 data-lang="en">Analytics &amp; Monthly Reports</h3>
+        <p data-lang="zh">每个月告诉你：有多少人看了你的页面，多少人点了电话，哪个广告带来最多客人，哪些服务最受欢迎——用数据做决定，不靠感觉。</p>
+        <p data-lang="en">Monthly report: how many viewed your page, how many clicked your number, which ad brought the most customers, which services are most popular — decisions driven by data, not gut feeling.</p>
+      </div>
+
+    </div>
+
+    <div class="solutions-note fade-in">
+      <p data-lang="zh">
+        以上所有功能均为<strong>定制开发</strong>，根据你选择的套餐组合搭配。
+        没有现成模板，每一个旺铺都是为你的生意单独搭建的。
+        <br>→ <a href="#pricing" style="color:var(--gold)">查看套餐组合</a>
+      </p>
+      <p data-lang="en">
+        All of the above are <strong>custom-built</strong> for your business based on your chosen plan.
+        No templates — every Wangpu is built specifically for you.
+        <br>→ <a href="#pricing" style="color:var(--gold)">View pricing plans</a>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SCREEN 3：8 大行业 ===== -->
+<section id="industries">
+  <div class="container">
+    <h2 class="section-title fade-in" data-lang="zh">覆盖 <span>8 大行业</span>，你的生意在其中</h2>
+    <h2 class="section-title fade-in" data-lang="en"><span>8 Industries</span> We Cover</h2>
+    <p class="section-sub fade-in" data-lang="zh">爱尔兰华人常见的生意类型，我们都深入了解过，所以能真正帮到你</p>
+    <p class="section-sub fade-in" data-lang="en">We've worked with all the most common Chinese-run businesses in Ireland — we understand your specific challenges</p>
+
+    <div class="industries-grid">
+      <!-- 美甲美睫 -->
+      <a class="industry-card fade-in" href="https://beauty-549968261036.europe-west1.run.app/guide" target="_blank" rel="noopener">
+        <span class="industry-emoji">💅</span>
+        <h3 data-lang="zh">美甲美睫</h3>
+        <h3 data-lang="en">Nail &amp; Lash</h3>
+        <p class="industry-headline" data-lang="zh">客人自己订时间、付定金，No-show 爽约率掉 70%</p>
+        <p class="industry-headline" data-lang="en">Self-booking with deposits — cut no-shows by 70%</p>
+        <p class="industry-desc" data-lang="zh">在线预约 + 定金锁档 + 作品集展示 + 6 周自动召回短信，周末档不再被放鸽子</p>
+        <p class="industry-desc" data-lang="en">Online booking + deposit lock-in + portfolio + 6-week auto-recall SMS — never lose a weekend slot to no-shows</p>
+        <p class="industry-proof" data-lang="zh">Lucan 陈姐美甲上线 3 个月，周末档 95% 提前订满</p>
+        <p class="industry-proof" data-lang="en">Sister Chen's Nails (Dublin Lucan) — 95% weekend slots pre-booked after 3 months</p>
+        <span class="industry-demo-link" data-lang="zh">查看在线演示 →</span>
+        <span class="industry-demo-link" data-lang="en">View Live Demo →</span>
+      </a>
+      <!-- 理发造型 -->
+      <div class="industry-card fade-in">
+        <span class="industry-emoji">✂️</span>
+        <h3 data-lang="zh">理发造型</h3>
+        <h3 data-lang="en">Hair Salon</h3>
+        <p class="industry-headline" data-lang="zh">客人指定 Tony、记住每次发型，6 周到期自动短信召回</p>
+        <p class="industry-headline" data-lang="en">Stylist preference + cut history + 6-week auto SMS recall</p>
+        <p class="industry-desc" data-lang="zh">多 Tony 排班 + 客户发型档案 + 染烫时长智能预留，告别"上次怎么剪的我忘了"</p>
+        <p class="industry-desc" data-lang="en">Multi-stylist scheduling + client cut profiles + smart time blocks for colour/perm — never ask "how did we cut it last time?" again</p>
+        <p class="industry-proof" data-lang="zh">行业平均回头率 35%，系统化召回后可提升至 60%+</p>
+        <p class="industry-proof" data-lang="en">Industry average repeat rate is 35% — systematic recall pushes it past 60%</p>
+      </div>
+      <!-- 手机维修 -->
+      <div class="industry-card fade-in">
+        <span class="industry-emoji">📱</span>
+        <h3 data-lang="zh">手机维修</h3>
+        <h3 data-lang="en">Phone Repair</h3>
+        <p class="industry-headline" data-lang="zh">客人在网上输手机型号秒看价，你不用接电话报价了</p>
+        <p class="industry-headline" data-lang="en">Customers self-quote by phone model — stop fielding price calls</p>
+        <p class="industry-desc" data-lang="zh">透明价目 + 在线下单 + 当日取件提醒 + 维修历史档案，新客自助、老客复购</p>
+        <p class="industry-desc" data-lang="en">Transparent pricing + online orders + same-day pickup alerts + repair history — self-service for new clients, easy returns for regulars</p>
+        <p class="industry-proof" data-lang="zh">Cork 阿强手机维修上线 5 个月，月营业额 +€1,800</p>
+        <p class="industry-proof" data-lang="en">A-Qiang Phone Repair (Cork) — +€1,800 monthly revenue after 5 months</p>
+      </div>
+      <!-- 汽车修理 -->
+      <div class="industry-card fade-in">
+        <span class="industry-emoji">🔧</span>
+        <h3 data-lang="zh">汽车修理</h3>
+        <h3 data-lang="en">Auto Service</h3>
+        <p class="industry-headline" data-lang="zh">NCT / Tax / 保养自动到期提醒，客户车没出问题先想到你</p>
+        <p class="industry-headline" data-lang="en">Auto reminders for NCT, Tax &amp; service — be the first call before things break</p>
+        <p class="industry-desc" data-lang="zh">NCT 在线预约 + 完整车辆服务档案 + 保险公司报价单一键导出，客户的车你比他更懂</p>
+        <p class="industry-desc" data-lang="en">NCT online booking + full service history per vehicle + one-click insurance quotes — know each car better than the owner</p>
+        <p class="industry-proof" data-lang="zh">一台车一年触达 4–6 次提醒，主动复购率提升 2 倍</p>
+        <p class="industry-proof" data-lang="en">4–6 reminder touchpoints per car per year — doubles proactive return visits</p>
+      </div>
+      <!-- 园艺草坪 -->
+      <div class="industry-card fade-in">
+        <span class="industry-emoji">🌿</span>
+        <h3 data-lang="zh">园艺草坪</h3>
+        <h3 data-lang="en">Gardening</h3>
+        <p class="industry-headline" data-lang="zh">客人发花园照片直接出报价，你不用每单跑一趟</p>
+        <p class="industry-headline" data-lang="en">Customers send photos, get quotes — stop driving to every site</p>
+        <p class="industry-desc" data-lang="zh">照片报价表单 + 14 天自动排期 + 雨天顺延通知 + 施工前后对比相册，锁定一整个夏天的活</p>
+        <p class="industry-desc" data-lang="en">Photo-based quote forms + 14-day auto-scheduling + rain-day reschedule alerts + before/after gallery — book out your entire summer</p>
+        <p class="industry-proof" data-lang="zh">上门估价转化率约 40%，远程报价转化率 70%+，跑空成本直接省掉</p>
+        <p class="industry-proof" data-lang="en">On-site quotes convert at ~40%; remote photo quotes hit 70%+ — eliminate wasted trips entirely</p>
+      </div>
+      <!-- 中餐外卖 -->
+      <div class="industry-card fade-in">
+        <span class="industry-emoji">🍜</span>
+        <h3 data-lang="zh">中餐外卖</h3>
+        <h3 data-lang="en">Chinese Takeaway</h3>
+        <p class="industry-headline" data-lang="zh">自家下单平台，告别 Just Eat 30% 抽成，客户数据归你</p>
+        <p class="industry-headline" data-lang="en">Your own ordering site — no 30% commission, customer data stays yours</p>
+        <p class="industry-desc" data-lang="zh">在线点单 + Stripe 直收 + 中英双语菜单 + 老客积分召回，平台只是你的渠道之一</p>
+        <p class="industry-desc" data-lang="en">Online ordering + direct Stripe payments + bilingual menu + loyalty points — make platforms just one of your channels, not your only one</p>
+        <p class="industry-proof" data-lang="zh">月营业额 €10,000 的店，自家下单一年省下 €34,200 平台佣金</p>
+        <p class="industry-proof" data-lang="en">A €10k/month shop saves €34,200/year in platform fees by selling direct</p>
+      </div>
+      <!-- 仓储物流 -->
+      <div class="industry-card fade-in">
+        <span class="industry-emoji">📦</span>
+        <h3 data-lang="zh">仓储物流</h3>
+        <h3 data-lang="en">Storage &amp; Logistics</h3>
+        <p class="industry-headline" data-lang="zh">货主自助查货 + 货位条码扫描 + 自动对账单 + 中英双语出入库单</p>
+        <p class="industry-headline" data-lang="en">Self-service stock tracking + barcode bin location + auto reconciliation + bilingual docs</p>
+        <p class="industry-desc" data-lang="zh">海外仓（替别人保管）和本地仓（自己进货卖）是两套生意，我们都做了完整 demo</p>
+        <p class="industry-desc" data-lang="en">Overseas freight warehouse (storing others' goods) vs. local import warehouse (your own inventory) — full live demos for both</p>
+        <div style="display:flex; gap:8px; margin-top:14px; flex-wrap:wrap;">
+          <a href="warehouse-demo/index.html" target="_blank" rel="noopener" style="flex:1; min-width:140px; padding:10px 12px; background:#0d4f3c; color:#fff; border-radius:8px; font-size:0.78rem; font-weight:700; text-decoration:none; text-align:center; transition:all .2s;" onmouseover="this.style.background='#1a7a5e'" onmouseout="this.style.background='#0d4f3c'">
+            <span data-lang="zh">📦 海外仓 Demo →</span>
+            <span data-lang="en">📦 Overseas Demo →</span>
+          </a>
+          <a href="local-warehouse-demo/index.html" target="_blank" rel="noopener" style="flex:1; min-width:140px; padding:10px 12px; background:#1e3a5f; color:#fff; border-radius:8px; font-size:0.78rem; font-weight:700; text-decoration:none; text-align:center; transition:all .2s;" onmouseover="this.style.background='#ea580c'" onmouseout="this.style.background='#1e3a5f'">
+            <span data-lang="zh">🏗️ 本地仓 Demo →</span>
+            <span data-lang="en">🏗️ Local Demo →</span>
+          </a>
+        </div>
+      </div>
+      <!-- 手机配件店 -->
+      <div class="industry-card fade-in">
+        <span class="industry-emoji">🛒</span>
+        <h3 data-lang="zh">手机配件店</h3>
+        <h3 data-lang="en">Accessories Shop</h3>
+        <p class="industry-headline" data-lang="zh">B 端 C 端两套价格自动切换，新款到货按客户标签精准推送</p>
+        <p class="industry-headline" data-lang="en">Wholesale &amp; retail pricing auto-switch; new arrivals push to tagged customers</p>
+        <p class="industry-desc" data-lang="zh">双价体系 + 客户分组标签 + 新品到货自动通知，告别"半夜在群里发壳子图"</p>
+        <p class="industry-desc" data-lang="en">Dual pricing tiers + customer tagging + automated new-arrival notifications — stop blasting case photos in WeChat groups at midnight</p>
+        <p class="industry-proof" data-lang="zh">一个 200 SKU 的配件店，微信群手动通知转化率 &lt;2%，标签精准推送可达 12%+</p>
+        <p class="industry-proof" data-lang="en">A 200-SKU accessories shop sees &lt;2% conversion from group blasts; tagged push hits 12%+</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SCREEN 4：真实故事 ===== -->
+<section id="stories">
+  <div class="container">
+    <h2 class="section-title fade-in" data-lang="zh"><span>真实故事</span>，真实生意</h2>
+    <h2 class="section-title fade-in" data-lang="en"><span>Real Stories</span>, Real Results</h2>
+    <p class="section-sub fade-in" data-lang="zh">这些是和我们合作的华人老板，他们的原话</p>
+    <p class="section-sub fade-in" data-lang="en">These are the actual words of Chinese business owners who work with us</p>
+
+    <div class="stories-grid">
+      <div class="story-card fade-in">
+        <p class="story-text" data-lang="zh">
+          以前靠老客介绍，每个月最担心淡季。上了旺铺之后，
+          帮我加了预约系统和积分，客人主动回来了——上个月积分兑换的就有十几单。
+          还有爱尔兰女生专门 Google 到我的，说搜"nail salon Lucan"就看到我了。
+        </p>
+        <p class="story-text" data-lang="en">
+          Before, I relied on referrals and dreaded slow months. After Wangpu added my booking system and loyalty points,
+          clients started coming back on their own — last month alone, over a dozen redemptions.
+          An Irish girl even found me on Google by searching "nail salon Lucan."
+        </p>
+        <div class="story-author">
+          <div class="story-avatar">陈</div>
+          <div class="story-author-info">
+            <strong data-lang="zh">陈姐美甲 · Dublin Lucan</strong>
+            <strong data-lang="en">Sister Chen's Nails · Dublin Lucan</strong>
+            <span data-lang="zh">上线 3 个月</span>
+            <span data-lang="en">3 months live</span>
+            <div class="story-result" data-lang="zh">新客增加 +40%</div>
+            <div class="story-result" data-lang="en">+40% new customers</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="story-card fade-in">
+        <p class="story-text" data-lang="zh">
+          我一个人修手机，不会做宣传。旺铺帮我建了个页面，
+          写清楚我修什么型号、多少钱、几小时出来，还开了在线下单。
+          现在有客人下班前在网上下单，我备好零件，他下班直接来取，
+          省了他等待时间，也省了我反复接电话。
+        </p>
+        <p class="story-text" data-lang="en">
+          I run the shop alone with zero marketing. Wangpu built my page — listing models, prices, turnaround times —
+          and added online ordering. Now customers place orders before they finish work,
+          I prep the parts, they pick it up after work. Saves everyone time, and I stopped losing calls.
+        </p>
+        <div class="story-author">
+          <div class="story-avatar">强</div>
+          <div class="story-author-info">
+            <strong data-lang="zh">阿强手机维修 · Cork 市中心</strong>
+            <strong data-lang="en">A-Qiang Phone Repair · Cork City Centre</strong>
+            <span data-lang="zh">上线 5 个月</span>
+            <span data-lang="en">5 months live</span>
+            <div class="story-result" data-lang="zh">月营业额增加 €1,800</div>
+            <div class="story-result" data-lang="en">+€1,800 monthly revenue</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="story-card fade-in">
+        <p class="story-text" data-lang="zh">
+          我们在 Limerick 做华人货物批发，以前客人全靠微信群，
+          旺铺帮我们搭了一个批发客户系统，企业客户登录后看专属报价，
+          在线下单，自动出入库单。效率提升了很多，
+          还帮我们申请了政府的 €2,500 补贴，等于前两年月费全免了。
+        </p>
+        <p class="story-text" data-lang="en">
+          We run Chinese goods wholesale in Limerick — previously all managed through WeChat.
+          Wangpu built us a wholesale client system: business clients log in, see their pricing, order online,
+          get automatic fulfilment documents. Far more efficient.
+          They also helped us get the €2,500 government grant, which covered almost two years of fees.
+        </p>
+        <div class="story-author">
+          <div class="story-avatar">李</div>
+          <div class="story-author-info">
+            <strong data-lang="zh">李氏批发仓 · Limerick</strong>
+            <strong data-lang="en">Li Family Wholesale · Limerick</strong>
+            <span data-lang="zh">上线 8 个月</span>
+            <span data-lang="en">8 months live</span>
+            <div class="story-result" data-lang="zh">政府补贴 €2,500 已到账</div>
+            <div class="story-result" data-lang="en">€2,500 gov grant received</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SCREEN 5：旺铺套餐 ===== -->
+<section id="pricing">
+  <div class="container">
+    <h2 class="section-title fade-in" data-lang="zh">选择你的<span>旺铺套餐</span></h2>
+    <h2 class="section-title fade-in" data-lang="en">Choose Your <span>Wangpu Plan</span></h2>
+    <p class="section-sub fade-in" data-lang="zh">四档标准方案 + 企业定制，按需选择，随时升级。全部定制开发，绝不套模板</p>
+    <p class="section-sub fade-in" data-lang="en">Four tiers + enterprise bespoke — pick your fit, upgrade anytime. All custom-built, never templated</p>
+
+    <div class="pricing-grid">
+
+      <!-- STARTER 入门旺铺 -->
+      <div class="pricing-card fade-in">
+        <div class="pricing-name" data-lang="zh">入门旺铺</div>
+        <div class="pricing-name" data-lang="en">Starter</div>
+        <div class="pricing-tagline" data-lang="zh">先上线，先被搜到</div>
+        <div class="pricing-tagline" data-lang="en">Get online, get found</div>
+        <div class="pricing-price">€499</div>
+        <div class="pricing-period" data-lang="zh">一次性建站费</div>
+        <div class="pricing-period" data-lang="en">one-time setup fee</div>
+        <ul class="pricing-features">
+          <li data-lang="zh">3–5 页企业官网（行业模板）</li>
+          <li data-lang="en">3–5 page website (industry template)</li>
+          <li data-lang="zh">.ie / .com 域名首年免费</li>
+          <li data-lang="en">.ie/.com domain (first year free)</li>
+          <li data-lang="zh">爱尔兰服务器 + SSL + 每日备份</li>
+          <li data-lang="en">Irish server + SSL + daily backup</li>
+          <li data-lang="zh">在线留言 / 报价表单</li>
+          <li data-lang="en">Online enquiry / quote form</li>
+          <li data-lang="zh">基础 SEO + Google Analytics</li>
+          <li data-lang="en">Basic SEO + Google Analytics</li>
+          <li data-lang="zh">中文客服 5×8</li>
+          <li data-lang="en">CN support 5×8</li>
+        </ul>
+        <div class="pricing-monthly" data-lang="zh">+ €39/月 维护托管</div>
+        <div class="pricing-monthly" data-lang="en">+ €39/month hosting &amp; maintenance</div>
+        <a href="#contact" class="btn-secondary pricing-btn" data-lang="zh">咨询入门旺铺</a>
+        <a href="#contact" class="btn-secondary pricing-btn" data-lang="en">Enquire Now</a>
+      </div>
+
+      <!-- ESSENTIAL 基础旺铺 (featured) -->
+      <div class="pricing-card featured fade-in">
+        <div class="pricing-badge" data-lang="zh">⭐ 最多人选</div>
+        <div class="pricing-badge" data-lang="en">⭐ Most Popular</div>
+        <div class="pricing-name" data-lang="zh">基础旺铺</div>
+        <div class="pricing-name" data-lang="en">Essential</div>
+        <div class="pricing-tagline" data-lang="zh">开始收款，留住老客</div>
+        <div class="pricing-tagline" data-lang="en">Start selling, retain regulars</div>
+        <div class="pricing-price">€999</div>
+        <div class="pricing-period" data-lang="zh">一次性建站费</div>
+        <div class="pricing-period" data-lang="en">one-time setup fee</div>
+        <ul class="pricing-features">
+          <li data-lang="zh">含入门旺铺全部功能</li>
+          <li data-lang="en">Everything in Starter</li>
+          <li data-lang="zh">✨ 完整电商（100 SKU + 购物车）</li>
+          <li data-lang="en">✨ Full e-commerce (100 SKUs)</li>
+          <li data-lang="zh">✨ Stripe / 微信 / 支付宝收款</li>
+          <li data-lang="en">✨ Stripe / WeChat / Alipay</li>
+          <li data-lang="zh">✨ 会员积分 + 优惠券系统</li>
+          <li data-lang="en">✨ Loyalty points + coupons</li>
+          <li data-lang="zh">✨ 中英双语切换</li>
+          <li data-lang="en">✨ Bilingual (CN + EN)</li>
+          <li data-lang="zh">✨ 爱尔兰 23% VAT 自动计算</li>
+          <li data-lang="en">✨ Auto Irish VAT (23%)</li>
+        </ul>
+        <div class="pricing-monthly" data-lang="zh">+ €79/月 维护托管</div>
+        <div class="pricing-monthly" data-lang="en">+ €79/month hosting &amp; maintenance</div>
+        <a href="#contact" class="btn-primary pricing-btn" data-lang="zh">立即咨询基础旺铺</a>
+        <a href="#contact" class="btn-primary pricing-btn" data-lang="en">Enquire Now</a>
+      </div>
+
+      <!-- GROWTH 成长旺铺 -->
+      <div class="pricing-card fade-in">
+        <div class="pricing-name" data-lang="zh">成长旺铺</div>
+        <div class="pricing-name" data-lang="en">Growth</div>
+        <div class="pricing-tagline" data-lang="zh">多店连锁，系统化管理</div>
+        <div class="pricing-tagline" data-lang="en">Multi-location, systematic ops</div>
+        <div class="pricing-price">€4,999</div>
+        <div class="pricing-period" data-lang="zh">一次性建站费</div>
+        <div class="pricing-period" data-lang="en">one-time setup fee</div>
+        <ul class="pricing-features">
+          <li data-lang="zh">含基础旺铺全部功能</li>
+          <li data-lang="en">Everything in Essential</li>
+          <li data-lang="zh">✨ 在线预约 + 员工排期</li>
+          <li data-lang="en">✨ Booking + staff scheduling</li>
+          <li data-lang="zh">✨ 进阶库存（多仓 / 条码）</li>
+          <li data-lang="en">✨ Inventory (multi-warehouse)</li>
+          <li data-lang="zh">✨ 基础 CRM + 客户标签</li>
+          <li data-lang="en">✨ CRM + customer tags</li>
+          <li data-lang="zh">✨ 3–15 员工账号 + 排班</li>
+          <li data-lang="en">✨ 3–15 staff + scheduling</li>
+          <li data-lang="zh">✨ 多门店（最多 5 家）</li>
+          <li data-lang="en">✨ Multi-location (up to 5)</li>
+        </ul>
+        <div class="pricing-monthly" data-lang="zh">+ €299/月 SaaS 运营</div>
+        <div class="pricing-monthly" data-lang="en">+ €299/month SaaS ops</div>
+        <a href="#contact" class="btn-secondary pricing-btn" data-lang="zh">咨询成长旺铺</a>
+        <a href="#contact" class="btn-secondary pricing-btn" data-lang="en">Enquire Now</a>
+      </div>
+
+      <!-- BUSINESS 商务旺铺 -->
+      <div class="pricing-card fade-in">
+        <div class="pricing-name" data-lang="zh">商务旺铺</div>
+        <div class="pricing-name" data-lang="en">Business</div>
+        <div class="pricing-tagline" data-lang="zh">全套自动化，规模扩张</div>
+        <div class="pricing-tagline" data-lang="en">Full automation, built to scale</div>
+        <div class="pricing-price">€14,999</div>
+        <div class="pricing-period" data-lang="zh">一次性建站费</div>
+        <div class="pricing-period" data-lang="en">one-time setup fee</div>
+        <ul class="pricing-features">
+          <li data-lang="zh">含成长旺铺全部功能</li>
+          <li data-lang="en">Everything in Growth</li>
+          <li data-lang="zh">✨ 营销自动化工作流</li>
+          <li data-lang="en">✨ Marketing automation</li>
+          <li data-lang="zh">✨ 社媒统一发布（含小红书）</li>
+          <li data-lang="en">✨ Unified social (incl. Xiaohongshu)</li>
+          <li data-lang="zh">✨ 短信 + AI 电话（按量）</li>
+          <li data-lang="en">✨ SMS + AI calling (metered)</li>
+          <li data-lang="zh">✨ 多公司 / 多币种收款</li>
+          <li data-lang="en">✨ Multi-entity / multi-currency</li>
+        </ul>
+        <div class="pricing-monthly" data-lang="zh">+ €699/月 SaaS 运营</div>
+        <div class="pricing-monthly" data-lang="en">+ €699/month SaaS ops</div>
+        <a href="#contact" class="btn-secondary pricing-btn" data-lang="zh">咨询商务旺铺</a>
+        <a href="#contact" class="btn-secondary pricing-btn" data-lang="en">Enquire Now</a>
+      </div>
+
+    </div><!-- /.pricing-grid -->
+
+    <!-- Enterprise 2-banner row -->
+    <div class="pricing-enterprise">
+      <div class="pricing-ent-card fade-in">
+        <div class="pricing-ent-info">
+          <h4 data-lang="zh">企业旺铺 ENTERPRISE</h4>
+          <h4 data-lang="en">Enterprise Plan</h4>
+          <p data-lang="zh">50–150 人 / 跨境集团 / 大型连锁，含 ERP + MRP + 多国税务，专属 CSM</p>
+          <p data-lang="en">50–150 staff / cross-border group / large chain — ERP + MRP + multi-country tax, dedicated CSM</p>
+          <div class="pricing-ent-price">
+            <span data-lang="zh">€39,999 起</span>
+            <span data-lang="en">from €39,999</span>
+            <small data-lang="zh">+ €1,499/月 · 1h SLA</small>
+            <small data-lang="en">+ €1,499/mo · 1h SLA</small>
+          </div>
+        </div>
+        <a href="#contact" class="btn-secondary pricing-btn pricing-ent-btn" data-lang="zh">联系咨询</a>
+        <a href="#contact" class="btn-secondary pricing-btn pricing-ent-btn" data-lang="en">Contact Us</a>
+      </div>
+      <div class="pricing-ent-card fade-in">
+        <div class="pricing-ent-info">
+          <h4 data-lang="zh">完全定制 BESPOKE</h4>
+          <h4 data-lang="en">Bespoke / Custom</h4>
+          <p data-lang="zh">行业定制 / 源码交付 / 私有部署 / 独立 SaaS 平台 / 专属开发团队</p>
+          <p data-lang="en">Industry-specific / source code delivery / private deployment / standalone SaaS / dedicated dev team</p>
+          <div class="pricing-ent-price">
+            <span data-lang="zh">€69,999 起</span>
+            <span data-lang="en">from €69,999</span>
+            <small data-lang="zh">· 所有参数单议</small>
+            <small data-lang="en">· All terms negotiable</small>
+          </div>
+        </div>
+        <a href="#contact" class="btn-secondary pricing-btn pricing-ent-btn" data-lang="zh">联系咨询</a>
+        <a href="#contact" class="btn-secondary pricing-btn pricing-ent-btn" data-lang="en">Contact Us</a>
+      </div>
+    </div><!-- /.pricing-enterprise -->
+
+    <!-- View full pricing page -->
+    <div class="pricing-more-link fade-in">
+      <a href="pricing-demo.html" data-lang="zh">查看完整功能对比与定价详情 →</a>
+      <a href="pricing-demo.html" data-lang="en">View full feature comparison &amp; pricing details →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SCREEN 6：月费买到了什么 ===== -->
+<section id="value">
+  <div class="container">
+    <h2 class="section-title fade-in" data-lang="zh">月费<span>买到了什么</span></h2>
+    <h2 class="section-title fade-in" data-lang="en">What Your <span>Monthly Fee</span> Gets You</h2>
+    <p class="section-sub fade-in" data-lang="zh">中旺铺月费 €199，对比自己雇人或外包</p>
+    <p class="section-sub fade-in" data-lang="en">Growth plan at €199/month — versus hiring or outsourcing yourself</p>
+
+    <div class="value-grid">
+      <div class="value-side fade-in">
+        <h3 data-lang="zh">旺铺月费包含</h3>
+        <h3 data-lang="en">Included in Monthly Fee</h3>
+        <ul class="value-list">
+          <li>
+            <span class="icon">📝</span>
+            <div>
+              <strong data-lang="zh">每月内容制作 4 篇</strong>
+              <strong data-lang="en">4 pieces of content/month</strong>
+              <p data-lang="zh">中英双语图文，覆盖 Google、Facebook、Instagram 渠道</p>
+              <p data-lang="en">Bilingual posts across Google, Facebook, and Instagram</p>
+            </div>
+          </li>
+          <li>
+            <span class="icon">🔍</span>
+            <div>
+              <strong data-lang="zh">SEO + 排名持续维护</strong>
+              <strong data-lang="en">Ongoing SEO &amp; ranking maintenance</strong>
+              <p data-lang="zh">关键词监控、内容更新、Google 地图评分管理</p>
+              <p data-lang="en">Keyword monitoring, content updates, Google Maps review management</p>
+            </div>
+          </li>
+          <li>
+            <span class="icon">🎯</span>
+            <div>
+              <strong data-lang="zh">广告优化 + 节日活动</strong>
+              <strong data-lang="en">Ad optimisation + seasonal campaigns</strong>
+              <p data-lang="zh">每月调整广告受众和出价，春节、圣帕节、复活节等节点活动策划</p>
+              <p data-lang="en">Monthly audience and bid adjustments, CNY/St Patrick's/Easter campaigns</p>
+            </div>
+          </li>
+          <li>
+            <span class="icon">🎫</span>
+            <div>
+              <strong data-lang="zh">优惠券 + 积分活动维护</strong>
+              <strong data-lang="en">Coupon &amp; loyalty programme management</strong>
+              <p data-lang="zh">发放优惠券、更新积分规则、维护会员数据</p>
+              <p data-lang="en">Issuing coupons, updating points rules, maintaining member data</p>
+            </div>
+          </li>
+          <li>
+            <span class="icon">🔧</span>
+            <div>
+              <strong data-lang="zh">技术维护不停歇</strong>
+              <strong data-lang="en">24/7 technical maintenance</strong>
+              <p data-lang="zh">网站更新、信息修改、宕机响应，你无需操心任何技术问题</p>
+              <p data-lang="en">Content updates, info changes, uptime monitoring — zero technical worries for you</p>
+            </div>
+          </li>
+        </ul>
+        <div class="value-total">
+          <span data-lang="zh">市场价总值约</span>
+          <span data-lang="en">Market value approx.</span>
+          <strong data-lang="zh">€800+/月</strong>
+          <strong data-lang="en">€800+/mo</strong>
+        </div>
+      </div>
+
+      <div class="value-side fade-in">
+        <h3 data-lang="zh">自己做的代价</h3>
+        <h3 data-lang="en">The DIY Cost</h3>
+        <ul class="value-list">
+          <li>
+            <span class="icon" style="background:var(--ink-mute)">人</span>
+            <div>
+              <strong data-lang="zh">兼职社媒专员</strong>
+              <strong data-lang="en">Part-time social media person</strong>
+              <p data-lang="zh">€400–600/月，不懂双语，不懂华人生意</p>
+              <p data-lang="en">€400–600/month, not bilingual, doesn't understand Chinese businesses</p>
+            </div>
+          </li>
+          <li>
+            <span class="icon" style="background:var(--ink-mute)">搜</span>
+            <div>
+              <strong data-lang="zh">SEO 顾问</strong>
+              <strong data-lang="en">SEO consultant</strong>
+              <p data-lang="zh">€200–400/月，多数不懂中文内容优化</p>
+              <p data-lang="en">€200–400/month, most can't handle Chinese-language content</p>
+            </div>
+          </li>
+          <li>
+            <span class="icon" style="background:var(--ink-mute)">📷</span>
+            <div>
+              <strong data-lang="zh">摄影师</strong>
+              <strong data-lang="en">Photographer</strong>
+              <p data-lang="zh">每次 €150–300，一年四次就是 €600–1,200</p>
+              <p data-lang="en">€150–300 per shoot — four sessions a year is €600–1,200</p>
+            </div>
+          </li>
+          <li>
+            <span class="icon" style="background:var(--ink-mute)">🌐</span>
+            <div>
+              <strong data-lang="zh">网站维护外包</strong>
+              <strong data-lang="en">Website maintenance (outsourced)</strong>
+              <p data-lang="zh">€100–200/月，出问题不及时，不懂中文内容</p>
+              <p data-lang="en">€100–200/month, slow response, can't handle Chinese content</p>
+            </div>
+          </li>
+          <li>
+            <span class="icon" style="background:var(--ink-mute)">译</span>
+            <div>
+              <strong data-lang="zh">翻译服务</strong>
+              <strong data-lang="en">Translation services</strong>
+              <p data-lang="zh">专业中英互译 €60–120/千字，每月都要花</p>
+              <p data-lang="en">€60–120 per thousand words — a recurring monthly cost</p>
+            </div>
+          </li>
+        </ul>
+        <div class="value-total" style="background:var(--ink-mute)">
+          <span data-lang="zh">自己做总花费约</span>
+          <span data-lang="en">DIY total cost approx.</span>
+          <strong data-lang="zh">€1,200+/月</strong>
+          <strong data-lang="en">€1,200+/mo</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SCREEN 7：政府补贴 ===== -->
+<section id="subsidy">
+  <div class="container">
+    <div class="subsidy-inner fade-in">
+      <span class="subsidy-badge" data-lang="zh">🇮🇪 爱尔兰政府资助计划</span>
+      <span class="subsidy-badge" data-lang="en">🇮🇪 Irish Government Grant Scheme</span>
+
+      <h2 class="section-title" data-lang="zh">政府给你<span>€2,500</span><br>补贴建网站</h2>
+      <h2 class="section-title" data-lang="en">The Government Gives You<br><span>€2,500</span> to Go Digital</h2>
+
+      <div class="subsidy-amount">€2,500</div>
+
+      <p data-lang="zh">
+        爱尔兰政府的 <strong>Trading Online Voucher（TOV）</strong> 计划，专为帮助小生意上网而设。
+        申请成功后，政府直接出 €2,500 用于你的网站建设费用。
+        小旺铺建站费 €3,800，申请后你自己只需出 <strong>€1,300</strong>。
+      </p>
+      <p data-lang="en">
+        The Irish Government's <strong>Trading Online Voucher (TOV)</strong> scheme helps small businesses go digital.
+        If approved, the government covers €2,500 of your setup cost.
+        On the Starter plan (€3,800), you only pay <strong>€1,300</strong> out of pocket.
+      </p>
+
+      <div class="subsidy-steps">
+        <div class="subsidy-step">
+          <span class="subsidy-step-num">①</span>
+          <span class="subsidy-step-label" data-lang="zh">联系我们</span>
+          <span class="subsidy-step-label" data-lang="en">Contact Us</span>
+        </div>
+        <div class="subsidy-step">
+          <span class="subsidy-step-num">②</span>
+          <span class="subsidy-step-label" data-lang="zh">确认资格</span>
+          <span class="subsidy-step-label" data-lang="en">Check Eligibility</span>
+        </div>
+        <div class="subsidy-step">
+          <span class="subsidy-step-num">③</span>
+          <span class="subsidy-step-label" data-lang="zh">我们全程协助申请</span>
+          <span class="subsidy-step-label" data-lang="en">We Handle the Application</span>
+        </div>
+        <div class="subsidy-step">
+          <span class="subsidy-step-num">④</span>
+          <span class="subsidy-step-label" data-lang="zh">拿到补贴</span>
+          <span class="subsidy-step-label" data-lang="en">Grant Approved</span>
+        </div>
+        <div class="subsidy-step">
+          <span class="subsidy-step-num">⑤</span>
+          <span class="subsidy-step-label" data-lang="zh">生意开始旺</span>
+          <span class="subsidy-step-label" data-lang="en">Business Grows</span>
+        </div>
+      </div>
+
+      <p data-lang="zh">⚠️ 补贴名额有限，先到先得。我们负责所有申请文件，你只需提供基础资料。</p>
+      <p data-lang="en">⚠️ Places are limited and first-come, first-served. We prepare all paperwork — you just provide the basics.</p>
+
+      <a href="#contact" class="btn-primary subsidy-cta-btn" data-lang="zh">立即查询补贴资格 →</a>
+      <a href="#contact" class="btn-primary subsidy-cta-btn" data-lang="en">Check My Eligibility →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FAQ ===== -->
+<section id="faq">
+  <div class="container">
+    <h2 class="section-title fade-in" data-lang="zh">常见<span>问题解答</span></h2>
+    <h2 class="section-title fade-in" data-lang="en">Frequently Asked <span>Questions</span></h2>
+    <p class="section-sub fade-in" data-lang="zh">有问题很正常，这里有答案</p>
+    <p class="section-sub fade-in" data-lang="en">Questions are normal — here are the answers</p>
+
+    <div class="faq-list fade-in">
+
+      <div class="faq-item">
+        <button class="faq-question">
+          <span data-lang="zh">我不懂电脑，可以用旺铺吗？</span>
+          <span data-lang="en">I'm not tech-savvy. Can I still use Wangpu?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer"><div class="faq-answer-inner">
+          <span data-lang="zh">完全可以。旺铺的原则就是"你只管做生意"。我们负责建网站、写内容、上传照片、管理系统，你只需要提供生意信息（营业时间、服务项目、价格）。很多合作老板从来不用电脑，合作得非常顺畅。</span>
+          <span data-lang="en">Absolutely. Wangpu's principle is "you focus on your business." We handle the website, content, photos, and systems. You just provide business info (hours, services, prices). Many of our partners never touch a computer — the partnership works perfectly.</span>
+        </div></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          <span data-lang="zh">"定制开发"是什么意思？和买模板有什么区别？</span>
+          <span data-lang="en">What does "custom-built" actually mean? How is it different from a template?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer"><div class="faq-answer-inner">
+          <span data-lang="zh">模板是套现成设计，所有用这个模板的人网站看起来差不多，功能也是固定的。定制开发是根据你的生意从头搭建：你的品牌颜色、你需要的功能（比如有些美甲店需要作品集，有些餐馆需要外卖系统）、你的客户习惯——全部单独配置，不是改几个字就完事。</span>
+          <span data-lang="en">A template means everyone using it has a similar-looking site with the same fixed functions. Custom-built means we design around your business from scratch: your brand colours, the exact features you need (a nail salon needs a portfolio, a takeaway needs an ordering system), your customers' behaviour — all configured individually, not just replacing a few text fields.</span>
+        </div></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          <span data-lang="zh">会员积分系统怎么运作？客人需要下载 App 吗？</span>
+          <span data-lang="en">How does the loyalty points system work? Do customers need to download an app?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer"><div class="faq-answer-inner">
+          <span data-lang="zh">不需要下载任何 App。客人通过你的网页或者扫码就能查积分、领优惠券。每次消费后自动累积积分，积分可以在下次消费时抵扣或兑换礼品。你可以在后台看到每个会员的消费记录，随时调整积分规则和优惠活动。</span>
+          <span data-lang="en">No app download needed. Customers check points and claim coupons through your webpage or a QR scan. Points accumulate automatically after each purchase and can be redeemed for discounts or gifts. You see every member's transaction history in the dashboard and can adjust rules and campaigns anytime.</span>
+        </div></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          <span data-lang="zh">月费是永远都要付的吗？停了会怎样？</span>
+          <span data-lang="en">Is the monthly fee forever? What happens if I stop?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer"><div class="faq-answer-inner">
+          <span data-lang="zh">月费是持续运营服务的费用。停止付月费后，你的网站仍然存在并可访问（建站是一次性的，成果归你），但我们不再帮你更新内容、维护系统、投放广告。最低承诺是 3 个月，之后随时可以停，没有违约金。</span>
+          <span data-lang="en">The monthly fee covers ongoing services. If you stop paying, your website stays live and accessible (the setup is yours permanently), but we stop updating content, maintaining systems, and running ads. Minimum commitment is 3 months, then cancel anytime with no penalty.</span>
+        </div></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          <span data-lang="zh">€2,500 政府补贴是真的吗？我能申请吗？</span>
+          <span data-lang="en">Is the €2,500 government grant real? Can I apply?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer"><div class="faq-answer-inner">
+          <span data-lang="zh">是真实的政策，由爱尔兰当地企业局（Local Enterprise Office）管理，叫 Trading Online Voucher（TOV）。符合条件的小生意最高可申请 €2,500 用于网站建设。基本条件：爱尔兰注册公司、年营业额低于 €2M、目前没有专业网站。我们会帮你确认资格，协助准备全部申请文件。</span>
+          <span data-lang="en">Yes, it's a real scheme run by the Local Enterprise Office (LEO) called the Trading Online Voucher (TOV). Eligible small businesses can claim up to €2,500 for website costs. Basic criteria: Irish-registered business, turnover under €2M, no existing professional website. We verify your eligibility and prepare the entire application for you.</span>
+        </div></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          <span data-lang="zh">多久可以上线？</span>
+          <span data-lang="en">How long until I go live?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer"><div class="faq-answer-inner">
+          <span data-lang="zh">签约后，一般 2–3 周完成建站上线。时间主要取决于拍摄安排和你提供资料的速度。需要赶在某个节日（比如春节）前上线的，提前告诉我们，我们优先处理。</span>
+          <span data-lang="en">After signing, launch typically takes 2–3 weeks. Timeline depends mainly on photography scheduling and how quickly you can provide information. Need to go live before a specific date (like Chinese New Year)? Let us know — we'll prioritise your build.</span>
+        </div></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          <span data-lang="zh">我在爱尔兰哪个城市都可以上旺铺吗？</span>
+          <span data-lang="en">Can I join from any city in Ireland?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer"><div class="faq-answer-inner">
+          <span data-lang="zh">可以。旺铺在爱尔兰全国都有服务，包括 Dublin、Cork、Limerick、Galway、Waterford 等主要城市，以及其他城镇。每个地区的 SEO 和广告策略会针对本地关键词单独优化。</span>
+          <span data-lang="en">Yes. Wangpu serves all of Ireland — Dublin, Cork, Limerick, Galway, Waterford, and beyond. SEO and ad strategies are tailored to local search terms for each region.</span>
+        </div></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          <span data-lang="zh">签合同吗？合同多长时间？</span>
+          <span data-lang="en">Is there a contract? How long?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer"><div class="faq-answer-inner">
+          <span data-lang="zh">会签一份服务协议。建站部分是一次性项目，月费服务最低承诺 3 个月（方便我们做出可见效果）。3 个月后可随时取消月费，建站成果归你所有。我们的客户平均续费率超过 85%，因为他们看到了真实效果。</span>
+          <span data-lang="en">We sign a service agreement. The setup is a one-time project. The monthly service requires a minimum 3-month commitment (enough time to show results). After that, cancel anytime and keep the website assets. Our renewal rate is over 85% because clients see real results.</span>
+        </div></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== CONTACT ===== -->
+<section id="contact">
+  <div class="container">
+    <h2 class="section-title fade-in" data-lang="zh">现在就<span>联系我们</span></h2>
+    <h2 class="section-title fade-in" data-lang="en"><span>Get in Touch</span> Today</h2>
+    <p class="section-sub fade-in" data-lang="zh">免费咨询，10 分钟了解旺铺适不适合你的生意</p>
+    <p class="section-sub fade-in" data-lang="en">Free consultation — 10 minutes to find out if Wangpu is right for you</p>
+
+    <div class="contact-grid">
+      <div class="contact-card fade-in">
+        <div class="contact-icon" style="background:#25D366;color:white;">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        </div>
+        <h3 data-lang="zh">WhatsApp 咨询</h3>
+        <h3 data-lang="en">WhatsApp Us</h3>
+        <p data-lang="zh">扫码或点击，发一条消息就能开始。中英文都行，随时回复。</p>
+        <p data-lang="en">Scan or tap to start. We reply in Chinese or English, any time.</p>
+        <div class="qr-placeholder">
+          <span data-lang="zh">WhatsApp QR 码<br>（替换为实际二维码）</span>
+          <span data-lang="en">WhatsApp QR Code<br>(replace with actual)</span>
+        </div>
+        <a href="https://wa.me/353XXXXXXXXX?text=你好，我想了解1688旺铺计划" class="contact-action" data-lang="zh">WhatsApp 立即咨询</a>
+        <a href="https://wa.me/353XXXXXXXXX?text=Hi%2C%20I%27d%20like%20to%20learn%20about%20Wangpu" class="contact-action" data-lang="en">Chat on WhatsApp</a>
+      </div>
+
+      <div class="contact-card fade-in">
+        <div class="contact-icon" style="background:#09B83E;color:white;">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+        </div>
+        <h3 data-lang="zh">微信咨询</h3>
+        <h3 data-lang="en">Add Us on WeChat</h3>
+        <p data-lang="zh">扫码加好友，发"旺铺咨询"即可开始。</p>
+        <p data-lang="en">Scan to add us, send "Wangpu" to start the conversation.</p>
+        <div class="qr-placeholder">
+          <span data-lang="zh">微信二维码<br>（替换为实际二维码）</span>
+          <span data-lang="en">WeChat QR Code<br>(replace with actual)</span>
+        </div>
+        <a href="#" class="contact-action" data-lang="zh">微信号：1688ie（示例）</a>
+        <a href="#" class="contact-action" data-lang="en">WeChat ID: 1688ie (example)</a>
+      </div>
+
+      <div class="contact-card fade-in">
+        <div class="contact-icon" style="background:var(--red);color:white;">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+        </div>
+        <h3 data-lang="zh">电话直接联系</h3>
+        <h3 data-lang="en">Call Us Directly</h3>
+        <p data-lang="zh">工作日 9:00–18:00（爱尔兰时间）。急事、周末可 WhatsApp 留言。</p>
+        <p data-lang="en">Mon–Fri 9am–6pm Irish time. Urgent or weekends — WhatsApp us.</p>
+        <div style="height:120px;display:flex;align-items:center;justify-content:center;">
+          <div style="text-align:center;">
+            <div style="font-size:1.4rem;font-weight:900;color:var(--red);margin-bottom:8px;">+353 XX XXX XXXX</div>
+            <div style="font-size:0.78rem;color:var(--ink-mute);" data-lang="zh">（替换为实际号码）</div>
+            <div style="font-size:0.78rem;color:var(--ink-mute);" data-lang="en">(replace with actual number)</div>
+          </div>
+        </div>
+        <a href="tel:+353XXXXXXXXX" class="contact-action" data-lang="zh">立即致电</a>
+        <a href="tel:+353XXXXXXXXX" class="contact-action" data-lang="en">Call Now</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer id="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a href="#hero" class="nav-logo">1688<span>.ie</span></a>
+        <p data-lang="zh">爱尔兰华人生意的数字化搭档。<br>定制开发，量身打造，让每一个勤劳的华人生意都能被看见、被找到。</p>
+        <p data-lang="en">The digital partner for Chinese businesses in Ireland. Custom-built, tailored to you — making every hard-working business visible and findable.</p>
+      </div>
+      <div class="footer-col">
+        <h4 data-lang="zh">快速导航</h4>
+        <h4 data-lang="en">Quick Links</h4>
+        <a href="#solutions" data-lang="zh">解决方案</a>
+        <a href="#solutions" data-lang="en">Solutions</a>
+        <a href="#industries" data-lang="zh">行业覆盖</a>
+        <a href="#industries" data-lang="en">Industries</a>
+        <a href="#pricing" data-lang="zh">旺铺套餐</a>
+        <a href="#pricing" data-lang="en">Pricing</a>
+        <a href="#subsidy" data-lang="zh">政府补贴</a>
+        <a href="#subsidy" data-lang="en">Gov Grant</a>
+        <a href="#faq" data-lang="zh">常见问题</a>
+        <a href="#faq" data-lang="en">FAQ</a>
+      </div>
+      <div class="footer-col">
+        <h4 data-lang="zh">联系方式</h4>
+        <h4 data-lang="en">Contact</h4>
+        <a href="https://wa.me/353XXXXXXXXX" data-lang="zh">WhatsApp 咨询</a>
+        <a href="https://wa.me/353XXXXXXXXX" data-lang="en">WhatsApp</a>
+        <a href="#" data-lang="zh">微信：1688ie（示例）</a>
+        <a href="#" data-lang="en">WeChat: 1688ie (example)</a>
+        <a href="tel:+353XXXXXXXXX">+353 XX XXX XXXX</a>
+        <a href="mailto:hello@1688.ie">hello@1688.ie</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span data-lang="zh">© 2024 1688.ie · 爱尔兰华人生意平台 · 版权所有</span>
+      <span data-lang="en">© 2024 1688.ie · Irish Chinese Business Platform · All rights reserved</span>
+      <span data-lang="zh">Dublin, Ireland · 爱尔兰注册企业</span>
+      <span data-lang="en">Dublin, Ireland · Registered in Ireland</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ===== FLOAT WA ===== -->
+<a id="float-wa" href="https://wa.me/353XXXXXXXXX?text=你好，我想了解1688旺铺计划" target="_blank" rel="noopener" aria-label="WhatsApp 咨询">
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<script>
+  // LANG
+  const langBtn = document.getElementById('langBtn');
+  let isEn = false;
+  langBtn.addEventListener('click', () => {
+    isEn = !isEn;
+    document.body.classList.toggle('en', isEn);
+    langBtn.textContent = isEn ? '中文' : 'EN';
+    document.documentElement.lang = isEn ? 'en' : 'zh-CN';
+  });
+
+  // HAMBURGER
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  hamburger.addEventListener('click', () => mobileMenu.classList.toggle('open'));
+  function closeMobile() { mobileMenu.classList.remove('open'); }
+  document.addEventListener('click', (e) => {
+    if (!hamburger.contains(e.target) && !mobileMenu.contains(e.target)) mobileMenu.classList.remove('open');
+  });
+
+  // FAQ
+  document.querySelectorAll('.faq-question').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.faq-item');
+      const wasOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+      if (!wasOpen) item.classList.add('open');
+    });
+  });
+
+  // FADE IN
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), (entry.target.dataset.delay || 0) * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-in').forEach((el, i) => {
+    el.dataset.delay = i % 5;
+    observer.observe(el);
+  });
+
+  // NAV HIGHLIGHT
+  window.addEventListener('scroll', () => {
+    let current = '';
+    document.querySelectorAll('section[id]').forEach(s => {
+      if (window.scrollY >= s.offsetTop - 80) current = s.id;
+    });
+    document.querySelectorAll('.nav-links a').forEach(a => {
+      a.style.color = a.getAttribute('href') === `#${current}` ? 'var(--red)' : '';
+    });
+  }, { passive: true });
+</script>
+</body>
+</html>

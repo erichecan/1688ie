@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>B2B 客户端 · 鸿基建材仓</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Noto+Serif+SC:wght@600;700;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --steel: #1e3a5f;
+    --steel-dark: #0f2540;
+    --orange: #ea580c;
+    --orange-light: #fb923c;
+    --gold: #d4af37;
+  }
+  body { font-family: 'Inter', sans-serif; background: #f5f1e8; color: #1c1917; }
+  .font-mono { font-family: 'JetBrains Mono', monospace; }
+  .font-serif { font-family: 'Noto Serif SC', serif; }
+
+  .gradient-steel { background: linear-gradient(135deg, #1e3a5f 0%, #0f2540 100%); }
+  .gradient-orange { background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%); }
+  .gradient-gold { background: linear-gradient(135deg, #d4af37 0%, #b08923 100%); }
+
+  /* Top bar */
+  .top-bar {
+    background: linear-gradient(135deg, #1e3a5f 0%, #0f2540 100%);
+    color: #fff;
+  }
+
+  /* Tier badge */
+  .tier-badge {
+    background: linear-gradient(135deg, #d4af37, #b08923);
+    color: #fff;
+    padding: 3px 10px;
+    border-radius: 99px;
+    font-size: 11px;
+    font-weight: 700;
+    box-shadow: 0 2px 6px rgba(212,175,55,.4);
+  }
+
+  /* Tabs */
+  .nav-tab {
+    padding: 12px 18px;
+    border-bottom: 3px solid transparent;
+    font-weight: 600;
+    color: #64748b;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .nav-tab:hover { color: var(--steel); }
+  .nav-tab.active { color: var(--orange); border-color: var(--orange); }
+
+  /* Product card */
+  .product-card {
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all .3s ease;
+    border: 1px solid #e5e7eb;
+  }
+  .product-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 24px rgba(15,37,64,.1);
+    border-color: var(--orange);
+  }
+  .product-img {
+    aspect-ratio: 1;
+    background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 56px;
+    position: relative;
+  }
+  .stock-badge {
+    position: absolute;
+    top: 8px; right: 8px;
+    background: rgba(34,197,94,.95);
+    color: #fff;
+    font-size: 10px; font-weight: 700;
+    padding: 3px 8px; border-radius: 99px;
+  }
+  .stock-badge.low { background: rgba(234,88,12,.95); }
+  .stock-badge.out { background: rgba(115,115,115,.95); }
+
+  .price-tag {
+    color: var(--orange);
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+  }
+  .retail-price {
+    color: #94a3b8;
+    text-decoration: line-through;
+    font-size: 11px;
+    margin-left: 6px;
+  }
+
+  /* Cart float */
+  .cart-float {
+    position: fixed;
+    bottom: 24px; right: 24px;
+    background: var(--orange);
+    color: #fff;
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(234,88,12,.4);
+    z-index: 50;
+    transition: transform .2s;
+  }
+  .cart-float:hover { transform: scale(1.05); }
+  .cart-count {
+    position: absolute;
+    top: -4px; right: -4px;
+    background: var(--steel-dark);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 99px;
+    min-width: 22px; height: 22px;
+    display: flex; align-items: center; justify-content: center;
+    padding: 0 6px;
+    border: 2px solid #fff;
+  }
+
+  /* Cart drawer */
+  .cart-drawer {
+    position: fixed;
+    top: 0; right: 0; bottom: 0;
+    width: 100%; max-width: 480px;
+    background: #fff;
+    box-shadow: -8px 0 32px rgba(0,0,0,.15);
+    transform: translateX(100%);
+    transition: transform .3s ease;
+    z-index: 100;
+    display: flex; flex-direction: column;
+  }
+  .cart-drawer.open { transform: translateX(0); }
+  .cart-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,.4);
+    opacity: 0; pointer-events: none;
+    transition: opacity .3s;
+    z-index: 99;
+  }
+  .cart-overlay.open { opacity: 1; pointer-events: auto; }
+
+  /* Tab content */
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* Order status pill */
+  .pill {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 3px 10px;
+    border-radius: 99px;
+    font-size: 11px; font-weight: 700;
+  }
+  .pill-pending { background: #fef3c7; color: #92400e; }
+  .pill-picking { background: #dbeafe; color: #1e40af; }
+  .pill-shipped { background: #d1fae5; color: #065f46; }
+  .pill-delivered { background: #e0e7ff; color: #3730a3; }
+  .pill-overdue { background: #fee2e2; color: #991b1b; }
+  .pill-paid { background: #d1fae5; color: #065f46; }
+
+  /* Filter chip */
+  .filter-chip {
+    padding: 6px 14px;
+    border-radius: 99px;
+    border: 1.5px solid #e5e7eb;
+    background: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    color: #475569;
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .filter-chip:hover { border-color: var(--orange); color: var(--orange); }
+  .filter-chip.active {
+    background: var(--steel-dark);
+    color: #fff;
+    border-color: var(--steel-dark);
+  }
+
+  /* Btn */
+  .btn-primary {
+    background: var(--orange); color: #fff;
+    padding: 8px 16px; border-radius: 8px;
+    font-weight: 700; font-size: 13px;
+    transition: all .15s;
+  }
+  .btn-primary:hover { background: #c2410c; }
+  .btn-outline {
+    background: #fff; color: var(--steel);
+    border: 1.5px solid var(--steel);
+    padding: 8px 16px; border-radius: 8px;
+    font-weight: 700; font-size: 13px;
+  }
+
+  /* Stock bar */
+  .stock-bar {
+    height: 4px; border-radius: 2px;
+    background: #f1f5f9;
+    overflow: hidden;
+  }
+  .stock-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #22c55e, #15803d);
+  }
+  .stock-bar-fill.low {
+    background: linear-gradient(90deg, #fb923c, #ea580c);
+  }
+  .stock-bar-fill.critical {
+    background: linear-gradient(90deg, #ef4444, #b91c1c);
+  }
+
+  /* Toast */
+  @keyframes toastIn { from { transform: translate(-50%, 100%); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
+  @keyframes toastOut { to { transform: translate(-50%, 100%); opacity: 0; } }
+  .toast-bottom {
+    position: fixed;
+    bottom: 100px; left: 50%; transform: translateX(-50%);
+    background: var(--steel-dark); color: #fff;
+    padding: 12px 20px; border-radius: 12px;
+    font-weight: 600; font-size: 14px;
+    z-index: 200;
+    box-shadow: 0 8px 24px rgba(0,0,0,.3);
+    animation: toastIn .3s ease;
+  }
+
+  /* Order timeline */
+  .order-timeline {
+    display: flex; align-items: center;
+    margin: 12px 0;
+  }
+  .order-step {
+    flex: 1;
+    text-align: center;
+    position: relative;
+  }
+  .order-step::after {
+    content: '';
+    position: absolute;
+    top: 14px; left: 50%; right: -50%;
+    height: 2px; background: #e5e7eb;
+    z-index: 0;
+  }
+  .order-step:last-child::after { display: none; }
+  .order-step.done::after { background: #22c55e; }
+  .order-step.current::after { background: linear-gradient(90deg, #22c55e 50%, #e5e7eb 50%); }
+  .order-step-circle {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: #e5e7eb; color: #94a3b8;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700;
+    margin: 0 auto;
+    position: relative; z-index: 1;
+  }
+  .order-step.done .order-step-circle { background: #22c55e; color: #fff; }
+  .order-step.current .order-step-circle { background: var(--orange); color: #fff; box-shadow: 0 0 0 5px rgba(234,88,12,.2); }
+  .order-step-label {
+    font-size: 11px; color: #64748b; margin-top: 4px;
+  }
+  .order-step.done .order-step-label,
+  .order-step.current .order-step-label { color: var(--steel); font-weight: 600; }
+
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-thumb { background: rgba(0,0,0,.15); border-radius: 4px; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════
+     TOP BAR
+═══════════════════════════════════════════════════ -->
+<div class="top-bar">
+  <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-9 h-9 rounded-lg gradient-orange flex items-center justify-center">
+        <span class="font-serif text-white font-bold text-lg">鸿</span>
+      </div>
+      <div>
+        <div class="font-serif text-white font-bold text-base leading-tight">鸿基建材仓 · B2B</div>
+        <div class="text-orange-300 text-xs font-mono">B2B Wholesale Portal</div>
+      </div>
+    </div>
+    <div class="hidden md:flex items-center gap-6 text-sm">
+      <div class="text-gray-300">
+        <span class="text-orange-300">Dublin Industrial Estate</span>
+        · <span class="font-mono" id="topTime">09:41</span>
+      </div>
+    </div>
+    <div class="flex items-center gap-3">
+      <span class="tier-badge">🥇 金卡客户</span>
+      <div class="flex items-center gap-2">
+        <div class="w-9 h-9 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-white font-bold">马</div>
+        <div class="hidden md:block">
+          <div class="text-white text-sm font-semibold">马俊装修队</div>
+          <div class="text-orange-300 text-xs">Dublin 24</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     ACCOUNT SUMMARY
+═══════════════════════════════════════════════════ -->
+<div class="bg-white border-b">
+  <div class="max-w-7xl mx-auto px-6 py-5">
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+      <div>
+        <div class="text-xs text-gray-500">客户等级</div>
+        <div class="flex items-center gap-2 mt-1">
+          <span class="font-serif text-xl font-bold text-yellow-700">金卡</span>
+          <span class="text-xs text-gray-500 font-mono">VIP-G</span>
+        </div>
+        <div class="text-xs text-orange-600 mt-0.5">享受 22% 批发折扣</div>
+      </div>
+      <div>
+        <div class="text-xs text-gray-500">本月已采购</div>
+        <div class="font-mono text-xl font-bold text-steel mt-1" style="color:#1e3a5f">€ 8,420</div>
+        <div class="text-xs text-green-600 mt-0.5">↑ vs 上月 €6,180</div>
+      </div>
+      <div>
+        <div class="text-xs text-gray-500">账期</div>
+        <div class="font-mono text-xl font-bold text-steel mt-1" style="color:#1e3a5f">30 天</div>
+        <div class="text-xs text-gray-500 mt-0.5">可用额度 €5,000</div>
+      </div>
+      <div>
+        <div class="text-xs text-gray-500">待付账款</div>
+        <div class="font-mono text-xl font-bold text-orange-600 mt-1">€ 2,640</div>
+        <div class="text-xs text-orange-600 mt-0.5">⚠️ 12 天后到期</div>
+      </div>
+      <div>
+        <div class="text-xs text-gray-500">购买年限</div>
+        <div class="font-mono text-xl font-bold text-steel mt-1" style="color:#1e3a5f">2.4 年</div>
+        <div class="text-xs text-gray-500 mt-0.5">累计 €82,400</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     NAV TABS
+═══════════════════════════════════════════════════ -->
+<div class="bg-white sticky top-0 z-20 border-b shadow-sm">
+  <div class="max-w-7xl mx-auto px-6 flex overflow-x-auto">
+    <div class="nav-tab active" onclick="switchTab('shop', this)">🛒 商品采购</div>
+    <div class="nav-tab" onclick="switchTab('orders', this)">📋 我的订单</div>
+    <div class="nav-tab" onclick="switchTab('billing', this)">💰 账单 / 发票</div>
+    <div class="nav-tab" onclick="switchTab('favorite', this)">⭐ 常购清单</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     TAB: 商品采购
+═══════════════════════════════════════════════════ -->
+<div class="tab-content active" id="tab-shop">
+  <div class="max-w-7xl mx-auto px-6 py-6">
+
+    <!-- Search + Filter -->
+    <div class="bg-white rounded-2xl p-4 mb-5 shadow-sm">
+      <div class="flex gap-3 mb-4">
+        <input type="text" placeholder="搜索 SKU 编号 / 品名 / 规格..." class="flex-1 px-4 py-3 rounded-xl border border-gray-200 focus:border-orange-500 outline-none text-sm">
+        <button class="btn-primary px-6">搜索</button>
+      </div>
+      <div class="flex flex-wrap gap-2 items-center">
+        <span class="text-xs text-gray-500 mr-1">分类：</span>
+        <button class="filter-chip active" onclick="filterCat('all', this)">全部 1,247</button>
+        <button class="filter-chip" onclick="filterCat('tile', this)">瓷砖 312</button>
+        <button class="filter-chip" onclick="filterCat('floor', this)">地板 248</button>
+        <button class="filter-chip" onclick="filterCat('bath', this)">卫浴 186</button>
+        <button class="filter-chip" onclick="filterCat('kitchen', this)">厨房 142</button>
+        <button class="filter-chip" onclick="filterCat('hard', this)">五金 218</button>
+        <button class="filter-chip" onclick="filterCat('paint', this)">涂料 89</button>
+        <button class="filter-chip" onclick="filterCat('wall', this)">墙纸 52</button>
+      </div>
+    </div>
+
+    <!-- Promo banner -->
+    <div class="mb-5 bg-gradient-to-r from-orange-500 to-red-600 rounded-2xl p-5 text-white flex items-center justify-between">
+      <div>
+        <div class="font-serif text-xl font-bold mb-1">🔥 清仓特价 · 仿古砖 ARG-203</div>
+        <div class="text-sm text-orange-100">原价 €68 / 箱 → 限时 €47 / 箱（金卡再 -10%）</div>
+      </div>
+      <button onclick="quickAdd('ARG-203')" class="bg-white text-orange-700 font-bold px-5 py-2 rounded-lg hover:bg-orange-50">立即抢购 →</button>
+    </div>
+
+    <!-- Product grid -->
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" id="productGrid">
+
+      <div class="product-card">
+        <div class="product-img"><span>🟦</span><div class="stock-badge">充足 412 箱</div></div>
+        <div class="p-3">
+          <div class="text-xs font-mono text-gray-500 mb-1">SKU-F2103</div>
+          <div class="font-serif font-bold text-sm text-steel mb-1" style="color:#1e3a5f">SPC 锁扣地板 白橡木</div>
+          <div class="text-xs text-gray-500 mb-2">12mm · 防水耐磨 · 2.5㎡/箱</div>
+          <div class="flex items-baseline justify-between mb-3">
+            <div>
+              <span class="price-tag text-lg">€38.00</span>
+              <span class="retail-price">€48.80</span>
+            </div>
+            <span class="text-xs text-gray-500">/箱</span>
+          </div>
+          <button onclick="addToCart('F2103','SPC 白橡地板',38)" class="w-full btn-primary">加入购物车</button>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img"><span>⬜</span><div class="stock-badge">充足 287 箱</div></div>
+        <div class="p-3">
+          <div class="text-xs font-mono text-gray-500 mb-1">SKU-T0851</div>
+          <div class="font-serif font-bold text-sm text-steel mb-1" style="color:#1e3a5f">卡拉拉白瓷砖 800×800</div>
+          <div class="text-xs text-gray-500 mb-2">大理石纹 · 抛釉 · 3 片/箱</div>
+          <div class="flex items-baseline justify-between mb-3">
+            <div>
+              <span class="price-tag text-lg">€58.00</span>
+              <span class="retail-price">€74.50</span>
+            </div>
+            <span class="text-xs text-gray-500">/箱</span>
+          </div>
+          <button onclick="addToCart('T0851','卡拉拉白瓷砖',58)" class="w-full btn-primary">加入购物车</button>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img"><span>🚿</span><div class="stock-badge low">仅 22 件</div></div>
+        <div class="p-3">
+          <div class="text-xs font-mono text-gray-500 mb-1">SKU-B0445</div>
+          <div class="font-serif font-bold text-sm text-steel mb-1" style="color:#1e3a5f">隐藏式卫浴龙头 鎏金</div>
+          <div class="text-xs text-gray-500 mb-2">铜本体 · 三孔安装 · 含淋浴头</div>
+          <div class="flex items-baseline justify-between mb-3">
+            <div>
+              <span class="price-tag text-lg">€128.00</span>
+              <span class="retail-price">€185.00</span>
+            </div>
+            <span class="text-xs text-gray-500">/件</span>
+          </div>
+          <button onclick="addToCart('B0445','隐藏龙头 鎏金',128)" class="w-full btn-primary">加入购物车</button>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img"><span>🟫</span><div class="stock-badge">充足 320 箱</div></div>
+        <div class="p-3">
+          <div class="text-xs font-mono text-gray-500 mb-1">SKU-T1021</div>
+          <div class="font-serif font-bold text-sm text-steel mb-1" style="color:#1e3a5f">木纹砖 200×1200</div>
+          <div class="text-xs text-gray-500 mb-2">仿橡木 · 防滑 · 4 片/箱</div>
+          <div class="flex items-baseline justify-between mb-3">
+            <div>
+              <span class="price-tag text-lg">€42.00</span>
+              <span class="retail-price">€55.00</span>
+            </div>
+            <span class="text-xs text-gray-500">/箱</span>
+          </div>
+          <button onclick="addToCart('T1021','木纹砖',42)" class="w-full btn-primary">加入购物车</button>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img"><span>🚪</span><div class="stock-badge">充足 98 套</div></div>
+        <div class="p-3">
+          <div class="text-xs font-mono text-gray-500 mb-1">SKU-H0203</div>
+          <div class="font-serif font-bold text-sm text-steel mb-1" style="color:#1e3a5f">实心门锁套装 黑色</div>
+          <div class="text-xs text-gray-500 mb-2">不锈钢 · 含门把+合页+锁芯</div>
+          <div class="flex items-baseline justify-between mb-3">
+            <div>
+              <span class="price-tag text-lg">€45.00</span>
+              <span class="retail-price">€62.00</span>
+            </div>
+            <span class="text-xs text-gray-500">/套</span>
+          </div>
+          <button onclick="addToCart('H0203','实心门锁 黑',45)" class="w-full btn-primary">加入购物车</button>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img"><span>🪵</span><div class="stock-badge">充足 82 箱</div></div>
+        <div class="p-3">
+          <div class="text-xs font-mono text-gray-500 mb-1">SKU-F1820</div>
+          <div class="font-serif font-bold text-sm text-steel mb-1" style="color:#1e3a5f">水曲柳实木复合地板</div>
+          <div class="text-xs text-gray-500 mb-2">15mm · UV 漆面 · 2.2㎡/箱</div>
+          <div class="flex items-baseline justify-between mb-3">
+            <div>
+              <span class="price-tag text-lg">€52.00</span>
+              <span class="retail-price">€69.00</span>
+            </div>
+            <span class="text-xs text-gray-500">/箱</span>
+          </div>
+          <button onclick="addToCart('F1820','水曲柳实木复合',52)" class="w-full btn-primary">加入购物车</button>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img"><span>🔨</span><div class="stock-badge low">仅 12 箱</div></div>
+        <div class="p-3">
+          <div class="text-xs font-mono text-gray-500 mb-1">SKU-F2103-NEW</div>
+          <div class="font-serif font-bold text-sm text-steel mb-1" style="color:#1e3a5f">SPC 锁扣地板 灰橡木</div>
+          <div class="text-xs text-gray-500 mb-2">12mm · 新色到货 · 2.5㎡/箱</div>
+          <div class="flex items-baseline justify-between mb-3">
+            <div>
+              <span class="price-tag text-lg">€38.00</span>
+            </div>
+            <span class="text-xs text-gray-500">/箱</span>
+          </div>
+          <button onclick="addToCart('F2103-NEW','SPC 灰橡',38)" class="w-full btn-primary">加入购物车</button>
+        </div>
+      </div>
+
+      <div class="product-card opacity-70">
+        <div class="product-img"><span>🚽</span><div class="stock-badge out">缺货 · 5 月 8 日到</div></div>
+        <div class="p-3">
+          <div class="text-xs font-mono text-gray-500 mb-1">SKU-B0102</div>
+          <div class="font-serif font-bold text-sm text-steel mb-1" style="color:#1e3a5f">智能马桶 一体式</div>
+          <div class="text-xs text-gray-500 mb-2">缓降 + 加热 + 自动冲洗</div>
+          <div class="flex items-baseline justify-between mb-3">
+            <div>
+              <span class="price-tag text-lg">€420.00</span>
+            </div>
+            <span class="text-xs text-gray-500">/台</span>
+          </div>
+          <button onclick="quickAction('订货预约')" class="w-full btn-outline">📅 预约到货</button>
+        </div>
+      </div>
+
+    </div>
+    <div class="text-center mt-6 text-sm text-gray-500">显示 8 / 1,247 件商品 · <a href="javascript:void(0)" class="text-orange-600 font-bold">加载更多 →</a></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     TAB: 我的订单
+═══════════════════════════════════════════════════ -->
+<div class="tab-content" id="tab-orders">
+  <div class="max-w-7xl mx-auto px-6 py-6">
+    <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
+
+      <!-- Order 1 - In progress -->
+      <div class="p-5 border-b">
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <div class="font-mono font-bold text-steel" style="color:#1e3a5f">订单 #ORD-2026-0428-MJ</div>
+            <div class="text-xs text-gray-500 mt-1">下单于 2026-04-28 14:22 · 共 6 个 SKU · 8 箱地板 + 12 箱瓷砖</div>
+          </div>
+          <span class="pill pill-picking">📦 仓库拣货中</span>
+        </div>
+        <div class="order-timeline">
+          <div class="order-step done">
+            <div class="order-step-circle">✓</div>
+            <div class="order-step-label">下单确认</div>
+          </div>
+          <div class="order-step done">
+            <div class="order-step-circle">✓</div>
+            <div class="order-step-label">财务审核</div>
+          </div>
+          <div class="order-step current">
+            <div class="order-step-circle">3</div>
+            <div class="order-step-label">仓库拣货</div>
+          </div>
+          <div class="order-step">
+            <div class="order-step-circle">4</div>
+            <div class="order-step-label">配送中</div>
+          </div>
+          <div class="order-step">
+            <div class="order-step-circle">5</div>
+            <div class="order-step-label">已签收</div>
+          </div>
+        </div>
+        <div class="flex justify-between items-center mt-3 pt-3 border-t">
+          <div class="text-sm text-gray-600">
+            <span>预计配送：</span>
+            <span class="font-bold text-orange-600">明天 09:00-12:00</span>
+            <span class="text-gray-400 ml-2">（含安装搬运）</span>
+          </div>
+          <div class="text-right">
+            <div class="text-xs text-gray-500">订单金额</div>
+            <div class="font-mono font-bold text-xl text-steel" style="color:#1e3a5f">€ 1,240.00</div>
+          </div>
+        </div>
+        <div class="flex gap-2 mt-3">
+          <button class="btn-outline" onclick="quickAction('查看详情')">📄 查看明细</button>
+          <button class="btn-outline" onclick="quickAction('联系客服')">💬 联系客服</button>
+        </div>
+      </div>
+
+      <!-- Order 2 - Shipped -->
+      <div class="p-5 border-b">
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <div class="font-mono font-bold text-steel" style="color:#1e3a5f">订单 #ORD-2026-0425-MJ</div>
+            <div class="text-xs text-gray-500 mt-1">下单于 2026-04-25 10:15 · 卫浴五金大单</div>
+          </div>
+          <span class="pill pill-shipped">🚚 配送中</span>
+        </div>
+        <div class="order-timeline">
+          <div class="order-step done">
+            <div class="order-step-circle">✓</div>
+            <div class="order-step-label">下单</div>
+          </div>
+          <div class="order-step done">
+            <div class="order-step-circle">✓</div>
+            <div class="order-step-label">审核</div>
+          </div>
+          <div class="order-step done">
+            <div class="order-step-circle">✓</div>
+            <div class="order-step-label">拣货</div>
+          </div>
+          <div class="order-step current">
+            <div class="order-step-circle">4</div>
+            <div class="order-step-label">配送中</div>
+          </div>
+          <div class="order-step">
+            <div class="order-step-circle">5</div>
+            <div class="order-step-label">签收</div>
+          </div>
+        </div>
+        <div class="flex justify-between items-center mt-3 pt-3 border-t">
+          <div class="text-sm">
+            <span class="text-gray-600">司机：</span>
+            <span class="font-semibold text-steel" style="color:#1e3a5f">陈师傅 · 087-2841033</span>
+            <span class="text-gray-400 ml-2">· 距离 4.2km</span>
+          </div>
+          <div class="text-right">
+            <div class="text-xs text-gray-500">订单金额</div>
+            <div class="font-mono font-bold text-xl text-steel" style="color:#1e3a5f">€ 2,180.00</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Order 3 - Completed -->
+      <div class="p-5 border-b">
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <div class="font-mono font-bold text-steel" style="color:#1e3a5f">订单 #ORD-2026-0418-MJ</div>
+            <div class="text-xs text-gray-500 mt-1">下单于 2026-04-18 · 已签收 4 月 20 日</div>
+          </div>
+          <span class="pill pill-delivered">✓ 已完成</span>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+          <div>
+            <div class="text-xs text-gray-500">SKU 数</div>
+            <div class="font-bold text-steel" style="color:#1e3a5f">4 个 SKU</div>
+          </div>
+          <div>
+            <div class="text-xs text-gray-500">总数量</div>
+            <div class="font-bold text-steel" style="color:#1e3a5f">28 箱</div>
+          </div>
+          <div>
+            <div class="text-xs text-gray-500">订单金额</div>
+            <div class="font-mono font-bold text-orange-600">€ 1,820.00</div>
+          </div>
+          <div>
+            <div class="text-xs text-gray-500">付款状态</div>
+            <span class="pill pill-paid">✓ 已付清</span>
+          </div>
+        </div>
+        <div class="flex gap-2 mt-3">
+          <button class="btn-outline" onclick="quickAction('再次下单')">🔄 再次下单</button>
+          <button class="btn-outline" onclick="quickAction('下载发票')">📄 下载发票</button>
+        </div>
+      </div>
+
+      <!-- Order 4 - Older -->
+      <div class="p-5">
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <div class="font-mono font-bold text-steel" style="color:#1e3a5f">订单 #ORD-2026-0410-MJ</div>
+            <div class="text-xs text-gray-500 mt-1">下单于 2026-04-10 · 已签收</div>
+          </div>
+          <span class="pill pill-delivered">✓ 已完成</span>
+        </div>
+        <div class="text-sm text-gray-600">瓷砖大单 · 240 箱 · <span class="font-bold text-orange-600">€ 4,820.00</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     TAB: 账单 / 发票
+═══════════════════════════════════════════════════ -->
+<div class="tab-content" id="tab-billing">
+  <div class="max-w-7xl mx-auto px-6 py-6 space-y-5">
+
+    <!-- 账期警告 -->
+    <div class="bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl p-5 text-white">
+      <div class="flex items-start justify-between">
+        <div>
+          <div class="text-sm opacity-90">⚠️ 账期到期提醒</div>
+          <div class="font-serif text-2xl font-bold mt-1">€ 2,640 · 12 天后到期</div>
+          <div class="text-sm opacity-90 mt-1">订单 #ORD-2026-0418-MJ · 应付 2026-05-12</div>
+        </div>
+        <button class="bg-white text-orange-700 font-bold px-5 py-2.5 rounded-lg" onclick="quickAction('立即支付')">立即支付</button>
+      </div>
+    </div>
+
+    <!-- 账单列表 -->
+    <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
+      <div class="px-5 py-4 border-b flex items-center justify-between">
+        <h3 class="font-serif font-bold text-lg text-steel" style="color:#1e3a5f">📋 账单与发票</h3>
+        <div class="flex gap-2">
+          <button class="filter-chip active">全部</button>
+          <button class="filter-chip">未付</button>
+          <button class="filter-chip">已付</button>
+        </div>
+      </div>
+      <table class="w-full text-sm">
+        <thead class="bg-gray-50 text-xs uppercase text-gray-500 tracking-wider">
+          <tr>
+            <th class="px-5 py-3 text-left">发票号</th>
+            <th class="px-5 py-3 text-left">订单号</th>
+            <th class="px-5 py-3 text-left">开票日期</th>
+            <th class="px-5 py-3 text-left">到期日</th>
+            <th class="px-5 py-3 text-right">金额（含 VAT 23%）</th>
+            <th class="px-5 py-3 text-center">状态</th>
+            <th class="px-5 py-3 text-center">操作</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          <tr class="hover:bg-orange-50">
+            <td class="px-5 py-4 font-mono text-orange-600 font-semibold">INV-2026-0428</td>
+            <td class="px-5 py-4 text-gray-700 font-mono text-xs">ORD-2026-0428-MJ</td>
+            <td class="px-5 py-4 text-gray-700">2026-04-28</td>
+            <td class="px-5 py-4 text-gray-700">2026-05-28</td>
+            <td class="px-5 py-4 text-right font-mono font-bold text-steel" style="color:#1e3a5f">€ 1,525.20</td>
+            <td class="px-5 py-4 text-center"><span class="pill pill-pending">待付款</span></td>
+            <td class="px-5 py-4 text-center">
+              <button onclick="quickAction('下载 PDF')" class="text-orange-600 font-semibold text-xs">📥 PDF</button>
+            </td>
+          </tr>
+          <tr class="hover:bg-orange-50">
+            <td class="px-5 py-4 font-mono text-orange-600 font-semibold">INV-2026-0425</td>
+            <td class="px-5 py-4 text-gray-700 font-mono text-xs">ORD-2026-0425-MJ</td>
+            <td class="px-5 py-4 text-gray-700">2026-04-25</td>
+            <td class="px-5 py-4 text-gray-700">2026-05-25</td>
+            <td class="px-5 py-4 text-right font-mono font-bold text-steel" style="color:#1e3a5f">€ 2,681.40</td>
+            <td class="px-5 py-4 text-center"><span class="pill pill-pending">待付款</span></td>
+            <td class="px-5 py-4 text-center">
+              <button onclick="quickAction('下载 PDF')" class="text-orange-600 font-semibold text-xs">📥 PDF</button>
+            </td>
+          </tr>
+          <tr class="bg-orange-50 hover:bg-orange-100">
+            <td class="px-5 py-4 font-mono text-orange-600 font-semibold">INV-2026-0418</td>
+            <td class="px-5 py-4 text-gray-700 font-mono text-xs">ORD-2026-0418-MJ</td>
+            <td class="px-5 py-4 text-gray-700">2026-04-18</td>
+            <td class="px-5 py-4 text-orange-700 font-semibold">2026-05-12 ⚠️</td>
+            <td class="px-5 py-4 text-right font-mono font-bold text-orange-600">€ 2,238.60</td>
+            <td class="px-5 py-4 text-center"><span class="pill pill-pending">即将到期</span></td>
+            <td class="px-5 py-4 text-center">
+              <button onclick="quickAction('立即支付')" class="text-white bg-orange-600 hover:bg-orange-700 font-semibold text-xs px-3 py-1 rounded">支付</button>
+            </td>
+          </tr>
+          <tr class="hover:bg-orange-50">
+            <td class="px-5 py-4 font-mono text-gray-500 font-semibold">INV-2026-0410</td>
+            <td class="px-5 py-4 text-gray-700 font-mono text-xs">ORD-2026-0410-MJ</td>
+            <td class="px-5 py-4 text-gray-700">2026-04-10</td>
+            <td class="px-5 py-4 text-gray-700">2026-05-10</td>
+            <td class="px-5 py-4 text-right font-mono font-bold text-gray-700">€ 5,928.60</td>
+            <td class="px-5 py-4 text-center"><span class="pill pill-paid">✓ 已付</span></td>
+            <td class="px-5 py-4 text-center">
+              <button onclick="quickAction('下载 PDF')" class="text-orange-600 font-semibold text-xs">📥 PDF</button>
+            </td>
+          </tr>
+          <tr class="hover:bg-orange-50">
+            <td class="px-5 py-4 font-mono text-gray-500 font-semibold">INV-2026-0328</td>
+            <td class="px-5 py-4 text-gray-700 font-mono text-xs">ORD-2026-0328-MJ</td>
+            <td class="px-5 py-4 text-gray-700">2026-03-28</td>
+            <td class="px-5 py-4 text-gray-700">2026-04-28</td>
+            <td class="px-5 py-4 text-right font-mono font-bold text-gray-700">€ 3,420.00</td>
+            <td class="px-5 py-4 text-center"><span class="pill pill-paid">✓ 已付</span></td>
+            <td class="px-5 py-4 text-center">
+              <button onclick="quickAction('下载 PDF')" class="text-orange-600 font-semibold text-xs">📥 PDF</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="bg-gray-50 px-5 py-4 flex justify-between items-center text-sm">
+        <div class="text-gray-600">本月开票合计：<span class="font-mono font-bold text-steel" style="color:#1e3a5f">€ 13,793.80</span></div>
+        <div class="flex gap-3">
+          <span class="text-orange-600">未付：<span class="font-mono font-bold">€ 6,445.20</span></span>
+          <span class="text-green-600">已付：<span class="font-mono font-bold">€ 9,348.60</span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 账期说明 -->
+    <div class="bg-white rounded-2xl shadow-sm p-5">
+      <h3 class="font-serif font-bold text-lg text-steel mb-3" style="color:#1e3a5f">💎 您的金卡账期权益</h3>
+      <div class="grid md:grid-cols-3 gap-4 text-sm">
+        <div class="bg-yellow-50 rounded-xl p-4 border border-yellow-200">
+          <div class="text-yellow-700 font-bold mb-1">📅 账期 30 天</div>
+          <p class="text-gray-700 text-xs leading-relaxed">下单后 30 天内付清即可，无需现金</p>
+        </div>
+        <div class="bg-yellow-50 rounded-xl p-4 border border-yellow-200">
+          <div class="text-yellow-700 font-bold mb-1">💰 信用额度 €5,000</div>
+          <p class="text-gray-700 text-xs leading-relaxed">已用 €2,640 · 可用 €2,360</p>
+        </div>
+        <div class="bg-yellow-50 rounded-xl p-4 border border-yellow-200">
+          <div class="text-yellow-700 font-bold mb-1">🎁 折扣 22%</div>
+          <p class="text-gray-700 text-xs leading-relaxed">所有商品自动减免，结算时可见</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     TAB: 常购清单
+═══════════════════════════════════════════════════ -->
+<div class="tab-content" id="tab-favorite">
+  <div class="max-w-7xl mx-auto px-6 py-6">
+    <div class="bg-white rounded-2xl shadow-sm p-5 mb-4">
+      <h3 class="font-serif font-bold text-lg text-steel mb-2" style="color:#1e3a5f">⭐ 您的常购清单（基于过去 6 个月）</h3>
+      <p class="text-sm text-gray-600">这些 SKU 您每次都买，已为您锁定金卡价，可一键加入购物车</p>
+    </div>
+    <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
+      <div class="divide-y divide-gray-100">
+        <div class="p-4 flex items-center gap-4 hover:bg-orange-50">
+          <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center text-2xl">🟦</div>
+          <div class="flex-1">
+            <div class="font-bold text-steel" style="color:#1e3a5f">SPC 锁扣地板 白橡木</div>
+            <div class="text-xs text-gray-500">SKU-F2103 · 累计采购 184 箱 · 上次 4 月 28 日</div>
+          </div>
+          <div class="text-right">
+            <div class="price-tag text-lg">€38.00</div>
+            <div class="text-xs text-gray-500">/箱</div>
+          </div>
+          <button onclick="addToCart('F2103','SPC 白橡',38)" class="btn-primary">+ 加入</button>
+        </div>
+        <div class="p-4 flex items-center gap-4 hover:bg-orange-50">
+          <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center text-2xl">⬜</div>
+          <div class="flex-1">
+            <div class="font-bold text-steel" style="color:#1e3a5f">卡拉拉白瓷砖 800×800</div>
+            <div class="text-xs text-gray-500">SKU-T0851 · 累计采购 92 箱 · 上次 4 月 25 日</div>
+          </div>
+          <div class="text-right">
+            <div class="price-tag text-lg">€58.00</div>
+            <div class="text-xs text-gray-500">/箱</div>
+          </div>
+          <button onclick="addToCart('T0851','卡拉拉白',58)" class="btn-primary">+ 加入</button>
+        </div>
+        <div class="p-4 flex items-center gap-4 hover:bg-orange-50">
+          <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-amber-100 to-amber-200 flex items-center justify-center text-2xl">🚪</div>
+          <div class="flex-1">
+            <div class="font-bold text-steel" style="color:#1e3a5f">实心门锁套装 黑色</div>
+            <div class="text-xs text-gray-500">SKU-H0203 · 累计采购 38 套 · 上次 4 月 18 日</div>
+          </div>
+          <div class="text-right">
+            <div class="price-tag text-lg">€45.00</div>
+            <div class="text-xs text-gray-500">/套</div>
+          </div>
+          <button onclick="addToCart('H0203','实心门锁',45)" class="btn-primary">+ 加入</button>
+        </div>
+        <div class="p-4 flex items-center gap-4 hover:bg-orange-50">
+          <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-yellow-100 to-yellow-200 flex items-center justify-center text-2xl">🚿</div>
+          <div class="flex-1">
+            <div class="font-bold text-steel" style="color:#1e3a5f">隐藏式卫浴龙头 鎏金</div>
+            <div class="text-xs text-gray-500">SKU-B0445 · 累计采购 14 件 · 上次 4 月 18 日</div>
+          </div>
+          <div class="text-right">
+            <div class="price-tag text-lg">€128.00</div>
+            <div class="text-xs text-gray-500">/件</div>
+          </div>
+          <button onclick="addToCart('B0445','隐藏龙头',128)" class="btn-primary">+ 加入</button>
+        </div>
+      </div>
+      <div class="bg-gray-50 px-5 py-3 text-center">
+        <button onclick="addAllFav()" class="text-orange-600 font-bold text-sm hover:underline">一键加入全部常购清单 →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     CART FLOAT + DRAWER
+═══════════════════════════════════════════════════ -->
+<div class="cart-float" onclick="toggleCart()">
+  <span style="font-size:24px">🛒</span>
+  <span class="cart-count" id="cartCount">0</span>
+</div>
+
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="p-5 border-b flex justify-between items-center bg-steel-dark text-white" style="background:#0f2540">
+    <h3 class="font-serif font-bold text-lg">🛒 购物车</h3>
+    <button onclick="toggleCart()" class="text-white text-2xl leading-none">×</button>
+  </div>
+  <div class="flex-1 overflow-y-auto p-4" id="cartItems">
+    <div class="text-center text-gray-400 py-12 text-sm">购物车是空的</div>
+  </div>
+  <div class="border-t p-5 space-y-3 bg-gray-50">
+    <div class="flex justify-between text-sm">
+      <span class="text-gray-600">小计</span>
+      <span class="font-mono font-bold" id="cartSubtotal">€ 0.00</span>
+    </div>
+    <div class="flex justify-between text-sm">
+      <span class="text-gray-600">金卡折扣 22%</span>
+      <span class="font-mono font-bold text-green-600" id="cartDiscount">- € 0.00</span>
+    </div>
+    <div class="flex justify-between text-sm">
+      <span class="text-gray-600">VAT 23%</span>
+      <span class="font-mono font-bold" id="cartVat">€ 0.00</span>
+    </div>
+    <div class="flex justify-between text-base border-t pt-3">
+      <span class="font-bold">应付金额</span>
+      <span class="font-mono font-bold text-2xl text-orange-600" id="cartTotal">€ 0.00</span>
+    </div>
+    <button onclick="checkout()" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 rounded-xl">
+      提交订单 · 30 天账期支付 →
+    </button>
+  </div>
+</div>
+
+<script>
+const params = new URLSearchParams(location.search);
+const ref = params.get('ref');
+if (ref) {
+  sessionStorage.setItem('ref', ref);
+  document.querySelectorAll('a[href$=".html"]').forEach(a => {
+    try {
+      const url = new URL(a.href, location.href);
+      url.searchParams.set('ref', ref);
+      a.href = url.toString();
+    } catch (e) {}
+  });
+}
+
+function updateTime() {
+  const now = new Date();
+  const h = now.getHours().toString().padStart(2,'0');
+  const m = now.getMinutes().toString().padStart(2,'0');
+  const el = document.getElementById('topTime');
+  if (el) el.textContent = `${h}:${m}`;
+}
+setInterval(updateTime, 1000); updateTime();
+
+function switchTab(name, el) {
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  if (el) el.classList.add('active');
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+}
+
+function filterCat(cat, el) {
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  if (el) el.classList.add('active');
+  showToast(`筛选：${cat}（演示）`);
+}
+
+// ── Cart ────────────────────────────────
+const cart = [];
+
+function addToCart(sku, name, price) {
+  const existing = cart.find(c => c.sku === sku);
+  if (existing) existing.qty++;
+  else cart.push({ sku, name, price, qty: 1 });
+  updateCart();
+  showToast(`✓ 已加入：${name}`);
+}
+
+function quickAdd(sku) {
+  addToCart(sku, '清仓 ARG-203 仿古砖', 47);
+}
+
+function addAllFav() {
+  ['F2103|SPC 白橡|38','T0851|卡拉拉白|58','H0203|实心门锁|45','B0445|隐藏龙头|128'].forEach(s => {
+    const [sku,name,price] = s.split('|');
+    addToCart(sku, name, +price);
+  });
+}
+
+function changeQty(sku, delta) {
+  const item = cart.find(c => c.sku === sku);
+  if (!item) return;
+  item.qty += delta;
+  if (item.qty <= 0) cart.splice(cart.indexOf(item), 1);
+  updateCart();
+}
+
+function updateCart() {
+  document.getElementById('cartCount').textContent = cart.reduce((s,i) => s + i.qty, 0);
+  const itemsEl = document.getElementById('cartItems');
+  if (cart.length === 0) {
+    itemsEl.innerHTML = '<div class="text-center text-gray-400 py-12 text-sm">购物车是空的</div>';
+  } else {
+    itemsEl.innerHTML = cart.map(i => `
+      <div class="flex items-center gap-3 py-3 border-b border-gray-100">
+        <div class="w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center">📦</div>
+        <div class="flex-1 min-w-0">
+          <div class="text-sm font-bold text-steel" style="color:#1e3a5f">${i.name}</div>
+          <div class="text-xs text-gray-500 font-mono">SKU-${i.sku} · €${i.price.toFixed(2)}</div>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="changeQty('${i.sku}',-1)" class="w-7 h-7 bg-gray-100 rounded font-bold">−</button>
+          <span class="font-mono w-7 text-center text-sm">${i.qty}</span>
+          <button onclick="changeQty('${i.sku}',1)" class="w-7 h-7 bg-orange-500 text-white rounded font-bold">+</button>
+        </div>
+        <div class="font-mono font-bold text-orange-600 w-20 text-right text-sm">€${(i.price*i.qty).toFixed(2)}</div>
+      </div>
+    `).join('');
+  }
+  const subtotal = cart.reduce((s,i) => s + i.price * i.qty, 0);
+  const discount = subtotal * 0.22;
+  const afterDisc = subtotal - discount;
+  const vat = afterDisc * 0.23;
+  const total = afterDisc + vat;
+  document.getElementById('cartSubtotal').textContent = '€ ' + subtotal.toFixed(2);
+  document.getElementById('cartDiscount').textContent = '- € ' + discount.toFixed(2);
+  document.getElementById('cartVat').textContent = '€ ' + vat.toFixed(2);
+  document.getElementById('cartTotal').textContent = '€ ' + total.toFixed(2);
+}
+
+function toggleCart() {
+  document.getElementById('cartDrawer').classList.toggle('open');
+  document.getElementById('cartOverlay').classList.toggle('open');
+}
+
+function checkout() {
+  if (cart.length === 0) { showToast('购物车是空的'); return; }
+  showToast('✓ 订单已提交，仓库将在 4 小时内开始拣货');
+  cart.length = 0;
+  updateCart();
+  toggleCart();
+}
+
+function quickAction(t) { showToast(`✓ ${t}`); }
+
+let toastTimer = null;
+function showToast(msg) {
+  document.querySelectorAll('.toast-bottom').forEach(t => t.remove());
+  if (toastTimer) clearTimeout(toastTimer);
+  const t = document.createElement('div');
+  t.className = 'toast-bottom';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  toastTimer = setTimeout(() => {
+    t.style.animation = 'toastOut .3s ease forwards';
+    setTimeout(() => t.remove(), 300);
+  }, 2000);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>员工端 · Emerald WMS · Staff App</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  body { font-family: 'Inter', sans-serif; background: #111827; }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+  @keyframes scanLine { 0%{top:10%} 100%{top:85%} }
+  .scan-line { animation: scanLine 1.8s ease-in-out infinite alternate; }
+  @keyframes success { 0%{transform:scale(0.8);opacity:0} 60%{transform:scale(1.08)} 100%{transform:scale(1);opacity:1} }
+  .success-pop { animation: success 0.4s ease-out forwards; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+  .blink { animation: blink 0.8s ease-in-out infinite; }
+  @keyframes slideUp { from{transform:translateY(100%);opacity:0} to{transform:translateY(0);opacity:1} }
+  .slide-up { animation: slideUp 0.3s ease-out; }
+  .btn-primary { background: #0d4f3c; color: white; transition: all 0.15s; }
+  .btn-primary:active { transform: scale(0.97); background: #0a3d2e; }
+  .btn-orange { background: #f97316; color: white; transition: all 0.15s; }
+  .btn-orange:active { transform: scale(0.97); }
+  /* Phone frame */
+  .phone-frame { max-width: 390px; min-height: 100vh; margin: 0 auto; position: relative; }
+</style>
+</head>
+<body class="min-h-screen">
+
+<!-- Desktop wrapper hint -->
+<div class="hidden sm:flex items-center justify-center min-h-screen bg-gray-900 px-4">
+  <div class="text-center mb-4 absolute top-4 left-0 right-0">
+    <p class="text-gray-500 text-xs">员工端为手机界面设计 · 以下为手机模拟器</p>
+  </div>
+  <!-- Phone chrome -->
+  <div class="relative mt-8" style="width:390px;">
+    <div class="bg-gray-800 rounded-[48px] p-3 shadow-2xl border border-gray-700">
+      <!-- Notch -->
+      <div class="bg-black rounded-[40px] overflow-hidden" style="min-height:820px;">
+        <div class="bg-black flex justify-center pt-3 pb-1">
+          <div class="w-24 h-6 bg-gray-900 rounded-full"></div>
+        </div>
+        <iframe src="staff.html#app" class="w-full border-none" style="height:780px;" id="phone-frame"></iframe>
+      </div>
+    </div>
+    <!-- Nav links below phone -->
+    <div class="flex justify-center gap-6 mt-6">
+      <a href="index.html" class="text-gray-500 hover:text-white text-xs transition-colors">🏠 主页</a>
+      <a href="client.html" class="text-gray-500 hover:text-white text-xs transition-colors">👤 货主端</a>
+      <a href="boss.html" class="text-gray-500 hover:text-white text-xs transition-colors">📊 老板端</a>
+    </div>
+  </div>
+</div>
+
+<!-- Mobile / iframe content -->
+<div class="sm:hidden phone-frame bg-gray-900" id="app">
+  <!-- Status bar -->
+  <div class="bg-[#0d4f3c] px-4 pt-4 pb-0">
+    <div class="flex items-center justify-between mb-3">
+      <div>
+        <div class="text-green-300 text-xs mono">EMERALD WMS · 员工端</div>
+        <div class="text-white font-bold text-lg mt-0.5">Maria Chen</div>
+        <div class="text-white/50 text-xs">货架员 · 班次 08:00-17:00</div>
+      </div>
+      <div class="text-right">
+        <div class="text-white/60 text-xs mono" id="staff-time">--:--</div>
+        <div class="text-green-300 text-xs mt-1 flex items-center gap-1 justify-end">
+          <span class="w-1.5 h-1.5 rounded-full bg-green-400 blink"></span>在线
+        </div>
+      </div>
+    </div>
+
+    <!-- Today stats bar -->
+    <div class="bg-[#0a3d2e] rounded-t-2xl px-4 py-3 flex justify-around">
+      <div class="text-center">
+        <div class="mono text-xl font-black text-white" id="today-in">0</div>
+        <div class="text-green-400 text-xs">今日入库</div>
+      </div>
+      <div class="border-x border-white/10 px-4 text-center">
+        <div class="mono text-xl font-black text-white" id="today-out">0</div>
+        <div class="text-green-400 text-xs">今日出库</div>
+      </div>
+      <div class="text-center">
+        <div class="mono text-xl font-black text-white">0</div>
+        <div class="text-green-400 text-xs">异常</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main content area -->
+  <div class="bg-white rounded-b-none min-h-screen pb-32" id="main-content">
+
+    <!-- Mode selector -->
+    <div class="px-4 pt-4 pb-2" id="mode-select">
+      <p class="text-gray-500 text-sm mb-3 font-medium">选择操作类型 / Select Operation</p>
+      <div class="grid grid-cols-2 gap-3">
+        <button onclick="startScan('in')" class="btn-primary rounded-2xl p-5 text-left">
+          <div class="text-3xl mb-2">📥</div>
+          <div class="font-bold text-base">入库</div>
+          <div class="text-white/70 text-xs mt-0.5">Inbound / 收货</div>
+        </button>
+        <button onclick="startScan('out')" class="btn-orange rounded-2xl p-5 text-left">
+          <div class="text-3xl mb-2">📤</div>
+          <div class="font-bold text-base">出库</div>
+          <div class="text-white/70 text-xs mt-0.5">Outbound / 发货</div>
+        </button>
+        <button onclick="startScan('count')" class="bg-gray-100 rounded-2xl p-5 text-left">
+          <div class="text-3xl mb-2">🔢</div>
+          <div class="font-bold text-base text-gray-700">盘点</div>
+          <div class="text-gray-500 text-xs mt-0.5">Stock Count</div>
+        </button>
+        <button onclick="startScan('move')" class="bg-gray-100 rounded-2xl p-5 text-left">
+          <div class="text-3xl mb-2">↔️</div>
+          <div class="font-bold text-base text-gray-700">移位</div>
+          <div class="text-gray-500 text-xs mt-0.5">Relocate</div>
+        </button>
+      </div>
+
+      <!-- Recent ops -->
+      <div class="mt-4">
+        <p class="text-gray-400 text-xs mono mb-2">我今天的操作记录</p>
+        <div class="space-y-2" id="my-ops">
+          <!-- filled by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Scanner view (hidden initially) -->
+    <div id="scanner-view" class="hidden px-4 pt-4">
+      <!-- Back + title -->
+      <div class="flex items-center gap-3 mb-4">
+        <button onclick="backToMenu()" class="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center text-gray-600">←</button>
+        <div>
+          <div class="font-bold text-gray-800" id="scan-title">入库扫码</div>
+          <div class="text-gray-400 text-xs" id="scan-subtitle">Scan barcode / QR code</div>
+        </div>
+      </div>
+
+      <!-- Fake scanner -->
+      <div class="relative bg-gray-900 rounded-2xl overflow-hidden mb-4" style="height:220px;">
+        <!-- Corner markers -->
+        <div class="absolute top-4 left-4 w-8 h-8 border-t-2 border-l-2 border-green-400"></div>
+        <div class="absolute top-4 right-4 w-8 h-8 border-t-2 border-r-2 border-green-400"></div>
+        <div class="absolute bottom-4 left-4 w-8 h-8 border-b-2 border-l-2 border-green-400"></div>
+        <div class="absolute bottom-4 right-4 w-8 h-8 border-b-2 border-r-2 border-green-400"></div>
+        <!-- Scan line -->
+        <div class="scan-line absolute left-4 right-4 h-0.5 bg-green-400 shadow-[0_0_8px_#4ade80]" style="top:40%"></div>
+        <!-- Center text -->
+        <div class="absolute inset-0 flex items-center justify-center">
+          <div class="text-center">
+            <div class="text-white/40 text-sm">对准条码 / 二维码</div>
+            <div class="text-white/20 text-xs mt-1 mono">Place barcode within frame</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Manual input -->
+      <div class="bg-gray-50 rounded-xl p-4 mb-4">
+        <p class="text-gray-500 text-xs mb-2">或手动输入 SKU / Enter manually</p>
+        <div class="flex gap-2">
+          <input type="text" id="manual-sku" placeholder="ST-USB-C-HUB-01" class="flex-1 border border-gray-200 rounded-lg px-3 py-2.5 text-sm mono focus:outline-none focus:border-[#0d4f3c]">
+          <button onclick="confirmScan()" class="btn-primary rounded-lg px-4 py-2.5 text-sm font-bold">确认</button>
+        </div>
+      </div>
+
+      <!-- Demo buttons -->
+      <p class="text-gray-400 text-xs mono mb-2">演示：点击模拟扫码结果</p>
+      <div class="grid grid-cols-1 gap-2">
+        <button onclick="mockScan('ST-USB-C-HUB-01','USB-C 七合一集线器','A-12')" class="border border-gray-200 rounded-xl px-4 py-3 text-left hover:bg-gray-50 transition-colors">
+          <div class="mono text-xs font-bold text-[#0d4f3c]">ST-USB-C-HUB-01</div>
+          <div class="text-sm text-gray-700 mt-0.5">USB-C 七合一集线器</div>
+          <div class="text-xs text-gray-400 mono">货架 A-12 · 当前库存 8 件</div>
+        </button>
+        <button onclick="mockScan('ST-POWER-BANK-10','10,000mAh 充电宝','A-15')" class="border border-gray-200 rounded-xl px-4 py-3 text-left hover:bg-gray-50 transition-colors">
+          <div class="mono text-xs font-bold text-[#0d4f3c]">ST-POWER-BANK-10</div>
+          <div class="text-sm text-gray-700 mt-0.5">10,000mAh 充电宝</div>
+          <div class="text-xs text-gray-400 mono">货架 A-15 · 当前库存 298 件</div>
+        </button>
+        <button onclick="mockScan('ST-HDMI-CABLE','HDMI 2.1 高速线 2m','A-03')" class="border border-gray-200 rounded-xl px-4 py-3 text-left hover:bg-gray-50 transition-colors">
+          <div class="mono text-xs font-bold text-[#0d4f3c]">ST-HDMI-CABLE</div>
+          <div class="text-sm text-gray-700 mt-0.5">HDMI 2.1 高速线 2m</div>
+          <div class="text-xs text-gray-400 mono">货架 A-03 · 当前库存 145 件</div>
+        </button>
+      </div>
+    </div>
+
+    <!-- Result view (hidden initially) -->
+    <div id="result-view" class="hidden px-4 pt-4">
+      <!-- Success card -->
+      <div id="result-card" class="success-pop">
+        <!-- filled by JS -->
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bottom nav -->
+  <div class="fixed bottom-0 left-0 right-0 sm:hidden bg-white border-t border-gray-200 px-2 py-2 flex justify-around">
+    <button onclick="showSection('mode-select')" class="flex flex-col items-center gap-0.5 px-3 py-1">
+      <span class="text-xl">🏠</span><span class="text-xs text-gray-500">首页</span>
+    </button>
+    <button class="flex flex-col items-center gap-0.5 px-3 py-1">
+      <span class="text-xl">📋</span><span class="text-xs text-gray-500">任务</span>
+    </button>
+    <button class="flex flex-col items-center gap-0.5 px-3 py-1">
+      <span class="text-xl">📦</span><span class="text-xs text-gray-500">查货</span>
+    </button>
+    <button class="flex flex-col items-center gap-0.5 px-3 py-1">
+      <span class="text-xl">👤</span><span class="text-xs text-gray-500">我的</span>
+    </button>
+  </div>
+</div>
+
+<!-- Also show full-page on desktop inside iframe (detect by hash) -->
+<script>
+// Propagate ref
+(function() {
+  const params = new URLSearchParams(location.search);
+  const ref = params.get('ref') || sessionStorage.getItem('ref');
+  if (ref) {
+    sessionStorage.setItem('ref', ref);
+    document.querySelectorAll('a[href$=".html"]').forEach(a => {
+      const url = new URL(a.href, location.href);
+      url.searchParams.set('ref', ref);
+      a.href = url.toString();
+    });
+  }
+})();
+
+// On desktop, show the mobile UI anyway (remove sm:hidden)
+if (window.innerWidth >= 640 && !window.frameElement) {
+  document.querySelector('.sm\\:hidden')?.classList.remove('sm:hidden');
+  document.querySelector('.hidden.sm\\:flex')?.classList.add('hidden');
+}
+// If in iframe, just show app
+if (window.frameElement) {
+  document.querySelector('.hidden.sm\\:flex')?.classList.add('hidden');
+  const app = document.getElementById('app');
+  if (app) { app.classList.remove('sm:hidden'); app.style.background='white'; }
+}
+
+// Time
+setInterval(() => {
+  const now = new Date();
+  const t = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+  const el = document.getElementById('staff-time');
+  if (el) el.textContent = t;
+}, 1000);
+document.getElementById('staff-time').textContent = (() => {
+  const now = new Date();
+  return `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+})();
+
+// Today counters
+let todayInCount = 0, todayOutCount = 0;
+
+// My ops list
+const myOps = [
+  { time:'09:42', type:'in',  sku:'ST-POWER-BANK-10', qty:300, loc:'A-15' },
+  { time:'10:15', type:'out', sku:'ST-HDMI-CABLE',     qty:50,  loc:'A-03' },
+  { time:'11:30', type:'in',  sku:'ST-WEBCAM-FHD',     qty:100, loc:'A-19' },
+];
+todayInCount = 400; todayOutCount = 50;
+document.getElementById('today-in').textContent = todayInCount;
+document.getElementById('today-out').textContent = todayOutCount;
+
+const myOpsEl = document.getElementById('my-ops');
+myOps.forEach(o => {
+  myOpsEl.innerHTML += `
+    <div class="flex items-center gap-3 bg-gray-50 rounded-xl px-4 py-3">
+      <span class="w-7 h-7 rounded-lg ${o.type==='in'?'bg-green-100 text-green-700':'bg-orange-100 text-orange-700'} flex items-center justify-center text-sm font-bold">${o.type==='in'?'↓':'↑'}</span>
+      <div class="flex-1 min-w-0">
+        <div class="mono text-xs font-bold text-gray-700 truncate">${o.sku}</div>
+        <div class="text-xs text-gray-400">${o.loc} · ×${o.qty}</div>
+      </div>
+      <span class="mono text-xs text-gray-400">${o.time}</span>
+    </div>
+  `;
+});
+
+// Scan flow
+let currentMode = 'in';
+
+function startScan(mode) {
+  currentMode = mode;
+  const titles = { in:'入库扫码 / Inbound', out:'出库扫码 / Outbound', count:'盘点 / Stock Count', move:'移位 / Relocate' };
+  document.getElementById('scan-title').textContent = titles[mode];
+  document.getElementById('mode-select').classList.add('hidden');
+  document.getElementById('result-view').classList.add('hidden');
+  document.getElementById('scanner-view').classList.remove('hidden');
+  document.getElementById('manual-sku').value = '';
+}
+
+function backToMenu() {
+  document.getElementById('scanner-view').classList.add('hidden');
+  document.getElementById('result-view').classList.add('hidden');
+  document.getElementById('mode-select').classList.remove('hidden');
+}
+
+function confirmScan() {
+  const sku = document.getElementById('manual-sku').value.trim();
+  if (!sku) { alert('请输入 SKU'); return; }
+  mockScan(sku, sku, 'A-??');
+}
+
+function mockScan(sku, name, loc) {
+  // Beep simulation (visual)
+  document.getElementById('scanner-view').classList.add('hidden');
+
+  const isIn = currentMode === 'in';
+  const isOut = currentMode === 'out';
+  const newQty = isIn ? Math.floor(Math.random()*200+50) : Math.max(0, Math.floor(Math.random()*100+10));
+
+  document.getElementById('result-card').innerHTML = `
+    <div class="bg-${isIn?'green':'orange'}-50 border-2 border-${isIn?'green':'orange'}-200 rounded-2xl p-5 mb-4">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-12 h-12 rounded-xl bg-${isIn?'green':'orange'}-100 flex items-center justify-center text-2xl">${isIn?'✅':'📤'}</div>
+        <div>
+          <div class="font-black text-gray-800">${isIn?'入库确认':'出库确认'}</div>
+          <div class="mono text-xs text-gray-500 mt-0.5">${new Date().toLocaleTimeString('zh-CN')}</div>
+        </div>
+      </div>
+      <div class="space-y-2 mb-5">
+        <div class="flex justify-between"><span class="text-sm text-gray-500">SKU</span><span class="mono text-sm font-bold text-[#0d4f3c]">${sku}</span></div>
+        <div class="flex justify-between"><span class="text-sm text-gray-500">品名</span><span class="text-sm font-semibold">${name}</span></div>
+        <div class="flex justify-between"><span class="text-sm text-gray-500">货架位</span><span class="mono text-sm font-bold">${loc}</span></div>
+      </div>
+
+      <!-- Qty selector -->
+      <div class="bg-white rounded-xl p-4 mb-4">
+        <p class="text-xs text-gray-500 mb-3">${isIn?'入库数量':'出库数量'} / Quantity</p>
+        <div class="flex items-center gap-4 justify-center">
+          <button onclick="changeQty(-10)" class="w-10 h-10 rounded-full bg-gray-100 font-black text-gray-700 text-lg">−</button>
+          <div class="mono text-3xl font-black text-[#0d4f3c] w-20 text-center" id="qty-display">48</div>
+          <button onclick="changeQty(10)" class="w-10 h-10 rounded-full bg-gray-100 font-black text-gray-700 text-lg">+</button>
+        </div>
+        <input type="number" id="qty-input" value="48" min="1" class="w-full mt-2 text-center border border-gray-200 rounded-lg py-2 mono text-sm focus:outline-none focus:border-[#0d4f3c]" oninput="document.getElementById('qty-display').textContent=this.value">
+      </div>
+
+      <!-- Photo note -->
+      <div class="bg-white rounded-xl p-3 mb-4 flex items-center gap-3">
+        <span class="text-2xl">📷</span>
+        <div>
+          <div class="text-sm font-semibold text-gray-700">拍照留存（可选）</div>
+          <div class="text-xs text-gray-400">Photo proof · optional</div>
+        </div>
+        <button class="ml-auto text-xs text-[#0d4f3c] font-bold border border-[#0d4f3c] px-3 py-1.5 rounded-lg">拍照</button>
+      </div>
+
+      <!-- Confirm -->
+      <button onclick="submitOp('${sku}','${name}','${loc}')" class="w-full bg-[#0d4f3c] text-white font-black py-4 rounded-xl text-base">
+        ${isIn?'确认入库 ✓':'确认出库 ✓'}
+      </button>
+      <button onclick="backToMenu()" class="w-full mt-2 text-gray-400 text-sm py-2">取消 / Cancel</button>
+    </div>
+  `;
+
+  document.getElementById('result-view').classList.remove('hidden');
+}
+
+function changeQty(delta) {
+  const inp = document.getElementById('qty-input');
+  const display = document.getElementById('qty-display');
+  if (!inp) return;
+  let v = parseInt(inp.value) + delta;
+  if (v < 1) v = 1;
+  inp.value = v;
+  display.textContent = v;
+}
+
+function submitOp(sku, name, loc) {
+  const qty = parseInt(document.getElementById('qty-input')?.value || 48);
+  const isIn = currentMode === 'in';
+
+  if (isIn) { todayInCount += qty; document.getElementById('today-in').textContent = todayInCount; }
+  else { todayOutCount += qty; document.getElementById('today-out').textContent = todayOutCount; }
+
+  // Success flash
+  document.getElementById('result-card').innerHTML = `
+    <div class="flex flex-col items-center justify-center py-12 success-pop">
+      <div class="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center mb-4">
+        <span class="text-4xl">✅</span>
+      </div>
+      <div class="font-black text-xl text-gray-800 mb-1">操作成功！</div>
+      <div class="mono text-xs text-gray-400 mb-1">Operation recorded</div>
+      <div class="bg-gray-100 rounded-xl px-4 py-3 mt-4 text-center">
+        <div class="mono text-xs text-gray-500">${sku}</div>
+        <div class="font-bold text-gray-800">${isIn?'入库':'出库'} × ${qty} 件</div>
+        <div class="mono text-xs text-gray-400">${loc} · ${new Date().toLocaleTimeString('zh-CN')}</div>
+      </div>
+      <button onclick="startScan('${currentMode}')" class="mt-6 bg-[#0d4f3c] text-white font-bold px-8 py-3 rounded-xl">继续扫码</button>
+      <button onclick="backToMenu()" class="mt-2 text-gray-400 text-sm py-2">返回主菜单</button>
+    </div>
+  `;
+
+  // Update my ops
+  const newOp = { time: new Date().toLocaleTimeString('zh-CN', {hour:'2-digit',minute:'2-digit'}), type: currentMode, sku, qty, loc };
+  const li = document.createElement('div');
+  li.className = 'flex items-center gap-3 bg-gray-50 rounded-xl px-4 py-3 slide-up';
+  li.innerHTML = `
+    <span class="w-7 h-7 rounded-lg ${isIn?'bg-green-100 text-green-700':'bg-orange-100 text-orange-700'} flex items-center justify-center text-sm font-bold">${isIn?'↓':'↑'}</span>
+    <div class="flex-1 min-w-0">
+      <div class="mono text-xs font-bold text-gray-700 truncate">${sku}</div>
+      <div class="text-xs text-gray-400">${loc} · ×${qty}</div>
+    </div>
+    <span class="mono text-xs text-gray-400">${newOp.time}</span>
+  `;
+  const myOpsEl = document.getElementById('my-ops');
+  myOpsEl.prepend(li);
+}
+
+function showSection(id) {
+  backToMenu();
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>帮助中心 · 1688.ie</title>
+<meta name="description" content="1688.ie 帮助中心：售前咨询、方案选型、合同付款、开发上线、运营推广、政府补贴、账单售后全流程指引。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #C8102E; --red-dark: #8B0A1F;
+    --gold: #D4AF37; --gold-light: #E8C968;
+    --cream: #FAF6F0; --paper: #F5EFE4;
+    --ink: #1C1C1C; --ink-soft: #3A3A3A; --ink-mute: #6B6B6B;
+    --line: #E0D6C2; --green: #17844D;
+    --nav-h: 64px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; font-size: 16px; }
+  body {
+    font-family: 'Noto Serif SC', serif;
+    background-color: var(--cream);
+    color: var(--ink);
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 9999; opacity: 0.5;
+  }
+  a { color: var(--red); text-decoration: none; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+
+  /* NAV */
+  #nav { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h);
+    background: rgba(250,246,240,0.95); backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line); z-index: 1000; display: flex; align-items: center; }
+  #nav .container { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+  .nav-logo { font-size: 1.5rem; font-weight: 900; color: var(--red); letter-spacing: -0.5px; }
+  .nav-logo span { color: var(--gold); }
+  .nav-links { display: flex; align-items: center; gap: 28px; list-style: none; }
+  .nav-links a { color: var(--ink-soft); font-size: 0.9rem; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--red); }
+  .nav-links .nav-cta { background: var(--red); color: white; padding: 8px 18px; border-radius: 4px;
+    font-weight: 700; font-size: 0.85rem; box-shadow: 3px 3px 0 var(--red-dark);
+    transition: background 0.2s, transform 0.1s, box-shadow 0.1s; }
+  .nav-links .nav-cta:hover { background: var(--red-dark); transform: translate(1px, 1px); box-shadow: 2px 2px 0 var(--red-dark); }
+  .back-link { color: var(--ink-mute); font-size: 0.85rem; }
+  .back-link:hover { color: var(--red); }
+  .lang-toggle { background: var(--ink); color: var(--cream); border: none; padding: 6px 14px;
+    border-radius: 4px; cursor: pointer; font-size: 0.8rem; font-family: inherit; transition: background 0.2s; margin-left: 8px; }
+  .lang-toggle:hover { background: var(--red); }
+
+  /* HERO */
+  .page-hero { padding-top: calc(var(--nav-h) + 70px); padding-bottom: 60px;
+    background: linear-gradient(160deg, var(--ink) 0%, #2a1a1a 100%);
+    text-align: center; position: relative; overflow: hidden; }
+  .page-hero::before { content: '问'; position: absolute; right: -60px; top: 50%;
+    transform: translateY(-50%); font-size: 50vw; font-weight: 900;
+    color: var(--red); opacity: 0.04; pointer-events: none; user-select: none; }
+  .page-hero .eyebrow { display: inline-flex; background: var(--red); color: white;
+    font-size: 0.75rem; padding: 5px 14px; border-radius: 2px; margin-bottom: 24px;
+    letter-spacing: 1px; font-weight: 600; }
+  .page-hero h1 { font-family: 'Playfair Display', 'Noto Serif SC', serif;
+    font-size: clamp(1.8rem, 4.5vw, 3rem); font-weight: 900; color: var(--cream);
+    margin-bottom: 16px; line-height: 1.25; }
+  .page-hero h1 span { color: var(--gold); }
+  .page-hero p { color: rgba(250,246,240,0.72); font-size: 1rem;
+    max-width: 640px; margin: 0 auto 28px; }
+
+  .search-box { max-width: 560px; margin: 0 auto; position: relative; }
+  .search-box input {
+    width: 100%; padding: 14px 18px 14px 46px;
+    border: 1px solid rgba(212,175,55,0.4); border-radius: 4px;
+    background: rgba(250,246,240,0.08); color: var(--cream);
+    font-family: inherit; font-size: 0.95rem; outline: none;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .search-box input::placeholder { color: rgba(250,246,240,0.45); }
+  .search-box input:focus { border-color: var(--gold); background: rgba(250,246,240,0.12); }
+  .search-box::before {
+    content: '🔍'; position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+    font-size: 1rem; opacity: 0.7;
+  }
+
+  /* LAYOUT */
+  .help-wrap { padding: 60px 0 100px; }
+  .help-grid { display: grid; grid-template-columns: 220px 1fr; gap: 40px; align-items: start; }
+
+  .cat-nav { position: sticky; top: calc(var(--nav-h) + 20px); }
+  .cat-nav h4 { font-size: 0.78rem; letter-spacing: 1.5px; color: var(--ink-mute);
+    text-transform: uppercase; margin-bottom: 14px; font-weight: 700; }
+  .cat-nav ul { list-style: none; }
+  .cat-nav li { margin-bottom: 4px; }
+  .cat-nav a { display: block; padding: 8px 12px; color: var(--ink-soft);
+    font-size: 0.9rem; border-radius: 3px; border-left: 2px solid transparent;
+    transition: all 0.15s; }
+  .cat-nav a:hover { background: var(--paper); color: var(--red); border-left-color: var(--red); }
+  .cat-nav a.active { background: var(--paper); color: var(--red); border-left-color: var(--red); font-weight: 700; }
+
+  .cat-section { margin-bottom: 56px; scroll-margin-top: calc(var(--nav-h) + 20px); }
+  .cat-title { display: flex; align-items: center; gap: 12px;
+    font-size: 1.4rem; font-weight: 900; color: var(--ink);
+    padding-bottom: 14px; border-bottom: 2px solid var(--line); margin-bottom: 24px; }
+  .cat-title .icon { font-size: 1.6rem; }
+  .cat-title small { font-size: 0.78rem; color: var(--ink-mute); font-weight: 400; margin-left: auto; }
+
+  .article {
+    background: white; border: 1px solid var(--line); border-radius: 6px;
+    padding: 22px 26px; margin-bottom: 14px;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.02);
+    transition: box-shadow 0.2s, transform 0.1s;
+  }
+  .article:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.06); }
+  .article h3 { font-size: 1.05rem; font-weight: 700; color: var(--ink); margin-bottom: 12px;
+    display: flex; align-items: baseline; gap: 8px; }
+  .article h3::before { content: 'Q'; color: var(--red); font-weight: 900;
+    font-family: 'Playfair Display', serif; font-size: 1.1rem; }
+  .article ol { padding-left: 22px; margin: 0 0 12px; }
+  .article ol li { font-size: 0.92rem; color: var(--ink-soft); margin-bottom: 6px; line-height: 1.7; }
+  .article p.lead { font-size: 0.92rem; color: var(--ink-soft); margin-bottom: 10px; }
+  .article .note {
+    background: #FFF8E1; border: 1px solid #F5D67A; border-left: 4px solid #E0AC1A;
+    padding: 10px 14px; border-radius: 3px; font-size: 0.85rem; color: #6B5413;
+    margin-top: 12px;
+  }
+  .article .note::before { content: '⚠️ '; }
+  .article .tip {
+    background: #E8F4FB; border: 1px solid #B6DDF1; border-left: 4px solid #2A8DD3;
+    padding: 10px 14px; border-radius: 3px; font-size: 0.85rem; color: #1A5680;
+    margin-top: 12px;
+  }
+  .article .tip::before { content: '💡 '; }
+
+  .no-results {
+    text-align: center; padding: 60px 20px; color: var(--ink-mute);
+    background: var(--paper); border-radius: 6px; border: 1px dashed var(--line);
+  }
+  .no-results .icon { font-size: 3rem; margin-bottom: 14px; }
+
+  /* CTA */
+  .help-cta {
+    background: var(--paper); border: 1px solid var(--line); border-left: 4px solid var(--red);
+    padding: 28px 32px; border-radius: 4px; margin-top: 40px;
+    display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap;
+  }
+  .help-cta .text h4 { font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; }
+  .help-cta .text p { font-size: 0.88rem; color: var(--ink-mute); }
+  .btn-primary { background: var(--red); color: white; padding: 12px 24px; border: none; border-radius: 4px;
+    font-size: 0.92rem; font-family: inherit; font-weight: 700; cursor: pointer;
+    text-decoration: none; display: inline-block; box-shadow: 4px 4px 0 var(--red-dark);
+    transition: background 0.2s, transform 0.1s, box-shadow 0.1s; }
+  .btn-primary:hover { background: var(--red-dark); transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--red-dark); }
+
+  /* SITE FOOTER */
+  .site-footer { background: #0f0f0f; color: rgba(250,246,240,0.4);
+    padding: 32px 20px; text-align: center; font-size: 0.78rem; border-top: 1px solid rgba(255,255,255,0.06); }
+  .site-footer a { color: rgba(250,246,240,0.6); }
+  .site-footer a:hover { color: var(--gold); }
+
+  /* LANG */
+  [data-lang="en"] { display: none; }
+  body.en [data-lang="zh"] { display: none; }
+  body.en [data-lang="en"] { display: inline; }
+  body.en h1[data-lang="en"], body.en h2[data-lang="en"], body.en h3[data-lang="en"],
+  body.en h4[data-lang="en"], body.en p[data-lang="en"], body.en div[data-lang="en"],
+  body.en li[data-lang="en"] { display: block; }
+  body.en li[data-lang="en"] { display: list-item; }
+
+  @media (max-width: 880px) {
+    .help-grid { grid-template-columns: 1fr; }
+    .cat-nav { position: relative; top: 0; padding-bottom: 20px; border-bottom: 1px solid var(--line); }
+    .cat-nav ul { display: flex; gap: 6px; flex-wrap: wrap; }
+    .cat-nav a { padding: 6px 12px; border-radius: 20px; border-left: none; border: 1px solid var(--line); font-size: 0.82rem; }
+    .cat-nav a.active { border-color: var(--red); }
+  }
+  @media (max-width: 640px) {
+    .nav-links li:not(:last-child):not(:first-child) { display: none; }
+    .page-hero { padding-top: calc(var(--nav-h) + 40px); padding-bottom: 40px; }
+    .help-cta { flex-direction: column; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="container">
+    <a href="index.html" class="nav-logo">1688<span>.ie</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html" class="back-link"><span data-lang="zh">← 返回首页</span><span data-lang="en">← Home</span></a></li>
+      <li><a href="pricing-demo.html"><span data-lang="zh">定价</span><span data-lang="en">Pricing</span></a></li>
+      <li><a href="flow.html"><span data-lang="zh">业务流程</span><span data-lang="en">How It Works</span></a></li>
+      <li><a href="help.html"><span data-lang="zh">帮助中心</span><span data-lang="en">Help</span></a></li>
+      <li><a href="mailto:hello@1688.ie" class="nav-cta"><span data-lang="zh">免费咨询</span><span data-lang="en">Free Consult</span></a></li>
+    </ul>
+    <button class="lang-toggle" id="langBtn">EN</button>
+  </div>
+</nav>
+
+<section class="page-hero">
+  <div class="container">
+    <span class="eyebrow" data-lang="zh">📚 帮助中心</span>
+    <span class="eyebrow" data-lang="en">📚 Help Center</span>
+    <h1 data-lang="zh">有问题？<span>这里有答案</span></h1>
+    <h1 data-lang="en">Got Questions? <span>We Have Answers</span></h1>
+    <p data-lang="zh">从首次咨询到运营售后，1688.ie 全流程指引。中英双语客服 5×8 在线。</p>
+    <p data-lang="en">From first consultation to post-launch operations, full guidance for 1688.ie. Bilingual support, 5×8.</p>
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="搜索：报价、补贴、上线时间…" autocomplete="off">
+    </div>
+  </div>
+</section>
+
+<div class="container help-wrap">
+  <div class="help-grid">
+
+    <!-- SIDEBAR -->
+    <aside class="cat-nav">
+      <h4 data-lang="zh">分类导航</h4>
+      <h4 data-lang="en">Categories</h4>
+      <ul>
+        <li><a href="#sales" class="cat-link active" data-cat="sales"><span data-lang="zh">🤝 售前咨询</span><span data-lang="en">🤝 Pre-sales</span></a></li>
+        <li><a href="#plan" class="cat-link" data-cat="plan"><span data-lang="zh">📐 方案选型</span><span data-lang="en">📐 Plan Selection</span></a></li>
+        <li><a href="#contract" class="cat-link" data-cat="contract"><span data-lang="zh">✍️ 合同付款</span><span data-lang="en">✍️ Contract & Payment</span></a></li>
+        <li><a href="#dev" class="cat-link" data-cat="dev"><span data-lang="zh">🎨 设计开发</span><span data-lang="en">🎨 Design & Dev</span></a></li>
+        <li><a href="#launch" class="cat-link" data-cat="launch"><span data-lang="zh">🚀 上线培训</span><span data-lang="en">🚀 Launch & Training</span></a></li>
+        <li><a href="#ops" class="cat-link" data-cat="ops"><span data-lang="zh">📈 运营推广</span><span data-lang="en">📈 Marketing Ops</span></a></li>
+        <li><a href="#tov" class="cat-link" data-cat="tov"><span data-lang="zh">💰 政府补贴</span><span data-lang="en">💰 Gov Grant</span></a></li>
+        <li><a href="#billing" class="cat-link" data-cat="billing"><span data-lang="zh">🧾 账单售后</span><span data-lang="en">🧾 Billing & Support</span></a></li>
+      </ul>
+    </aside>
+
+    <!-- CONTENT -->
+    <main id="helpContent">
+
+      <!-- 售前咨询 -->
+      <section class="cat-section" id="sales">
+        <h2 class="cat-title">
+          <span class="icon">🤝</span>
+          <span data-lang="zh">售前咨询</span>
+          <span data-lang="en">Pre-sales</span>
+          <small data-lang="zh">免费 · 30 分钟</small>
+          <small data-lang="en">Free · 30 min</small>
+        </h2>
+
+        <article class="article" data-keywords="咨询 consultation 免费 free wechat 微信 whatsapp">
+          <h3><span data-lang="zh">如何预约免费咨询？</span><span data-lang="en">How do I book a free consultation?</span></h3>
+          <ol>
+            <li data-lang="zh">点击页面右上角「免费咨询」按钮</li>
+            <li data-lang="en">Click the "Free Consult" button in the top-right nav</li>
+            <li data-lang="zh">通过 WhatsApp / 微信 / 邮件三种方式任选其一</li>
+            <li data-lang="en">Reach us via WhatsApp / WeChat / Email — your choice</li>
+            <li data-lang="zh">告知您的行业、当前阶段和大致需求，我们 24h 内回复</li>
+            <li data-lang="en">Tell us your industry, stage, and rough needs — we reply within 24h</li>
+          </ol>
+          <div class="tip" data-lang="zh">中文客服直接微信沟通最快，英文客服推荐邮件。</div>
+          <div class="tip" data-lang="en">For Chinese support WeChat is fastest; for English, email is recommended.</div>
+        </article>
+
+        <article class="article" data-keywords="时间 长 久 多久 quote how long timeline">
+          <h3><span data-lang="zh">咨询后多久能拿到方案？</span><span data-lang="en">How long until I receive a proposal?</span></h3>
+          <p class="lead" data-lang="zh">标准流程是 3 个工作日内出报价单和方案推荐。</p>
+          <p class="lead" data-lang="en">Standard turnaround: written proposal and quote within 3 business days.</p>
+          <ol>
+            <li data-lang="zh">第 1 天：30 分钟需求电话或视频沟通</li>
+            <li data-lang="en">Day 1: 30-min call / video to gather requirements</li>
+            <li data-lang="zh">第 2 天：内部评估行业和功能需求</li>
+            <li data-lang="en">Day 2: internal assessment of industry & feature needs</li>
+            <li data-lang="zh">第 3 天：发送 PDF 报价单 + 推荐档位</li>
+            <li data-lang="en">Day 3: deliver PDF quote + recommended tier</li>
+          </ol>
+        </article>
+
+        <article class="article" data-keywords="行业 industry 适合 fit 餐饮 美甲 律师 lawyer beauty restaurant">
+          <h3><span data-lang="zh">我的行业适合 1688.ie 吗？</span><span data-lang="en">Does my industry fit 1688.ie?</span></h3>
+          <p class="lead" data-lang="zh">我们专注 8 个爱尔兰华人主流行业：</p>
+          <p class="lead" data-lang="en">We focus on 8 mainstream Chinese-business industries in Ireland:</p>
+          <ol>
+            <li data-lang="zh">餐饮（堂食 / 外卖 / 中央厨房）</li>
+            <li data-lang="en">F&B (dine-in / takeaway / central kitchen)</li>
+            <li data-lang="zh">美甲 · 美发 · SPA</li>
+            <li data-lang="en">Nail / Hair / SPA</li>
+            <li data-lang="zh">律师 · 移民 · 会计 · 翻译</li>
+            <li data-lang="en">Lawyer / Immigration / Accounting / Translation</li>
+            <li data-lang="zh">超市 · 杂货店 · 进口食品</li>
+            <li data-lang="en">Supermarket / Grocery / Imported food</li>
+            <li data-lang="zh">教育培训 · 留学 · 中文学校</li>
+            <li data-lang="en">Education / Study abroad / Chinese school</li>
+            <li data-lang="zh">物流 · 货代 · 跨境电商</li>
+            <li data-lang="en">Logistics / Forwarding / Cross-border e-commerce</li>
+          </ol>
+          <div class="note" data-lang="zh">不在以上行业不代表不能做，请联系客服评估可行性。</div>
+          <div class="note" data-lang="en">Not on the list? Contact us — we'll assess feasibility for your case.</div>
+        </article>
+      </section>
+
+      <!-- 方案选型 -->
+      <section class="cat-section" id="plan">
+        <h2 class="cat-title">
+          <span class="icon">📐</span>
+          <span data-lang="zh">方案选型</span>
+          <span data-lang="en">Plan Selection</span>
+        </h2>
+
+        <article class="article" data-keywords="档位 tier starter growth scale 选 哪个 which">
+          <h3><span data-lang="zh">6 个档位我应该选哪个？</span><span data-lang="en">Which of the 6 tiers should I pick?</span></h3>
+          <ol>
+            <li data-lang="zh"><strong>STARTER (€499)</strong>：个体户 / 新店，只需要一个像样的官网门面</li>
+            <li data-lang="en"><strong>STARTER (€499)</strong>: Sole trader / new shop — just need a presentable site</li>
+            <li data-lang="zh"><strong>GROWTH (€999)</strong>：1–3 家店，需要在线预约或留资</li>
+            <li data-lang="en"><strong>GROWTH (€999)</strong>: 1–3 shops, need online booking or lead capture</li>
+            <li data-lang="zh"><strong>SCALE (€4,999)</strong>：开始做电商或会员，需要 CRM</li>
+            <li data-lang="en"><strong>SCALE (€4,999)</strong>: Starting e-commerce or membership, need CRM</li>
+            <li data-lang="zh"><strong>PRO (€14,999)</strong>：3+ 家店或团队 5+ 人，需 ERP / 财务对接</li>
+            <li data-lang="en"><strong>PRO (€14,999)</strong>: 3+ shops or team of 5+, need ERP / finance integration</li>
+            <li data-lang="zh"><strong>ENTERPRISE</strong>：连锁集团或多业态，需要专属定制</li>
+            <li data-lang="en"><strong>ENTERPRISE</strong>: Chain group or multi-format business, need full customization</li>
+          </ol>
+          <div class="tip" data-lang="zh">不确定？看 <a href="pricing-demo.html#matrix">完整功能对比表</a>，或预约咨询让我们推荐。</div>
+          <div class="tip" data-lang="en">Not sure? See the <a href="pricing-demo.html#matrix">full feature comparison</a> or book a consult.</div>
+        </article>
+
+        <article class="article" data-keywords="升级 upgrade 降级 downgrade 套餐 tier 切换">
+          <h3><span data-lang="zh">能从低档位升级到高档位吗？</span><span data-lang="en">Can I upgrade from a lower tier later?</span></h3>
+          <p class="lead" data-lang="zh">可以。系统是模块化设计，升级只补差价。</p>
+          <p class="lead" data-lang="en">Yes — the system is modular. Upgrading only requires the price difference.</p>
+          <ol>
+            <li data-lang="zh">联系客服说明目标档位</li>
+            <li data-lang="en">Contact support and specify the target tier</li>
+            <li data-lang="zh">3 个工作日内出升级方案和补差价金额</li>
+            <li data-lang="en">Receive upgrade plan + delta cost within 3 business days</li>
+            <li data-lang="zh">付款后 1–2 周内开通新模块</li>
+            <li data-lang="en">After payment, new modules go live in 1–2 weeks</li>
+          </ol>
+        </article>
+
+        <article class="article" data-keywords="独立 自定 customize 不在套餐">
+          <h3><span data-lang="zh">套餐里没有的功能能加吗？</span><span data-lang="en">Can I add features not in any tier?</span></h3>
+          <p class="lead" data-lang="zh">可以，按 €120/小时 的开发费报价。常见定制需求：</p>
+          <p class="lead" data-lang="en">Yes — billed at €120/hour. Common custom requests:</p>
+          <ol>
+            <li data-lang="zh">和现有 POS / ERP 系统对接</li>
+            <li data-lang="en">Integration with existing POS / ERP systems</li>
+            <li data-lang="zh">特殊行业流程（如药品追溯、危化品）</li>
+            <li data-lang="en">Industry-specific flows (e.g. pharmacy tracking, hazardous goods)</li>
+            <li data-lang="zh">多语言版本（除中英外）</li>
+            <li data-lang="en">Additional languages beyond Chinese & English</li>
+          </ol>
+        </article>
+      </section>
+
+      <!-- 合同付款 -->
+      <section class="cat-section" id="contract">
+        <h2 class="cat-title">
+          <span class="icon">✍️</span>
+          <span data-lang="zh">合同与付款</span>
+          <span data-lang="en">Contract & Payment</span>
+        </h2>
+
+        <article class="article" data-keywords="合同 contract 签 sign 电子 esign">
+          <h3><span data-lang="zh">合同怎么签？需要现场吗？</span><span data-lang="en">How is the contract signed? In person?</span></h3>
+          <ol>
+            <li data-lang="zh">我们使用 DocuSign 电子合同，全程线上完成</li>
+            <li data-lang="en">We use DocuSign e-signature — fully online</li>
+            <li data-lang="zh">合同包含中英双语对照版本</li>
+            <li data-lang="en">Contracts are bilingual (Chinese + English side-by-side)</li>
+            <li data-lang="zh">如需爱尔兰本地律师见证，可加 €200 安排</li>
+            <li data-lang="en">If you need an Irish solicitor witness, add €200</li>
+          </ol>
+        </article>
+
+        <article class="article" data-keywords="付款 payment 分期 50 首款 deposit 银行 bank 转账">
+          <h3><span data-lang="zh">付款方式和节奏？</span><span data-lang="en">Payment methods and schedule?</span></h3>
+          <p class="lead" data-lang="zh">标准：50% 首款 + 50% 上线款。支持以下方式：</p>
+          <p class="lead" data-lang="en">Standard: 50% deposit + 50% on launch. Supported methods:</p>
+          <ol>
+            <li data-lang="zh">爱尔兰银行转账（SEPA，免手续费）</li>
+            <li data-lang="en">Irish bank transfer (SEPA, no fees)</li>
+            <li data-lang="zh">Stripe 信用卡（+1.5% 手续费）</li>
+            <li data-lang="en">Stripe credit card (+1.5% fee)</li>
+            <li data-lang="zh">微信 / 支付宝（按当日汇率，仅限 €5,000 以下）</li>
+            <li data-lang="en">WeChat / Alipay (today's FX rate, only under €5,000)</li>
+          </ol>
+          <div class="note" data-lang="zh">所有价格 ex VAT。爱尔兰 VAT 注册企业可全额抵扣 23%。</div>
+          <div class="note" data-lang="en">All prices ex VAT. Irish VAT-registered businesses get full 23% deduction.</div>
+        </article>
+
+        <article class="article" data-keywords="发票 invoice vat 税">
+          <h3><span data-lang="zh">能开 VAT 发票吗？</span><span data-lang="en">Can you issue a VAT invoice?</span></h3>
+          <p class="lead" data-lang="zh">可以。我们是爱尔兰注册企业（CRO），收款 5 个工作日内出 VAT 发票。</p>
+          <p class="lead" data-lang="en">Yes — we are an Irish-registered company (CRO). VAT invoice issued within 5 business days of payment.</p>
+        </article>
+      </section>
+
+      <!-- 设计开发 -->
+      <section class="cat-section" id="dev">
+        <h2 class="cat-title">
+          <span class="icon">🎨</span>
+          <span data-lang="zh">设计与开发</span>
+          <span data-lang="en">Design & Development</span>
+        </h2>
+
+        <article class="article" data-keywords="时间 多久 timeline weeks 开发周期">
+          <h3><span data-lang="zh">从签约到上线要多久？</span><span data-lang="en">From contract to launch — how long?</span></h3>
+          <ol>
+            <li data-lang="zh">STARTER：模板站，2 周</li>
+            <li data-lang="en">STARTER: template site, 2 weeks</li>
+            <li data-lang="zh">GROWTH：定制设计 + 预约系统，3–4 周</li>
+            <li data-lang="en">GROWTH: custom design + booking, 3–4 weeks</li>
+            <li data-lang="zh">SCALE：电商 + 会员 + CRM，6–8 周</li>
+            <li data-lang="en">SCALE: e-commerce + membership + CRM, 6–8 weeks</li>
+            <li data-lang="zh">PRO：含 ERP / 财务对接，10–14 周</li>
+            <li data-lang="en">PRO: with ERP / finance integration, 10–14 weeks</li>
+          </ol>
+          <div class="tip" data-lang="zh">实际进度取决于您提供素材（logo、产品照、文案）的速度。</div>
+          <div class="tip" data-lang="en">Actual timeline depends on how fast you supply assets (logo, product photos, copy).</div>
+        </article>
+
+        <article class="article" data-keywords="素材 资料 提供 logo 产品 图片 copy">
+          <h3><span data-lang="zh">需要我提供哪些素材？</span><span data-lang="en">What materials do I need to provide?</span></h3>
+          <ol>
+            <li data-lang="zh">公司 logo（如无，可加 €300 由我们设计）</li>
+            <li data-lang="en">Company logo (or add €300 for us to design one)</li>
+            <li data-lang="zh">营业执照或 CRO 注册证明</li>
+            <li data-lang="en">Business license or CRO registration proof</li>
+            <li data-lang="zh">产品 / 服务列表（Excel 或 Word 都可）</li>
+            <li data-lang="en">Product / service list (Excel or Word both work)</li>
+            <li data-lang="zh">商品照片（如无，可加 €80/件 上门拍摄）</li>
+            <li data-lang="en">Product photos (or add €80/item for on-site photography)</li>
+            <li data-lang="zh">公司简介、地址、电话、邮箱</li>
+            <li data-lang="en">Company intro, address, phone, email</li>
+          </ol>
+        </article>
+
+        <article class="article" data-keywords="修改 改 几次 设计稿 design revision">
+          <h3><span data-lang="zh">设计稿可以改几次？</span><span data-lang="en">How many design revisions are included?</span></h3>
+          <p class="lead" data-lang="zh">每个档位包含的修改轮数：</p>
+          <p class="lead" data-lang="en">Revision rounds included by tier:</p>
+          <ol>
+            <li data-lang="zh">STARTER：2 轮（首页 + 整体配色）</li>
+            <li data-lang="en">STARTER: 2 rounds (homepage + overall palette)</li>
+            <li data-lang="zh">GROWTH：3 轮</li>
+            <li data-lang="en">GROWTH: 3 rounds</li>
+            <li data-lang="zh">SCALE 及以上：5 轮 + 关键页面无限微调</li>
+            <li data-lang="en">SCALE and above: 5 rounds + unlimited tweaks on key pages</li>
+          </ol>
+          <div class="note" data-lang="zh">超出后按 €100/轮 收费，但实际操作中 95% 项目都在范围内。</div>
+          <div class="note" data-lang="en">Extra rounds: €100 each. In practice 95% of projects stay within scope.</div>
+        </article>
+      </section>
+
+      <!-- 上线培训 -->
+      <section class="cat-section" id="launch">
+        <h2 class="cat-title">
+          <span class="icon">🚀</span>
+          <span data-lang="zh">上线与培训</span>
+          <span data-lang="en">Launch & Training</span>
+        </h2>
+
+        <article class="article" data-keywords="培训 training 教 怎么用 后台 admin">
+          <h3><span data-lang="zh">上线后我能自己管理后台吗？</span><span data-lang="en">Can I manage the admin myself after launch?</span></h3>
+          <p class="lead" data-lang="zh">完全可以。每个档位都包含培训：</p>
+          <p class="lead" data-lang="en">Absolutely. Every tier includes training:</p>
+          <ol>
+            <li data-lang="zh">STARTER：1 次 1 小时录屏教程</li>
+            <li data-lang="en">STARTER: one 1-hour recorded tutorial</li>
+            <li data-lang="zh">GROWTH：1 次 2 小时线上培训 + 中文操作手册</li>
+            <li data-lang="en">GROWTH: one 2-hour live online training + Chinese manual</li>
+            <li data-lang="zh">SCALE 及以上：上门培训 + 1 个月辅导期</li>
+            <li data-lang="en">SCALE and above: on-site training + 1-month coaching period</li>
+          </ol>
+        </article>
+
+        <article class="article" data-keywords="域名 domain ie 注册 ssl https">
+          <h3><span data-lang="zh">域名和 SSL 怎么处理？</span><span data-lang="en">How are domain and SSL handled?</span></h3>
+          <ol>
+            <li data-lang="zh">.ie 或 .com 域名首年由我们免费注册</li>
+            <li data-lang="en">.ie or .com domain registered free for the first year</li>
+            <li data-lang="zh">SSL 证书自动配置，免费续期（Let's Encrypt）</li>
+            <li data-lang="en">SSL auto-configured and free-renewing (Let's Encrypt)</li>
+            <li data-lang="zh">已有域名可直接转移或解析过来</li>
+            <li data-lang="en">Existing domains can be transferred or pointed to us</li>
+          </ol>
+        </article>
+
+        <article class="article" data-keywords="数据 迁移 旧网站 migrate 现有">
+          <h3><span data-lang="zh">已有旧网站，数据能搬过来吗？</span><span data-lang="en">I have an old site — can data be migrated?</span></h3>
+          <p class="lead" data-lang="zh">可以。常见迁移内容：商品、订单、会员、文章。</p>
+          <p class="lead" data-lang="en">Yes. Commonly migrated: products, orders, members, articles.</p>
+          <ol>
+            <li data-lang="zh">提供旧站后台导出（Excel / CSV / 数据库备份）</li>
+            <li data-lang="en">Provide an export from the old site (Excel / CSV / DB dump)</li>
+            <li data-lang="zh">我们做字段映射和数据清洗</li>
+            <li data-lang="en">We handle field mapping and data cleaning</li>
+            <li data-lang="zh">数据 1,000 条以内免费，超出按 €0.05/条</li>
+            <li data-lang="en">Up to 1,000 records free, €0.05 each beyond that</li>
+          </ol>
+        </article>
+      </section>
+
+      <!-- 运营推广 -->
+      <section class="cat-section" id="ops">
+        <h2 class="cat-title">
+          <span class="icon">📈</span>
+          <span data-lang="zh">运营推广</span>
+          <span data-lang="en">Marketing Operations</span>
+        </h2>
+
+        <article class="article" data-keywords="seo 排名 google 谷歌 优化">
+          <h3><span data-lang="zh">能做 Google 排名优化吗？</span><span data-lang="en">Do you provide Google SEO?</span></h3>
+          <p class="lead" data-lang="zh">基础 SEO 所有档位标配（meta、sitemap、结构化数据）。深度服务：</p>
+          <p class="lead" data-lang="en">Basic SEO is included in all tiers (meta, sitemap, structured data). Deeper services:</p>
+          <ol>
+            <li data-lang="zh">关键词研究和竞品分析：€500 一次性</li>
+            <li data-lang="en">Keyword research & competitor analysis: €500 one-off</li>
+            <li data-lang="zh">月度 SEO 服务（4 篇博文 + 外链）：€600/月</li>
+            <li data-lang="en">Monthly SEO (4 blog posts + backlinks): €600/mo</li>
+            <li data-lang="zh">Google Ads 代投：投放预算 + 15% 服务费</li>
+            <li data-lang="en">Google Ads management: ad budget + 15% service fee</li>
+          </ol>
+        </article>
+
+        <article class="article" data-keywords="社交 instagram facebook 朋友圈 wechat 推广">
+          <h3><span data-lang="zh">社交媒体内容能代运营吗？</span><span data-lang="en">Do you offer social media management?</span></h3>
+          <p class="lead" data-lang="zh">可以。常见组合：</p>
+          <p class="lead" data-lang="en">Yes. Common bundles:</p>
+          <ol>
+            <li data-lang="zh">Instagram + Facebook 双平台：8 条/月，€450</li>
+            <li data-lang="en">Instagram + Facebook combo: 8 posts/mo, €450</li>
+            <li data-lang="zh">微信公众号 + 朋友圈：4 条推文 + 12 条朋友圈，€500</li>
+            <li data-lang="en">WeChat Official + Moments: 4 articles + 12 moments, €500</li>
+            <li data-lang="zh">小红书种草：3 篇笔记/月，€350</li>
+            <li data-lang="en">RED (Xiaohongshu) posts: 3/mo, €350</li>
+          </ol>
+        </article>
+
+        <article class="article" data-keywords="数据 报表 看 visit traffic analytics">
+          <h3><span data-lang="zh">网站流量数据怎么看？</span><span data-lang="en">How do I see traffic data?</span></h3>
+          <ol>
+            <li data-lang="zh">所有站点标配 Google Analytics 4 + Search Console</li>
+            <li data-lang="en">All sites ship with Google Analytics 4 + Search Console</li>
+            <li data-lang="zh">后台首页有简化版数据看板（日访问、转化、热门页）</li>
+            <li data-lang="en">Admin home has a simplified dashboard (daily visits, conversions, top pages)</li>
+            <li data-lang="zh">每月 1 号自动生成 PDF 月报发到您邮箱</li>
+            <li data-lang="en">PDF monthly report auto-emailed on the 1st of each month</li>
+          </ol>
+        </article>
+      </section>
+
+      <!-- 政府补贴 -->
+      <section class="cat-section" id="tov">
+        <h2 class="cat-title">
+          <span class="icon">💰</span>
+          <span data-lang="zh">政府补贴 (TOV)</span>
+          <span data-lang="en">Trading Online Voucher (TOV)</span>
+        </h2>
+
+        <article class="article" data-keywords="tov trading online voucher 补贴 申请 grant">
+          <h3><span data-lang="zh">TOV 是什么？我能申请多少？</span><span data-lang="en">What is TOV and how much can I get?</span></h3>
+          <p class="lead" data-lang="zh">TOV = Trading Online Voucher，爱尔兰政府数字化补贴，最高 €2,500（覆盖 50% 项目费用）。</p>
+          <p class="lead" data-lang="en">TOV = Trading Online Voucher, an Irish government digitization grant, up to €2,500 (covers 50% of project cost).</p>
+          <ol>
+            <li data-lang="zh">爱尔兰注册企业（CRO + VAT）</li>
+            <li data-lang="en">Must be Irish-registered (CRO + VAT)</li>
+            <li data-lang="zh">年营业额低于 €2M</li>
+            <li data-lang="en">Annual turnover under €2M</li>
+            <li data-lang="zh">员工 10 人以下</li>
+            <li data-lang="en">Fewer than 10 employees</li>
+            <li data-lang="zh">无现有专业网站（或现网站功能严重受限）</li>
+            <li data-lang="en">No existing professional website (or severely limited current site)</li>
+          </ol>
+        </article>
+
+        <article class="article" data-keywords="申请 流程 怎么 apply 帮 协助">
+          <h3><span data-lang="zh">申请流程是怎样的？你们能帮我申请吗？</span><span data-lang="en">What's the application process? Can you help?</span></h3>
+          <p class="lead" data-lang="zh">我们提供完整申请协助，全程不收额外费用。</p>
+          <p class="lead" data-lang="en">We provide full application assistance — no extra charge.</p>
+          <ol>
+            <li data-lang="zh">参加 LEO 半天免费在线培训（必须，我们提前预约）</li>
+            <li data-lang="en">Attend LEO's free half-day online training (required — we book it for you)</li>
+            <li data-lang="zh">我们出英文报价单 + 项目说明书</li>
+            <li data-lang="en">We prepare the English quote + project specification</li>
+            <li data-lang="zh">您提交申请到当地 LEO（Local Enterprise Office）</li>
+            <li data-lang="en">You submit to your Local Enterprise Office (LEO)</li>
+            <li data-lang="zh">4–6 周内审批，通过后开始项目</li>
+            <li data-lang="en">Approval in 4–6 weeks, project begins after</li>
+            <li data-lang="zh">项目验收后 LEO 直接打款 50% 到您账户</li>
+            <li data-lang="en">After project sign-off, LEO transfers the 50% directly to you</li>
+          </ol>
+          <div class="tip" data-lang="zh">通过率约 80%，我们至今协助申请的 30+ 案例全部通过。</div>
+          <div class="tip" data-lang="en">Approval rate ~80%; all 30+ cases we've supported have been approved.</div>
+        </article>
+      </section>
+
+      <!-- 账单售后 -->
+      <section class="cat-section" id="billing">
+        <h2 class="cat-title">
+          <span class="icon">🧾</span>
+          <span data-lang="zh">账单与售后</span>
+          <span data-lang="en">Billing & Support</span>
+        </h2>
+
+        <article class="article" data-keywords="月费 maintenance 维护 hosting 托管">
+          <h3><span data-lang="zh">月费里包含什么？</span><span data-lang="en">What's included in the monthly fee?</span></h3>
+          <ol>
+            <li data-lang="zh">爱尔兰服务器托管 + CDN 加速</li>
+            <li data-lang="en">Irish server hosting + CDN acceleration</li>
+            <li data-lang="zh">每日自动备份（保留 30 天）</li>
+            <li data-lang="en">Daily automated backups (30-day retention)</li>
+            <li data-lang="zh">SSL 证书自动续期</li>
+            <li data-lang="en">SSL certificate auto-renewal</li>
+            <li data-lang="zh">系统安全补丁 + 性能监控</li>
+            <li data-lang="en">Security patches + performance monitoring</li>
+            <li data-lang="zh">中英双语客服（5×8）</li>
+            <li data-lang="en">Bilingual support (5×8)</li>
+          </ol>
+        </article>
+
+        <article class="article" data-keywords="问题 故障 down 宕机 sla 响应">
+          <h3><span data-lang="zh">网站打不开怎么办？响应时间？</span><span data-lang="en">Site is down — what's the response SLA?</span></h3>
+          <ol>
+            <li data-lang="zh">7×24 自动监控，宕机 5 分钟内告警</li>
+            <li data-lang="en">7×24 auto-monitoring; alerts within 5 min of downtime</li>
+            <li data-lang="zh">STARTER / GROWTH：工作时间 4 小时响应</li>
+            <li data-lang="en">STARTER / GROWTH: 4-hour response in business hours</li>
+            <li data-lang="zh">SCALE：7×14 · 4 小时 SLA</li>
+            <li data-lang="en">SCALE: 7×14 · 4-hour SLA</li>
+            <li data-lang="zh">PRO / ENTERPRISE：4×24 · 1 小时 SLA</li>
+            <li data-lang="en">PRO / ENTERPRISE: 4×24 · 1-hour SLA</li>
+          </ol>
+        </article>
+
+        <article class="article" data-keywords="退款 取消 refund cancel 不满意">
+          <h3><span data-lang="zh">不满意能退款吗？</span><span data-lang="en">Refund policy if I'm not satisfied?</span></h3>
+          <p class="lead" data-lang="zh">分阶段政策：</p>
+          <p class="lead" data-lang="en">Stage-based policy:</p>
+          <ol>
+            <li data-lang="zh">签约 7 天内：100% 退款</li>
+            <li data-lang="en">Within 7 days of signing: 100% refund</li>
+            <li data-lang="zh">设计稿确认前：扣除已发生工时（按 €120/小时），余款全退</li>
+            <li data-lang="en">Before design sign-off: deduct hours spent (€120/hr), refund the rest</li>
+            <li data-lang="zh">开发开始后：按工程进度比例结算</li>
+            <li data-lang="en">After development begins: pro-rata based on progress</li>
+            <li data-lang="zh">月度服务可随时取消，下月生效</li>
+            <li data-lang="en">Monthly services can be cancelled anytime, effective next month</li>
+          </ol>
+        </article>
+      </section>
+
+      <div class="no-results" id="noResults" style="display:none;">
+        <div class="icon">🔍</div>
+        <p data-lang="zh">没有找到相关内容，试试换个关键词？</p>
+        <p data-lang="en">No matching results. Try different keywords?</p>
+      </div>
+
+      <div class="help-cta">
+        <div class="text">
+          <h4 data-lang="zh">没找到答案？</h4>
+          <h4 data-lang="en">Didn't find your answer?</h4>
+          <p data-lang="zh">直接联系我们，30 分钟内回复（工作时间）。</p>
+          <p data-lang="en">Reach out directly — reply within 30 min during business hours.</p>
+        </div>
+        <a href="mailto:hello@1688.ie" class="btn-primary" data-lang="zh">联系客服</a>
+        <a href="mailto:hello@1688.ie" class="btn-primary" data-lang="en">Contact Support</a>
+      </div>
+    </main>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <p>© 2026 1688.ie · Registered in Ireland (CRO #XXXXXX) · VAT IE1234567X</p>
+  <p style="margin-top:8px;">
+    <a href="index.html" data-lang="zh">← 返回首页</a><a href="index.html" data-lang="en">← Back to Home</a> ·
+    <a href="pricing-demo.html" data-lang="zh">定价</a><a href="pricing-demo.html" data-lang="en">Pricing</a> ·
+    <a href="flow.html" data-lang="zh">业务流程</a><a href="flow.html" data-lang="en">How It Works</a>
+  </p>
+</footer>
+
+<script>
+  // LANG
+  const langBtn = document.getElementById('langBtn');
+  let isEn = false;
+  langBtn.addEventListener('click', () => {
+    isEn = !isEn;
+    document.body.classList.toggle('en', isEn);
+    langBtn.textContent = isEn ? '中文' : 'EN';
+    document.documentElement.lang = isEn ? 'en' : 'zh-CN';
+    document.getElementById('searchInput').placeholder = isEn ? 'Search: quote, grant, timeline…' : '搜索：报价、补贴、上线时间…';
+  });
+
+  // SEARCH
+  const search = document.getElementById('searchInput');
+  const articles = document.querySelectorAll('.article');
+  const sections = document.querySelectorAll('.cat-section');
+  const noResults = document.getElementById('noResults');
+
+  search.addEventListener('input', e => {
+    const q = e.target.value.trim().toLowerCase();
+    if (!q) {
+      articles.forEach(a => a.style.display = '');
+      sections.forEach(s => s.style.display = '');
+      noResults.style.display = 'none';
+      return;
+    }
+    let hits = 0;
+    articles.forEach(a => {
+      const text = (a.textContent + ' ' + (a.dataset.keywords || '')).toLowerCase();
+      const match = text.includes(q);
+      a.style.display = match ? '' : 'none';
+      if (match) hits++;
+    });
+    sections.forEach(s => {
+      const visible = s.querySelectorAll('.article:not([style*="none"])').length > 0;
+      s.style.display = visible ? '' : 'none';
+    });
+    noResults.style.display = hits === 0 ? '' : 'none';
+  });
+
+  // CAT NAV ACTIVE
+  const catLinks = document.querySelectorAll('.cat-link');
+  const catSections = document.querySelectorAll('.cat-section');
+  function updateActive() {
+    const scrollY = window.scrollY + 100;
+    let current = catSections[0].id;
+    catSections.forEach(s => { if (s.offsetTop <= scrollY) current = s.id; });
+    catLinks.forEach(l => l.classList.toggle('active', l.dataset.cat === current));
+  }
+  window.addEventListener('scroll', updateActive);
+</script>
+</body>
+</html>

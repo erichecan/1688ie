@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>鸿基建材仓 · Hongji Building Supplies — 本地仓进销存系统</title>
+<meta name="description" content="专为爱尔兰华人建材进口商设计的进销存系统：集装箱全程追踪、单品落地成本、B2B/B2C/网店三渠道库存联动">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Noto+Serif+SC:wght@600;700;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --steel: #1e3a5f;
+    --steel-dark: #0f2540;
+    --steel-light: #2c5282;
+    --orange: #ea580c;
+    --orange-light: #fb923c;
+    --concrete: #525252;
+    --bone: #fafaf9;
+    --kraft: #f5f1e8;
+  }
+  * { -webkit-font-smoothing: antialiased; }
+  body { font-family: 'Inter', sans-serif; color: #1c1917; background: var(--bone); }
+  .font-mono { font-family: 'JetBrains Mono', monospace; }
+  .font-serif { font-family: 'Noto Serif SC', serif; }
+  .text-steel { color: var(--steel); }
+  .bg-steel { background: var(--steel); }
+  .bg-steel-dark { background: var(--steel-dark); }
+  .text-orange { color: var(--orange); }
+  .bg-orange { background: var(--orange); }
+  .border-steel { border-color: var(--steel); }
+  .border-orange { border-color: var(--orange); }
+
+  /* 钢蓝渐变 */
+  .gradient-steel {
+    background: linear-gradient(135deg, #1e3a5f 0%, #0f2540 100%);
+  }
+  .gradient-orange {
+    background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
+  }
+
+  /* 工业纹理 */
+  .industrial-bg {
+    background-color: var(--steel-dark);
+    background-image:
+      linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  /* Sticky nav */
+  .nav-bar {
+    backdrop-filter: blur(12px);
+    background: rgba(15, 37, 64, 0.92);
+    border-bottom: 1px solid rgba(234,88,12,.2);
+  }
+
+  /* Live ticker */
+  @keyframes tickerScroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .ticker-track {
+    display: flex; gap: 60px;
+    animation: tickerScroll 60s linear infinite;
+    white-space: nowrap;
+  }
+
+  /* Container journey */
+  .journey-step {
+    position: relative;
+  }
+  .journey-step::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: -16px;
+    width: 32px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--steel) 0%, transparent 100%);
+    transform: translateY(-50%);
+  }
+  .journey-step:last-child::after { display: none; }
+
+  /* Pain card sticky note */
+  .pain-card {
+    background: #fef3c7;
+    border-left: 4px solid var(--orange);
+    transform: rotate(-0.5deg);
+    transition: transform .3s ease;
+  }
+  .pain-card:nth-child(2n) { transform: rotate(0.7deg); background: #fed7aa; }
+  .pain-card:nth-child(3n) { transform: rotate(-0.3deg); background: #fde68a; }
+  .pain-card:hover { transform: rotate(0deg) scale(1.02); }
+
+  /* Container card */
+  .container-card {
+    background: linear-gradient(135deg, #1e3a5f 0%, #0f2540 100%);
+    border: 1px solid rgba(234,88,12,.3);
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+  }
+  .container-card::before {
+    content: 'CONTAINER';
+    position: absolute;
+    top: 12px; right: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: rgba(234,88,12,.6);
+    letter-spacing: 3px;
+  }
+  .container-stripe {
+    background-image: repeating-linear-gradient(
+      45deg,
+      rgba(234,88,12,.15),
+      rgba(234,88,12,.15) 8px,
+      transparent 8px,
+      transparent 16px
+    );
+    height: 6px;
+  }
+
+  /* 仪表盘脉动 */
+  @keyframes pulseRing {
+    0% { transform: scale(.8); opacity: 1; }
+    100% { transform: scale(2); opacity: 0; }
+  }
+  .live-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #22c55e; position: relative;
+  }
+  .live-dot::before {
+    content: '';
+    position: absolute; inset: 0;
+    border-radius: 50%; background: #22c55e;
+    animation: pulseRing 1.6s ease-out infinite;
+  }
+
+  /* 渠道徽章 */
+  .channel-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 2px 8px; border-radius: 999px;
+    font-size: 11px; font-weight: 600;
+  }
+  .ch-shop { background: #dbeafe; color: #1e3a8a; }
+  .ch-b2b { background: #fed7aa; color: #9a3412; }
+  .ch-retail { background: #d1fae5; color: #065f46; }
+
+  /* Demo entry cards */
+  .demo-card {
+    background: #fff;
+    border-radius: 20px;
+    border: 2px solid #e5e5e5;
+    transition: all .3s cubic-bezier(.4,0,.2,1);
+    position: relative;
+    overflow: hidden;
+  }
+  .demo-card:hover {
+    border-color: var(--orange);
+    transform: translateY(-6px);
+    box-shadow: 0 24px 48px rgba(15,37,64,.18);
+  }
+  .demo-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, var(--steel), var(--orange));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform .4s ease;
+  }
+  .demo-card:hover::before { transform: scaleX(1); }
+
+  /* Slider */
+  input[type="range"].slider-orange {
+    -webkit-appearance: none;
+    width: 100%; height: 6px;
+    border-radius: 3px;
+    background: linear-gradient(to right, var(--orange) 0%, var(--orange) var(--val,50%), #e5e5e5 var(--val,50%), #e5e5e5 100%);
+    outline: none;
+  }
+  input[type="range"].slider-orange::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 22px; height: 22px;
+    border-radius: 50%; background: var(--steel);
+    border: 3px solid var(--orange);
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,.2);
+  }
+
+  /* Reveal on scroll */
+  .reveal {
+    opacity: 0; transform: translateY(20px);
+    transition: opacity .6s ease, transform .6s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* Stamp */
+  .stamp {
+    display: inline-block;
+    border: 2px solid var(--orange);
+    color: var(--orange);
+    padding: 4px 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    transform: rotate(-3deg);
+    font-weight: 700;
+  }
+
+  /* Bar chart */
+  .bar {
+    background: linear-gradient(180deg, var(--orange-light), var(--orange));
+    border-radius: 4px 4px 0 0;
+    transition: height 1s cubic-bezier(.4,0,.2,1);
+  }
+
+  /* 落地成本表格 */
+  .cost-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px dashed rgba(255,255,255,.15); }
+  .cost-row:last-child { border-bottom: none; }
+
+  /* CTA */
+  .btn-primary {
+    background: var(--orange);
+    color: #fff;
+    padding: 14px 28px;
+    border-radius: 12px;
+    font-weight: 700;
+    transition: all .2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 16px rgba(234,88,12,.4);
+  }
+  .btn-primary:hover { background: #c2410c; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(234,88,12,.5); }
+  .btn-secondary {
+    background: transparent;
+    color: var(--steel);
+    border: 2px solid var(--steel);
+    padding: 12px 26px;
+    border-radius: 12px;
+    font-weight: 700;
+    transition: all .2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn-secondary:hover { background: var(--steel); color: #fff; }
+
+  /* Referral badge */
+  .ref-badge {
+    position: fixed;
+    bottom: 20px; left: 20px;
+    background: var(--steel-dark);
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    box-shadow: 0 4px 16px rgba(0,0,0,.2);
+    z-index: 50;
+    border: 1px solid rgba(234,88,12,.4);
+    display: none;
+  }
+  .ref-badge.show { display: block; }
+
+  /* 货架占用 */
+  .shelf-cell {
+    aspect-ratio: 1;
+    border-radius: 4px;
+    background: rgba(255,255,255,.08);
+    transition: all .3s;
+  }
+  .shelf-cell.occupied { background: var(--steel-light); }
+  .shelf-cell.full { background: var(--orange); }
+  .shelf-cell.alert { background: #ef4444; animation: alertPulse 2s ease infinite; }
+  @keyframes alertPulse {
+    0%,100% { opacity: 1; }
+    50% { opacity: .5; }
+  }
+
+  /* 滚动隐藏 */
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(30,58,95,.3); border-radius: 4px; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════
+     STICKY NAV
+═══════════════════════════════════════════════════════ -->
+<nav class="nav-bar fixed top-0 left-0 right-0 z-50">
+  <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-9 h-9 rounded-lg gradient-orange flex items-center justify-center">
+        <span class="font-serif text-white font-bold text-lg">鸿</span>
+      </div>
+      <div>
+        <div class="font-serif text-white font-bold text-base leading-tight">鸿基建材仓</div>
+        <div class="text-orange-300 text-xs font-mono">Hongji · Dublin</div>
+      </div>
+    </div>
+    <div class="hidden md:flex items-center gap-7 text-sm text-gray-200">
+      <a href="#pain" class="hover:text-orange-400">头疼事</a>
+      <a href="#dashboard" class="hover:text-orange-400">看板演示</a>
+      <a href="#demos" class="hover:text-orange-400">三端体验</a>
+      <a href="#calc" class="hover:text-orange-400">省钱测算</a>
+      <a href="#contact" class="hover:text-orange-400">联系我们</a>
+    </div>
+    <a href="#contact" class="btn-primary text-sm" style="padding:8px 16px">立即了解 →</a>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════════
+     LIVE TICKER
+═══════════════════════════════════════════════════════ -->
+<div class="bg-steel-dark text-orange-300 py-2 mt-16 overflow-hidden border-b border-orange-900">
+  <div class="ticker-track text-xs font-mono">
+    <span>● 集装箱 #MSCU7281044 已抵达都柏林港</span>
+    <span>● SKU-T0823 西班牙瓷砖到柜 240 箱</span>
+    <span>● 上海某老板娘下单 4 个柜的 SPC 地板</span>
+    <span>● 滞销预警：仿古砖 ARG-203 已积压 187 天</span>
+    <span>● 马俊装修队订单已发货 · €4,820</span>
+    <span>● 本月毛利 €18,470 · 同比 ↑23%</span>
+    <span>● Shopify 网店今日新增订单 6 单</span>
+    <!-- 复制一遍实现无缝循环 -->
+    <span>● 集装箱 #MSCU7281044 已抵达都柏林港</span>
+    <span>● SKU-T0823 西班牙瓷砖到柜 240 箱</span>
+    <span>● 上海某老板娘下单 4 个柜的 SPC 地板</span>
+    <span>● 滞销预警：仿古砖 ARG-203 已积压 187 天</span>
+    <span>● 马俊装修队订单已发货 · €4,820</span>
+    <span>● 本月毛利 €18,470 · 同比 ↑23%</span>
+    <span>● Shopify 网店今日新增订单 6 单</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     HERO
+═══════════════════════════════════════════════════════ -->
+<section class="industrial-bg text-white py-20 px-6 relative overflow-hidden">
+  <div class="max-w-7xl mx-auto relative z-10">
+    <div class="stamp mb-6">本地仓 · 进销存 · v2.0</div>
+    <h1 class="font-serif text-5xl md:text-7xl font-black leading-tight mb-6">
+      你从中国进的货<br>
+      <span class="text-orange-400">从下柜到出门</span>，每一步都看得清
+    </h1>
+    <p class="text-xl text-gray-300 max-w-3xl mb-10 leading-relaxed">
+      专为爱尔兰华人建材进口商打造。<br>
+      <span class="text-white font-semibold">集装箱全程追踪 · 单品落地成本 · 三渠道库存联动 · B 端账期管理</span>
+    </p>
+    <div class="flex flex-wrap gap-4 mb-12">
+      <a href="#demos" class="btn-primary text-lg">看三端真实演示 →</a>
+      <a href="#calc" class="btn-secondary text-lg" style="background:transparent;color:#fff;border-color:#fff">算算我能省多少钱</a>
+    </div>
+
+    <!-- Hero stats -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-5xl">
+      <div class="bg-white bg-opacity-5 backdrop-blur rounded-2xl p-5 border border-white border-opacity-10">
+        <div class="text-orange-400 text-xs font-mono mb-1">在途集装箱</div>
+        <div class="text-4xl font-mono font-black text-white">7</div>
+        <div class="text-xs text-gray-400 mt-1">总价值 €182,400</div>
+      </div>
+      <div class="bg-white bg-opacity-5 backdrop-blur rounded-2xl p-5 border border-white border-opacity-10">
+        <div class="text-orange-400 text-xs font-mono mb-1">在管 SKU</div>
+        <div class="text-4xl font-mono font-black text-white" id="heroSkuCount">1,247</div>
+        <div class="text-xs text-gray-400 mt-1">瓷砖 / 地板 / 卫浴 / 五金</div>
+      </div>
+      <div class="bg-white bg-opacity-5 backdrop-blur rounded-2xl p-5 border border-white border-opacity-10">
+        <div class="text-orange-400 text-xs font-mono mb-1">B 端客户</div>
+        <div class="text-4xl font-mono font-black text-white">38</div>
+        <div class="text-xs text-gray-400 mt-1">装修队 + 建材店</div>
+      </div>
+      <div class="bg-white bg-opacity-5 backdrop-blur rounded-2xl p-5 border border-white border-opacity-10">
+        <div class="text-orange-400 text-xs font-mono mb-1">月营收</div>
+        <div class="text-4xl font-mono font-black text-white">€<span id="heroRev">82.4</span>K</div>
+        <div class="text-xs text-gray-400 mt-1">三渠道合计 ↑ 23%</div>
+      </div>
+    </div>
+
+    <!-- Channel badges -->
+    <div class="mt-10 flex flex-wrap gap-3 items-center text-sm">
+      <span class="text-gray-400">销售渠道：</span>
+      <span class="channel-badge ch-shop">🛒 Shopify 网店</span>
+      <span class="channel-badge ch-b2b">🏗️ B2B 批发（38 家）</span>
+      <span class="channel-badge ch-retail">🛍️ 仓库零售</span>
+      <span class="text-gray-400">→ 库存自动联动，永不超卖</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     PAIN WALL — 8 个建材老板的头疼事
+═══════════════════════════════════════════════════════ -->
+<section id="pain" class="py-24 px-6 bg-bone">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-14 reveal">
+      <div class="text-orange font-mono text-sm uppercase tracking-widest mb-3">PAIN POINTS</div>
+      <h2 class="font-serif text-4xl md:text-5xl font-black text-steel">
+        这些事<span class="text-orange">每天都在发生</span>
+      </h2>
+      <p class="text-gray-600 mt-4 text-lg">认领 1 件以上算我输</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+      <div class="pain-card p-5 rounded-lg shadow-sm reveal">
+        <div class="text-2xl mb-2">📦</div>
+        <div class="font-serif font-bold text-base mb-1.5">柜子在哪？</div>
+        <p class="text-sm text-gray-700 leading-relaxed">"上海发的那 3 个柜，到没到爱尔兰？哪个是瓷砖哪个是地板？只能微信问货代。"</p>
+      </div>
+      <div class="pain-card p-5 rounded-lg shadow-sm reveal">
+        <div class="text-2xl mb-2">💰</div>
+        <div class="font-serif font-bold text-base mb-1.5">这砖到底多少钱卖？</div>
+        <p class="text-sm text-gray-700 leading-relaxed">"装柜价 + 海运 + 关税 + 卸柜搬运，一摊就是十几项。每次定价靠拍脑袋，怕亏。"</p>
+      </div>
+      <div class="pain-card p-5 rounded-lg shadow-sm reveal">
+        <div class="text-2xl mb-2">🏗️</div>
+        <div class="font-serif font-bold text-base mb-1.5">工地催货找不到</div>
+        <p class="text-sm text-gray-700 leading-relaxed">"客户问 SKU-T0823 还剩几箱，仓库里要翻 20 分钟，最后告诉我'好像没了'。"</p>
+      </div>
+      <div class="pain-card p-5 rounded-lg shadow-sm reveal">
+        <div class="text-2xl mb-2">🔄</div>
+        <div class="font-serif font-bold text-base mb-1.5">三个渠道库存对不上</div>
+        <p class="text-sm text-gray-700 leading-relaxed">"网店显示有货，仓库其实卖给装修队了，客户付完钱我才发现超卖。退款 + 道歉。"</p>
+      </div>
+      <div class="pain-card p-5 rounded-lg shadow-sm reveal">
+        <div class="text-2xl mb-2">🪦</div>
+        <div class="font-serif font-bold text-base mb-1.5">滞销品压死人</div>
+        <p class="text-sm text-gray-700 leading-relaxed">"那批仿古砖压了一年多了，资金 €8,000 卡死。但又不知道哪些 SKU 也快变这样。"</p>
+      </div>
+      <div class="pain-card p-5 rounded-lg shadow-sm reveal">
+        <div class="text-2xl mb-2">⚠️</div>
+        <div class="font-serif font-bold text-base mb-1.5">热销品老缺货</div>
+        <p class="text-sm text-gray-700 leading-relaxed">"那个白色 SPC 地板月月卖空，每次缺货都丢单。但补货量靠估，少了又卖空。"</p>
+      </div>
+      <div class="pain-card p-5 rounded-lg shadow-sm reveal">
+        <div class="text-2xl mb-2">💸</div>
+        <div class="font-serif font-bold text-base mb-1.5">B 端客户挂账</div>
+        <p class="text-sm text-gray-700 leading-relaxed">"老张装修队又欠了 3 个月，€2,100。月底对账要核 38 家，Excel 翻到吐。"</p>
+      </div>
+      <div class="pain-card p-5 rounded-lg shadow-sm reveal">
+        <div class="text-2xl mb-2">📊</div>
+        <div class="font-serif font-bold text-base mb-1.5">毛利不知道</div>
+        <p class="text-sm text-gray-700 leading-relaxed">"今年生意比去年好像差点，但具体哪个品类亏哪个赚？不知道。年底看账才知道。"</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     CONTAINER JOURNEY — 集装箱全程追踪
+═══════════════════════════════════════════════════════ -->
+<section class="py-24 px-6 industrial-bg text-white">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-14 reveal">
+      <div class="text-orange font-mono text-sm uppercase tracking-widest mb-3">CONTAINER LIFECYCLE</div>
+      <h2 class="font-serif text-4xl md:text-5xl font-black">
+        每一个柜，<span class="text-orange-400">从订到卖</span>，都在系统里
+      </h2>
+      <p class="text-gray-400 mt-4 text-lg">不再问货代"到哪了"，自己手机一开就知道</p>
+    </div>
+
+    <!-- Journey timeline -->
+    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4 mb-12 reveal">
+      <div class="journey-step text-center">
+        <div class="w-14 h-14 mx-auto mb-2 rounded-full bg-steel-dark border-2 border-orange flex items-center justify-center text-xl">📝</div>
+        <div class="text-xs font-mono text-orange-400">01</div>
+        <div class="text-sm font-semibold mt-1">下 PO 单</div>
+        <div class="text-xs text-gray-500 mt-1">1688 / 工厂</div>
+      </div>
+      <div class="journey-step text-center">
+        <div class="w-14 h-14 mx-auto mb-2 rounded-full bg-steel-dark border-2 border-orange flex items-center justify-center text-xl">🏭</div>
+        <div class="text-xs font-mono text-orange-400">02</div>
+        <div class="text-sm font-semibold mt-1">工厂生产</div>
+        <div class="text-xs text-gray-500 mt-1">15-20 天</div>
+      </div>
+      <div class="journey-step text-center">
+        <div class="w-14 h-14 mx-auto mb-2 rounded-full bg-steel-dark border-2 border-orange flex items-center justify-center text-xl">📦</div>
+        <div class="text-xs font-mono text-orange-400">03</div>
+        <div class="text-sm font-semibold mt-1">装柜出运</div>
+        <div class="text-xs text-gray-500 mt-1">提单号</div>
+      </div>
+      <div class="journey-step text-center">
+        <div class="w-14 h-14 mx-auto mb-2 rounded-full bg-steel-dark border-2 border-orange flex items-center justify-center text-xl">🚢</div>
+        <div class="text-xs font-mono text-orange-400">04</div>
+        <div class="text-sm font-semibold mt-1">海运在途</div>
+        <div class="text-xs text-gray-500 mt-1">35-42 天</div>
+      </div>
+      <div class="journey-step text-center">
+        <div class="w-14 h-14 mx-auto mb-2 rounded-full bg-steel-dark border-2 border-orange flex items-center justify-center text-xl">⚓</div>
+        <div class="text-xs font-mono text-orange-400">05</div>
+        <div class="text-sm font-semibold mt-1">到达都柏林港</div>
+        <div class="text-xs text-gray-500 mt-1">Dublin Port</div>
+      </div>
+      <div class="journey-step text-center">
+        <div class="w-14 h-14 mx-auto mb-2 rounded-full bg-steel-dark border-2 border-orange flex items-center justify-center text-xl">📋</div>
+        <div class="text-xs font-mono text-orange-400">06</div>
+        <div class="text-sm font-semibold mt-1">清关报关</div>
+        <div class="text-xs text-gray-500 mt-1">关税计算</div>
+      </div>
+      <div class="journey-step text-center">
+        <div class="w-14 h-14 mx-auto mb-2 rounded-full bg-steel-dark border-2 border-orange flex items-center justify-center text-xl">🚛</div>
+        <div class="text-xs font-mono text-orange-400">07</div>
+        <div class="text-sm font-semibold mt-1">拖柜到仓</div>
+        <div class="text-xs text-gray-500 mt-1">Ballymount</div>
+      </div>
+      <div class="journey-step text-center">
+        <div class="w-14 h-14 mx-auto mb-2 rounded-full bg-orange flex items-center justify-center text-xl">✓</div>
+        <div class="text-xs font-mono text-orange-400">08</div>
+        <div class="text-sm font-semibold mt-1">卸柜入库</div>
+        <div class="text-xs text-gray-500 mt-1">扫码上架</div>
+      </div>
+    </div>
+
+    <!-- Sample container card with cost breakdown -->
+    <div class="grid lg:grid-cols-2 gap-6">
+      <div class="container-card p-6 reveal">
+        <div class="container-stripe -mx-6 -mt-6 mb-4"></div>
+        <div class="flex items-start justify-between mb-4">
+          <div>
+            <div class="text-orange-400 font-mono text-xs">CNTR ID</div>
+            <div class="font-mono text-2xl text-white font-bold">MSCU7281044</div>
+          </div>
+          <span class="bg-orange text-white text-xs px-3 py-1 rounded-full font-bold">在途 第 28 天</span>
+        </div>
+        <div class="grid grid-cols-2 gap-3 text-sm mb-4">
+          <div>
+            <div class="text-gray-400 text-xs">供应商</div>
+            <div class="text-white">佛山陶瓷工厂</div>
+          </div>
+          <div>
+            <div class="text-gray-400 text-xs">装柜日期</div>
+            <div class="text-white font-mono">2026-04-02</div>
+          </div>
+          <div>
+            <div class="text-gray-400 text-xs">预计到港</div>
+            <div class="text-orange-400 font-mono">2026-05-08</div>
+          </div>
+          <div>
+            <div class="text-gray-400 text-xs">柜型</div>
+            <div class="text-white">40' HQ</div>
+          </div>
+        </div>
+        <div class="bg-black bg-opacity-30 rounded-lg p-3 mb-4">
+          <div class="text-orange-400 text-xs font-mono mb-2">装柜清单（4 个 SKU）</div>
+          <div class="space-y-1.5 text-xs">
+            <div class="flex justify-between text-white"><span>T0823 西班牙仿古砖 600×600</span><span class="font-mono">240 箱</span></div>
+            <div class="flex justify-between text-white"><span>T0851 卡拉拉白瓷砖 800×800</span><span class="font-mono">180 箱</span></div>
+            <div class="flex justify-between text-white"><span>T1021 木纹砖 200×1200</span><span class="font-mono">320 箱</span></div>
+            <div class="flex justify-between text-white"><span>T1145 厨卫小砖 150×150</span><span class="font-mono">96 箱</span></div>
+          </div>
+        </div>
+        <div class="flex items-center justify-between text-xs">
+          <span class="text-gray-400">货值（FOB）</span>
+          <span class="text-white font-mono text-base font-bold">€18,420</span>
+        </div>
+      </div>
+
+      <!-- 落地成本明细 -->
+      <div class="container-card p-6 reveal">
+        <div class="container-stripe -mx-6 -mt-6 mb-4"></div>
+        <div class="mb-4">
+          <div class="text-orange-400 font-mono text-xs">LANDED COST</div>
+          <div class="text-white text-xl font-bold">单 SKU 落地成本明细</div>
+          <div class="text-gray-400 text-xs mt-1">以 SKU-T0823 西班牙仿古砖为例</div>
+        </div>
+        <div class="space-y-1 text-sm">
+          <div class="cost-row text-gray-300">
+            <span>FOB 出厂价 / 箱</span>
+            <span class="font-mono text-white">€38.50</span>
+          </div>
+          <div class="cost-row text-gray-300">
+            <span>海运费分摊</span>
+            <span class="font-mono text-white">€6.20</span>
+          </div>
+          <div class="cost-row text-gray-300">
+            <span>关税（爱尔兰 6.5%）</span>
+            <span class="font-mono text-white">€2.91</span>
+          </div>
+          <div class="cost-row text-gray-300">
+            <span>清关代理费分摊</span>
+            <span class="font-mono text-white">€1.40</span>
+          </div>
+          <div class="cost-row text-gray-300">
+            <span>拖柜 + 卸柜搬运</span>
+            <span class="font-mono text-white">€3.10</span>
+          </div>
+          <div class="cost-row text-gray-300">
+            <span>仓储均摊（30 天）</span>
+            <span class="font-mono text-white">€1.80</span>
+          </div>
+          <div class="cost-row text-gray-300">
+            <span>损耗预留 1.5%</span>
+            <span class="font-mono text-white">€0.79</span>
+          </div>
+          <div class="border-t border-orange border-opacity-50 pt-3 mt-2 flex justify-between items-baseline">
+            <span class="text-orange-400 font-bold text-base">落地成本 / 箱</span>
+            <span class="font-mono text-orange-400 font-black text-2xl">€54.70</span>
+          </div>
+          <div class="text-xs text-gray-500 mt-2">
+            建议 B 端批发价 €72-78（毛利 31-43%）<br>
+            建议网店零售价 €89-95（毛利 63-74%）
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     LIVE DASHBOARD
+═══════════════════════════════════════════════════════ -->
+<section id="dashboard" class="py-24 px-6 bg-kraft" style="background:#f5f1e8">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-12 reveal">
+      <div class="text-orange font-mono text-sm uppercase tracking-widest mb-3">LIVE DASHBOARD</div>
+      <h2 class="font-serif text-4xl md:text-5xl font-black text-steel">
+        老板手机一开，<span class="text-orange">全仓在眼前</span>
+      </h2>
+      <p class="text-gray-600 mt-4 text-lg">下面是真实演示数据，每隔几秒自动刷新</p>
+    </div>
+
+    <div class="grid lg:grid-cols-3 gap-5">
+      <!-- 月度毛利 -->
+      <div class="bg-white rounded-2xl p-6 shadow-md reveal">
+        <div class="flex items-center justify-between mb-4">
+          <div class="text-sm font-bold text-steel">📈 本月毛利走势</div>
+          <span class="live-dot"></span>
+        </div>
+        <div class="text-3xl font-mono font-black text-steel mb-1">€<span id="monthGross">18,470</span></div>
+        <div class="text-xs text-green-600 font-semibold mb-4">↑ 23.4% vs 上月</div>
+        <div class="flex items-end gap-1.5 h-24">
+          <div class="bar flex-1" style="height:45%"></div>
+          <div class="bar flex-1" style="height:62%"></div>
+          <div class="bar flex-1" style="height:55%"></div>
+          <div class="bar flex-1" style="height:78%"></div>
+          <div class="bar flex-1" style="height:71%"></div>
+          <div class="bar flex-1" style="height:88%"></div>
+          <div class="bar flex-1" style="height:95%; background:linear-gradient(180deg,#fb923c,#ea580c); box-shadow:0 0 12px rgba(234,88,12,.4)"></div>
+        </div>
+        <div class="flex justify-between text-xs text-gray-500 mt-2 font-mono">
+          <span>10/26</span><span>11/26</span><span>12/26</span><span>01/27</span><span>02/27</span><span>03/27</span><span class="text-orange font-bold">本月</span>
+        </div>
+      </div>
+
+      <!-- TOP 10 热销 -->
+      <div class="bg-white rounded-2xl p-6 shadow-md reveal">
+        <div class="flex items-center justify-between mb-4">
+          <div class="text-sm font-bold text-steel">🔥 TOP 5 热销 SKU</div>
+          <span class="text-xs text-gray-500">本月</span>
+        </div>
+        <div class="space-y-3" id="topSkuList">
+          <div class="flex items-center gap-3 text-sm">
+            <span class="font-mono text-orange-600 font-bold w-5">1</span>
+            <div class="flex-1 min-w-0">
+              <div class="text-steel font-semibold truncate">SPC 锁扣地板 白橡木</div>
+              <div class="text-xs text-gray-500">SKU-F2103 · €38/箱</div>
+            </div>
+            <span class="font-mono text-sm font-bold text-green-600">412 箱</span>
+          </div>
+          <div class="flex items-center gap-3 text-sm">
+            <span class="font-mono text-orange-600 font-bold w-5">2</span>
+            <div class="flex-1 min-w-0">
+              <div class="text-steel font-semibold truncate">卡拉拉白瓷砖 800×800</div>
+              <div class="text-xs text-gray-500">SKU-T0851 · €58/箱</div>
+            </div>
+            <span class="font-mono text-sm font-bold text-green-600">287 箱</span>
+          </div>
+          <div class="flex items-center gap-3 text-sm">
+            <span class="font-mono text-orange-600 font-bold w-5">3</span>
+            <div class="flex-1 min-w-0">
+              <div class="text-steel font-semibold truncate">隐藏式卫浴龙头 鎏金</div>
+              <div class="text-xs text-gray-500">SKU-B0445 · €128/件</div>
+            </div>
+            <span class="font-mono text-sm font-bold text-green-600">156 件</span>
+          </div>
+          <div class="flex items-center gap-3 text-sm">
+            <span class="font-mono text-orange-600 font-bold w-5">4</span>
+            <div class="flex-1 min-w-0">
+              <div class="text-steel font-semibold truncate">实心门锁套装 黑色</div>
+              <div class="text-xs text-gray-500">SKU-H0203 · €45/套</div>
+            </div>
+            <span class="font-mono text-sm font-bold text-green-600">98 套</span>
+          </div>
+          <div class="flex items-center gap-3 text-sm">
+            <span class="font-mono text-orange-600 font-bold w-5">5</span>
+            <div class="flex-1 min-w-0">
+              <div class="text-steel font-semibold truncate">水曲柳实木复合地板</div>
+              <div class="text-xs text-gray-500">SKU-F1820 · €52/箱</div>
+            </div>
+            <span class="font-mono text-sm font-bold text-green-600">82 箱</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 滞销红榜 -->
+      <div class="bg-white rounded-2xl p-6 shadow-md reveal">
+        <div class="flex items-center justify-between mb-4">
+          <div class="text-sm font-bold text-steel">⚠️ 滞销红榜</div>
+          <span class="text-xs px-2 py-0.5 bg-red-100 text-red-700 rounded-full font-bold">需处理</span>
+        </div>
+        <div class="space-y-3">
+          <div class="flex items-center gap-3 text-sm border-l-4 border-red-500 pl-3 py-1">
+            <div class="flex-1 min-w-0">
+              <div class="text-steel font-semibold truncate">仿古砖 ARG-203</div>
+              <div class="text-xs text-gray-500">积压 187 天 · 占资 €8,240</div>
+            </div>
+            <span class="font-mono text-xs font-bold text-red-600">90 箱</span>
+          </div>
+          <div class="flex items-center gap-3 text-sm border-l-4 border-red-500 pl-3 py-1">
+            <div class="flex-1 min-w-0">
+              <div class="text-steel font-semibold truncate">卡通儿童墙纸</div>
+              <div class="text-xs text-gray-500">积压 142 天 · 占资 €4,180</div>
+            </div>
+            <span class="font-mono text-xs font-bold text-red-600">68 卷</span>
+          </div>
+          <div class="flex items-center gap-3 text-sm border-l-4 border-orange-500 pl-3 py-1">
+            <div class="flex-1 min-w-0">
+              <div class="text-steel font-semibold truncate">巴洛克花纹瓷砖</div>
+              <div class="text-xs text-gray-500">积压 98 天 · 占资 €2,920</div>
+            </div>
+            <span class="font-mono text-xs font-bold text-orange-600">42 箱</span>
+          </div>
+          <div class="flex items-center gap-3 text-sm border-l-4 border-orange-500 pl-3 py-1">
+            <div class="flex-1 min-w-0">
+              <div class="text-steel font-semibold truncate">铜质拉丝把手</div>
+              <div class="text-xs text-gray-500">积压 76 天 · 占资 €1,650</div>
+            </div>
+            <span class="font-mono text-xs font-bold text-orange-600">120 件</span>
+          </div>
+          <button class="w-full mt-2 bg-orange text-white text-xs font-bold py-2 rounded-lg hover:bg-orange-600">一键发清仓促销 →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 第二排：仓位 + 应收 + 三渠道 -->
+    <div class="grid lg:grid-cols-3 gap-5 mt-5">
+      <!-- 仓位占用 -->
+      <div class="bg-steel-dark rounded-2xl p-6 text-white reveal">
+        <div class="flex items-center justify-between mb-3">
+          <div class="text-sm font-bold">🏗️ 仓位实时占用</div>
+          <span class="text-xs text-orange-300 font-mono">A 区 · 192 个货位</span>
+        </div>
+        <div class="grid grid-cols-12 gap-1 mb-4">
+          <!-- 12x8 = 96 cells -->
+        </div>
+        <div id="shelfGrid" class="grid grid-cols-12 gap-1 mb-4"></div>
+        <div class="flex justify-between text-xs">
+          <span><span class="inline-block w-3 h-3 rounded-sm align-middle mr-1" style="background:rgba(255,255,255,.08)"></span>空位</span>
+          <span><span class="inline-block w-3 h-3 rounded-sm align-middle mr-1" style="background:#2c5282"></span>已占</span>
+          <span><span class="inline-block w-3 h-3 rounded-sm align-middle mr-1" style="background:#ea580c"></span>满载</span>
+          <span><span class="inline-block w-3 h-3 rounded-sm align-middle mr-1" style="background:#ef4444"></span>异常</span>
+        </div>
+        <div class="text-center mt-4 pt-4 border-t border-white border-opacity-10">
+          <div class="text-2xl font-mono font-black text-orange-400">82%</div>
+          <div class="text-xs text-gray-400">A 区占用率（建议 < 85%）</div>
+        </div>
+      </div>
+
+      <!-- 应收账款 -->
+      <div class="bg-white rounded-2xl p-6 shadow-md reveal">
+        <div class="flex items-center justify-between mb-4">
+          <div class="text-sm font-bold text-steel">💸 应收账款</div>
+          <span class="text-xs text-red-600 font-bold">3 家逾期</span>
+        </div>
+        <div class="text-3xl font-mono font-black text-orange-600 mb-4">€ 12,840</div>
+        <div class="space-y-2.5 text-sm">
+          <div class="flex justify-between items-center pb-2 border-b border-gray-100">
+            <div>
+              <div class="text-steel font-semibold">老张装修队</div>
+              <div class="text-xs text-red-600">逾期 92 天 ⚠️</div>
+            </div>
+            <span class="font-mono font-bold text-red-600">€ 4,820</span>
+          </div>
+          <div class="flex justify-between items-center pb-2 border-b border-gray-100">
+            <div>
+              <div class="text-steel font-semibold">华兴建材店</div>
+              <div class="text-xs text-orange-600">逾期 38 天</div>
+            </div>
+            <span class="font-mono font-bold text-orange-600">€ 3,210</span>
+          </div>
+          <div class="flex justify-between items-center pb-2 border-b border-gray-100">
+            <div>
+              <div class="text-steel font-semibold">马俊装修队</div>
+              <div class="text-xs text-orange-600">逾期 12 天</div>
+            </div>
+            <span class="font-mono font-bold text-orange-600">€ 2,640</span>
+          </div>
+          <div class="flex justify-between items-center text-gray-500">
+            <span class="text-xs">其他 35 家正常</span>
+            <span class="font-mono text-sm">€ 2,170</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 三渠道销售 -->
+      <div class="bg-white rounded-2xl p-6 shadow-md reveal">
+        <div class="flex items-center justify-between mb-4">
+          <div class="text-sm font-bold text-steel">🛒 三渠道销售</div>
+          <span class="text-xs text-gray-500">本月</span>
+        </div>
+        <div class="space-y-4">
+          <div>
+            <div class="flex justify-between items-baseline mb-1">
+              <span class="channel-badge ch-b2b">🏗️ B2B 批发</span>
+              <span class="font-mono font-bold text-steel">€ 52,840</span>
+            </div>
+            <div class="h-2 rounded-full bg-gray-100 overflow-hidden">
+              <div class="h-full bg-orange-500" style="width:64%"></div>
+            </div>
+            <div class="text-xs text-gray-500 mt-1">64% · 38 家活跃客户</div>
+          </div>
+          <div>
+            <div class="flex justify-between items-baseline mb-1">
+              <span class="channel-badge ch-shop">🛒 Shopify 网店</span>
+              <span class="font-mono font-bold text-steel">€ 18,920</span>
+            </div>
+            <div class="h-2 rounded-full bg-gray-100 overflow-hidden">
+              <div class="h-full bg-blue-600" style="width:23%"></div>
+            </div>
+            <div class="text-xs text-gray-500 mt-1">23% · 142 笔订单</div>
+          </div>
+          <div>
+            <div class="flex justify-between items-baseline mb-1">
+              <span class="channel-badge ch-retail">🛍️ 仓库零售</span>
+              <span class="font-mono font-bold text-steel">€ 10,640</span>
+            </div>
+            <div class="h-2 rounded-full bg-gray-100 overflow-hidden">
+              <div class="h-full bg-emerald-600" style="width:13%"></div>
+            </div>
+            <div class="text-xs text-gray-500 mt-1">13% · 散客现金</div>
+          </div>
+        </div>
+        <div class="mt-4 pt-4 border-t border-gray-100 bg-orange-50 -mx-6 -mb-6 px-6 py-3 rounded-b-2xl">
+          <div class="text-xs text-gray-700">
+            <span class="font-bold text-orange-700">⚡ 库存自动联动：</span>
+            网店卖一件，B 端可见库存自动 -1，永不超卖
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     DEMO ENTRIES — 三端体验
+═══════════════════════════════════════════════════════ -->
+<section id="demos" class="py-24 px-6 bg-bone">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-12 reveal">
+      <div class="text-orange font-mono text-sm uppercase tracking-widest mb-3">LIVE DEMO</div>
+      <h2 class="font-serif text-4xl md:text-5xl font-black text-steel">
+        点进去就能<span class="text-orange">真实操作</span>
+      </h2>
+      <p class="text-gray-600 mt-4 text-lg">三个角色的端，每一个都能点进去试</p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6">
+      <!-- 老板端 -->
+      <a href="boss.html" class="demo-card p-7 reveal block">
+        <div class="text-5xl mb-4">👔</div>
+        <h3 class="font-serif text-2xl font-black text-steel mb-2">老板端</h3>
+        <div class="text-orange font-mono text-xs uppercase tracking-wider mb-4">BOSS DASHBOARD</div>
+        <p class="text-gray-600 text-sm leading-relaxed mb-5">
+          手机上看：在途几个柜、月度毛利、TOP 热销、滞销红榜、库存周转、应收欠款、缺货预警、采购建议
+        </p>
+        <ul class="text-xs text-gray-500 space-y-1.5 mb-5">
+          <li>✓ 集装箱全程追踪</li>
+          <li>✓ 单 SKU 落地成本计算</li>
+          <li>✓ 三渠道销售对比</li>
+          <li>✓ 应收账款催款</li>
+        </ul>
+        <span class="text-orange font-bold text-sm group">进入老板端 →</span>
+      </a>
+
+      <!-- 员工端 -->
+      <a href="staff.html" class="demo-card p-7 reveal block">
+        <div class="text-5xl mb-4">📱</div>
+        <h3 class="font-serif text-2xl font-black text-steel mb-2">员工端</h3>
+        <div class="text-orange font-mono text-xs uppercase tracking-wider mb-4">STAFF SCANNER</div>
+        <p class="text-gray-600 text-sm leading-relaxed mb-5">
+          手机扫码：到柜卸货、入库上架、按订单拣货、盘点、移库。建材大件按托盘/件/m² 多单位
+        </p>
+        <ul class="text-xs text-gray-500 space-y-1.5 mb-5">
+          <li>✓ 集装箱卸柜验收</li>
+          <li>✓ 扫码入库定位</li>
+          <li>✓ 拣货任务派发</li>
+          <li>✓ 实时盘点对账</li>
+        </ul>
+        <span class="text-orange font-bold text-sm">进入员工端 →</span>
+      </a>
+
+      <!-- B2B 客户端 -->
+      <a href="client.html" class="demo-card p-7 reveal block">
+        <div class="text-5xl mb-4">🏗️</div>
+        <h3 class="font-serif text-2xl font-black text-steel mb-2">B2B 客户端</h3>
+        <div class="text-orange font-mono text-xs uppercase tracking-wider mb-4">B2B PORTAL</div>
+        <p class="text-gray-600 text-sm leading-relaxed mb-5">
+          下游买家自助下单：浏览商品、看自己等级的批发价、加购、查订单进度、查账期、下载发票
+        </p>
+        <ul class="text-xs text-gray-500 space-y-1.5 mb-5">
+          <li>✓ 装修队/建材店登录</li>
+          <li>✓ 分级批发价（金/银/铜卡）</li>
+          <li>✓ 自助下单 + 账期</li>
+          <li>✓ 历史订单 + 发票</li>
+        </ul>
+        <span class="text-orange font-bold text-sm">进入 B2B 客户端 →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     ROI CALCULATOR
+═══════════════════════════════════════════════════════ -->
+<section id="calc" class="py-24 px-6 gradient-steel text-white">
+  <div class="max-w-5xl mx-auto">
+    <div class="text-center mb-10 reveal">
+      <div class="text-orange-400 font-mono text-sm uppercase tracking-widest mb-3">ROI CALCULATOR</div>
+      <h2 class="font-serif text-4xl md:text-5xl font-black">
+        算算你<span class="text-orange-400">每月能省多少</span>
+      </h2>
+      <p class="text-gray-300 mt-4 text-lg">基于建材进口商真实运营数据估算</p>
+    </div>
+
+    <div class="bg-white bg-opacity-5 backdrop-blur rounded-3xl p-8 border border-white border-opacity-10 reveal">
+      <div class="grid md:grid-cols-2 gap-8 mb-8">
+        <div>
+          <label class="text-sm text-gray-300 mb-2 block">每月进货集装箱数</label>
+          <div class="flex items-center gap-4 mb-2">
+            <input type="range" class="slider-orange flex-1" id="rngContainers" min="1" max="20" value="4" style="--val:21%">
+            <span class="font-mono text-2xl font-bold text-orange-400 w-12 text-center" id="valContainers">4</span>
+            <span class="text-sm text-gray-400">个柜</span>
+          </div>
+          <div class="text-xs text-gray-500">每柜均值 €18,000 · 共 €<span id="valContainerVal">72,000</span></div>
+        </div>
+        <div>
+          <label class="text-sm text-gray-300 mb-2 block">在管 SKU 数</label>
+          <div class="flex items-center gap-4 mb-2">
+            <input type="range" class="slider-orange flex-1" id="rngSku" min="200" max="3000" value="1200" step="100" style="--val:36%">
+            <span class="font-mono text-2xl font-bold text-orange-400 w-16 text-center" id="valSku">1,200</span>
+          </div>
+          <div class="text-xs text-gray-500">瓷砖 + 地板 + 卫浴 + 五金 + 涂料</div>
+        </div>
+        <div>
+          <label class="text-sm text-gray-300 mb-2 block">B 端客户数</label>
+          <div class="flex items-center gap-4 mb-2">
+            <input type="range" class="slider-orange flex-1" id="rngClients" min="5" max="100" value="35" style="--val:32%">
+            <span class="font-mono text-2xl font-bold text-orange-400 w-12 text-center" id="valClients">35</span>
+            <span class="text-sm text-gray-400">家</span>
+          </div>
+          <div class="text-xs text-gray-500">装修队 + 本地建材店</div>
+        </div>
+        <div>
+          <label class="text-sm text-gray-300 mb-2 block">月营业额</label>
+          <div class="flex items-center gap-4 mb-2">
+            <input type="range" class="slider-orange flex-1" id="rngRev" min="20000" max="300000" value="80000" step="5000" style="--val:21%">
+            <span class="font-mono text-xl font-bold text-orange-400 w-24 text-center">€<span id="valRev">80,000</span></span>
+          </div>
+          <div class="text-xs text-gray-500">三渠道合计</div>
+        </div>
+      </div>
+
+      <div class="border-t border-white border-opacity-15 pt-7">
+        <div class="text-orange-400 text-sm font-mono mb-5 uppercase tracking-wider">每月预计节省</div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+          <div>
+            <div class="text-xs text-gray-400 mb-1">人工对账时间</div>
+            <div class="text-2xl font-mono font-bold text-white"><span id="saveHours">42</span> 小时</div>
+            <div class="text-xs text-green-400">≈ €<span id="saveLabor">630</span></div>
+          </div>
+          <div>
+            <div class="text-xs text-gray-400 mb-1">滞销品占资</div>
+            <div class="text-2xl font-mono font-bold text-white">↓ €<span id="saveDead">5,400</span></div>
+            <div class="text-xs text-green-400">资金周转加快</div>
+          </div>
+          <div>
+            <div class="text-xs text-gray-400 mb-1">超卖损失</div>
+            <div class="text-2xl font-mono font-bold text-white">↓ €<span id="saveOver">880</span></div>
+            <div class="text-xs text-green-400">避免退款 + 客诉</div>
+          </div>
+          <div>
+            <div class="text-xs text-gray-400 mb-1">逾期账款催回</div>
+            <div class="text-2xl font-mono font-bold text-white">↑ €<span id="saveAr">2,240</span></div>
+            <div class="text-xs text-green-400">7 天提醒机制</div>
+          </div>
+        </div>
+        <div class="bg-orange bg-opacity-20 border border-orange border-opacity-50 rounded-2xl p-6 text-center">
+          <div class="text-sm text-orange-300 mb-2">综合每月可节省 / 多赚</div>
+          <div class="font-serif text-5xl md:text-6xl font-black text-white mb-2">€ <span id="totalSave">9,150</span></div>
+          <div class="text-orange-200 text-sm">≈ 系统年费用 <span class="font-bold">3.6 倍</span> · 第 1 个月即回本</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     CONTACT
+═══════════════════════════════════════════════════════ -->
+<section id="contact" class="py-24 px-6 bg-bone">
+  <div class="max-w-4xl mx-auto">
+    <div class="text-center mb-10 reveal">
+      <div class="stamp mb-4">立即开始</div>
+      <h2 class="font-serif text-4xl md:text-5xl font-black text-steel mb-4">
+        留个联系方式，<span class="text-orange">我们 24 小时内回你</span>
+      </h2>
+      <p class="text-gray-600 text-lg">前 10 名提交的建材老板，免费仓库实地诊断 + 落地成本方案</p>
+    </div>
+
+    <form class="bg-white rounded-3xl shadow-xl p-8 md:p-10 reveal" onsubmit="event.preventDefault(); submitForm()">
+      <div class="grid md:grid-cols-2 gap-5 mb-5">
+        <div>
+          <label class="text-sm font-semibold text-steel mb-1.5 block">您的姓氏 *</label>
+          <input type="text" required class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-orange outline-none transition-colors" placeholder="王 / 张 / 陈">
+        </div>
+        <div>
+          <label class="text-sm font-semibold text-steel mb-1.5 block">微信号 / WhatsApp *</label>
+          <input type="text" required class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-orange outline-none" placeholder="方便联系">
+        </div>
+        <div>
+          <label class="text-sm font-semibold text-steel mb-1.5 block">仓库所在城市</label>
+          <input type="text" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-orange outline-none" placeholder="Dublin / Cork / 其他">
+        </div>
+        <div>
+          <label class="text-sm font-semibold text-steel mb-1.5 block">主营品类</label>
+          <select class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-orange outline-none bg-white">
+            <option>瓷砖 / 地板</option>
+            <option>卫浴 / 厨房</option>
+            <option>五金 / 门窗</option>
+            <option>涂料 / 墙纸</option>
+            <option>综合建材</option>
+            <option>其他</option>
+          </select>
+        </div>
+      </div>
+      <div class="mb-6">
+        <label class="text-sm font-semibold text-steel mb-1.5 block">最头疼的事是什么？（选填）</label>
+        <textarea rows="3" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-orange outline-none" placeholder="比如：每次进新柜不知道怎么定价；月底对 B 端客户账要 2 天..."></textarea>
+      </div>
+      <button type="submit" class="btn-primary w-full justify-center text-lg py-4">提交，预约免费诊断 →</button>
+      <p class="text-xs text-gray-500 mt-4 text-center">提交即同意我们 24 小时内通过微信/WhatsApp 联系您 · 不会群发广告</p>
+    </form>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════════════════ -->
+<footer class="bg-steel-dark text-gray-400 py-12 px-6">
+  <div class="max-w-7xl mx-auto">
+    <div class="grid md:grid-cols-3 gap-8 mb-8">
+      <div>
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-10 h-10 rounded-lg gradient-orange flex items-center justify-center">
+            <span class="font-serif text-white font-bold text-lg">鸿</span>
+          </div>
+          <div>
+            <div class="font-serif text-white font-bold">鸿基建材仓</div>
+            <div class="text-xs text-orange-300 font-mono">Hongji Building Supplies</div>
+          </div>
+        </div>
+        <p class="text-sm leading-relaxed">为爱尔兰华人建材进口商打造的进销存系统。集装箱全程追踪 · 单品落地成本 · 三渠道库存联动。</p>
+      </div>
+      <div>
+        <div class="text-white font-bold mb-3">演示入口</div>
+        <ul class="space-y-2 text-sm">
+          <li><a href="boss.html" class="hover:text-orange-400">→ 老板端</a></li>
+          <li><a href="staff.html" class="hover:text-orange-400">→ 员工端</a></li>
+          <li><a href="client.html" class="hover:text-orange-400">→ B2B 客户端</a></li>
+          <li><a href="../index.html" class="hover:text-orange-400">← 返回 1688.ie 主页</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="text-white font-bold mb-3">联系</div>
+        <ul class="space-y-2 text-sm">
+          <li>📍 Dublin Industrial Estate, Ireland</li>
+          <li>📧 hello@1688.ie</li>
+          <li>💬 微信：1688ie</li>
+        </ul>
+      </div>
+    </div>
+    <div class="border-t border-white border-opacity-10 pt-6 flex flex-col md:flex-row justify-between items-center gap-3 text-xs">
+      <span>© 2026 鸿基建材仓演示 · 1688.ie · 演示数据非真实库存</span>
+      <span class="font-mono">v2.0 · LOCAL WAREHOUSE EDITION</span>
+    </div>
+  </div>
+</footer>
+
+<!-- 销售归属徽章 -->
+<div class="ref-badge" id="refBadge">
+  ◉ 由 <span id="refName" class="text-orange-400 font-bold">—</span> 推荐
+</div>
+
+<script>
+// ────────────────────────────────────────────────────
+// 销售归属系统
+// ────────────────────────────────────────────────────
+const params = new URLSearchParams(location.search);
+const ref = params.get('ref');
+if (ref) {
+  sessionStorage.setItem('ref', ref);
+  document.querySelectorAll('a[href$=".html"]').forEach(a => {
+    if (a.href.includes('://')) {
+      try {
+        const url = new URL(a.href, location.href);
+        url.searchParams.set('ref', ref);
+        a.href = url.toString();
+      } catch (e) {}
+    }
+  });
+  document.getElementById('refName').textContent = ref;
+  document.getElementById('refBadge').classList.add('show');
+}
+
+// ────────────────────────────────────────────────────
+// Reveal on scroll
+// ────────────────────────────────────────────────────
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) e.target.classList.add('visible');
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+// ────────────────────────────────────────────────────
+// 货位网格
+// ────────────────────────────────────────────────────
+(function buildShelf() {
+  const grid = document.getElementById('shelfGrid');
+  if (!grid) return;
+  const states = [];
+  for (let i = 0; i < 96; i++) {
+    const r = Math.random();
+    if (r < 0.08) states.push('');
+    else if (r < 0.55) states.push('occupied');
+    else if (r < 0.92) states.push('full');
+    else states.push('alert');
+  }
+  grid.innerHTML = states.map(s => `<div class="shelf-cell ${s}"></div>`).join('');
+})();
+
+// ────────────────────────────────────────────────────
+// 实时数据脉动
+// ────────────────────────────────────────────────────
+let baseRev = 18470;
+setInterval(() => {
+  baseRev += Math.floor(Math.random() * 80 + 20);
+  const el = document.getElementById('monthGross');
+  if (el) el.textContent = baseRev.toLocaleString();
+}, 3500);
+
+let heroRev = 82.4;
+setInterval(() => {
+  heroRev += +(Math.random() * 0.05).toFixed(2);
+  const el = document.getElementById('heroRev');
+  if (el) el.textContent = heroRev.toFixed(1);
+}, 4500);
+
+let skuCount = 1247;
+setInterval(() => {
+  if (Math.random() > 0.7) {
+    skuCount += Math.random() > 0.5 ? 1 : -1;
+    const el = document.getElementById('heroSkuCount');
+    if (el) el.textContent = skuCount.toLocaleString();
+  }
+}, 5000);
+
+// ────────────────────────────────────────────────────
+// ROI 计算器
+// ────────────────────────────────────────────────────
+function updSlider(el) {
+  const min = +el.min, max = +el.max, val = +el.value;
+  el.style.setProperty('--val', ((val - min) / (max - min) * 100) + '%');
+}
+function recalc() {
+  const c = +document.getElementById('rngContainers').value;
+  const s = +document.getElementById('rngSku').value;
+  const k = +document.getElementById('rngClients').value;
+  const r = +document.getElementById('rngRev').value;
+
+  const containerVal = c * 18000;
+  const hours = Math.round(8 + k * 0.5 + s * 0.012);
+  const labor = Math.round(hours * 15);
+  const dead = Math.round(r * 0.067);
+  const over = Math.round(r * 0.011);
+  const ar = Math.round(r * 0.028);
+  const total = labor + dead + over + ar;
+
+  document.getElementById('valContainers').textContent = c;
+  document.getElementById('valContainerVal').textContent = containerVal.toLocaleString();
+  document.getElementById('valSku').textContent = s.toLocaleString();
+  document.getElementById('valClients').textContent = k;
+  document.getElementById('valRev').textContent = r.toLocaleString();
+  document.getElementById('saveHours').textContent = hours;
+  document.getElementById('saveLabor').textContent = labor.toLocaleString();
+  document.getElementById('saveDead').textContent = dead.toLocaleString();
+  document.getElementById('saveOver').textContent = over.toLocaleString();
+  document.getElementById('saveAr').textContent = ar.toLocaleString();
+  document.getElementById('totalSave').textContent = total.toLocaleString();
+}
+['rngContainers','rngSku','rngClients','rngRev'].forEach(id => {
+  const el = document.getElementById(id);
+  el.addEventListener('input', () => { updSlider(el); recalc(); });
+  updSlider(el);
+});
+recalc();
+
+// ────────────────────────────────────────────────────
+// 表单提交
+// ────────────────────────────────────────────────────
+function submitForm() {
+  alert('演示模式：实际部署后会通过微信/WhatsApp 24 小时内联系您。\n\n您的需求已记录。');
+}
+</script>
+</body>
+</html>

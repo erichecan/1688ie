@@ -1,0 +1,1432 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>定价方案 · 1688.ie 旺铺计划</title>
+<meta name="description" content="1688.ie 旺铺计划完整定价：从 €499 起步，电商、会员、CRM 全套方案，爱尔兰华人专属服务。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<style>
+  /* ===== TOKENS ===== */
+  :root {
+    --red: #C8102E;
+    --red-dark: #8B0A1F;
+    --gold: #D4AF37;
+    --gold-light: #E8C968;
+    --cream: #FAF6F0;
+    --paper: #F5EFE4;
+    --ink: #1C1C1C;
+    --ink-soft: #3A3A3A;
+    --ink-mute: #6B6B6B;
+    --line: #E0D6C2;
+    --green: #17844D;
+    --nav-h: 64px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; font-size: 16px; }
+  body {
+    font-family: 'Noto Serif SC', serif;
+    background-color: var(--cream);
+    color: var(--ink);
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.5;
+  }
+  img { max-width: 100%; display: block; }
+  a { color: var(--red); text-decoration: none; }
+
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+
+  /* ===== NAV ===== */
+  #nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: var(--nav-h);
+    background: rgba(250,246,240,0.95);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+  }
+  #nav .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+  .nav-logo {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: var(--red);
+    text-decoration: none;
+    letter-spacing: -0.5px;
+  }
+  .nav-logo span { color: var(--gold); }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    list-style: none;
+  }
+  .nav-links a {
+    color: var(--ink-soft);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--red); }
+  .nav-links .nav-cta {
+    background: var(--red);
+    color: white;
+    padding: 8px 18px;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    box-shadow: 3px 3px 0 var(--red-dark);
+    transition: background 0.2s, transform 0.1s, box-shadow 0.1s;
+  }
+  .nav-links .nav-cta:hover {
+    background: var(--red-dark);
+    transform: translate(1px, 1px);
+    box-shadow: 2px 2px 0 var(--red-dark);
+  }
+  .back-link {
+    color: var(--ink-mute);
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .back-link:hover { color: var(--red); }
+
+  /* ===== HERO ===== */
+  .page-hero {
+    padding-top: calc(var(--nav-h) + 70px);
+    padding-bottom: 70px;
+    background: linear-gradient(160deg, var(--ink) 0%, #2a1a1a 100%);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .page-hero::before {
+    content: '价';
+    position: absolute;
+    right: -60px; top: 50%;
+    transform: translateY(-50%);
+    font-size: 50vw;
+    font-weight: 900;
+    color: var(--red);
+    opacity: 0.04;
+    pointer-events: none;
+    user-select: none;
+  }
+  .page-hero .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--red);
+    color: white;
+    font-size: 0.75rem;
+    padding: 5px 14px;
+    border-radius: 2px;
+    margin-bottom: 24px;
+    letter-spacing: 1px;
+    font-weight: 600;
+  }
+  .page-hero h1 {
+    font-family: 'Playfair Display', 'Noto Serif SC', serif;
+    font-size: clamp(1.8rem, 4.5vw, 3rem);
+    font-weight: 900;
+    color: var(--cream);
+    margin-bottom: 16px;
+    line-height: 1.25;
+  }
+  .page-hero h1 span { color: var(--gold); }
+  .page-hero p {
+    color: rgba(250,246,240,0.72);
+    font-size: 1rem;
+    max-width: 640px;
+    margin: 0 auto 24px;
+    line-height: 1.85;
+  }
+  .hero-vat {
+    display: inline-block;
+    border: 1px solid rgba(212,175,55,0.4);
+    color: var(--gold-light);
+    padding: 6px 18px;
+    border-radius: 2px;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+  }
+
+  /* ===== TOV 补贴横幅 ===== */
+  .tov-banner {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--gold);
+    padding: 16px 24px;
+    margin: 0 auto;
+    max-width: 1100px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 0.9rem;
+  }
+  .tov-banner .icon { font-size: 1.6rem; flex-shrink: 0; }
+  .tov-banner strong { color: var(--red); }
+  .tov-banner a { color: var(--red); font-weight: 700; border-bottom: 1px solid var(--red); }
+
+  /* ===== SECTION ===== */
+  .section { padding: 80px 0; }
+  .section-dark {
+    background: var(--ink);
+    color: var(--cream);
+  }
+  .section-paper { background: var(--paper); }
+
+  .section-title {
+    font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+    font-weight: 900;
+    color: var(--ink);
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  .section-title span { color: var(--red); }
+  .section-dark .section-title { color: var(--cream); }
+  .section-dark .section-title span { color: var(--gold); }
+  .section-sub {
+    text-align: center;
+    color: var(--ink-mute);
+    font-size: 0.95rem;
+    margin-bottom: 52px;
+    max-width: 640px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .section-dark .section-sub { color: rgba(250,246,240,0.55); }
+
+  /* ===== BUTTONS ===== */
+  .btn-primary {
+    background: var(--red);
+    color: white;
+    padding: 13px 26px;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: background 0.2s, transform 0.1s, box-shadow 0.1s;
+    box-shadow: 4px 4px 0 var(--red-dark);
+  }
+  .btn-primary:hover {
+    background: var(--red-dark);
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 var(--red-dark);
+  }
+  .btn-secondary {
+    background: transparent;
+    color: var(--ink);
+    padding: 12px 26px;
+    border: 2px solid var(--ink);
+    border-radius: 4px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.2s;
+  }
+  .btn-secondary:hover { background: var(--ink); color: var(--cream); }
+  .btn-outline-cream {
+    background: transparent;
+    color: var(--cream);
+    padding: 12px 26px;
+    border: 2px solid rgba(250,246,240,0.5);
+    border-radius: 4px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.2s;
+  }
+  .btn-outline-cream:hover { border-color: var(--cream); background: rgba(250,246,240,0.1); }
+
+  /* ===== PRICING CARDS ===== */
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    align-items: stretch;
+  }
+  .pricing-card {
+    background: white;
+    border: 2px solid var(--line);
+    border-radius: 4px;
+    padding: 28px 20px 24px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+  .pricing-card.featured {
+    background: var(--ink);
+    border-color: var(--gold);
+    border-width: 2px;
+  }
+  .featured-badge {
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--gold);
+    color: var(--ink);
+    font-size: 0.7rem;
+    font-weight: 900;
+    padding: 4px 14px;
+    border-radius: 2px;
+    letter-spacing: 1px;
+    white-space: nowrap;
+  }
+  .card-tier-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: var(--ink-mute);
+    margin-bottom: 4px;
+    text-transform: uppercase;
+  }
+  .pricing-card.featured .card-tier-label { color: var(--gold-light); }
+  .card-tier-name {
+    font-size: 1.05rem;
+    font-weight: 900;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+  .pricing-card.featured .card-tier-name { color: var(--cream); }
+  .card-target {
+    font-size: 0.8rem;
+    color: var(--ink-mute);
+    min-height: 44px;
+    margin-bottom: 18px;
+    line-height: 1.55;
+  }
+  .pricing-card.featured .card-target { color: rgba(250,246,240,0.65); }
+  .card-divider {
+    border: none;
+    border-top: 1px solid var(--line);
+    margin-bottom: 18px;
+  }
+  .pricing-card.featured .card-divider { border-color: rgba(212,175,55,0.3); }
+  .card-price {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    margin-bottom: 4px;
+  }
+  .card-price .amount {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--ink);
+    line-height: 1;
+  }
+  .pricing-card.featured .card-price .amount { color: var(--gold); }
+  .card-price .unit { font-size: 0.8rem; color: var(--ink-mute); }
+  .pricing-card.featured .card-price .unit { color: rgba(250,246,240,0.5); }
+  .card-monthly {
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    margin-bottom: 4px;
+  }
+  .pricing-card.featured .card-monthly { color: rgba(250,246,240,0.75); }
+  .card-monthly strong { color: var(--ink); font-weight: 700; }
+  .pricing-card.featured .card-monthly strong { color: var(--cream); }
+  .card-yearly {
+    font-size: 0.75rem;
+    color: var(--ink-mute);
+    margin-bottom: 18px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--line);
+  }
+  .pricing-card.featured .card-yearly {
+    color: rgba(250,246,240,0.45);
+    border-color: rgba(212,175,55,0.3);
+  }
+  .pricing-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 22px;
+    font-size: 0.82rem;
+    flex-grow: 1;
+    line-height: 1.55;
+  }
+  .pricing-card ul li {
+    padding: 6px 0 6px 22px;
+    position: relative;
+    color: var(--ink-soft);
+  }
+  .pricing-card.featured ul li { color: rgba(250,246,240,0.85); }
+  .pricing-card ul li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    top: 6px;
+    color: var(--green);
+    font-weight: 700;
+    font-size: 0.8rem;
+  }
+  .pricing-card.featured ul li::before { color: var(--gold); }
+  .pricing-card ul li.more {
+    padding-left: 0;
+    color: var(--red);
+    font-weight: 700;
+    margin-top: 6px;
+  }
+  .pricing-card.featured ul li.more { color: var(--gold-light); }
+  .pricing-card ul li.more::before { content: ""; }
+  .card-cta {
+    display: block;
+    text-align: center;
+    background: var(--red);
+    color: white;
+    padding: 11px 16px;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-decoration: none;
+    box-shadow: 3px 3px 0 var(--red-dark);
+    transition: background 0.2s, transform 0.1s, box-shadow 0.1s;
+    margin-top: auto;
+  }
+  .card-cta:hover {
+    background: var(--red-dark);
+    transform: translate(1px, 1px);
+    box-shadow: 2px 2px 0 var(--red-dark);
+  }
+  .pricing-card.featured .card-cta {
+    background: var(--gold);
+    color: var(--ink);
+    box-shadow: 3px 3px 0 #9a7c1a;
+  }
+  .pricing-card.featured .card-cta:hover {
+    background: var(--gold-light);
+    box-shadow: 2px 2px 0 #9a7c1a;
+  }
+
+  /* ===== ENTERPRISE BANNERS ===== */
+  .enterprise-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 20px;
+  }
+  .enterprise-card {
+    background: var(--ink);
+    border: 1px solid rgba(212,175,55,0.3);
+    border-radius: 4px;
+    padding: 28px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+  }
+  .enterprise-card:nth-child(2) {
+    background: #0f0f0f;
+    border-color: rgba(200,16,46,0.3);
+  }
+  .ent-info h3 {
+    font-size: 1rem;
+    font-weight: 900;
+    color: var(--gold);
+    margin-bottom: 6px;
+    letter-spacing: 0.5px;
+  }
+  .enterprise-card:nth-child(2) .ent-info h3 { color: var(--gold-light); }
+  .ent-info p {
+    font-size: 0.8rem;
+    color: rgba(250,246,240,0.6);
+    margin-bottom: 10px;
+    line-height: 1.55;
+  }
+  .ent-price {
+    font-size: 1.3rem;
+    font-weight: 900;
+    color: var(--cream);
+    font-family: 'Playfair Display', serif;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .ent-price small {
+    font-size: 0.78rem;
+    font-weight: 400;
+    color: rgba(250,246,240,0.5);
+    font-family: 'Noto Serif SC', serif;
+  }
+  .ent-cta {
+    flex-shrink: 0;
+    display: inline-block;
+    background: transparent;
+    color: var(--cream);
+    border: 2px solid rgba(250,246,240,0.4);
+    border-radius: 4px;
+    padding: 10px 20px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+  .ent-cta:hover {
+    border-color: var(--cream);
+    background: rgba(250,246,240,0.08);
+  }
+
+  /* ===== FEATURE MATRIX ===== */
+  .matrix-wrapper {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .matrix-scroll { overflow-x: auto; }
+  table.matrix {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+    min-width: 900px;
+  }
+  table.matrix thead th {
+    background: var(--ink);
+    color: var(--cream);
+    padding: 16px 12px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 0.8rem;
+    border-bottom: 2px solid var(--gold);
+    border-right: 1px solid rgba(255,255,255,0.06);
+  }
+  table.matrix thead th:first-child {
+    text-align: left;
+    padding-left: 20px;
+    background: #0f0f0f;
+  }
+  table.matrix thead th .tier-name {
+    font-size: 0.9rem;
+    font-weight: 900;
+    display: block;
+    margin-bottom: 3px;
+  }
+  table.matrix thead th .tier-price {
+    font-size: 0.72rem;
+    opacity: 0.65;
+    display: block;
+  }
+  table.matrix thead th.featured {
+    background: var(--red);
+    border-bottom-color: var(--red-dark);
+  }
+  table.matrix tbody td {
+    padding: 9px 12px;
+    text-align: center;
+    border-bottom: 1px solid var(--line);
+    border-right: 1px solid var(--line);
+  }
+  table.matrix tbody td:first-child {
+    text-align: left;
+    padding-left: 20px;
+    color: var(--ink-soft);
+    font-weight: 600;
+    background: var(--cream);
+  }
+  table.matrix tbody tr.category-row td {
+    background: var(--paper);
+    font-weight: 900;
+    color: var(--ink);
+    font-size: 0.78rem;
+    padding: 8px 20px;
+    text-align: left;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid var(--line);
+  }
+  table.matrix tbody tr:hover td:not(:first-child) { background: #fdf8f2; }
+  table.matrix tbody tr.category-row:hover td { background: var(--paper); }
+  .check { color: var(--green); font-weight: 700; font-size: 0.95rem; }
+  .dash { color: var(--line); }
+  .text-cell { color: var(--ink-soft); font-size: 0.78rem; }
+  .tier-featured-col { background: rgba(200,16,46,0.03); }
+
+  /* ===== FAQ ===== */
+  .faq { max-width: 820px; margin: 0 auto; }
+  .faq-item {
+    border-bottom: 1px solid var(--line);
+    padding: 0;
+  }
+  .faq-item summary {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--ink);
+    cursor: pointer;
+    list-style: none;
+    position: relative;
+    padding: 18px 40px 18px 0;
+  }
+  .faq-item summary::-webkit-details-marker { display: none; }
+  .faq-item summary::after {
+    content: "+";
+    position: absolute;
+    right: 4px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.5rem;
+    color: var(--red);
+    font-weight: 300;
+    line-height: 1;
+  }
+  .faq-item[open] summary::after { content: "−"; }
+  .faq-item p {
+    margin: 0 0 18px;
+    color: var(--ink-mute);
+    font-size: 0.88rem;
+    line-height: 1.8;
+  }
+
+  /* ===== FOOTER CTA ===== */
+  .footer-cta {
+    padding: 90px 20px;
+    text-align: center;
+    background: var(--ink);
+    position: relative;
+    overflow: hidden;
+  }
+  .footer-cta::before {
+    content: '旺';
+    position: absolute;
+    left: -80px; top: 50%;
+    transform: translateY(-50%);
+    font-size: 40vw;
+    font-weight: 900;
+    color: var(--red);
+    opacity: 0.04;
+    pointer-events: none;
+    user-select: none;
+  }
+  .footer-cta .eyebrow {
+    display: inline-flex;
+    background: var(--red);
+    color: white;
+    font-size: 0.72rem;
+    padding: 4px 14px;
+    border-radius: 2px;
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+    font-weight: 700;
+  }
+  .footer-cta h2 {
+    font-family: 'Playfair Display', 'Noto Serif SC', serif;
+    font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+    font-weight: 900;
+    color: var(--cream);
+    margin-bottom: 14px;
+  }
+  .footer-cta h2 span { color: var(--gold); }
+  .footer-cta p {
+    color: rgba(250,246,240,0.65);
+    margin: 0 auto 36px;
+    max-width: 540px;
+    font-size: 0.95rem;
+    line-height: 1.85;
+  }
+  .btn-group {
+    display: inline-flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  /* ===== SITE FOOTER ===== */
+  .site-footer {
+    background: #0f0f0f;
+    color: rgba(250,246,240,0.4);
+    padding: 32px 20px;
+    text-align: center;
+    font-size: 0.78rem;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .site-footer a { color: rgba(250,246,240,0.6); }
+  .site-footer a:hover { color: var(--gold); }
+
+  /* ===== RESPONSIVE ===== */
+  /* ===== LANG TOGGLE ===== */
+  .lang-toggle {
+    background: var(--ink);
+    color: var(--cream);
+    border: none;
+    padding: 6px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-family: inherit;
+    transition: background 0.2s;
+    margin-left: 8px;
+  }
+  .lang-toggle:hover { background: var(--red); }
+  [data-lang="en"] { display: none; }
+  body.en [data-lang="zh"] { display: none; }
+  body.en [data-lang="en"] { display: inline; }
+  body.en h1[data-lang="en"],
+  body.en h2[data-lang="en"],
+  body.en h3[data-lang="en"],
+  body.en p[data-lang="en"],
+  body.en div[data-lang="en"],
+  body.en summary[data-lang="en"] { display: block; }
+  body.en li[data-lang="en"] { display: list-item; }
+  /* pricing-card list items default to block */
+  .pricing-card ul > li[data-lang="en"] { display: none; }
+  body.en .pricing-card ul > li[data-lang="zh"] { display: none; }
+  body.en .pricing-card ul > li[data-lang="en"] { display: block; }
+
+  @media (max-width: 960px) {
+    .pricing-grid { grid-template-columns: repeat(2, 1fr); }
+    .enterprise-row { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 640px) {
+    .pricing-grid { grid-template-columns: 1fr; gap: 20px; }
+    .enterprise-card { flex-direction: column; text-align: center; }
+    .ent-price { justify-content: center; }
+    .page-hero { padding-top: calc(var(--nav-h) + 40px); padding-bottom: 50px; }
+    .section { padding: 56px 0; }
+    .nav-links li:not(:last-child) { display: none; }
+    .tov-banner { flex-direction: column; text-align: center; gap: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== NAV ===== -->
+<nav id="nav">
+  <div class="container">
+    <a href="index.html" class="nav-logo">1688<span>.ie</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html" class="back-link"><span data-lang="zh">← 返回首页</span><span data-lang="en">← Back to Home</span></a></li>
+      <li><a href="#pricing"><span data-lang="zh">定价</span><span data-lang="en">Pricing</span></a></li>
+      <li><a href="#matrix"><span data-lang="zh">功能对比</span><span data-lang="en">Compare</span></a></li>
+      <li><a href="flow.html"><span data-lang="zh">业务流程</span><span data-lang="en">How It Works</span></a></li>
+      <li><a href="help.html"><span data-lang="zh">帮助中心</span><span data-lang="en">Help</span></a></li>
+      <li><a href="#contact" class="nav-cta"><span data-lang="zh">免费咨询</span><span data-lang="en">Free Consult</span></a></li>
+    </ul>
+    <button class="lang-toggle" id="langBtn">EN</button>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="page-hero">
+  <div class="container">
+    <span class="eyebrow" data-lang="zh">完整定价方案</span>
+    <span class="eyebrow" data-lang="en">Full Pricing Plans</span>
+    <h1 data-lang="zh">透明定价 · 本地服务<br><span>按需升级</span></h1>
+    <h1 data-lang="en">Transparent Pricing · Local Service<br><span>Scale as You Grow</span></h1>
+    <p data-lang="zh">爱尔兰本地建站 + SaaS 运营系统一体化方案，从 €499 起。中英双语客服、爱尔兰服务器托管。</p>
+    <p data-lang="en">Ireland-local website + SaaS operations system, all-in-one. Starting from €499. Bilingual support, Irish servers.</p>
+    <span class="hero-vat" data-lang="zh">所有价格 ex VAT · 爱尔兰 VAT 注册企业可全额抵扣</span>
+    <span class="hero-vat" data-lang="en">All prices ex VAT · Fully deductible for Irish VAT-registered businesses</span>
+  </div>
+</section>
+
+<!-- TOV 补贴横幅 -->
+<div class="container">
+  <div class="tov-banner">
+    <span class="icon">💰</span>
+    <div data-lang="zh">
+      <strong>爱尔兰 LEO 官方最高 €2,500 补贴：</strong>
+      微型企业（&lt; 10 员工，营业额 &lt; €2M）可申请 Trading Online Voucher，获 50/50 匹配资助。
+      电商档位客户最高实际自付减半。<a href="#tov">了解如何申请 →</a>
+    </div>
+    <div data-lang="en">
+      <strong>Up to €2,500 Irish LEO grant:</strong>
+      Micro-enterprises (&lt; 10 staff, turnover &lt; €2M) can apply for the Trading Online Voucher, a 50/50 matched grant.
+      E-commerce tier customers can effectively halve out-of-pocket cost. <a href="#tov">How to apply →</a>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 主定价卡 ===== -->
+<section id="pricing" class="section">
+  <div class="container">
+    <h2 class="section-title" data-lang="zh">选择适合您的<span>方案</span></h2>
+    <h2 class="section-title" data-lang="en">Choose Your <span>Plan</span></h2>
+    <p class="section-sub" data-lang="zh">6 个标准档位 + 完全定制。以下 4 档为最常见选择，企业级方案见下方。</p>
+    <p class="section-sub" data-lang="en">6 standard tiers + full customization. The 4 below are most common; enterprise tiers shown further down.</p>
+
+    <div class="pricing-grid">
+
+      <!-- STARTER -->
+      <div class="pricing-card">
+        <div class="card-tier-label"><span data-lang="zh">STARTER · 起步版</span><span data-lang="en">STARTER</span></div>
+        <h3 class="card-tier-name" data-lang="zh">个体户 / 新开小店</h3>
+        <h3 class="card-tier-name" data-lang="en">Sole Trader / New Small Shop</h3>
+        <p class="card-target" data-lang="zh">模板式企业官网 + 在线留言表单，专注建立品牌门面</p>
+        <p class="card-target" data-lang="en">Template-based brand website + contact form. Build your online presence.</p>
+        <hr class="card-divider">
+        <div class="card-price">
+          <span class="amount">€499</span><span class="unit" data-lang="zh">一次性</span><span class="unit" data-lang="en">one-time</span>
+        </div>
+        <div class="card-monthly" data-lang="zh">+ <strong>€39/月</strong> 维护托管</div>
+        <div class="card-monthly" data-lang="en">+ <strong>€39/mo</strong> hosting & support</div>
+        <div class="card-yearly" data-lang="zh">首年总额 €967（ex VAT）</div>
+        <div class="card-yearly" data-lang="en">Year 1 total €967 (ex VAT)</div>
+        <ul>
+          <li data-lang="zh"><span data-lang="zh">3-5 页</span><span data-lang="en">3-5 pages</span>企业官网（30+ 行业模板）</li>
+          <li data-lang="en">3-5 page brand site (30+ templates)</li>
+          <li data-lang="zh">.ie 或 .com 域名（首年免费）</li>
+          <li data-lang="en">.ie or .com domain (free year 1)</li>
+          <li data-lang="zh">爱尔兰服务器 + SSL + 每日备份</li>
+          <li data-lang="en">Irish hosting + SSL + daily backups</li>
+          <li data-lang="zh">在线报价 / 留言表单</li>
+          <li data-lang="en">Online quote / contact forms</li>
+          <li data-lang="zh">微信 / WhatsApp 聊天按钮</li>
+          <li data-lang="en">WeChat / WhatsApp chat buttons</li>
+          <li data-lang="zh">基础 SEO + Google Analytics</li>
+          <li data-lang="en">Basic SEO + Google Analytics</li>
+          <li data-lang="zh">中文客服（微信/电话 5×8）</li>
+          <li data-lang="en">Bilingual support (5×8)</li>
+          <li class="more" data-lang="zh">共 14 项功能 →</li>
+          <li class="more" data-lang="en">14 features in total →</li>
+        </ul>
+        <a href="#contact" class="card-cta" data-lang="zh">立即咨询</a>
+        <a href="#contact" class="card-cta" data-lang="en">Get a Quote</a>
+      </div>
+
+      <!-- ESSENTIAL (featured) -->
+      <div class="pricing-card featured">
+        <span class="featured-badge"><span data-lang="zh">最受欢迎</span><span data-lang="en">MOST POPULAR</span></span>
+        <div class="card-tier-label"><span data-lang="zh">ESSENTIAL · 基础版</span><span data-lang="en">ESSENTIAL</span></div>
+        <h3 class="card-tier-name" data-lang="zh">稳定运营的小店</h3>
+        <h3 class="card-tier-name" data-lang="en">Established Small Shop</h3>
+        <p class="card-target" data-lang="zh">奶茶/美甲/餐饮/代购，需要线上收款 + 会员</p>
+        <p class="card-target" data-lang="en">Bubble tea / nail / restaurant / resellers needing online payments + membership</p>
+        <hr class="card-divider">
+        <div class="card-price">
+          <span class="amount">€999</span><span class="unit" data-lang="zh">一次性</span><span class="unit" data-lang="en">one-time</span>
+        </div>
+        <div class="card-monthly" data-lang="zh">+ <strong>€79/月</strong> 维护托管</div>
+        <div class="card-monthly" data-lang="en">+ <strong>€79/mo</strong> hosting & support</div>
+        <div class="card-yearly" data-lang="zh">首年总额 €1,947（ex VAT）</div>
+        <div class="card-yearly" data-lang="en">Year 1 total €1,947 (ex VAT)</div>
+        <ul>
+          <li data-lang="zh">STARTER 全部功能</li>
+          <li data-lang="en">Everything in STARTER</li>
+          <li data-lang="zh">完整电商（100 个 SKU）</li>
+          <li data-lang="en">Full e-commerce (100 SKUs)</li>
+          <li data-lang="zh">Stripe / Revolut / 微信 / 支付宝</li>
+          <li data-lang="en">Stripe / Revolut / WeChat Pay / Alipay</li>
+          <li data-lang="zh">会员 + 积分 + 优惠券</li>
+          <li data-lang="en">Members + points + coupons</li>
+          <li data-lang="zh">基础库存跟踪</li>
+          <li data-lang="en">Basic inventory tracking</li>
+          <li data-lang="zh">Mailchimp 邮件营销</li>
+          <li data-lang="en">Mailchimp email marketing</li>
+          <li data-lang="zh">中英双语切换</li>
+          <li data-lang="en">Bilingual EN/ZH toggle</li>
+          <li data-lang="zh">爱尔兰 23% VAT 自动计算</li>
+          <li data-lang="en">Irish 23% VAT auto-calc</li>
+          <li class="more" data-lang="zh">共 22 项功能 →</li>
+          <li class="more" data-lang="en">22 features in total →</li>
+        </ul>
+        <a href="#contact" class="card-cta" data-lang="zh">立即咨询</a>
+        <a href="#contact" class="card-cta" data-lang="en">Get a Quote</a>
+      </div>
+
+      <!-- GROWTH -->
+      <div class="pricing-card">
+        <div class="card-tier-label"><span data-lang="zh">GROWTH · 成长版</span><span data-lang="en">GROWTH</span></div>
+        <h3 class="card-tier-name" data-lang="zh">中型餐饮连锁 / 小电商</h3>
+        <h3 class="card-tier-name" data-lang="en">Mid-size Chain / Small E-commerce</h3>
+        <p class="card-target" data-lang="zh">3-5 家分店 / 营业额 €200k-€1M，需要预约 + CRM + 库存</p>
+        <p class="card-target" data-lang="en">3-5 outlets / €200k-€1M turnover. Bookings + CRM + inventory.</p>
+        <hr class="card-divider">
+        <div class="card-price">
+          <span class="amount">€4,999</span><span class="unit" data-lang="zh">一次性</span><span class="unit" data-lang="en">one-time</span>
+        </div>
+        <div class="card-monthly" data-lang="zh">+ <strong>€299/月</strong> SaaS 运营</div>
+        <div class="card-monthly" data-lang="en">+ <strong>€299/mo</strong> SaaS ops</div>
+        <div class="card-yearly" data-lang="zh">首年总额 €8,587（ex VAT）</div>
+        <div class="card-yearly" data-lang="en">Year 1 total €8,587 (ex VAT)</div>
+        <ul>
+          <li data-lang="zh">ESSENTIAL 全部功能</li>
+          <li data-lang="en">Everything in ESSENTIAL</li>
+          <li data-lang="zh">在线预约 + 员工排期</li>
+          <li data-lang="en">Online booking + staff scheduling</li>
+          <li data-lang="zh">进阶库存（多仓 / 条码）</li>
+          <li data-lang="en">Advanced inventory (multi-warehouse / barcode)</li>
+          <li data-lang="zh"><span data-lang="zh">基础 CRM</span><span data-lang="en">Basic CRM</span> + 客户标签</li>
+          <li data-lang="en">Basic CRM + customer tags</li>
+          <li data-lang="zh">工单管理 + 售后派工</li>
+          <li data-lang="en">Ticketing + after-sales dispatch</li>
+          <li data-lang="zh">员工账号 3-15 个 + 排班</li>
+          <li data-lang="en">3-15 staff accounts + rota</li>
+          <li data-lang="zh">采购 / 发票 / 销售漏斗</li>
+          <li data-lang="en">Purchasing / invoicing / sales funnel</li>
+          <li data-lang="zh">多门店 + 移动端</li>
+          <li data-lang="en">Multi-outlet + mobile</li>
+          <li class="more" data-lang="zh">共 37 项功能 →</li>
+          <li class="more" data-lang="en">37 features in total →</li>
+        </ul>
+        <a href="#contact" class="card-cta" data-lang="zh">立即咨询</a>
+        <a href="#contact" class="card-cta" data-lang="en">Get a Quote</a>
+      </div>
+
+      <!-- BUSINESS -->
+      <div class="pricing-card">
+        <div class="card-tier-label"><span data-lang="zh">BUSINESS · 商务版</span><span data-lang="en">BUSINESS</span></div>
+        <h3 class="card-tier-name" data-lang="zh">贸易商 / 中型连锁</h3>
+        <h3 class="card-tier-name" data-lang="en">Traders / Mid-size Chains</h3>
+        <p class="card-target" data-lang="zh">5-15 家店 / <span data-lang="zh">15-50 员工</span><span data-lang="en">15-50 staff</span>，需要营销自动化 + 多币种</p>
+        <p class="card-target" data-lang="en">5-15 outlets / 15-50 staff. Marketing automation + multi-currency.</p>
+        <hr class="card-divider">
+        <div class="card-price">
+          <span class="amount">€14,999</span><span class="unit" data-lang="zh">一次性</span><span class="unit" data-lang="en">one-time</span>
+        </div>
+        <div class="card-monthly" data-lang="zh">+ <strong>€699/月</strong> SaaS 运营</div>
+        <div class="card-monthly" data-lang="en">+ <strong>€699/mo</strong> SaaS ops</div>
+        <div class="card-yearly" data-lang="zh">首年总额 €23,387（ex VAT）</div>
+        <div class="card-yearly" data-lang="en">Year 1 total €23,387 (ex VAT)</div>
+        <ul>
+          <li data-lang="zh">GROWTH 全部功能</li>
+          <li data-lang="en">Everything in GROWTH</li>
+          <li data-lang="zh">营销自动化工作流</li>
+          <li data-lang="en">Marketing automation workflows</li>
+          <li data-lang="zh">社媒统一发布（含小红书）</li>
+          <li data-lang="en">Unified social posting (incl. Xiaohongshu)</li>
+          <li data-lang="zh">短信 + AI 电话（按量）</li>
+          <li data-lang="en">SMS + AI voice (usage-based)</li>
+          <li data-lang="zh">问卷 / NPS 系统</li>
+          <li data-lang="en">Surveys / NPS system</li>
+          <li data-lang="zh">多公司 / 多币种收款</li>
+          <li data-lang="en">Multi-entity / multi-currency payments</li>
+          <li data-lang="zh">爱尔兰 Revenue VAT 对接</li>
+          <li data-lang="en">Irish Revenue VAT integration</li>
+          <li class="more" data-lang="zh">共 52 项功能 →</li>
+          <li class="more" data-lang="en">52 features in total →</li>
+        </ul>
+        <a href="#contact" class="card-cta" data-lang="zh">立即咨询</a>
+        <a href="#contact" class="card-cta" data-lang="en">Get a Quote</a>
+      </div>
+
+    </div>
+
+    <!-- ENTERPRISE / BESPOKE -->
+    <div class="enterprise-row">
+      <div class="enterprise-card">
+        <div class="ent-info">
+          <h3 data-lang="zh">ENTERPRISE · 企业旺铺</h3>
+          <h3 data-lang="en">ENTERPRISE</h3>
+          <p data-lang="zh">50-150 人 SME / 跨境集团 / 大型连锁，含 ERP + MRP + 多国税务</p>
+          <p data-lang="en">50-150 staff SME / cross-border groups / large chains. ERP + MRP + multi-country tax.</p>
+          <div class="ent-price">
+            <span data-lang="zh">€39,999 起</span><span data-lang="en">From €39,999</span>
+            <small data-lang="zh">+ €1,499/月 · 1h SLA · 专属 CSM</small>
+            <small data-lang="en">+ €1,499/mo · 1h SLA · dedicated CSM</small>
+          </div>
+        </div>
+        <a href="#contact" class="ent-cta" data-lang="zh">联系咨询 →</a>
+        <a href="#contact" class="ent-cta" data-lang="en">Contact Us →</a>
+      </div>
+      <div class="enterprise-card">
+        <div class="ent-info">
+          <h3 data-lang="zh">BESPOKE · 完全定制</h3>
+          <h3 data-lang="en">BESPOKE</h3>
+          <p data-lang="zh">行业定制 / 源码交付 / 私有部署 / 独立 SaaS 平台 / 专属开发团队</p>
+          <p data-lang="en">Industry-tailored / source delivery / on-prem / dedicated SaaS / dedicated dev team</p>
+          <div class="ent-price">
+            <span data-lang="zh">€69,999 起</span><span data-lang="en">From €69,999</span>
+            <small data-lang="zh">· 所有参数单议</small>
+            <small data-lang="en">· All terms negotiable</small>
+          </div>
+        </div>
+        <a href="#contact" class="ent-cta" data-lang="zh">联系咨询 →</a>
+        <a href="#contact" class="ent-cta" data-lang="en">Contact Us →</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== 功能矩阵 ===== -->
+<section id="matrix" class="section section-paper">
+  <div class="container">
+    <h2 class="section-title" data-lang="zh">完整<span>功能对比</span></h2>
+    <h2 class="section-title" data-lang="en">Full <span>Feature Comparison</span></h2>
+    <p class="section-sub" data-lang="zh">6 档并排对比，帮你选到最适合的方案。请左右滑动查看完整表格。</p>
+    <p class="section-sub" data-lang="en">All 6 tiers side-by-side. Scroll horizontally to view the full table.</p>
+
+    <div class="matrix-wrapper">
+      <div class="matrix-scroll">
+        <table class="matrix">
+          <thead>
+            <tr>
+              <th><span data-lang="zh">功能</span><span data-lang="en">Feature</span></th>
+              <th>
+                <span class="tier-name">STARTER</span>
+                <span class="tier-price"><span data-lang="zh">€499 + €39/月</span><span data-lang="en">€499 + €39/mo</span></span>
+              </th>
+              <th class="featured">
+                <span class="tier-name">ESSENTIAL</span>
+                <span class="tier-price"><span data-lang="zh">€999 + €79/月</span><span data-lang="en">€999 + €79/mo</span></span>
+              </th>
+              <th>
+                <span class="tier-name">GROWTH</span>
+                <span class="tier-price"><span data-lang="zh">€4,999 + €299/月</span><span data-lang="en">€4,999 + €299/mo</span></span>
+              </th>
+              <th>
+                <span class="tier-name">BUSINESS</span>
+                <span class="tier-price"><span data-lang="zh">€14,999 + €699/月</span><span data-lang="en">€14,999 + €699/mo</span></span>
+              </th>
+              <th>
+                <span class="tier-name">ENTERPRISE</span>
+                <span class="tier-price"><span data-lang="zh">€39,999 + €1,499/月</span><span data-lang="en">€39,999 + €1,499/mo</span></span>
+              </th>
+              <th>
+                <span class="tier-name">BESPOKE</span>
+                <span class="tier-price"><span data-lang="zh">€69,999 起</span><span data-lang="en">From €69,999</span></span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="category-row"><td colspan="7"><span data-lang="zh">🌐 官网与本地合规</span><span data-lang="en">🌐 Website & Local Compliance</span></td></tr>
+            <tr>
+              <td><span data-lang="zh">企业官网页面数</span><span data-lang="en">Website pages</span></td>
+              <td class="text-cell"><span data-lang="zh">3-5 页</span><span data-lang="en">3-5 pages</span></td>
+              <td class="text-cell tier-featured-col"><span data-lang="zh">5-10 页</span><span data-lang="en">5-10 pages</span></td>
+              <td class="text-cell"><span data-lang="zh">无限页</span><span data-lang="en">Unlimited</span></td>
+              <td class="text-cell"><span data-lang="zh">无限页</span><span data-lang="en">Unlimited</span></td>
+              <td class="text-cell"><span data-lang="zh">无限页</span><span data-lang="en">Unlimited</span></td>
+              <td class="text-cell"><span data-lang="zh">定制</span><span data-lang="en">Custom</span></td>
+            </tr>
+            <tr>
+              <td><span data-lang="zh">.ie / .com 域名（首年）</span><span data-lang="en">.ie / .com domain (yr 1)</span></td>
+              <td class="check">✓</td>
+              <td class="check tier-featured-col">✓</td>
+              <td class="check">✓</td>
+              <td class="check">✓</td>
+              <td class="check">✓</td>
+              <td class="check">✓</td>
+            </tr>
+            <tr>
+              <td><span data-lang="zh">爱尔兰服务器 + SSL + 备份</span><span data-lang="en">Irish server + SSL + backup</span></td>
+              <td class="check">✓</td>
+              <td class="check tier-featured-col">✓</td>
+              <td class="check">✓</td>
+              <td class="check">✓</td>
+              <td class="check">✓</td>
+              <td class="check">✓</td>
+            </tr>
+            <tr>
+              <td><span data-lang="zh">GDPR 默认合规</span><span data-lang="en">GDPR-ready by default</span></td>
+              <td class="check">✓</td>
+              <td class="check tier-featured-col">✓</td>
+              <td class="check">✓</td>
+              <td class="check">✓</td>
+              <td class="check">✓</td>
+              <td class="check">✓</td>
+            </tr>
+            <tr>
+              <td><span data-lang="zh">中英双语切换</span><span data-lang="en">EN/ZH bilingual toggle</span></td>
+              <td class="dash">—</td>
+              <td class="check tier-featured-col">✓</td>
+              <td class="check">✓</td>
+              <td class="check">✓</td>
+              <td class="text-cell"><span data-lang="zh">中/英/葡/波/立</span><span data-lang="en">EN/ZH/PT/PL/LT</span></td>
+              <td class="text-cell"><span data-lang="zh">定制</span><span data-lang="en">Custom</span></td>
+            </tr>
+
+            <tr class="category-row"><td colspan="7"><span data-lang="zh">🛒 电商与支付</span><span data-lang="en">🛒 E-commerce & Payments</span></td></tr>
+            <tr>
+              <td><span data-lang="zh">在线商品 / 购物车 / 结账</span><span data-lang="en">Products / cart / checkout</span></td>
+              <td class="dash">—</td>
+              <td class="text-cell tier-featured-col"><span data-lang="zh">100 SKU</span><span data-lang="en">100 SKUs</span></td>
+              <td class="text-cell"><span data-lang="zh">1,000 SKU</span><span data-lang="en">1,000 SKUs</span></td>
+              <td class="text-cell"><span data-lang="zh">无限 SKU</span><span data-lang="en">Unlimited SKUs</span></td>
+              <td class="text-cell"><span data-lang="zh">无限</span><span data-lang="en">Unlimited</span></td>
+              <td class="text-cell"><span data-lang="zh">定制</span><span data-lang="en">Custom</span></td>
+            </tr>
+            <tr>
+              <td><span data-lang="zh">Stripe / Revolut / 微信 / 支付宝</span><span data-lang="en">Stripe / Revolut / WeChat / Alipay</span></td>
+              <td class="dash">—</td>
+              <td class="check tier-featured-col">✓</td>
+              <td class="check">✓</td>
+              <td class="check">✓</td>
+              <td class="check">✓</td>
+              <td class="check">✓</td>
+            </tr>
+            <tr>
+              <td><span data-lang="zh">会员 + 积分 + 优惠券</span><span data-lang="en">Members + points + coupons</span></td>
+              <td class="dash">—</td>
+              <td class="check tier-featured-col">✓</td>
+              <td class="text-cell"><span data-lang="zh">4 级会员</span><span data-lang="en">4 tiers</span></td>
+              <td class="text-cell"><span data-lang="zh">定制会员等级</span><span data-lang="en">Custom tiers</span></td>
+              <td class="text-cell"><span data-lang="zh">定制会员等级</span><span data-lang="en">Custom tiers</span></td>
+              <td class="check">✓</td>
+            </tr>
+            <tr>
+              <td><span data-lang="zh">多币种真实收款</span><span data-lang="en">Multi-currency live payments</span></td>
+              <td class="dash">—</td>
+              <td class="text-cell tier-featured-col"><span data-lang="zh">显示4币种</span><span data-lang="en">Display 4 currencies</span></td>
+              <td class="text-cell"><span data-lang="zh">显示4币种</span><span data-lang="en">Display 4 currencies</span></td>
+              <td class="text-cell">EUR/USD/GBP/CNY</td>
+              <td class="text-cell"><span data-lang="zh">任意币种</span><span data-lang="en">Any currency</span></td>
+              <td class="check">✓</td>
+            </tr>
+
+            <tr class="category-row"><td colspan="7"><span data-lang="zh">🏢 运营系统（SaaS）</span><span data-lang="en">🏢 Operations (SaaS)</span></td></tr>
+            <tr>
+              <td><span data-lang="zh">库存管理（多仓 / 条码）</span><span data-lang="en">Inventory (multi-warehouse / barcode)</span></td>
+              <td class="dash">—</td>
+              <td class="text-cell tier-featured-col"><span data-lang="zh">基础跟踪</span><span data-lang="en">Basic tracking</span></td>
+              <td class="check">✓</td>
+              <td class="check">✓</td>
+              <td class="check">✓ + MRP</td>
+              <td class="text-cell"><span data-lang="zh">定制</span><span data-lang="en">Custom</span></td>
+            </tr>
+            <tr>
+              <td><span data-lang="zh">预约系统 / 员工排期</span><span data-lang="en">Booking / staff scheduling</span></td>
+              <td class="dash">—</td>
+              <td class="dash tier-featured-col">—</td>
+              <td class="check">✓</td>
+              <td class="check">✓</td>
+              <td class="check">✓</td>
+              <td class="check">✓</td>
+            </tr>
+            <tr>
+              <td><span data-lang="zh">CRM / 客户标签</span><span data-lang="en">CRM / customer tags</span></td>
+              <td class="dash">—</td>
+              <td class="dash tier-featured-col">—</td>
+              <td class="text-cell"><span data-lang="zh">基础 CRM</span><span data-lang="en">Basic CRM</span></td>
+              <td class="check"><span data-lang="zh">✓ 含漏斗</span><span data-lang="en">✓ with funnel</span></td>
+              <td class="check"><span data-lang="zh">✓ 完整</span><span data-lang="en">✓ Full</span></td>
+              <td class="check">✓</td>
+            </tr>
+            <tr>
+              <td><span data-lang="zh">工单管理 / 售后派工</span><span data-lang="en">Ticketing / after-sales dispatch</span></td>
+              <td class="dash">—</td>
+              <td class="dash tier-featured-col">—</td>
+              <td class="check">✓</td>
+              <td class="check">✓ + SLA</td>
+              <td class="check">✓ + Field Service</td>
+              <td class="check">✓</td>
+            </tr>
+            <tr>
+              <td><span data-lang="zh">员工账号 + 角色权限</span><span data-lang="en">Staff accounts + roles</span></td>
+              <td class="dash">—</td>
+              <td class="dash tier-featured-col">—</td>
+              <td class="text-cell"><span data-lang="zh">3-15 员工</span><span data-lang="en">3-15 staff</span></td>
+              <td class="text-cell"><span data-lang="zh">15-50 员工</span><span data-lang="en">15-50 staff</span></td>
+              <td class="text-cell"><span data-lang="zh">50-150 员工</span><span data-lang="en">50-150 staff</span></td>
+              <td class="text-cell"><span data-lang="zh">无限</span><span data-lang="en">Unlimited</span></td>
+            </tr>
+            <tr>
+              <td><span data-lang="zh">排班 / 请假 / 考勤</span><span data-lang="en">Rota / leave / attendance</span></td>
+              <td class="dash">—</td>
+              <td class="dash tier-featured-col">—</td>
+              <td class="check">✓</td>
+              <td class="check">✓</td>
+              <td class="check"><span data-lang="zh">✓ + 招聘/绩效</span><span data-lang="en">✓ + Recruiting/KPIs</span></td>
+              <td class="text-cell"><span data-lang="zh">定制</span><span data-lang="en">Custom</span></td>
+            </tr>
+            <tr>
+              <td><span data-lang="zh">采购 / 供应商 / 对账</span><span data-lang="en">Purchasing / suppliers / reconciliation</span></td>
+              <td class="dash">—</td>
+              <td class="dash tier-featured-col">—</td>
+              <td class="check">✓</td>
+              <td class="check"><span data-lang="zh">✓ RFQ/评级</span><span data-lang="en">✓ RFQ/Rating</span></td>
+              <td class="check"><span data-lang="zh">✓ 完整</span><span data-lang="en">✓ Full</span></td>
+              <td class="text-cell"><span data-lang="zh">定制</span><span data-lang="en">Custom</span></td>
+            </tr>
+            <tr>
+              <td><span data-lang="zh">发票 / VAT 申报 / 对接 Revenue</span><span data-lang="en">Invoicing / VAT returns / Revenue</span></td>
+              <td class="dash">—</td>
+              <td class="text-cell tier-featured-col"><span data-lang="zh">自动 VAT</span><span data-lang="en">Auto VAT</span></td>
+              <td class="check">✓</td>
+              <td class="check">✓ + Revenue ROS</td>
+              <td class="check"><span data-lang="zh">✓ 多国税务</span><span data-lang="en">✓ Multi-country tax</span></td>
+              <td class="text-cell"><span data-lang="zh">定制</span><span data-lang="en">Custom</span></td>
+            </tr>
+            <tr>
+              <td><span data-lang="zh">销售管理 / 报价 / 合同</span><span data-lang="en">Sales / Quotes / Contracts</span></td>
+              <td class="dash">—</td>
+              <td class="dash tier-featured-col">—</td>
+              <td class="check">✓</td>
+              <td class="check">✓</td>
+              <td class="check">✓ + eSign</td>
+              <td class="text-cell"><span data-lang="zh">定制</span><span data-lang="en">Custom</span></td>
+            </tr>
+            <tr>
+              <td><span data-lang="zh">多门店 / 多品牌</span><span data-lang="en">Multi-store / Multi-brand</span></td>
+              <td class="dash">—</td>
+              <td class="dash tier-featured-col">—</td>
+              <td class="text-cell"><span data-lang="zh">最多 5 个</span><span data-lang="en">Up to 5</span></td>
+              <td class="text-cell"><span data-lang="zh">最多 15 个</span><span data-lang="en">Up to 15</span></td>
+              <td class="text-cell"><span data-lang="zh">多公司/多法人</span><span data-lang="en">Multi-entity</span></td>
+              <td class="check"><span data-lang="zh">无限</span><span data-lang="en">Unlimited</span></td>
+            </tr>
+
+            <tr class="category-row"><td colspan="7"><span data-lang="zh">📣 营销工具</span><span data-lang="en">📣 Marketing Tools</span></td></tr>
+            <tr>
+              <td><span data-lang="zh">邮件营销（EDM）</span><span data-lang="en">Email Marketing (EDM)</span></td>
+              <td class="dash">—</td>
+              <td class="text-cell tier-featured-col"><span data-lang="zh">Mailchimp 集成</span><span data-lang="en">Mailchimp integration</span></td>
+              <td class="text-cell"><span data-lang="zh">Klaviyo 模板库</span><span data-lang="en">Klaviyo templates</span></td>
+              <td class="check"><span data-lang="zh">✓ 自建 5万封/月</span><span data-lang="en">✓ Self-hosted 50k/mo</span></td>
+              <td class="check"><span data-lang="zh">✓ 自动化</span><span data-lang="en">✓ Automated</span></td>
+              <td class="text-cell"><span data-lang="zh">定制</span><span data-lang="en">Custom</span></td>
+            </tr>
+            <tr>
+              <td><span data-lang="zh">短信营销</span><span data-lang="en">SMS Marketing</span></td>
+              <td class="dash">—</td>
+              <td class="dash tier-featured-col">—</td>
+              <td class="dash">—</td>
+              <td class="check"><span data-lang="zh">✓ 按量</span><span data-lang="en">✓ Pay-as-you-go</span></td>
+              <td class="check"><span data-lang="zh">✓ 多地网关</span><span data-lang="en">✓ Multi-region gateways</span></td>
+              <td class="check">✓</td>
+            </tr>
+            <tr>
+              <td><span data-lang="zh">社媒发布（FB/IG/微信/小红书）</span><span data-lang="en">Social Posting (FB/IG/WeChat/Xiaohongshu)</span></td>
+              <td class="dash">—</td>
+              <td class="dash tier-featured-col">—</td>
+              <td class="text-cell"><span data-lang="zh">微信 + 小红书</span><span data-lang="en">WeChat + Xiaohongshu</span></td>
+              <td class="check"><span data-lang="zh">✓ 6 平台统一</span><span data-lang="en">✓ 6 platforms unified</span></td>
+              <td class="check"><span data-lang="zh">✓ + 日程</span><span data-lang="en">✓ + Scheduling</span></td>
+              <td class="text-cell"><span data-lang="zh">定制</span><span data-lang="en">Custom</span></td>
+            </tr>
+            <tr>
+              <td><span data-lang="zh">AI 电话外呼</span><span data-lang="en">AI Outbound Calling</span></td>
+              <td class="dash">—</td>
+              <td class="dash tier-featured-col">—</td>
+              <td class="dash">—</td>
+              <td class="check"><span data-lang="zh">✓ 按量</span><span data-lang="en">✓ Pay-as-you-go</span></td>
+              <td class="check"><span data-lang="zh">✓ + CTI</span><span data-lang="en">✓ + CTI</span></td>
+              <td class="check">✓</td>
+            </tr>
+            <tr>
+              <td><span data-lang="zh">问卷 / NPS / 满意度</span><span data-lang="en">Surveys / NPS / CSAT</span></td>
+              <td class="dash">—</td>
+              <td class="dash tier-featured-col">—</td>
+              <td class="dash">—</td>
+              <td class="check">✓</td>
+              <td class="check"><span data-lang="zh">✓ 高级</span><span data-lang="en">✓ Advanced</span></td>
+              <td class="check">✓</td>
+            </tr>
+            <tr>
+              <td><span data-lang="zh">营销自动化工作流</span><span data-lang="en">Marketing Automation Workflow</span></td>
+              <td class="dash">—</td>
+              <td class="dash tier-featured-col">—</td>
+              <td class="dash">—</td>
+              <td class="check">✓</td>
+              <td class="check"><span data-lang="zh"><span data-lang="zh">✓ 高级</span><span data-lang="en">✓ Advanced</span>触发</span><span data-lang="en">✓ Advanced triggers</span></td>
+              <td class="text-cell"><span data-lang="zh">定制</span><span data-lang="en">Custom</span></td>
+            </tr>
+
+            <tr class="category-row"><td colspan="7"><span data-lang="zh">🛠 技术与服务</span><span data-lang="en">🛠 Tech & Services</span></td></tr>
+            <tr>
+              <td>API / Webhook</td>
+              <td class="dash">—</td>
+              <td class="dash tier-featured-col">—</td>
+              <td class="dash">—</td>
+              <td class="check"><span data-lang="zh">基础 API</span><span data-lang="en">Basic API</span></td>
+              <td class="check">REST / GraphQL</td>
+              <td class="check"><span data-lang="zh">源码</span><span data-lang="en">Source code</span></td>
+            </tr>
+            <tr>
+              <td><span data-lang="zh">中文客服</span><span data-lang="en">Chinese-language Support</span></td>
+              <td class="check">5×8</td>
+              <td class="check tier-featured-col">5×8</td>
+              <td class="check">5×10</td>
+              <td class="check"><span data-lang="zh">7×14 · 4h SLA</span><span data-lang="en">7×14 · 4h SLA</span></td>
+              <td class="check"><span data-lang="zh">4×24 · 1h SLA</span><span data-lang="en">4×24 · 1h SLA</span></td>
+              <td class="check"><span data-lang="zh">专属</span><span data-lang="en">Dedicated</span></td>
+            </tr>
+            <tr>
+              <td><span data-lang="zh">专属客户成功经理</span><span data-lang="en">Dedicated CSM</span></td>
+              <td class="dash">—</td>
+              <td class="dash tier-featured-col">—</td>
+              <td class="dash">—</td>
+              <td class="text-cell"><span data-lang="zh">季度回顾</span><span data-lang="en">Quarterly review</span></td>
+              <td class="check"><span data-lang="zh">✓ 月度 2h</span><span data-lang="en">✓ Monthly 2h</span></td>
+              <td class="check"><span data-lang="zh">专属团队</span><span data-lang="en">Dedicated team</span></td>
+            </tr>
+            <tr>
+              <td><span data-lang="zh">每月小改动时数</span><span data-lang="en">Monthly Tweak Hours</span></td>
+              <td class="text-cell">1h</td>
+              <td class="text-cell tier-featured-col">2h</td>
+              <td class="text-cell">5h</td>
+              <td class="text-cell">10h</td>
+              <td class="text-cell">20h</td>
+              <td class="text-cell"><span data-lang="zh">议定</span><span data-lang="en">Negotiable</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FAQ ===== -->
+<section id="faq" class="section">
+  <div class="container">
+    <h2 class="section-title" data-lang="zh">常见<span>问题</span></h2>
+    <h2 class="section-title" data-lang="en">Frequently <span>Asked</span></h2>
+    <p class="section-sub" data-lang="zh">销售前最常被问到的 6 个问题。</p>
+    <p class="section-sub" data-lang="en">The 6 most common questions before signing.</p>
+
+    <div class="faq">
+
+      <details class="faq-item" open>
+        <summary data-lang="zh">价格是含 VAT 还是 ex VAT？</summary>
+        <summary data-lang="en">Are prices VAT-inclusive or ex VAT?</summary>
+        <p data-lang="zh">
+          所有展示价格均为 <strong>ex VAT</strong>（税前）。爱尔兰 VAT 标准税率 23%，VAT 注册企业可全额抵扣进项税；
+          非 VAT 注册客户实际支付需加 23% VAT。正式 Proposal 中会明列 Subtotal / VAT @ 23% / Total 三行。
+        </p>
+        <p data-lang="en">
+          All listed prices are <strong>ex VAT</strong>. Ireland's standard VAT is 23% and VAT-registered businesses can fully reclaim it.
+          Non-VAT customers pay an extra 23%. Every Proposal lists Subtotal / VAT @ 23% / Total separately.
+        </p>
+      </details>
+
+      <details class="faq-item">
+        <summary data-lang="zh">我可以先选 STARTER，以后再升级吗？</summary>
+        <summary data-lang="en">Can I start with STARTER and upgrade later?</summary>
+        <p data-lang="zh">
+          可以。所有档位之间支持平滑升级，升级时只需补差价 + 调整月费。如果未来确定要做电商或连锁管理，
+          建议直接选 ESSENTIAL / GROWTH，一步到位比两次升级省约 €500-1,000。
+        </p>
+        <p data-lang="en">
+          Yes. Tiers support seamless upgrades — pay the price delta plus the new monthly fee. If you already plan e-commerce or chain ops,
+          starting at ESSENTIAL / GROWTH typically saves €500-1,000 vs. two staged upgrades.
+        </p>
+      </details>
+
+      <details class="faq-item" id="tov">
+        <summary data-lang="zh">LEO Trading Online Voucher 怎么申请？</summary>
+        <summary data-lang="en">How do I apply for the LEO Trading Online Voucher?</summary>
+        <p data-lang="zh">
+          符合条件的微型企业（&lt;10 员工、年营业额 &lt;€2M、注册满 6 个月且在爱尔兰运营）可申请最高 €2,500 补贴，
+          采用 50/50 匹配模式（客户先出 50%，LEO 批准后返还 50%）。1688.ie 提供 <strong>€299 申请辅助服务</strong>，
+          包括填表、附文档、与本地 LEO 对接。申请周期 4-8 周。
+        </p>
+        <p data-lang="en">
+          Eligible micro-enterprises (&lt;10 staff, &lt;€2M turnover, 6+ months registered, trading in Ireland) can claim up to €2,500
+          via 50/50 match (you pay 50% upfront, LEO refunds 50% on approval). 1688.ie offers <strong>€299 application support</strong>
+          covering forms, documents and LEO liaison. Turnaround 4-8 weeks.
+        </p>
+      </details>
+
+      <details class="faq-item">
+        <summary data-lang="zh">合同期多久？可以提前终止吗？</summary>
+        <summary data-lang="en">What is the contract term? Can I exit early?</summary>
+        <p data-lang="zh">
+          标准月费合约为 <strong>12 个月最低承诺</strong>（ENTERPRISE 及以上为 24 个月）。合约期内如需提前终止，
+          需支付剩余月数 30% 作为违约金。续约时享 10% 折扣或免费升档 3 个月试用。
+        </p>
+        <p data-lang="en">
+          Standard SaaS contracts are a <strong>12-month minimum commitment</strong> (24 months for ENTERPRISE+).
+          Early termination requires 30% of remaining monthly fees. Renewal: 10% discount or free 3-month upgrade trial.
+        </p>
+      </details>
+
+      <details class="faq-item">
+        <summary data-lang="zh">月费具体包含什么？</summary>
+        <summary data-lang="en">What does the monthly fee include?</summary>
+        <p data-lang="zh">
+          托管 + SSL + 日备份 + 安全补丁 + 基础维护（每月固定小改动时数）+ 中文客服
+          + 数据导出 + 季度业务回顾（GROWTH 及以上）+ 月度 2 小时 CSM 咨询（ENTERPRISE）。
+          超出小改动时数部分按 €60/小时额外计算，账单按月分开明列，绝无隐藏费用。
+        </p>
+        <p data-lang="en">
+          Hosting + SSL + daily backups + security patches + maintenance hours + Chinese-language support
+          + data export + quarterly review (GROWTH+) + monthly 2h CSM session (ENTERPRISE).
+          Overage hours billed at €60/hr, itemised monthly. No hidden fees.
+        </p>
+      </details>
+
+      <details class="faq-item">
+        <summary data-lang="zh">可以只买建站不买月费吗？</summary>
+        <summary data-lang="en">Can I buy build-only without monthly fees?</summary>
+        <p data-lang="zh">
+          不建议。月费包含托管、SSL、GDPR 合规更新、安全补丁——没有月费的网站在 3-6 个月内就可能因为证书过期、
+          插件未更新而被搜索引擎降权或被黑。如果您现有技术团队能自行维护，可选 <strong>BESPOKE 源码交付</strong>（+€30,000 起），
+          一次性买断后自行托管。
+        </p>
+        <p data-lang="en">
+          Not recommended. The monthly fee covers hosting, SSL, compliance updates and security patches — sites without it can lose ranking
+          or be hacked within 3-6 months due to expired certs or unpatched plugins. If you have an in-house team,
+          choose <strong>BESPOKE source delivery</strong> (from +€30,000) for self-hosting.
+        </p>
+      </details>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== Footer CTA ===== -->
+<section id="contact" class="footer-cta">
+  <span class="eyebrow" data-lang="zh">免费咨询</span>
+  <span class="eyebrow" data-lang="en">Free Consultation</span>
+  <h2 data-lang="zh">准备好了吗？<br><span>30 分钟免费咨询</span></h2>
+  <h2 data-lang="en">Ready to start?<br><span>Book a 30-min free consult</span></h2>
+  <p data-lang="zh">告诉我们你的业务阶段、员工数、当前痛点，我们会推荐最合适的档位，并同步估算 TOV 补贴后的实际自付金额。</p>
+  <p data-lang="en">Tell us your stage, team size and pain points. We'll recommend the best tier and estimate your post-TOV out-of-pocket cost.</p>
+  <div class="btn-group">
+    <a href="mailto:hello@1688.ie?subject=定价咨询" class="btn-primary" data-lang="zh">邮件咨询</a>
+    <a href="mailto:hello@1688.ie?subject=Pricing%20Enquiry" class="btn-primary" data-lang="en">Email Us</a>
+    <a href="https://wa.me/353000000000" class="btn-outline-cream">WhatsApp</a>
+    <a href="#" class="btn-outline-cream" data-lang="zh">预约 30 分钟</a>
+    <a href="#" class="btn-outline-cream" data-lang="en">Book 30-min Slot</a>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <p>© 2026 1688.ie · Registered in Ireland (CRO #XXXXXX) · VAT IE1234567X</p>
+  <p style="margin-top:8px;">
+    <a href="#" data-lang="zh">隐私政策</a><a href="#" data-lang="en">Privacy</a> ·
+    <a href="#" data-lang="zh">服务条款</a><a href="#" data-lang="en">Terms</a> ·
+    <a href="#" data-lang="zh">Cookie 政策</a><a href="#" data-lang="en">Cookies</a> ·
+    <a href="index.html" data-lang="zh">← 返回首页</a><a href="index.html" data-lang="en">← Back to Home</a>
+  </p>
+</footer>
+
+<script>
+  const langBtn = document.getElementById('langBtn');
+  let isEn = false;
+  if (langBtn) {
+    langBtn.addEventListener('click', () => {
+      isEn = !isEn;
+      document.body.classList.toggle('en', isEn);
+      langBtn.textContent = isEn ? '中文' : 'EN';
+      document.documentElement.lang = isEn ? 'en' : 'zh-CN';
+    });
+  }
+</script>
+
+</body>
+</html>

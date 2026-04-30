@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>仓库管理系统 · Emerald WMS · 翠绿货代仓解决方案</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Noto+Serif+SC:wght@600;700;900&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #0d4f3c;
+    --green-mid: #155c47;
+    --green-light: #1a7a5e;
+    --orange: #f97316;
+    --amber: #f59e0b;
+    --cream: #fefdf8;
+    --grid: #e5e7eb;
+  }
+  body { font-family: 'Inter', sans-serif; background: var(--cream); }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+  .serif { font-family: 'Noto Serif SC', serif; }
+
+  /* Grid background */
+  .grid-bg {
+    background-image:
+      linear-gradient(rgba(13,79,60,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(13,79,60,0.06) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+
+  /* Live ticker */
+  @keyframes ticker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+  .ticker-inner { animation: ticker 30s linear infinite; }
+
+  /* Blink */
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .blink { animation: blink 1.2s ease-in-out infinite; }
+
+  /* Counter */
+  @keyframes countUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+  .count-up { animation: countUp 0.4s ease-out; }
+
+  /* Pulse dot */
+  @keyframes pulseRing { 0%{transform:scale(1);opacity:1} 100%{transform:scale(2.2);opacity:0} }
+  .pulse-dot::after { content:''; position:absolute; inset:-4px; border-radius:50%; background:currentColor; animation:pulseRing 1.5s ease-out infinite; }
+
+  /* Sticky nav */
+  .nav-sticky { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+
+  /* Pain card hover */
+  .pain-card { transition: transform 0.2s, box-shadow 0.2s; }
+  .pain-card:hover { transform: translateY(-4px) rotate(-0.5deg); box-shadow: 0 12px 32px rgba(0,0,0,0.15); }
+
+  /* Slider track */
+  input[type=range] { -webkit-appearance:none; appearance:none; background:transparent; }
+  input[type=range]::-webkit-slider-runnable-track { height:8px; border-radius:4px; background:linear-gradient(90deg,#f97316 var(--val,50%),#d1d5db var(--val,50%)); }
+  input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:24px; height:24px; border-radius:50%; background:#0d4f3c; border:3px solid white; box-shadow:0 2px 8px rgba(0,0,0,0.3); margin-top:-8px; cursor:pointer; }
+
+  /* Scroll reveal */
+  .reveal { opacity:0; transform:translateY(24px); transition:opacity 0.6s, transform 0.6s; }
+  .reveal.visible { opacity:1; transform:translateY(0); }
+</style>
+</head>
+<body class="min-h-screen">
+
+<!-- ─── STICKY NAV ─── -->
+<nav class="fixed top-0 left-0 right-0 z-50 nav-sticky bg-white/90 border-b border-gray-200">
+  <div class="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 rounded bg-[#0d4f3c] flex items-center justify-center">
+        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+      </div>
+      <span class="font-bold text-[#0d4f3c] text-sm tracking-wide">EMERALD WMS</span>
+      <span class="hidden sm:block text-xs text-gray-400 mono">v2.4.1</span>
+    </div>
+    <div class="flex items-center gap-4">
+      <a href="client.html" class="hidden sm:block text-xs text-gray-500 hover:text-[#0d4f3c] transition-colors">货主视角</a>
+      <a href="staff.html" class="hidden sm:block text-xs text-gray-500 hover:text-[#0d4f3c] transition-colors">员工视角</a>
+      <a href="boss.html" class="hidden sm:block text-xs text-gray-500 hover:text-[#0d4f3c] transition-colors">老板视角</a>
+      <a href="#contact" class="bg-[#f97316] text-white text-xs font-bold px-4 py-2 rounded-full hover:bg-orange-600 transition-colors">预约演示</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ─── TICKER ─── -->
+<div class="bg-[#0d4f3c] text-white overflow-hidden h-8 flex items-center mt-14">
+  <div class="ticker-inner flex gap-16 whitespace-nowrap text-xs mono">
+    <span class="text-amber-400">●</span> 实时数据 &nbsp;|&nbsp;
+    <span>入库单 #IR-2024-0892 已完成扫码 ✓</span> &nbsp;|&nbsp;
+    <span class="text-orange-400">ALERT</span> 货架 B-04 库存低于安全线 &nbsp;|&nbsp;
+    <span>客户 Green Way Ltd 已查看出库报告</span> &nbsp;|&nbsp;
+    <span>今日出库 847 件 · 入库 1,203 件</span> &nbsp;|&nbsp;
+    <span class="text-amber-400">●</span> 实时数据 &nbsp;|&nbsp;
+    <span>入库单 #IR-2024-0892 已完成扫码 ✓</span> &nbsp;|&nbsp;
+    <span class="text-orange-400">ALERT</span> 货架 B-04 库存低于安全线 &nbsp;|&nbsp;
+    <span>客户 Green Way Ltd 已查看出库报告</span> &nbsp;|&nbsp;
+    <span>今日出库 847 件 · 入库 1,203 件</span>
+  </div>
+</div>
+
+<!-- ─── HERO ─── -->
+<section class="grid-bg bg-[#0d4f3c] relative overflow-hidden py-20 px-4">
+  <div class="max-w-5xl mx-auto text-center relative z-10">
+    <div class="inline-flex items-center gap-2 bg-white/10 text-white/80 text-xs mono px-4 py-2 rounded-full mb-8 border border-white/20">
+      <span class="relative flex h-2 w-2"><span class="blink absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-amber-400"></span></span>
+      现场演示系统 · Dublin Ballymount 仓 · 实时数据流
+    </div>
+
+    <h1 class="serif text-4xl sm:text-5xl md:text-6xl text-white font-black leading-tight mb-6">
+      爱尔兰华人仓库<br>
+      <span class="text-amber-400">终于有了自己的系统</span>
+    </h1>
+
+    <p class="text-white/70 text-lg sm:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
+      专为都柏林 B2B 货代仓设计 · 中英双语 · 手机扫码 · 客户自助查货<br>
+      <span class="text-white/50 text-sm">告别 Excel · 告别微信群 · 告别被客户追问</span>
+    </p>
+
+    <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+      <a href="#dashboard" class="bg-amber-400 text-[#0d4f3c] font-black px-8 py-4 rounded-xl text-base hover:bg-amber-300 transition-all hover:scale-105 shadow-lg">
+        看实时演示大屏 →
+      </a>
+      <a href="boss.html" class="border-2 border-white/40 text-white font-semibold px-8 py-4 rounded-xl text-base hover:bg-white/10 transition-all">
+        老板端预览
+      </a>
+    </div>
+
+    <div class="grid grid-cols-3 gap-6 mt-16 max-w-lg mx-auto">
+      <div class="text-center">
+        <div class="mono text-3xl font-black text-amber-400">5</div>
+        <div class="text-white/60 text-xs mt-1">在用货主</div>
+      </div>
+      <div class="text-center border-x border-white/20">
+        <div class="mono text-3xl font-black text-white" id="hero-skus">3,847</div>
+        <div class="text-white/60 text-xs mt-1">在库 SKU</div>
+      </div>
+      <div class="text-center">
+        <div class="mono text-3xl font-black text-amber-400">0</div>
+        <div class="text-white/60 text-xs mt-1">未处理异常</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Decorative grid lines -->
+  <div class="absolute inset-0 pointer-events-none">
+    <div class="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#0a3d2e] to-transparent"></div>
+  </div>
+</section>
+
+<!-- ─── PAIN WALL ─── -->
+<section class="py-20 px-4 bg-white">
+  <div class="max-w-5xl mx-auto">
+    <div class="text-center mb-12 reveal">
+      <p class="mono text-xs text-gray-400 mb-3">▼ 对号入座</p>
+      <h2 class="serif text-3xl sm:text-4xl font-black text-[#0d4f3c]">你现在是不是这样管仓的？</h2>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <!-- Pain 1 -->
+      <div class="pain-card bg-yellow-50 border-2 border-yellow-300 rounded-2xl p-6 relative">
+        <div class="absolute -top-3 -left-3 bg-red-500 text-white text-xs font-black px-3 py-1 rounded-full rotate-[-8deg]">高频痛</div>
+        <div class="text-4xl mb-3">📱</div>
+        <p class="font-bold text-gray-800 text-base leading-snug">"货到了没？"</p>
+        <p class="text-gray-500 text-sm mt-2 leading-relaxed">客户半夜微信问你，你人在中国，完全不知道……员工也不知道该怎么回。</p>
+        <div class="mt-4 mono text-xs text-red-500 font-bold">→ 每周浪费 4-6 小时</div>
+      </div>
+
+      <!-- Pain 2 -->
+      <div class="pain-card bg-yellow-50 border-2 border-yellow-300 rounded-2xl p-6 relative">
+        <div class="absolute -top-3 -left-3 bg-red-500 text-white text-xs font-black px-3 py-1 rounded-full rotate-[5deg]">数据乱</div>
+        <div class="text-4xl mb-3">📊</div>
+        <p class="font-bold text-gray-800 text-base leading-snug">Excel 版本对不上</p>
+        <p class="text-gray-500 text-sm mt-2 leading-relaxed">员工 A 改了一份，员工 B 还在用旧版本。月底账对不上，全靠手查。</p>
+        <div class="mt-4 mono text-xs text-red-500 font-bold">→ 月底对账 1-2 天</div>
+      </div>
+
+      <!-- Pain 3 -->
+      <div class="pain-card bg-yellow-50 border-2 border-yellow-300 rounded-2xl p-6 relative">
+        <div class="absolute -top-3 -left-3 bg-orange-500 text-white text-xs font-black px-3 py-1 rounded-full rotate-[-4deg]">漏单</div>
+        <div class="text-4xl mb-3">📦</div>
+        <p class="font-bold text-gray-800 text-base leading-snug">货发错了、发漏了</p>
+        <p class="text-gray-500 text-sm mt-2 leading-relaxed">Maria 英文不够好，中文货名看不懂，SKU 认不准，挑错货两次了。</p>
+        <div class="mt-4 mono text-xs text-red-500 font-bold">→ 每单赔付 €150-800</div>
+      </div>
+
+      <!-- Pain 4 -->
+      <div class="pain-card bg-yellow-50 border-2 border-yellow-300 rounded-2xl p-6 relative">
+        <div class="absolute -top-3 -left-3 bg-orange-500 text-white text-xs font-black px-3 py-1 rounded-full rotate-[7deg]">收不到钱</div>
+        <div class="text-4xl mb-3">💸</div>
+        <p class="font-bold text-gray-800 text-base leading-snug">账单三个月后才结</p>
+        <p class="text-gray-500 text-sm mt-2 leading-relaxed">客户说记不清楚操作了多少票，你也没有清单，扯皮半天，最后少收了。</p>
+        <div class="mt-4 mono text-xs text-red-500 font-bold">→ 每月漏收 €500-2,000</div>
+      </div>
+
+      <!-- Pain 5 -->
+      <div class="pain-card bg-yellow-50 border-2 border-yellow-300 rounded-2xl p-6 relative">
+        <div class="absolute -top-3 -left-3 bg-red-600 text-white text-xs font-black px-3 py-1 rounded-full rotate-[-6deg]">招人难</div>
+        <div class="text-4xl mb-3">👷</div>
+        <p class="font-bold text-gray-800 text-base leading-snug">本地员工培训要一个月</p>
+        <p class="text-gray-500 text-sm mt-2 leading-relaxed">手工流程全靠老员工口口相传，新人上来一直问，效率低还容易出错。</p>
+        <div class="mt-4 mono text-xs text-red-500 font-bold">→ 培训成本 €800/人</div>
+      </div>
+
+      <!-- Pain 6 -->
+      <div class="pain-card bg-yellow-50 border-2 border-yellow-300 rounded-2xl p-6 relative">
+        <div class="absolute -top-3 -left-3 bg-red-500 text-white text-xs font-black px-3 py-1 rounded-full rotate-[3deg]">扩不了</div>
+        <div class="text-4xl mb-3">📈</div>
+        <p class="font-bold text-gray-800 text-base leading-snug">想多接客户但管不过来</p>
+        <p class="text-gray-500 text-sm mt-2 leading-relaxed">现在 5 个货主就已经焦头烂额了，有大客户找来，不敢接。</p>
+        <div class="mt-4 mono text-xs text-red-500 font-bold">→ 少赚 €3,000-8,000/月</div>
+      </div>
+    </div>
+
+    <div class="text-center mt-10 reveal">
+      <p class="text-gray-500 text-sm">中招几条？——大多数都柏林仓库 <strong class="text-[#0d4f3c]">全中</strong>。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─── LIVE DASHBOARD ─── -->
+<section id="dashboard" class="py-20 px-4 bg-[#0a1a14]">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-10 reveal">
+      <p class="mono text-xs text-green-400 mb-3">LIVE SYSTEM · 实时演示</p>
+      <h2 class="serif text-3xl sm:text-4xl font-black text-white mb-4">这是您办公室门口应该挂的屏</h2>
+      <p class="text-white/50 text-sm">以下数据每 3 秒自动更新 · 模拟真实仓库流量</p>
+    </div>
+
+    <!-- KPI Row -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
+      <div class="bg-[#0d4f3c]/80 border border-green-800 rounded-xl p-4">
+        <div class="mono text-xs text-green-400 mb-2">TODAY IN</div>
+        <div class="mono text-3xl font-black text-white" id="kpi-in">1,203</div>
+        <div class="mono text-xs text-green-400 mt-1">+87 ↑ vs yesterday</div>
+      </div>
+      <div class="bg-[#0d4f3c]/80 border border-green-800 rounded-xl p-4">
+        <div class="mono text-xs text-green-400 mb-2">TODAY OUT</div>
+        <div class="mono text-3xl font-black text-white" id="kpi-out">847</div>
+        <div class="mono text-xs text-amber-400 mt-1">-23 ↓ vs yesterday</div>
+      </div>
+      <div class="bg-[#0d4f3c]/80 border border-green-800 rounded-xl p-4">
+        <div class="mono text-xs text-green-400 mb-2">TOTAL IN STOCK</div>
+        <div class="mono text-3xl font-black text-white" id="kpi-stock">24,891</div>
+        <div class="mono text-xs text-green-400 mt-1">across 5 clients</div>
+      </div>
+      <div class="bg-orange-950/60 border border-orange-700 rounded-xl p-4">
+        <div class="mono text-xs text-orange-400 mb-2">ALERTS</div>
+        <div class="mono text-3xl font-black text-orange-400 blink" id="kpi-alerts">2</div>
+        <div class="mono text-xs text-orange-400 mt-1">needs attention</div>
+      </div>
+    </div>
+
+    <!-- Main dashboard grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <!-- Live operations feed -->
+      <div class="lg:col-span-2 bg-[#0d1a12] border border-green-900 rounded-xl p-5">
+        <div class="flex items-center justify-between mb-4">
+          <span class="mono text-xs text-green-400 font-bold">LIVE OPERATIONS FEED</span>
+          <span class="flex items-center gap-1.5 text-xs text-green-400"><span class="w-1.5 h-1.5 rounded-full bg-green-400 blink"></span>LIVE</span>
+        </div>
+        <div id="ops-feed" class="space-y-2 font-mono text-xs">
+          <!-- filled by JS -->
+        </div>
+      </div>
+
+      <!-- Shelf utilisation -->
+      <div class="bg-[#0d1a12] border border-green-900 rounded-xl p-5">
+        <div class="mono text-xs text-green-400 font-bold mb-4">SHELF UTILISATION</div>
+        <div id="shelves" class="space-y-3">
+          <!-- filled by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Role links -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
+      <a href="client.html" class="group bg-[#0d4f3c]/60 border border-green-800 rounded-xl p-5 hover:bg-[#0d4f3c] transition-all">
+        <div class="text-2xl mb-2">👤</div>
+        <div class="text-white font-bold text-sm">货主端</div>
+        <div class="text-white/50 text-xs mt-1">你的客户登录后看到的界面</div>
+        <div class="mono text-green-400 text-xs mt-3 group-hover:translate-x-1 transition-transform">进入 →</div>
+      </a>
+      <a href="staff.html" class="group bg-[#0d4f3c]/60 border border-green-800 rounded-xl p-5 hover:bg-[#0d4f3c] transition-all">
+        <div class="text-2xl mb-2">📱</div>
+        <div class="text-white font-bold text-sm">员工端</div>
+        <div class="text-white/50 text-xs mt-1">手机扫码 · 中英双语 · 零门槛</div>
+        <div class="mono text-green-400 text-xs mt-3 group-hover:translate-x-1 transition-transform">进入 →</div>
+      </a>
+      <a href="boss.html" class="group bg-[#0d4f3c]/60 border border-green-800 rounded-xl p-5 hover:bg-[#0d4f3c] transition-all">
+        <div class="text-2xl mb-2">📊</div>
+        <div class="text-white font-bold text-sm">老板端</div>
+        <div class="text-white/50 text-xs mt-1">在中国也能管都柏林的仓</div>
+        <div class="mono text-green-400 text-xs mt-3 group-hover:translate-x-1 transition-transform">进入 →</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PROOF ─── -->
+<section class="py-20 px-4 bg-white">
+  <div class="max-w-5xl mx-auto">
+    <div class="text-center mb-12 reveal">
+      <p class="mono text-xs text-gray-400 mb-3">翠绿货代仓 · 6 个月使用数据</p>
+      <h2 class="serif text-3xl sm:text-4xl font-black text-[#0d4f3c]">真实案例：Dublin Ballymount</h2>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+      <div class="space-y-4">
+        <div class="bg-gray-50 border border-gray-200 rounded-2xl p-6">
+          <div class="flex items-start gap-4">
+            <div class="w-12 h-12 rounded-full bg-[#0d4f3c] flex items-center justify-center flex-shrink-0">
+              <span class="text-white font-black text-lg">W</span>
+            </div>
+            <div>
+              <p class="text-gray-700 text-sm leading-relaxed italic">"以前每天至少接 15 个微信问'货到没'。现在客户自己在 App 上查，我手机安静了。最重要是——我回上海那个月，仓库照常跑，我一个电话都没接。"</p>
+              <div class="mt-3">
+                <p class="font-bold text-gray-900 text-sm">Wang 先生</p>
+                <p class="mono text-xs text-gray-400">翠绿货代仓 · 仓库负责人 · Dublin</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div class="bg-green-50 border border-green-200 rounded-xl p-4 text-center">
+            <div class="mono text-2xl font-black text-[#0d4f3c]">-91%</div>
+            <div class="text-xs text-gray-600 mt-1">客户追货电话</div>
+          </div>
+          <div class="bg-green-50 border border-green-200 rounded-xl p-4 text-center">
+            <div class="mono text-2xl font-black text-[#0d4f3c]">+40%</div>
+            <div class="text-xs text-gray-600 mt-1">新客户接受量</div>
+          </div>
+          <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 text-center">
+            <div class="mono text-2xl font-black text-amber-700">3天→4h</div>
+            <div class="text-xs text-gray-600 mt-1">月底对账时间</div>
+          </div>
+          <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 text-center">
+            <div class="mono text-2xl font-black text-amber-700">€0</div>
+            <div class="text-xs text-gray-600 mt-1">过去 6 月漏单赔付</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-[#0a1a14] rounded-2xl p-6 border border-green-900">
+        <div class="mono text-xs text-green-400 mb-4">WAREHOUSE CERT & COMPLIANCE</div>
+        <div class="space-y-3">
+          <div class="flex items-center justify-between border-b border-green-900 pb-3">
+            <span class="text-white/70 text-xs">EORI Number</span>
+            <span class="mono text-green-400 text-xs">IE3829471T</span>
+          </div>
+          <div class="flex items-center justify-between border-b border-green-900 pb-3">
+            <span class="text-white/70 text-xs">Revenue Customs Approval</span>
+            <span class="mono text-green-400 text-xs flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-green-400"></span> ACTIVE</span>
+          </div>
+          <div class="flex items-center justify-between border-b border-green-900 pb-3">
+            <span class="text-white/70 text-xs">Warehouse Location</span>
+            <span class="mono text-green-400 text-xs">Ballymount, D24</span>
+          </div>
+          <div class="flex items-center justify-between border-b border-green-900 pb-3">
+            <span class="text-white/70 text-xs">Capacity</span>
+            <span class="mono text-green-400 text-xs">3,500 m²</span>
+          </div>
+          <div class="flex items-center justify-between border-b border-green-900 pb-3">
+            <span class="text-white/70 text-xs">B2B Clients</span>
+            <span class="mono text-green-400 text-xs">5 active</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-white/70 text-xs">Last Audit</span>
+            <span class="mono text-green-400 text-xs">2024-11-08 ✓</span>
+          </div>
+        </div>
+        <div class="mt-5 pt-4 border-t border-green-900">
+          <div class="mono text-xs text-white/40">System powered by</div>
+          <div class="mono text-sm text-white font-bold mt-1">EMERALD WMS · 1688.ie</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── ROI CALCULATOR ─── -->
+<section class="py-20 px-4 bg-gray-50">
+  <div class="max-w-2xl mx-auto">
+    <div class="text-center mb-10 reveal">
+      <p class="mono text-xs text-gray-400 mb-3">算笔账</p>
+      <h2 class="serif text-3xl font-black text-[#0d4f3c]">你现在每个月在浪费多少钱？</h2>
+    </div>
+
+    <div class="bg-white border-2 border-gray-200 rounded-2xl p-8 shadow-sm">
+      <!-- Slider 1: Staff hours -->
+      <div class="mb-8">
+        <div class="flex justify-between items-baseline mb-3">
+          <label class="text-sm font-semibold text-gray-700">每月浪费在"追货、对账"的员工小时</label>
+          <span class="mono font-black text-[#0d4f3c] text-xl" id="slider1-val">40 h</span>
+        </div>
+        <input type="range" id="slider1" min="10" max="120" value="40" step="5" class="w-full" oninput="calcROI()">
+        <div class="flex justify-between mono text-xs text-gray-400 mt-1"><span>10h</span><span>120h</span></div>
+      </div>
+
+      <!-- Slider 2: Mispick cost -->
+      <div class="mb-8">
+        <div class="flex justify-between items-baseline mb-3">
+          <label class="text-sm font-semibold text-gray-700">每月漏单/错单造成的损失</label>
+          <span class="mono font-black text-[#0d4f3c] text-xl" id="slider2-val">€500</span>
+        </div>
+        <input type="range" id="slider2" min="0" max="3000" value="500" step="100" class="w-full" oninput="calcROI()">
+        <div class="flex justify-between mono text-xs text-gray-400 mt-1"><span>€0</span><span>€3,000</span></div>
+      </div>
+
+      <!-- Slider 3: Missed clients -->
+      <div class="mb-8">
+        <div class="flex justify-between items-baseline mb-3">
+          <label class="text-sm font-semibold text-gray-700">因为管不过来，每月少接的客户</label>
+          <span class="mono font-black text-[#0d4f3c] text-xl" id="slider3-val">1 个</span>
+        </div>
+        <input type="range" id="slider3" min="0" max="5" value="1" step="1" class="w-full" oninput="calcROI()">
+        <div class="flex justify-between mono text-xs text-gray-400 mt-1"><span>0</span><span>5个</span></div>
+      </div>
+
+      <!-- Result -->
+      <div class="bg-[#0d4f3c] rounded-xl p-6 text-center">
+        <p class="text-white/60 text-sm mb-2">你每月实际损失约</p>
+        <div class="mono text-5xl font-black text-amber-400" id="roi-total">€2,220</div>
+        <p class="text-white/60 text-sm mt-2">= 每年 <span class="text-white font-bold mono" id="roi-annual">€26,640</span></p>
+        <div class="mt-4 pt-4 border-t border-white/20">
+          <p class="text-white/70 text-xs">我们的系统月费从 <span class="text-amber-400 font-bold">€199/月</span> 起</p>
+          <p class="text-green-400 text-sm font-bold mt-1">投资回报率 <span id="roi-pct">1,116%</span> · <span id="roi-months">1.1</span> 个月回本</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CONTACT ─── -->
+<section id="contact" class="py-20 px-4 bg-[#0d4f3c]">
+  <div class="max-w-xl mx-auto text-center">
+    <h2 class="serif text-3xl sm:text-4xl font-black text-white mb-4">免费上门评估</h2>
+    <p class="text-white/70 mb-8">我们的顾问开车到您的仓库，用 2 小时帮您梳理流程，<strong class="text-white">零费用、零承诺</strong>。</p>
+
+    <div class="bg-white rounded-2xl p-8 text-left">
+      <div class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 mb-1">您的姓名 / Your Name</label>
+          <input type="text" placeholder="王先生 / Mr Wang" class="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#0d4f3c]">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 mb-1">WhatsApp / 电话</label>
+          <input type="tel" placeholder="+353 XX XXX XXXX" class="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#0d4f3c]">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 mb-1">仓库位置 / Warehouse Location</label>
+          <input type="text" placeholder="Ballymount / Fonthill / ..." class="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#0d4f3c]">
+        </div>
+        <input type="hidden" id="ref-field" name="ref" value="">
+        <button onclick="handleSubmit()" class="w-full bg-[#0d4f3c] text-white font-black py-4 rounded-xl hover:bg-[#155c47] transition-colors text-base">
+          📅 预约免费上门评估
+        </button>
+        <p class="text-center text-xs text-gray-400">或直接 WhatsApp：<a href="https://wa.me/353000000000" class="text-[#0d4f3c] font-bold">+353 XX XXX XXXX</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer class="bg-[#0a1a14] py-8 px-4">
+  <div class="max-w-5xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+    <div class="flex items-center gap-3">
+      <span class="font-black text-white mono">EMERALD WMS</span>
+      <span class="text-white/30 text-xs">by 1688.ie</span>
+    </div>
+    <div class="flex gap-6 text-white/40 text-xs">
+      <a href="client.html" class="hover:text-white transition-colors">货主端</a>
+      <a href="staff.html" class="hover:text-white transition-colors">员工端</a>
+      <a href="boss.html" class="hover:text-white transition-colors">老板端</a>
+    </div>
+    <div class="mono text-white/30 text-xs">© 2024 1688.ie · Dublin</div>
+  </div>
+</footer>
+
+<!-- ─── REFERRAL BADGE ─── -->
+<div id="ref-badge" class="hidden fixed bottom-4 right-4 z-50 bg-[#0d4f3c] text-white text-xs mono px-4 py-2 rounded-full shadow-lg border border-green-600">
+  <span class="text-green-400">REF:</span> <span id="ref-name"></span>
+</div>
+
+<script>
+// ─── REFERRAL ───
+(function() {
+  const params = new URLSearchParams(location.search);
+  const ref = params.get('ref');
+  if (ref) {
+    sessionStorage.setItem('ref', ref);
+    document.getElementById('ref-badge').classList.remove('hidden');
+    document.getElementById('ref-name').textContent = ref.toUpperCase();
+    document.getElementById('ref-field').value = ref;
+    // propagate to internal links
+    document.querySelectorAll('a[href$=".html"]').forEach(a => {
+      const url = new URL(a.href, location.href);
+      url.searchParams.set('ref', ref);
+      a.href = url.toString();
+    });
+  } else {
+    const stored = sessionStorage.getItem('ref');
+    if (stored) {
+      document.getElementById('ref-badge').classList.remove('hidden');
+      document.getElementById('ref-name').textContent = stored.toUpperCase();
+    }
+  }
+})();
+
+// ─── LIVE FEED ───
+const ops = [
+  { type: 'in',  icon: '▼', color: 'text-green-400', client: 'SinoTech Ltd',    sku: 'ST-USB-C-HUB-01',  qty: 48,  loc: 'A-12' },
+  { type: 'out', icon: '▲', color: 'text-orange-400', client: 'Green Way Ltd',   sku: 'GW-ECO-BAG-M',     qty: 120, loc: 'C-07' },
+  { type: 'in',  icon: '▼', color: 'text-green-400', client: 'Dublin Imports',   sku: 'DI-LAMP-DESK-02',  qty: 24,  loc: 'B-03' },
+  { type: 'out', icon: '▲', color: 'text-orange-400', client: 'CelticTrade Co.', sku: 'CT-TOOL-SET-PRO',  qty: 6,   loc: 'D-11' },
+  { type: 'in',  icon: '▼', color: 'text-green-400', client: 'SinoTech Ltd',    sku: 'ST-CABLE-3M-USB',  qty: 200, loc: 'A-08' },
+  { type: 'out', icon: '▲', color: 'text-orange-400', client: 'MedSupply IE',   sku: 'MS-GLOVE-L-BOX',   qty: 50,  loc: 'E-02' },
+  { type: 'alert', icon: '!', color: 'text-amber-400', client: 'GREEN WAY LTD', sku: 'GW-ECO-BAG-S',     qty: 8,   loc: 'C-04', alert: 'LOW STOCK' },
+];
+
+let feedIdx = 0;
+function pushFeedLine() {
+  const feed = document.getElementById('ops-feed');
+  const o = ops[feedIdx % ops.length];
+  const now = new Date();
+  const t = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
+
+  const div = document.createElement('div');
+  div.className = 'flex items-center gap-2 py-1.5 border-b border-green-900/40 animate-pulse';
+  div.style.animationDuration = '0.3s';
+  div.innerHTML = `
+    <span class="text-white/30">${t}</span>
+    <span class="${o.color} font-bold">${o.icon}</span>
+    <span class="text-white/80 flex-1">${o.client}</span>
+    <span class="text-white/50">${o.sku}</span>
+    <span class="${o.color} font-bold">×${o.qty}</span>
+    <span class="text-white/30">${o.loc}</span>
+    ${o.alert ? `<span class="bg-amber-900 text-amber-400 text-xs px-1.5 py-0.5 rounded">${o.alert}</span>` : ''}
+  `;
+  feed.prepend(div);
+  while (feed.children.length > 8) feed.removeChild(feed.lastChild);
+  feedIdx++;
+}
+setInterval(pushFeedLine, 2500);
+pushFeedLine();
+
+// ─── SHELVES ───
+const shelves = [
+  { id: 'A', pct: 78, color: 'bg-green-500' },
+  { id: 'B', pct: 92, color: 'bg-amber-500' },
+  { id: 'C', pct: 61, color: 'bg-green-500' },
+  { id: 'D', pct: 45, color: 'bg-green-500' },
+  { id: 'E', pct: 88, color: 'bg-orange-500' },
+];
+const shelvesEl = document.getElementById('shelves');
+shelves.forEach(s => {
+  shelvesEl.innerHTML += `
+    <div>
+      <div class="flex justify-between text-xs mb-1">
+        <span class="mono text-white/70">ZONE ${s.id}</span>
+        <span class="mono ${s.pct>85?'text-orange-400':s.pct>70?'text-amber-400':'text-green-400'}">${s.pct}%</span>
+      </div>
+      <div class="h-2.5 bg-green-950 rounded-full overflow-hidden">
+        <div class="${s.color} h-full rounded-full transition-all" style="width:${s.pct}%"></div>
+      </div>
+    </div>
+  `;
+});
+
+// ─── KPI live tick ───
+function randInt(n, spread) { return n + Math.floor(Math.random()*spread*2) - spread; }
+setInterval(() => {
+  document.getElementById('kpi-in').textContent = randInt(1203,5).toLocaleString();
+  document.getElementById('kpi-out').textContent = randInt(847,3).toLocaleString();
+  document.getElementById('kpi-stock').textContent = randInt(24891,15).toLocaleString();
+}, 3000);
+
+// ─── ROI CALCULATOR ───
+function calcROI() {
+  const h = +document.getElementById('slider1').value;
+  const loss = +document.getElementById('slider2').value;
+  const clients = +document.getElementById('slider3').value;
+
+  document.getElementById('slider1-val').textContent = h + ' h';
+  document.getElementById('slider2-val').textContent = '€' + loss.toLocaleString();
+  document.getElementById('slider3-val').textContent = clients + ' 个';
+
+  // Update slider gradient
+  ['slider1','slider2','slider3'].forEach(id => {
+    const el = document.getElementById(id);
+    const pct = ((el.value - el.min) / (el.max - el.min) * 100).toFixed(1);
+    el.style.setProperty('--val', pct + '%');
+  });
+
+  const staffCost = h * 20;        // €20/h avg
+  const clientRevenue = clients * 2000; // avg €2,000/client/month
+  const total = staffCost + loss + clientRevenue;
+  const annual = total * 12;
+  const sysCost = 199;
+  const roi = Math.round((total - sysCost) / sysCost * 100);
+  const months = (sysCost / total).toFixed(1);
+
+  document.getElementById('roi-total').textContent = '€' + total.toLocaleString();
+  document.getElementById('roi-annual').textContent = '€' + annual.toLocaleString();
+  document.getElementById('roi-pct').textContent = roi.toLocaleString() + '%';
+  document.getElementById('roi-months').textContent = months;
+}
+calcROI();
+
+// ─── SCROLL REVEAL ───
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ─── SUBMIT ───
+function handleSubmit() {
+  alert('收到！我们会在 24 小时内通过 WhatsApp 联系您预约上门时间。\n\nThank you! We\'ll WhatsApp you within 24h to arrange a visit.');
+}
+</script>
+</body>
+</html>

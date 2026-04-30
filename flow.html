@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>业务主流程 · 1688.ie</title>
+<meta name="description" content="1688.ie 业务主流程：从首次咨询到上线运营,7 步走完整流程。每一步谁负责、做什么、产出什么,一目了然。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #C8102E; --red-dark: #8B0A1F;
+    --gold: #D4AF37; --gold-light: #E8C968;
+    --cream: #FAF6F0; --paper: #F5EFE4;
+    --ink: #1C1C1C; --ink-soft: #3A3A3A; --ink-mute: #6B6B6B;
+    --line: #E0D6C2; --green: #17844D; --blue: #2A6FB3;
+    --nav-h: 64px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; font-size: 16px; }
+  body {
+    font-family: 'Noto Serif SC', serif;
+    background-color: var(--cream);
+    color: var(--ink);
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 9999; opacity: 0.5;
+  }
+  a { color: var(--red); text-decoration: none; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+
+  /* NAV */
+  #nav { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h);
+    background: rgba(250,246,240,0.95); backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line); z-index: 1000; display: flex; align-items: center; }
+  #nav .container { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+  .nav-logo { font-size: 1.5rem; font-weight: 900; color: var(--red); letter-spacing: -0.5px; }
+  .nav-logo span { color: var(--gold); }
+  .nav-links { display: flex; align-items: center; gap: 28px; list-style: none; }
+  .nav-links a { color: var(--ink-soft); font-size: 0.9rem; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--red); }
+  .nav-links .nav-cta { background: var(--red); color: white; padding: 8px 18px; border-radius: 4px;
+    font-weight: 700; font-size: 0.85rem; box-shadow: 3px 3px 0 var(--red-dark);
+    transition: background 0.2s, transform 0.1s, box-shadow 0.1s; }
+  .nav-links .nav-cta:hover { background: var(--red-dark); transform: translate(1px, 1px); box-shadow: 2px 2px 0 var(--red-dark); }
+  .back-link { color: var(--ink-mute); font-size: 0.85rem; }
+  .back-link:hover { color: var(--red); }
+  .lang-toggle { background: var(--ink); color: var(--cream); border: none; padding: 6px 14px;
+    border-radius: 4px; cursor: pointer; font-size: 0.8rem; font-family: inherit; transition: background 0.2s; margin-left: 8px; }
+  .lang-toggle:hover { background: var(--red); }
+
+  /* HERO */
+  .page-hero { padding-top: calc(var(--nav-h) + 70px); padding-bottom: 60px;
+    background: linear-gradient(160deg, var(--ink) 0%, #2a1a1a 100%);
+    text-align: center; position: relative; overflow: hidden; }
+  .page-hero::before { content: '流'; position: absolute; right: -60px; top: 50%;
+    transform: translateY(-50%); font-size: 50vw; font-weight: 900;
+    color: var(--gold); opacity: 0.04; pointer-events: none; user-select: none; }
+  .page-hero .eyebrow { display: inline-flex; background: var(--gold); color: var(--ink);
+    font-size: 0.75rem; padding: 5px 14px; border-radius: 2px; margin-bottom: 24px;
+    letter-spacing: 1px; font-weight: 700; }
+  .page-hero h1 { font-family: 'Playfair Display', 'Noto Serif SC', serif;
+    font-size: clamp(1.8rem, 4.5vw, 3rem); font-weight: 900; color: var(--cream);
+    margin-bottom: 16px; line-height: 1.25; }
+  .page-hero h1 span { color: var(--gold); }
+  .page-hero p { color: rgba(250,246,240,0.72); font-size: 1rem;
+    max-width: 640px; margin: 0 auto 12px; }
+
+  /* OVERVIEW STRIP */
+  .overview { background: var(--paper); border-bottom: 1px solid var(--line); padding: 28px 0; }
+  .overview-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; align-items: center; }
+  .overview-item { text-align: center; padding: 8px 4px; position: relative; }
+  .overview-item .num { display: inline-flex; width: 30px; height: 30px; border-radius: 50%;
+    background: var(--red); color: white; font-weight: 900; font-size: 0.9rem;
+    align-items: center; justify-content: center; margin-bottom: 8px;
+    font-family: 'Playfair Display', serif; }
+  .overview-item .label { font-size: 0.78rem; color: var(--ink-soft); font-weight: 600; line-height: 1.3; }
+  .overview-item:not(:last-child)::after { content: '→'; position: absolute; right: -8px; top: 22px;
+    color: var(--ink-mute); font-size: 0.85rem; opacity: 0.5; }
+
+  /* TIMELINE */
+  .flow-wrap { padding: 60px 0 80px; }
+  .flow-step { display: grid; grid-template-columns: 60px 1fr; gap: 24px;
+    margin-bottom: 8px; scroll-margin-top: calc(var(--nav-h) + 20px); }
+  .flow-marker { display: flex; flex-direction: column; align-items: center; }
+  .flow-circle { width: 48px; height: 48px; border-radius: 50%;
+    background: var(--red); color: white; font-weight: 900; font-size: 1.1rem;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif;
+    box-shadow: 3px 3px 0 var(--red-dark); flex-shrink: 0; }
+  .flow-line { width: 2px; flex: 1; background: var(--line); margin-top: 6px; min-height: 20px; }
+  .flow-step:last-child .flow-line { display: none; }
+
+  .flow-card { background: white; border: 1px solid var(--line); border-radius: 8px;
+    padding: 26px 30px; margin-bottom: 28px;
+    box-shadow: 0 2px 0 rgba(0,0,0,0.03);
+    transition: box-shadow 0.2s; position: relative; }
+  .flow-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.08); }
+  .flow-card .head { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; flex-wrap: wrap; }
+  .flow-card .emoji { font-size: 1.8rem; line-height: 1; }
+  .flow-card .title { font-size: 1.3rem; font-weight: 900; color: var(--ink); }
+  .flow-card .who { font-size: 0.72rem; padding: 3px 10px; border-radius: 3px;
+    color: white; font-weight: 700; letter-spacing: 0.5px; }
+  .flow-card .who.we { background: var(--red); }
+  .flow-card .who.you { background: var(--gold); color: var(--ink); }
+  .flow-card .who.both { background: var(--green); }
+  .flow-card .duration { margin-left: auto; font-size: 0.78rem; color: var(--ink-mute); font-weight: 600; }
+  .flow-card .desc { font-size: 0.95rem; color: var(--ink-soft); margin: 8px 0 16px; }
+  .flow-card .details { background: var(--paper); border-radius: 4px; padding: 14px 18px; margin-bottom: 16px; }
+  .flow-card .details h5 { font-size: 0.78rem; letter-spacing: 1px; color: var(--ink-mute);
+    text-transform: uppercase; font-weight: 700; margin-bottom: 8px; }
+  .flow-card .details ul { list-style: none; padding: 0; }
+  .flow-card .details li { font-size: 0.88rem; color: var(--ink-soft); padding: 3px 0 3px 20px; position: relative; }
+  .flow-card .details li::before { content: '✓'; position: absolute; left: 0; color: var(--green); font-weight: 900; }
+  .flow-card .output { background: #FFF8E1; border-left: 3px solid var(--gold); padding: 10px 14px;
+    border-radius: 3px; font-size: 0.86rem; color: #6B5413; margin-bottom: 14px; }
+  .flow-card .output::before { content: '📦 '; }
+  .flow-card .actions { display: flex; gap: 10px; flex-wrap: wrap; }
+  .flow-card .btn-link { font-size: 0.82rem; padding: 6px 14px; border: 1px solid var(--line);
+    border-radius: 3px; color: var(--ink-soft); transition: all 0.15s; }
+  .flow-card .btn-link:hover { border-color: var(--red); color: var(--red); background: var(--paper); }
+  .flow-card .btn-link.primary { background: var(--red); color: white; border-color: var(--red); }
+  .flow-card .btn-link.primary:hover { background: var(--red-dark); }
+
+  /* LEGEND */
+  .legend { display: flex; gap: 18px; justify-content: center; margin-bottom: 40px; flex-wrap: wrap;
+    padding: 14px; background: white; border: 1px solid var(--line); border-radius: 6px; }
+  .legend-item { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--ink-soft); }
+  .legend-dot { width: 14px; height: 14px; border-radius: 3px; }
+  .legend-dot.we { background: var(--red); }
+  .legend-dot.you { background: var(--gold); }
+  .legend-dot.both { background: var(--green); }
+
+  /* CTA */
+  .help-cta {
+    background: var(--paper); border: 1px solid var(--line); border-left: 4px solid var(--red);
+    padding: 28px 32px; border-radius: 4px; margin-top: 20px;
+    display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap;
+  }
+  .help-cta .text h4 { font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; }
+  .help-cta .text p { font-size: 0.88rem; color: var(--ink-mute); }
+  .btn-primary { background: var(--red); color: white; padding: 12px 24px; border: none; border-radius: 4px;
+    font-size: 0.92rem; font-family: inherit; font-weight: 700; cursor: pointer;
+    text-decoration: none; display: inline-block; box-shadow: 4px 4px 0 var(--red-dark);
+    transition: background 0.2s, transform 0.1s, box-shadow 0.1s; }
+  .btn-primary:hover { background: var(--red-dark); transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--red-dark); }
+
+  /* SITE FOOTER */
+  .site-footer { background: #0f0f0f; color: rgba(250,246,240,0.4);
+    padding: 32px 20px; text-align: center; font-size: 0.78rem; border-top: 1px solid rgba(255,255,255,0.06); }
+  .site-footer a { color: rgba(250,246,240,0.6); }
+  .site-footer a:hover { color: var(--gold); }
+
+  /* LANG */
+  [data-lang="en"] { display: none; }
+  body.en [data-lang="zh"] { display: none; }
+  body.en [data-lang="en"] { display: inline; }
+  body.en h1[data-lang="en"], body.en h2[data-lang="en"], body.en h3[data-lang="en"],
+  body.en h4[data-lang="en"], body.en h5[data-lang="en"], body.en p[data-lang="en"],
+  body.en div[data-lang="en"], body.en li[data-lang="en"] { display: block; }
+  body.en li[data-lang="en"] { display: list-item; }
+
+  @media (max-width: 880px) {
+    .overview-grid { grid-template-columns: repeat(4, 1fr); row-gap: 18px; }
+    .overview-item:nth-child(4)::after { display: none; }
+  }
+  @media (max-width: 640px) {
+    .nav-links li:not(:last-child):not(:first-child) { display: none; }
+    .page-hero { padding-top: calc(var(--nav-h) + 40px); padding-bottom: 40px; }
+    .overview-grid { grid-template-columns: repeat(2, 1fr); }
+    .overview-item:nth-child(2n)::after { display: none; }
+    .flow-step { grid-template-columns: 40px 1fr; gap: 14px; }
+    .flow-circle { width: 36px; height: 36px; font-size: 0.9rem; }
+    .flow-card { padding: 20px; }
+    .help-cta { flex-direction: column; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="container">
+    <a href="index.html" class="nav-logo">1688<span>.ie</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html" class="back-link"><span data-lang="zh">← 返回首页</span><span data-lang="en">← Home</span></a></li>
+      <li><a href="pricing-demo.html"><span data-lang="zh">定价</span><span data-lang="en">Pricing</span></a></li>
+      <li><a href="flow.html"><span data-lang="zh">业务流程</span><span data-lang="en">How It Works</span></a></li>
+      <li><a href="help.html"><span data-lang="zh">帮助中心</span><span data-lang="en">Help</span></a></li>
+      <li><a href="mailto:hello@1688.ie" class="nav-cta"><span data-lang="zh">免费咨询</span><span data-lang="en">Free Consult</span></a></li>
+    </ul>
+    <button class="lang-toggle" id="langBtn">EN</button>
+  </div>
+</nav>
+
+<section class="page-hero">
+  <div class="container">
+    <span class="eyebrow" data-lang="zh">🔄 业务主流程</span>
+    <span class="eyebrow" data-lang="en">🔄 How It Works</span>
+    <h1 data-lang="zh">从咨询到运营,<span>7 步全流程</span></h1>
+    <h1 data-lang="en">From First Call to Live Ops, <span>7 Steps Total</span></h1>
+    <p data-lang="zh">每一步谁负责、做什么、要多久、产出什么,一目了然。最快 2 周上线。</p>
+    <p data-lang="en">Who does what, how long it takes, what you get — at a glance. Live in as little as 2 weeks.</p>
+  </div>
+</section>
+
+<section class="overview">
+  <div class="container">
+    <div class="overview-grid">
+      <a href="#step-1" class="overview-item"><div class="num">1</div><div class="label" data-lang="zh">📞 免费咨询</div><div class="label" data-lang="en">📞 Consult</div></a>
+      <a href="#step-2" class="overview-item"><div class="num">2</div><div class="label" data-lang="zh">📋 方案推荐</div><div class="label" data-lang="en">📋 Proposal</div></a>
+      <a href="#step-3" class="overview-item"><div class="num">3</div><div class="label" data-lang="zh">✍️ 签约付款</div><div class="label" data-lang="en">✍️ Contract</div></a>
+      <a href="#step-4" class="overview-item"><div class="num">4</div><div class="label" data-lang="zh">🎨 设计开发</div><div class="label" data-lang="en">🎨 Design & Dev</div></a>
+      <a href="#step-5" class="overview-item"><div class="num">5</div><div class="label" data-lang="zh">🚀 上线培训</div><div class="label" data-lang="en">🚀 Launch</div></a>
+      <a href="#step-6" class="overview-item"><div class="num">6</div><div class="label" data-lang="zh">📈 运营推广</div><div class="label" data-lang="en">📈 Marketing</div></a>
+      <a href="#step-7" class="overview-item"><div class="num">7</div><div class="label" data-lang="zh">🔄 持续优化</div><div class="label" data-lang="en">🔄 Optimize</div></a>
+    </div>
+  </div>
+</section>
+
+<div class="container flow-wrap">
+
+  <div class="legend">
+    <div class="legend-item"><span class="legend-dot we"></span><span data-lang="zh">我们负责</span><span data-lang="en">We do it</span></div>
+    <div class="legend-item"><span class="legend-dot you"></span><span data-lang="zh">您负责</span><span data-lang="en">You do it</span></div>
+    <div class="legend-item"><span class="legend-dot both"></span><span data-lang="zh">双方协作</span><span data-lang="en">Together</span></div>
+  </div>
+
+  <!-- STEP 1 -->
+  <div class="flow-step" id="step-1">
+    <div class="flow-marker">
+      <div class="flow-circle">1</div>
+      <div class="flow-line"></div>
+    </div>
+    <div class="flow-card">
+      <div class="head">
+        <span class="emoji">📞</span>
+        <span class="title" data-lang="zh">免费咨询</span>
+        <span class="title" data-lang="en">Free Consultation</span>
+        <span class="who we" data-lang="zh">我们</span>
+        <span class="who we" data-lang="en">WE</span>
+        <span class="duration" data-lang="zh">⏱ 30 分钟 · 免费</span>
+        <span class="duration" data-lang="en">⏱ 30 min · Free</span>
+      </div>
+      <p class="desc" data-lang="zh">通过 WhatsApp / 微信 / 邮件预约,中英文客服按您的习惯沟通。了解您的行业、当前阶段、痛点和预算。</p>
+      <p class="desc" data-lang="en">Book via WhatsApp / WeChat / Email. Bilingual support meets you where you are. We learn about your industry, stage, pain points, and budget.</p>
+      <div class="details">
+        <h5 data-lang="zh">这一步具体做什么</h5>
+        <h5 data-lang="en">What happens in this step</h5>
+        <ul>
+          <li data-lang="zh">您填写表单或直接联系客服(微信/WhatsApp/邮件)</li>
+          <li data-lang="en">You fill the form or message us directly (WeChat/WhatsApp/Email)</li>
+          <li data-lang="zh">客服 24h 内回复,确认电话/视频时间</li>
+          <li data-lang="en">We reply within 24h to schedule a call/video</li>
+          <li data-lang="zh">30 分钟需求沟通,我们听+提问,不做销售</li>
+          <li data-lang="en">30-min discovery call — we listen and ask, no sales pitch</li>
+          <li data-lang="zh">沟通后您会收到一份纪要邮件,清单化复述需求</li>
+          <li data-lang="en">After the call you receive a summary email confirming what we heard</li>
+        </ul>
+      </div>
+      <div class="output" data-lang="zh">产出:需求纪要邮件 + 后续日程安排</div>
+      <div class="output" data-lang="en">Output: requirement summary email + next-step schedule</div>
+      <div class="actions">
+        <a href="mailto:hello@1688.ie" class="btn-link primary"><span data-lang="zh">📞 立即预约</span><span data-lang="en">📞 Book Now</span></a>
+        <a href="help.html#sales" class="btn-link"><span data-lang="zh">查看常见问题</span><span data-lang="en">View FAQ</span></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="flow-step" id="step-2">
+    <div class="flow-marker">
+      <div class="flow-circle">2</div>
+      <div class="flow-line"></div>
+    </div>
+    <div class="flow-card">
+      <div class="head">
+        <span class="emoji">📋</span>
+        <span class="title" data-lang="zh">方案推荐</span>
+        <span class="title" data-lang="en">Tailored Proposal</span>
+        <span class="who we" data-lang="zh">我们</span>
+        <span class="who we" data-lang="en">WE</span>
+        <span class="duration" data-lang="zh">⏱ 3 个工作日</span>
+        <span class="duration" data-lang="en">⏱ 3 business days</span>
+      </div>
+      <p class="desc" data-lang="zh">根据您的行业和阶段,我们从 6 个档位中推荐 1–2 个最匹配的,附 PDF 报价单和案例参考。</p>
+      <p class="desc" data-lang="en">Based on your industry and stage, we recommend 1–2 of our 6 tiers as best fits, with PDF quote and case references.</p>
+      <div class="details">
+        <h5 data-lang="zh">这一步具体做什么</h5>
+        <h5 data-lang="en">What happens in this step</h5>
+        <ul>
+          <li data-lang="zh">内部产品+设计+开发三方评估您的需求</li>
+          <li data-lang="en">Internal product + design + dev team assess your needs</li>
+          <li data-lang="zh">推荐档位 + 是否需要定制开发</li>
+          <li data-lang="en">Recommend tier + whether custom development is needed</li>
+          <li data-lang="zh">输出 PDF 报价单(含明细、付款方式、上线时间)</li>
+          <li data-lang="en">Deliver PDF quote (line items, payment, launch timeline)</li>
+          <li data-lang="zh">附 2–3 个同行业案例链接</li>
+          <li data-lang="en">Include 2–3 case study links from your industry</li>
+          <li data-lang="zh">如可申请政府补贴(TOV/Digital Voucher),一并说明</li>
+          <li data-lang="en">If gov grants apply (TOV/Digital Voucher), we explain options</li>
+        </ul>
+      </div>
+      <div class="output" data-lang="zh">产出:PDF 报价单 + 推荐档位 + 案例参考 + 补贴评估</div>
+      <div class="output" data-lang="en">Output: PDF quote + recommended tier + case refs + grant assessment</div>
+      <div class="actions">
+        <a href="pricing-demo.html" class="btn-link primary"><span data-lang="zh">查看完整定价</span><span data-lang="en">View Full Pricing</span></a>
+        <a href="pricing-demo.html#matrix" class="btn-link"><span data-lang="zh">功能对比表</span><span data-lang="en">Feature Matrix</span></a>
+        <a href="help.html#plan" class="btn-link"><span data-lang="zh">如何选档位?</span><span data-lang="en">How to pick a tier?</span></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="flow-step" id="step-3">
+    <div class="flow-marker">
+      <div class="flow-circle">3</div>
+      <div class="flow-line"></div>
+    </div>
+    <div class="flow-card">
+      <div class="head">
+        <span class="emoji">✍️</span>
+        <span class="title" data-lang="zh">签约付款</span>
+        <span class="title" data-lang="en">Contract & Deposit</span>
+        <span class="who both" data-lang="zh">双方</span>
+        <span class="who both" data-lang="en">BOTH</span>
+        <span class="duration" data-lang="zh">⏱ 1–2 工作日</span>
+        <span class="duration" data-lang="en">⏱ 1–2 business days</span>
+      </div>
+      <p class="desc" data-lang="zh">DocuSign 中英双语电子合同,50% 首款启动开发。支持银行转账、信用卡、微信/支付宝。</p>
+      <p class="desc" data-lang="en">DocuSign bilingual e-contract, 50% deposit kicks off development. Bank transfer, credit card, WeChat/Alipay all supported.</p>
+      <div class="details">
+        <h5 data-lang="zh">这一步具体做什么</h5>
+        <h5 data-lang="en">What happens in this step</h5>
+        <ul>
+          <li data-lang="zh">我们发送中英双语 DocuSign 合同链接</li>
+          <li data-lang="en">We send bilingual DocuSign contract link</li>
+          <li data-lang="zh">您审阅 → 在线签字(全程不需要见面)</li>
+          <li data-lang="en">You review → e-sign online (no in-person needed)</li>
+          <li data-lang="zh">支付 50% 首款(SEPA/Stripe/微信)</li>
+          <li data-lang="en">Pay 50% deposit (SEPA / Stripe / WeChat)</li>
+          <li data-lang="zh">收款后 5 工作日内开 VAT 发票</li>
+          <li data-lang="en">VAT invoice issued within 5 business days of payment</li>
+          <li data-lang="zh">指派项目经理(中文/英文你选),拉项目群</li>
+          <li data-lang="en">Project manager assigned (CN or EN), project group created</li>
+        </ul>
+      </div>
+      <div class="output" data-lang="zh">产出:已签合同 + VAT 发票 + 项目群 + PM 联系方式</div>
+      <div class="output" data-lang="en">Output: signed contract + VAT invoice + project group + PM contact</div>
+      <div class="actions">
+        <a href="help.html#contract" class="btn-link"><span data-lang="zh">合同&付款 FAQ</span><span data-lang="en">Contract & Payment FAQ</span></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 4 -->
+  <div class="flow-step" id="step-4">
+    <div class="flow-marker">
+      <div class="flow-circle">4</div>
+      <div class="flow-line"></div>
+    </div>
+    <div class="flow-card">
+      <div class="head">
+        <span class="emoji">🎨</span>
+        <span class="title" data-lang="zh">设计与开发</span>
+        <span class="title" data-lang="en">Design & Development</span>
+        <span class="who we" data-lang="zh">我们</span>
+        <span class="who we" data-lang="en">WE</span>
+        <span class="duration" data-lang="zh">⏱ 2–14 周(看档位)</span>
+        <span class="duration" data-lang="en">⏱ 2–14 weeks (by tier)</span>
+      </div>
+      <p class="desc" data-lang="zh">从 logo、配色、文案到功能开发,全程项目群同步进度。每周一次进度汇报,关键节点您确认后才进入下一步。</p>
+      <p class="desc" data-lang="en">From logo, palette, copy to feature build — progress synced in project group. Weekly status updates; key milestones require your sign-off.</p>
+      <div class="details">
+        <h5 data-lang="zh">这一步具体做什么</h5>
+        <h5 data-lang="en">What happens in this step</h5>
+        <ul>
+          <li data-lang="zh">您提供素材(logo、产品照、文案,我们有模板可用)</li>
+          <li data-lang="en">You provide assets (logo, product photos, copy — templates available)</li>
+          <li data-lang="zh">第 1 周:首页设计稿,2 轮免费修改</li>
+          <li data-lang="en">Week 1: homepage design draft, 2 free revision rounds</li>
+          <li data-lang="zh">第 2–N 周:功能开发(预约/电商/CRM 按档位)</li>
+          <li data-lang="en">Weeks 2–N: feature development (booking/e-com/CRM by tier)</li>
+          <li data-lang="zh">每周五项目群发周报(截图+视频演示)</li>
+          <li data-lang="en">Weekly Friday status (screenshots + video walkthrough)</li>
+          <li data-lang="zh">UAT 测试环境给您试用,提 bug 我们修</li>
+          <li data-lang="en">UAT staging provided for your testing, we fix all reported bugs</li>
+        </ul>
+      </div>
+      <div class="output" data-lang="zh">产出:可用 UAT 环境 + 设计源文件 + 周报存档</div>
+      <div class="output" data-lang="en">Output: working UAT environment + design source files + weekly status archive</div>
+      <div class="actions">
+        <a href="help.html#dev" class="btn-link"><span data-lang="zh">设计开发 FAQ</span><span data-lang="en">Design & Dev FAQ</span></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 5 -->
+  <div class="flow-step" id="step-5">
+    <div class="flow-marker">
+      <div class="flow-circle">5</div>
+      <div class="flow-line"></div>
+    </div>
+    <div class="flow-card">
+      <div class="head">
+        <span class="emoji">🚀</span>
+        <span class="title" data-lang="zh">上线与培训</span>
+        <span class="title" data-lang="en">Launch & Training</span>
+        <span class="who both" data-lang="zh">双方</span>
+        <span class="who both" data-lang="en">BOTH</span>
+        <span class="duration" data-lang="zh">⏱ 1 周</span>
+        <span class="duration" data-lang="en">⏱ 1 week</span>
+      </div>
+      <p class="desc" data-lang="zh">域名解析 + SSL 证书 + 正式上线。我们提供 2 小时一对一中文培训(可录屏),让您和团队学会日常运营。</p>
+      <p class="desc" data-lang="en">DNS + SSL + go-live. 2-hour 1-on-1 training in your language (recorded), so you and your team can run daily ops.</p>
+      <div class="details">
+        <h5 data-lang="zh">这一步具体做什么</h5>
+        <h5 data-lang="en">What happens in this step</h5>
+        <ul>
+          <li data-lang="zh">您支付 50% 尾款</li>
+          <li data-lang="en">You pay remaining 50% balance</li>
+          <li data-lang="zh">域名解析切换(我们出操作手册或代操作)</li>
+          <li data-lang="en">DNS cutover (we provide guide or do it for you)</li>
+          <li data-lang="zh">SSL 证书自动配置(免费,Let's Encrypt 或 Cloudflare)</li>
+          <li data-lang="en">SSL auto-configured (free, Let's Encrypt or Cloudflare)</li>
+          <li data-lang="zh">2 小时一对一培训(预约/订单/会员/数据导出全教)</li>
+          <li data-lang="en">2-hour 1-on-1 training (booking/orders/members/exports)</li>
+          <li data-lang="zh">培训录屏 + 中英 PDF 操作手册存档</li>
+          <li data-lang="en">Training recording + bilingual PDF manual archived</li>
+        </ul>
+      </div>
+      <div class="output" data-lang="zh">产出:正式网站上线 + 培训录屏 + PDF 操作手册</div>
+      <div class="output" data-lang="en">Output: live site + training recording + PDF manual</div>
+      <div class="actions">
+        <a href="help.html#launch" class="btn-link"><span data-lang="zh">上线培训 FAQ</span><span data-lang="en">Launch & Training FAQ</span></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 6 -->
+  <div class="flow-step" id="step-6">
+    <div class="flow-marker">
+      <div class="flow-circle">6</div>
+      <div class="flow-line"></div>
+    </div>
+    <div class="flow-card">
+      <div class="head">
+        <span class="emoji">📈</span>
+        <span class="title" data-lang="zh">运营与推广</span>
+        <span class="title" data-lang="en">Marketing & Operations</span>
+        <span class="who we" data-lang="zh">我们</span>
+        <span class="who we" data-lang="en">WE</span>
+        <span class="duration" data-lang="zh">⏱ 月度服务</span>
+        <span class="duration" data-lang="en">⏱ Monthly service</span>
+      </div>
+      <p class="desc" data-lang="zh">SEO 优化 + Google Ads + 社媒(小红书/抖音/IG)代运营。月度报告,数据驱动调优。可单选可打包。</p>
+      <p class="desc" data-lang="en">SEO + Google Ads + social media (Xiaohongshu/Douyin/IG) management. Monthly reports, data-driven tuning. Pick & mix or bundle.</p>
+      <div class="details">
+        <h5 data-lang="zh">这一步具体做什么</h5>
+        <h5 data-lang="en">What happens in this step</h5>
+        <ul>
+          <li data-lang="zh">SEO:关键词布局 + Google Search Console 监控</li>
+          <li data-lang="en">SEO: keyword optimization + Google Search Console monitoring</li>
+          <li data-lang="zh">Google Ads:本地搜索 + Maps + 再营销</li>
+          <li data-lang="en">Google Ads: local search + Maps + remarketing</li>
+          <li data-lang="zh">小红书/抖音/IG:每月 4–8 条原创内容</li>
+          <li data-lang="en">Xiaohongshu/Douyin/IG: 4–8 original posts per month</li>
+          <li data-lang="zh">每月 1 号出上月运营报告(流量/转化/ROI)</li>
+          <li data-lang="en">Monthly ops report on the 1st (traffic / conversion / ROI)</li>
+          <li data-lang="zh">季度复盘会议,调整策略</li>
+          <li data-lang="en">Quarterly review meeting to adjust strategy</li>
+        </ul>
+      </div>
+      <div class="output" data-lang="zh">产出:月度数据报告 + 内容存档 + 季度复盘纪要</div>
+      <div class="output" data-lang="en">Output: monthly data report + content archive + quarterly review notes</div>
+      <div class="actions">
+        <a href="help.html#ops" class="btn-link"><span data-lang="zh">运营推广 FAQ</span><span data-lang="en">Marketing FAQ</span></a>
+        <a href="help.html#tov" class="btn-link"><span data-lang="zh">💰 政府补贴</span><span data-lang="en">💰 Gov Grants</span></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 7 -->
+  <div class="flow-step" id="step-7">
+    <div class="flow-marker">
+      <div class="flow-circle">7</div>
+      <div class="flow-line"></div>
+    </div>
+    <div class="flow-card">
+      <div class="head">
+        <span class="emoji">🔄</span>
+        <span class="title" data-lang="zh">持续优化</span>
+        <span class="title" data-lang="en">Continuous Optimization</span>
+        <span class="who both" data-lang="zh">双方</span>
+        <span class="who both" data-lang="en">BOTH</span>
+        <span class="duration" data-lang="zh">⏱ 长期</span>
+        <span class="duration" data-lang="en">⏱ Ongoing</span>
+      </div>
+      <p class="desc" data-lang="zh">业务在变,网站也要跟着变。新增功能、改版迭代、扩展门店、对接系统——升级只补差价,不重做。</p>
+      <p class="desc" data-lang="en">Your business evolves, so does your site. Add features, redesign, expand locations, integrate systems — upgrade by paying the delta, no rebuilds.</p>
+      <div class="details">
+        <h5 data-lang="zh">这一步具体做什么</h5>
+        <h5 data-lang="en">What happens in this step</h5>
+        <ul>
+          <li data-lang="zh">您随时通过项目群提需求</li>
+          <li data-lang="en">Submit requests anytime via project group</li>
+          <li data-lang="zh">小调整(文案/图片)24h 内免费完成</li>
+          <li data-lang="en">Small tweaks (copy/images) done free within 24h</li>
+          <li data-lang="zh">新功能开发按 €120/h 报价,先估时再做</li>
+          <li data-lang="en">New features billed €120/hr, scoped before kickoff</li>
+          <li data-lang="zh">档位升级只补差价,不重做现有内容</li>
+          <li data-lang="en">Tier upgrades cost only the delta, no rework</li>
+          <li data-lang="zh">SLA:工作日响应 4h,周末次工作日上午</li>
+          <li data-lang="en">SLA: 4h response on weekdays, next-business-day mornings on weekends</li>
+        </ul>
+      </div>
+      <div class="output" data-lang="zh">产出:持续迭代的网站 + 完整变更记录</div>
+      <div class="output" data-lang="en">Output: continuously evolving site + full change history</div>
+      <div class="actions">
+        <a href="help.html#billing" class="btn-link"><span data-lang="zh">账单售后 FAQ</span><span data-lang="en">Billing & Support FAQ</span></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="help-cta">
+    <div class="text">
+      <h4 data-lang="zh">准备好开始第 1 步了吗?</h4>
+      <h4 data-lang="en">Ready to start with Step 1?</h4>
+      <p data-lang="zh">30 分钟免费咨询,中英文客服按您的习惯沟通。</p>
+      <p data-lang="en">30-min free consultation, bilingual support meets you where you are.</p>
+    </div>
+    <a href="mailto:hello@1688.ie" class="btn-primary"><span data-lang="zh">📞 立即预约咨询</span><span data-lang="en">📞 Book Free Consult</span></a>
+  </div>
+
+</div>
+
+<footer class="site-footer">
+  <span data-lang="zh">© 2026 1688.ie · 爱尔兰华人 SaaS 服务商 · <a href="help.html">帮助中心</a> · <a href="pricing-demo.html">定价</a> · <a href="mailto:hello@1688.ie">hello@1688.ie</a></span>
+  <span data-lang="en">© 2026 1688.ie · Ireland Chinese-business SaaS · <a href="help.html">Help Center</a> · <a href="pricing-demo.html">Pricing</a> · <a href="mailto:hello@1688.ie">hello@1688.ie</a></span>
+</footer>
+
+<script>
+  // LANG TOGGLE
+  const langBtn = document.getElementById('langBtn');
+  const body = document.body;
+  function setLang(lang) {
+    if (lang === 'en') {
+      body.classList.add('en');
+      langBtn.textContent = '中';
+      document.documentElement.lang = 'en';
+    } else {
+      body.classList.remove('en');
+      langBtn.textContent = 'EN';
+      document.documentElement.lang = 'zh-CN';
+    }
+    try { localStorage.setItem('lang', lang); } catch (e) {}
+  }
+  langBtn.addEventListener('click', () => setLang(body.classList.contains('en') ? 'zh' : 'en'));
+  try {
+    const saved = localStorage.getItem('lang');
+    if (saved === 'en') setLang('en');
+  } catch (e) {}
+</script>
+
+</body>
+</html>

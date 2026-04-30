@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>货主端 · Emerald WMS · Client Portal</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  body { font-family: 'Inter', sans-serif; background: #f8f9fa; }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+  @keyframes slideIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+  .slide-in { animation: slideIn 0.3s ease-out; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .blink { animation: blink 1.5s ease-in-out infinite; }
+  .tab-btn.active { background:#0d4f3c; color:white; }
+  .status-in { background:#dcfce7; color:#166534; }
+  .status-out { background:#fef3c7; color:#92400e; }
+  .status-pending { background:#fce7f3; color:#9d174d; }
+  .status-transit { background:#dbeafe; color:#1e40af; }
+</style>
+</head>
+<body class="min-h-screen bg-gray-50">
+
+<!-- Header -->
+<div class="bg-[#0d4f3c] text-white">
+  <div class="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <a href="index.html" class="text-white/50 hover:text-white text-sm transition-colors">← 返回主页</a>
+      <span class="text-white/30">|</span>
+      <div class="flex items-center gap-2">
+        <div class="w-7 h-7 rounded bg-white/20 flex items-center justify-center">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+        </div>
+        <span class="font-bold text-sm">EMERALD WMS</span>
+        <span class="text-white/40 mono text-xs">· 货主端</span>
+      </div>
+    </div>
+    <div class="flex items-center gap-3">
+      <div class="flex items-center gap-1.5">
+        <div class="w-2 h-2 rounded-full bg-green-400 blink"></div>
+        <span class="mono text-xs text-green-300">LIVE</span>
+      </div>
+      <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+        <span class="text-white font-bold text-sm">S</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Client info bar -->
+  <div class="border-t border-white/10">
+    <div class="max-w-4xl mx-auto px-4 py-3 flex flex-wrap gap-4 items-center">
+      <div>
+        <div class="text-xs text-white/50">货主账户</div>
+        <div class="font-bold text-sm">SinoTech Ltd</div>
+      </div>
+      <div class="border-l border-white/20 pl-4">
+        <div class="text-xs text-white/50">合同编号</div>
+        <div class="mono text-sm">EMW-2024-ST-003</div>
+      </div>
+      <div class="border-l border-white/20 pl-4">
+        <div class="text-xs text-white/50">在库 SKU</div>
+        <div class="mono text-sm font-bold text-amber-400">847</div>
+      </div>
+      <div class="border-l border-white/20 pl-4">
+        <div class="text-xs text-white/50">在库总件数</div>
+        <div class="mono text-sm font-bold text-amber-400">12,483</div>
+      </div>
+      <div class="ml-auto">
+        <div class="text-xs text-white/50">最后更新</div>
+        <div class="mono text-xs text-green-300" id="last-update">--:--:--</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Tabs -->
+<div class="bg-white border-b border-gray-200 sticky top-0 z-40">
+  <div class="max-w-4xl mx-auto px-4 flex gap-1 py-2">
+    <button onclick="switchTab('overview')" class="tab-btn active text-xs font-semibold px-4 py-2 rounded-lg transition-all" id="tab-overview">总览</button>
+    <button onclick="switchTab('inventory')" class="tab-btn text-xs font-semibold px-4 py-2 rounded-lg text-gray-500 hover:bg-gray-100 transition-all" id="tab-inventory">库存查询</button>
+    <button onclick="switchTab('orders')" class="tab-btn text-xs font-semibold px-4 py-2 rounded-lg text-gray-500 hover:bg-gray-100 transition-all" id="tab-orders">出入库记录</button>
+    <button onclick="switchTab('billing')" class="tab-btn text-xs font-semibold px-4 py-2 rounded-lg text-gray-500 hover:bg-gray-100 transition-all" id="tab-billing">账单</button>
+  </div>
+</div>
+
+<div class="max-w-4xl mx-auto px-4 py-6">
+
+<!-- ─── OVERVIEW TAB ─── -->
+<div id="panel-overview" class="slide-in">
+  <!-- KPI cards -->
+  <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+    <div class="bg-white border border-gray-200 rounded-xl p-4">
+      <div class="text-xs text-gray-500 mb-1">本月入库</div>
+      <div class="mono text-2xl font-black text-[#0d4f3c]">3,821</div>
+      <div class="text-xs text-green-600 mt-1">↑ 12% vs 上月</div>
+    </div>
+    <div class="bg-white border border-gray-200 rounded-xl p-4">
+      <div class="text-xs text-gray-500 mb-1">本月出库</div>
+      <div class="mono text-2xl font-black text-[#0d4f3c]">2,947</div>
+      <div class="text-xs text-gray-400 mt-1">→ 正常范围</div>
+    </div>
+    <div class="bg-white border border-gray-200 rounded-xl p-4">
+      <div class="text-xs text-gray-500 mb-1">待处理订单</div>
+      <div class="mono text-2xl font-black text-amber-600">3</div>
+      <div class="text-xs text-amber-600 mt-1">需确认</div>
+    </div>
+    <div class="bg-white border border-gray-200 rounded-xl p-4">
+      <div class="text-xs text-gray-500 mb-1">本月账单</div>
+      <div class="mono text-2xl font-black text-[#0d4f3c]">€1,847</div>
+      <div class="text-xs text-gray-400 mt-1">已出账</div>
+    </div>
+  </div>
+
+  <!-- Recent activity -->
+  <div class="bg-white border border-gray-200 rounded-xl mb-4">
+    <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
+      <span class="font-semibold text-sm text-gray-800">最新动态</span>
+      <span class="flex items-center gap-1 text-xs text-green-600"><span class="w-1.5 h-1.5 rounded-full bg-green-500 blink"></span>实时更新</span>
+    </div>
+    <div class="divide-y divide-gray-50" id="activity-feed">
+      <!-- filled by JS -->
+    </div>
+  </div>
+
+  <!-- Low stock alert -->
+  <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+    <div class="flex items-start gap-3">
+      <div class="w-8 h-8 rounded-lg bg-amber-100 flex items-center justify-center flex-shrink-0">
+        <span class="text-amber-600 text-base">⚠️</span>
+      </div>
+      <div>
+        <p class="font-semibold text-amber-800 text-sm">库存预警：2 个 SKU 低于安全线</p>
+        <p class="text-amber-700 text-xs mt-1">ST-USB-C-HUB-01（剩余 8 件）· ST-CABLE-3M-USB（剩余 12 件）</p>
+        <button onclick="switchTab('inventory')" class="mt-2 text-xs text-amber-700 font-semibold underline">查看库存详情 →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── INVENTORY TAB ─── -->
+<div id="panel-inventory" class="hidden slide-in">
+  <!-- Search bar -->
+  <div class="bg-white border border-gray-200 rounded-xl p-4 mb-4 flex gap-3">
+    <input type="text" placeholder="搜索 SKU、品名、货架位..." class="flex-1 text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-[#0d4f3c]" id="inv-search" oninput="filterInventory()">
+    <button class="bg-[#0d4f3c] text-white text-xs font-semibold px-4 py-2 rounded-lg">搜索</button>
+    <button onclick="exportCSV()" class="border border-gray-200 text-xs text-gray-600 font-semibold px-4 py-2 rounded-lg hover:bg-gray-50">↓ 导出 CSV</button>
+  </div>
+
+  <!-- Inventory table -->
+  <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-xs">
+        <thead>
+          <tr class="bg-gray-50 border-b border-gray-200">
+            <th class="text-left px-4 py-3 text-gray-500 font-semibold mono">SKU</th>
+            <th class="text-left px-4 py-3 text-gray-500 font-semibold">品名</th>
+            <th class="text-left px-4 py-3 text-gray-500 font-semibold">货架位</th>
+            <th class="text-right px-4 py-3 text-gray-500 font-semibold">在库数量</th>
+            <th class="text-right px-4 py-3 text-gray-500 font-semibold">安全线</th>
+            <th class="text-left px-4 py-3 text-gray-500 font-semibold">状态</th>
+            <th class="text-left px-4 py-3 text-gray-500 font-semibold">最近操作</th>
+          </tr>
+        </thead>
+        <tbody id="inv-table-body">
+          <!-- filled by JS -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ─── ORDERS TAB ─── -->
+<div id="panel-orders" class="hidden slide-in">
+  <div class="space-y-3" id="orders-list">
+    <!-- filled by JS -->
+  </div>
+</div>
+
+<!-- ─── BILLING TAB ─── -->
+<div id="panel-billing" class="hidden slide-in">
+  <div class="bg-white border border-gray-200 rounded-xl p-6 mb-4">
+    <div class="flex items-center justify-between mb-4">
+      <div>
+        <div class="text-xs text-gray-500">当前账单周期</div>
+        <div class="font-bold text-gray-800">2024年12月</div>
+      </div>
+      <div class="text-right">
+        <div class="text-xs text-gray-500">应付金额</div>
+        <div class="mono text-2xl font-black text-[#0d4f3c]">€1,847.50</div>
+      </div>
+    </div>
+
+    <div class="space-y-2 border-t border-gray-100 pt-4">
+      <div class="flex justify-between text-sm">
+        <span class="text-gray-600">仓储费（1,247 m³/天）</span>
+        <span class="mono font-semibold">€ 892.00</span>
+      </div>
+      <div class="flex justify-between text-sm">
+        <span class="text-gray-600">入库操作费（3,821 件 × €0.08）</span>
+        <span class="mono font-semibold">€ 305.68</span>
+      </div>
+      <div class="flex justify-between text-sm">
+        <span class="text-gray-600">出库操作费（2,947 件 × €0.10）</span>
+        <span class="mono font-semibold">€ 294.70</span>
+      </div>
+      <div class="flex justify-between text-sm">
+        <span class="text-gray-600">报关代理费（4票）</span>
+        <span class="mono font-semibold">€ 280.00</span>
+      </div>
+      <div class="flex justify-between text-sm text-green-700">
+        <span>长期合作折扣（-5%）</span>
+        <span class="mono font-semibold">- € 88.61</span>
+      </div>
+      <div class="flex justify-between text-sm font-bold border-t border-gray-200 pt-2 mt-2">
+        <span>VAT 23%</span>
+        <span class="mono">€ 163.73</span>
+      </div>
+      <div class="flex justify-between font-black text-base border-t border-gray-200 pt-2">
+        <span>合计</span>
+        <span class="mono text-[#0d4f3c]">€ 1,847.50</span>
+      </div>
+    </div>
+
+    <div class="mt-5 flex gap-3">
+      <button class="flex-1 bg-[#0d4f3c] text-white text-sm font-bold py-3 rounded-xl hover:bg-[#155c47] transition-colors">下载 PDF 发票</button>
+      <button class="border border-gray-200 text-gray-600 text-sm font-semibold px-4 py-3 rounded-xl hover:bg-gray-50 transition-colors">有疑问？联系仓库</button>
+    </div>
+  </div>
+
+  <!-- Past invoices -->
+  <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
+    <div class="px-5 py-3 border-b border-gray-100">
+      <span class="font-semibold text-sm text-gray-800">历史账单</span>
+    </div>
+    <div class="divide-y divide-gray-100">
+      <div class="flex items-center justify-between px-5 py-3">
+        <div><div class="text-sm font-medium">2024年11月</div><div class="mono text-xs text-gray-400">INV-2024-11-ST</div></div>
+        <div class="text-right"><div class="mono text-sm font-bold">€1,623.00</div><div class="text-xs text-green-600 mt-0.5">已付 ✓</div></div>
+      </div>
+      <div class="flex items-center justify-between px-5 py-3">
+        <div><div class="text-sm font-medium">2024年10月</div><div class="mono text-xs text-gray-400">INV-2024-10-ST</div></div>
+        <div class="text-right"><div class="mono text-sm font-bold">€1,788.50</div><div class="text-xs text-green-600 mt-0.5">已付 ✓</div></div>
+      </div>
+      <div class="flex items-center justify-between px-5 py-3">
+        <div><div class="text-sm font-medium">2024年9月</div><div class="mono text-xs text-gray-400">INV-2024-09-ST</div></div>
+        <div class="text-right"><div class="mono text-sm font-bold">€1,502.00</div><div class="text-xs text-green-600 mt-0.5">已付 ✓</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /max-w -->
+
+<!-- Back nav -->
+<div class="fixed bottom-4 left-4 right-4 flex justify-center z-50">
+  <div class="bg-[#0d4f3c] rounded-2xl px-6 py-3 flex gap-6 shadow-xl">
+    <a href="index.html" class="text-white/60 hover:text-white text-xs transition-colors">🏠 主页</a>
+    <a href="staff.html" class="text-white/60 hover:text-white text-xs transition-colors">👷 员工端</a>
+    <a href="boss.html" class="text-white/60 hover:text-white text-xs transition-colors">📊 老板端</a>
+  </div>
+</div>
+
+<script>
+// Propagate ref
+(function() {
+  const params = new URLSearchParams(location.search);
+  const ref = params.get('ref') || sessionStorage.getItem('ref');
+  if (ref) {
+    sessionStorage.setItem('ref', ref);
+    document.querySelectorAll('a[href$=".html"]').forEach(a => {
+      const url = new URL(a.href, location.href);
+      url.searchParams.set('ref', ref);
+      a.href = url.toString();
+    });
+  }
+})();
+
+// Live time
+setInterval(() => {
+  const now = new Date();
+  const t = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
+  const el = document.getElementById('last-update');
+  if (el) el.textContent = t;
+}, 1000);
+
+// Tab switching
+function switchTab(name) {
+  ['overview','inventory','orders','billing'].forEach(t => {
+    document.getElementById('panel-' + t).classList.add('hidden');
+    const btn = document.getElementById('tab-' + t);
+    btn.classList.remove('active');
+    btn.classList.add('text-gray-500');
+  });
+  document.getElementById('panel-' + name).classList.remove('hidden');
+  const activeBtn = document.getElementById('tab-' + name);
+  activeBtn.classList.add('active');
+  activeBtn.classList.remove('text-gray-500');
+}
+
+// Activity feed
+const activities = [
+  { time: '14:32', type: 'in',      label: '入库完成', desc: 'ST-USB-C-HUB-01 × 48件 · 货架 A-12', tag: '已完成' },
+  { time: '12:15', type: 'out',     label: '出库发货', desc: 'ST-CABLE-3M-USB × 200件 → FedEx IE', tag: '已发出' },
+  { time: '10:08', type: 'alert',   label: '库存预警', desc: 'ST-USB-C-HUB-01 剩余 8 件，低于安全线 20', tag: '需处理' },
+  { time: '09:45', type: 'in',      label: '入库扫码中', desc: 'ST-POWER-BANK-10 × 300件 · 正在核验', tag: '进行中' },
+  { time: '昨天',  type: 'out',     label: '出库完成', desc: 'ST-HDMI-CABLE × 85件 → DHL Express', tag: '已完成' },
+];
+const feed = document.getElementById('activity-feed');
+const typeColor = { in: 'text-green-600 bg-green-50', out: 'text-blue-600 bg-blue-50', alert: 'text-amber-600 bg-amber-50' };
+const tagColor = { '已完成': 'status-in', '已发出': 'status-transit', '需处理': 'status-pending', '进行中': 'status-out' };
+activities.forEach(a => {
+  feed.innerHTML += `
+    <div class="flex items-start gap-4 px-5 py-4">
+      <span class="mono text-xs text-gray-400 mt-0.5 w-10 flex-shrink-0">${a.time}</span>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2 flex-wrap">
+          <span class="text-sm font-semibold text-gray-800">${a.label}</span>
+          <span class="text-xs px-2 py-0.5 rounded-full ${tagColor[a.tag]}">${a.tag}</span>
+        </div>
+        <p class="mono text-xs text-gray-500 mt-0.5 truncate">${a.desc}</p>
+      </div>
+    </div>
+  `;
+});
+
+// Inventory data
+const inventory = [
+  { sku:'ST-USB-C-HUB-01', name:'USB-C 七合一集线器', loc:'A-12', qty:8,   safe:20, lastOp:'入库 2024-12-14' },
+  { sku:'ST-CABLE-3M-USB',  name:'3米 USB-A 数据线',  loc:'A-08', qty:12,  safe:50, lastOp:'出库 2024-12-13' },
+  { sku:'ST-HDMI-CABLE',    name:'HDMI 2.1 高速线 2m',loc:'A-03', qty:145, safe:30, lastOp:'出库 2024-12-12' },
+  { sku:'ST-POWER-BANK-10', name:'10,000mAh 充电宝',  loc:'A-15', qty:298, safe:40, lastOp:'入库 2024-12-14' },
+  { sku:'ST-WEBCAM-FHD',    name:'1080P 网络摄像头',  loc:'A-19', qty:67,  safe:20, lastOp:'出库 2024-12-11' },
+  { sku:'ST-KEYBOARD-BT',   name:'蓝牙无线键盘',      loc:'A-22', qty:44,  safe:25, lastOp:'入库 2024-12-09' },
+  { sku:'ST-MOUSE-ERGO',    name:'人体工学鼠标',       loc:'A-23', qty:82,  safe:30, lastOp:'出库 2024-12-08' },
+  { sku:'ST-STAND-LAPTOP',  name:'笔记本电脑支架',     loc:'A-26', qty:31,  safe:15, lastOp:'入库 2024-12-07' },
+];
+
+function renderInventory(data) {
+  const tbody = document.getElementById('inv-table-body');
+  tbody.innerHTML = data.map(item => {
+    const isLow = item.qty < item.safe;
+    const statusBadge = isLow
+      ? '<span class="text-xs px-2 py-0.5 rounded-full bg-red-100 text-red-700">⚠ 库存低</span>'
+      : '<span class="text-xs px-2 py-0.5 rounded-full bg-green-100 text-green-700">正常</span>';
+    return `
+      <tr class="hover:bg-gray-50 transition-colors ${isLow ? 'bg-red-50/50' : ''}">
+        <td class="px-4 py-3 mono font-semibold text-[#0d4f3c]">${item.sku}</td>
+        <td class="px-4 py-3 text-gray-800">${item.name}</td>
+        <td class="px-4 py-3 mono text-gray-500">${item.loc}</td>
+        <td class="px-4 py-3 mono font-black text-right ${isLow ? 'text-red-600' : 'text-gray-800'}">${item.qty}</td>
+        <td class="px-4 py-3 mono text-gray-400 text-right">${item.safe}</td>
+        <td class="px-4 py-3">${statusBadge}</td>
+        <td class="px-4 py-3 text-gray-400">${item.lastOp}</td>
+      </tr>
+    `;
+  }).join('');
+}
+renderInventory(inventory);
+
+function filterInventory() {
+  const q = document.getElementById('inv-search').value.toLowerCase();
+  const filtered = inventory.filter(i =>
+    i.sku.toLowerCase().includes(q) || i.name.toLowerCase().includes(q) || i.loc.toLowerCase().includes(q)
+  );
+  renderInventory(filtered);
+}
+
+function exportCSV() {
+  alert('CSV 导出已生成，正在下载...\n（演示模式）');
+}
+
+// Orders
+const orders = [
+  { id:'IR-2024-0892', type:'in',  date:'2024-12-14 09:45', status:'进行中', items:[{sku:'ST-POWER-BANK-10',qty:300}],         driver:'FedEx IE',  note:'货柜号 TCNU3847291' },
+  { id:'OR-2024-1147', type:'out', date:'2024-12-13 14:20', status:'已完成', items:[{sku:'ST-CABLE-3M-USB',qty:200},{sku:'ST-HDMI-CABLE',qty:50}], driver:'DHL Express', note:'追踪号 1Z999AA10123456784' },
+  { id:'OR-2024-1138', type:'out', date:'2024-12-12 10:30', status:'已完成', items:[{sku:'ST-HDMI-CABLE',qty:85}],              driver:'DHL Express', note:'追踪号 1Z999AA10123456721' },
+  { id:'IR-2024-0881', type:'in',  date:'2024-12-11 08:00', status:'已完成', items:[{sku:'ST-WEBCAM-FHD',qty:100}],             driver:'An Post',   note:'到货完好，无破损' },
+  { id:'OR-2024-1130', type:'out', date:'2024-12-10 15:45', status:'已完成', items:[{sku:'ST-KEYBOARD-BT',qty:20}],             driver:'DPD IE',    note:'追踪号 DPD-IE-3847291' },
+];
+
+const ordersList = document.getElementById('orders-list');
+orders.forEach(o => {
+  const isIn = o.type === 'in';
+  const statusColor = o.status === '进行中' ? 'status-out' : 'status-in';
+  const items = o.items.map(i => `<span class="mono text-xs">${i.sku} × ${i.qty}</span>`).join(' + ');
+  ordersList.innerHTML += `
+    <div class="bg-white border border-gray-200 rounded-xl p-5">
+      <div class="flex items-start justify-between gap-3 mb-3">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-lg ${isIn ? 'bg-green-100' : 'bg-blue-100'} flex items-center justify-center text-base">
+            ${isIn ? '▼' : '▲'}
+          </div>
+          <div>
+            <div class="mono text-xs font-bold text-gray-500">${o.id}</div>
+            <div class="text-sm font-semibold text-gray-800 mt-0.5">${isIn ? '入库单' : '出库单'}</div>
+          </div>
+        </div>
+        <span class="text-xs px-3 py-1 rounded-full ${statusColor}">${o.status}</span>
+      </div>
+      <div class="flex flex-wrap gap-2 mb-2">${items}</div>
+      <div class="flex flex-wrap gap-4 text-xs text-gray-400 mono mt-2">
+        <span>${o.date}</span>
+        <span>${o.driver}</span>
+        <span>${o.note}</span>
+      </div>
+    </div>
+  `;
+});
+</script>
+</body>
+</html>
