@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1688.ie · Demo 演示中心</title>
+<meta name="description" content="爱尔兰华人企业管理系统在线演示 · 海外仓 / 本地仓 / 美甲 / 餐饮等行业 demo 一键体验">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Noto+Serif+SC:wght@600;700;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { -webkit-font-smoothing: antialiased; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background:
+      radial-gradient(circle at 20% 0%, rgba(13,79,60,.08) 0%, transparent 50%),
+      radial-gradient(circle at 80% 100%, rgba(234,88,12,.08) 0%, transparent 50%),
+      #fafaf9;
+    min-height: 100vh;
+    color: #1c1917;
+  }
+  .font-mono { font-family: 'JetBrains Mono', monospace; }
+  .font-serif { font-family: 'Noto Serif SC', serif; }
+
+  /* Hero */
+  .hero-mark {
+    display: inline-block;
+    padding: 4px 12px;
+    background: rgba(13,79,60,.1);
+    color: #0d4f3c;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    border-radius: 99px;
+    border: 1px solid rgba(13,79,60,.3);
+  }
+
+  /* Demo card */
+  .demo-card {
+    background: #fff;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,.04);
+    border: 1px solid #e5e5e5;
+    transition: all .3s cubic-bezier(.4,0,.2,1);
+    position: relative;
+  }
+  .demo-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 24px 48px rgba(0,0,0,.12);
+  }
+  .demo-card-header {
+    padding: 32px 28px 24px;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+  .demo-card-header::after {
+    content: '';
+    position: absolute;
+    top: -50%; right: -20%;
+    width: 60%; height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .demo-card.overseas .demo-card-header {
+    background: linear-gradient(135deg, #0d4f3c 0%, #0a3a2c 100%);
+  }
+  .demo-card.local .demo-card-header {
+    background: linear-gradient(135deg, #1e3a5f 0%, #0f2540 100%);
+  }
+  .demo-card.future .demo-card-header {
+    background: linear-gradient(135deg, #525252 0%, #333 100%);
+  }
+
+  /* Role button */
+  .role-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    background: #fafaf9;
+    border-radius: 14px;
+    border: 1.5px solid #e5e5e5;
+    text-decoration: none;
+    color: inherit;
+    transition: all .2s ease;
+  }
+  .role-btn:hover {
+    background: #fff;
+    border-color: #0d4f3c;
+    transform: translateX(4px);
+    box-shadow: 0 4px 12px rgba(0,0,0,.06);
+  }
+  .demo-card.local .role-btn:hover { border-color: #1e3a5f; }
+  .role-btn-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .demo-card.overseas .role-btn-icon { background: rgba(13,79,60,.1); }
+  .demo-card.local .role-btn-icon { background: rgba(30,58,95,.1); }
+
+  /* Primary CTA */
+  .primary-cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 16px;
+    border-radius: 14px;
+    color: #fff;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all .2s ease;
+    margin-bottom: 14px;
+  }
+  .demo-card.overseas .primary-cta {
+    background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+    box-shadow: 0 4px 14px rgba(249,115,22,.3);
+  }
+  .demo-card.overseas .primary-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(249,115,22,.4);
+  }
+  .demo-card.local .primary-cta {
+    background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
+    box-shadow: 0 4px 14px rgba(234,88,12,.3);
+  }
+  .demo-card.local .primary-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(234,88,12,.4);
+  }
+
+  /* Stamp */
+  .stamp {
+    position: absolute;
+    top: 24px; right: 24px;
+    background: rgba(255,255,255,.15);
+    border: 1px solid rgba(255,255,255,.3);
+    color: #fff;
+    padding: 4px 10px;
+    border-radius: 99px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    backdrop-filter: blur(10px);
+  }
+
+  /* Industry tag */
+  .industry-tag {
+    display: inline-block;
+    padding: 2px 10px;
+    background: rgba(255,255,255,.15);
+    color: rgba(255,255,255,.9);
+    border-radius: 99px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-right: 4px;
+  }
+
+  /* Future card placeholder */
+  .future-role {
+    padding: 14px 16px;
+    background: #f5f5f4;
+    border-radius: 14px;
+    color: #a8a29e;
+    font-size: 13px;
+    text-align: center;
+    border: 1.5px dashed #d6d3d1;
+  }
+
+  /* QR section */
+  .qr-section {
+    background: linear-gradient(135deg, #0d4f3c 0%, #1e3a5f 100%);
+    border-radius: 24px;
+    padding: 32px;
+    color: #fff;
+    text-align: center;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .fade-up { opacity: 0; animation: fadeUp .6s ease forwards; }
+  .delay-1 { animation-delay: .1s; }
+  .delay-2 { animation-delay: .25s; }
+  .delay-3 { animation-delay: .4s; }
+  .delay-4 { animation-delay: .55s; }
+
+  /* Pulse dot */
+  @keyframes pulseDot {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.4); opacity: .6; }
+  }
+  .live-dot {
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #22c55e;
+    animation: pulseDot 1.6s ease infinite;
+  }
+
+  /* Sales attribution */
+  .ref-tag {
+    display: none;
+    position: fixed;
+    bottom: 24px; right: 24px;
+    background: #0d4f3c;
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 99px;
+    font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    box-shadow: 0 4px 16px rgba(0,0,0,.15);
+    z-index: 50;
+  }
+  .ref-tag.show { display: block; }
+
+  /* Responsive helpers */
+  @media (max-width: 640px) {
+    .demo-card-header { padding: 24px 20px 18px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════
+     Top Bar
+═══════════════════════════════════════════════════ -->
+<header class="border-b border-gray-200 bg-white bg-opacity-80 backdrop-blur sticky top-0 z-40">
+  <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+    <a href="index.html" class="flex items-center gap-3">
+      <div class="w-9 h-9 rounded-lg flex items-center justify-center text-white font-serif font-bold text-base" style="background:linear-gradient(135deg,#0d4f3c,#1a7a5e)">1</div>
+      <div>
+        <div class="font-serif font-bold text-base text-gray-900">1688.ie</div>
+        <div class="text-xs text-gray-500 font-mono">Demo 演示中心</div>
+      </div>
+    </a>
+    <div class="flex items-center gap-4 text-sm">
+      <a href="index.html" class="text-gray-600 hover:text-orange-600 hidden sm:block">← 返回主站</a>
+      <a href="index.html#contact" class="bg-orange-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-orange-700">联系销售</a>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════════════
+     Hero
+═══════════════════════════════════════════════════ -->
+<section class="max-w-6xl mx-auto px-6 pt-12 pb-8">
+  <div class="text-center fade-up">
+    <span class="hero-mark">DEMO HUB · 实时在线演示</span>
+    <h1 class="font-serif text-4xl md:text-5xl font-black mt-5 leading-tight">
+      想看哪个生意的<span style="color:#ea580c">真实演示</span>？
+    </h1>
+    <p class="text-gray-600 text-lg mt-4 max-w-2xl mx-auto leading-relaxed">
+      下面每个 demo 都是<b class="text-gray-900">可以点进去操作</b>的真实演示。<br class="hidden sm:block">
+      老板看 dashboard、员工扫码、客户下单——全流程跑通。
+    </p>
+    <div class="mt-5 inline-flex items-center gap-2 text-sm text-gray-500">
+      <span class="live-dot"></span>
+      <span>所有 demo 数据每隔几秒自动刷新，模拟真实运营</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     Demo Cards
+═══════════════════════════════════════════════════ -->
+<section class="max-w-6xl mx-auto px-6 pb-20">
+  <div class="grid md:grid-cols-2 gap-6">
+
+    <!-- 海外仓 -->
+    <div class="demo-card overseas fade-up delay-1">
+      <div class="demo-card-header">
+        <span class="stamp">OVERSEAS · v2.0</span>
+        <div class="text-5xl mb-3">📦</div>
+        <h2 class="font-serif text-3xl font-black mb-1">海外仓 · 货代仓</h2>
+        <div class="text-emerald-200 font-mono text-sm mb-3">翠绿货代仓 · Emerald Logistics Dublin</div>
+        <p class="text-emerald-100 text-sm leading-relaxed mb-4">
+          替多个货主保管货物的<b class="text-white">服务型仓库</b>。<br>
+          收仓储费 + 操作费，多货主独立看自己的库存。
+        </p>
+        <div class="flex flex-wrap gap-1.5">
+          <span class="industry-tag">货代</span>
+          <span class="industry-tag">中欧物流</span>
+          <span class="industry-tag">多货主</span>
+        </div>
+      </div>
+      <div class="p-6">
+        <a href="warehouse-demo/index.html" class="primary-cta">
+          🌟 完整销售落地页（推荐先看）
+        </a>
+        <div class="text-xs text-gray-500 font-mono uppercase tracking-wider mb-3 mt-5">三端体验入口</div>
+        <div class="space-y-2">
+          <a href="warehouse-demo/boss.html" class="role-btn">
+            <div class="role-btn-icon">👔</div>
+            <div class="flex-1">
+              <div class="font-bold text-gray-900">老板端</div>
+              <div class="text-xs text-gray-500">手机看：客户收入排行 · 员工状态 · 远程批准</div>
+            </div>
+            <span class="text-emerald-700 font-bold">→</span>
+          </a>
+          <a href="warehouse-demo/staff.html" class="role-btn">
+            <div class="role-btn-icon">📱</div>
+            <div class="flex-1">
+              <div class="font-bold text-gray-900">员工端</div>
+              <div class="text-xs text-gray-500">手机扫码 · 入库 / 出库 / 盘点 / 移位</div>
+            </div>
+            <span class="text-emerald-700 font-bold">→</span>
+          </a>
+          <a href="warehouse-demo/client.html" class="role-btn">
+            <div class="role-btn-icon">🏢</div>
+            <div class="flex-1">
+              <div class="font-bold text-gray-900">货主端</div>
+              <div class="text-xs text-gray-500">B 端货主自助查货 · 出入库记录 · 月度账单</div>
+            </div>
+            <span class="text-emerald-700 font-bold">→</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 本地仓 -->
+    <div class="demo-card local fade-up delay-2">
+      <div class="demo-card-header">
+        <span class="stamp">LOCAL · v2.0</span>
+        <div class="text-5xl mb-3">🏗️</div>
+        <h2 class="font-serif text-3xl font-black mb-1">本地仓 · 进口贸易</h2>
+        <div class="text-blue-200 font-mono text-sm mb-3">鸿基建材仓 · Hongji Building Supplies</div>
+        <p class="text-blue-100 text-sm leading-relaxed mb-4">
+          自己从中国进口建材<b class="text-white">自己卖</b>的贸易型仓库。<br>
+          集装箱全程追踪 · 单 SKU 落地成本 · 三渠道库存联动。
+        </p>
+        <div class="flex flex-wrap gap-1.5">
+          <span class="industry-tag">建材</span>
+          <span class="industry-tag">B2B+B2C</span>
+          <span class="industry-tag">Shopify 联动</span>
+        </div>
+      </div>
+      <div class="p-6">
+        <a href="local-warehouse-demo/index.html" class="primary-cta">
+          🌟 完整销售落地页（推荐先看）
+        </a>
+        <div class="text-xs text-gray-500 font-mono uppercase tracking-wider mb-3 mt-5">三端体验入口</div>
+        <div class="space-y-2">
+          <a href="local-warehouse-demo/boss.html" class="role-btn">
+            <div class="role-btn-icon">👔</div>
+            <div class="flex-1">
+              <div class="font-bold text-gray-900">老板端</div>
+              <div class="text-xs text-gray-500">在途柜 · 月度毛利 · 滞销红榜 · 应收欠款</div>
+            </div>
+            <span class="font-bold" style="color:#1e3a5f">→</span>
+          </a>
+          <a href="local-warehouse-demo/staff.html" class="role-btn">
+            <div class="role-btn-icon">📱</div>
+            <div class="flex-1">
+              <div class="font-bold text-gray-900">员工端</div>
+              <div class="text-xs text-gray-500">收柜 · 入库 · 拣货 · 多单位（箱/㎡/件）</div>
+            </div>
+            <span class="font-bold" style="color:#1e3a5f">→</span>
+          </a>
+          <a href="local-warehouse-demo/client.html" class="role-btn">
+            <div class="role-btn-icon">🏗️</div>
+            <div class="flex-1">
+              <div class="font-bold text-gray-900">B2B 客户端</div>
+              <div class="text-xs text-gray-500">装修队自助下单 · 金卡折扣 · 30 天账期</div>
+            </div>
+            <span class="font-bold" style="color:#1e3a5f">→</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 美甲美睫 -->
+    <a href="https://beauty-549968261036.europe-west1.run.app/guide" target="_blank" rel="noopener" class="demo-card fade-up delay-3" style="background:#fff; text-decoration:none; color:inherit;">
+      <div class="demo-card-header" style="background:linear-gradient(135deg,#ec4899 0%,#be185d 100%);">
+        <span class="stamp">LIVE · v1</span>
+        <div class="text-5xl mb-3">💅</div>
+        <h2 class="font-serif text-3xl font-black mb-1">美甲美睫</h2>
+        <div class="text-pink-200 font-mono text-sm mb-3">Sister Chen's Nails Demo</div>
+        <p class="text-pink-100 text-sm leading-relaxed mb-4">
+          客人自己订时间、付定金，<b class="text-white">No-show 爽约率掉 70%</b>。<br>
+          已有真实店铺在用，Lucan 陈姐美甲。
+        </p>
+        <div class="flex flex-wrap gap-1.5">
+          <span class="industry-tag">在线预约</span>
+          <span class="industry-tag">定金锁档</span>
+          <span class="industry-tag">召回短信</span>
+        </div>
+      </div>
+      <div class="p-6">
+        <div style="background:linear-gradient(135deg,#ec4899,#be185d); color:#fff;" class="primary-cta">
+          🌟 进入美甲店演示 →
+        </div>
+        <div class="text-xs text-gray-500 mt-2 text-center">
+          外部链接 · 真实运营中的客户案例
+        </div>
+      </div>
+    </a>
+
+    <!-- 更多行业（占位） -->
+    <div class="demo-card future fade-up delay-4">
+      <div class="demo-card-header">
+        <span class="stamp">SOON</span>
+        <div class="text-5xl mb-3">🚀</div>
+        <h2 class="font-serif text-3xl font-black mb-1">更多行业</h2>
+        <div class="text-gray-300 font-mono text-sm mb-3">陆续上线中</div>
+        <p class="text-gray-200 text-sm leading-relaxed">
+          按照客户需求优先级开发。<br>
+          有特定行业要看 demo？<b class="text-white">联系我们提需求</b>。
+        </p>
+      </div>
+      <div class="p-6">
+        <div class="space-y-2 mb-4">
+          <div class="future-role">🍜 中餐外卖 · 自家下单平台</div>
+          <div class="future-role">📱 手机配件店 · B+C 双价</div>
+          <div class="future-role">✂️ 理发造型 · 多 Tony 排班</div>
+          <div class="future-role">🛒 中超 / 食材批发</div>
+        </div>
+        <a href="index.html#contact" class="primary-cta" style="background:linear-gradient(135deg,#525252,#333);">
+          告诉我们你做哪个生意 →
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     Sales tip / Share section
+═══════════════════════════════════════════════════ -->
+<section class="max-w-4xl mx-auto px-6 pb-16">
+  <div class="qr-section">
+    <div class="text-orange-300 font-mono text-xs uppercase tracking-widest mb-3">FOR SALES AGENTS</div>
+    <h3 class="font-serif text-2xl md:text-3xl font-black mb-3">销售代理：直接发这个链接</h3>
+    <div class="bg-black bg-opacity-30 rounded-xl px-5 py-3 inline-block font-mono text-sm md:text-base mb-4 border border-white border-opacity-10">
+      <span class="text-emerald-300" id="demoUrl">https://1688.ie/demos.html</span>
+    </div>
+    <div class="text-emerald-100 text-sm mb-5 max-w-xl mx-auto leading-relaxed">
+      客户点开就能看到所有 demo 卡片，自己选感兴趣的进去体验。<br>
+      不需要他先看完整个主页，也不用解释怎么找。
+    </div>
+    <div class="flex flex-wrap gap-3 justify-center">
+      <button onclick="copyUrl()" class="bg-white text-emerald-900 font-bold px-5 py-2.5 rounded-lg hover:bg-emerald-50 transition-colors">
+        📋 复制链接
+      </button>
+      <a href="index.html" class="bg-white bg-opacity-10 text-white font-bold px-5 py-2.5 rounded-lg hover:bg-opacity-20 border border-white border-opacity-20">
+        ← 完整主页
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     Footer
+═══════════════════════════════════════════════════ -->
+<footer class="border-t border-gray-200 py-8">
+  <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-3 text-sm text-gray-500">
+    <div>© 2026 1688.ie · 爱尔兰华人企业管理系统</div>
+    <div class="flex gap-4">
+      <a href="index.html" class="hover:text-orange-600">主页</a>
+      <a href="pricing-demo.html" class="hover:text-orange-600">定价</a>
+      <a href="help.html" class="hover:text-orange-600">帮助</a>
+    </div>
+  </div>
+</footer>
+
+<!-- 销售归属徽章 -->
+<div class="ref-tag" id="refTag">◉ 由 <span id="refName" class="font-bold text-orange-300 ml-1">—</span> 推荐</div>
+
+<script>
+// ── Sales attribution ────────────────────────────
+const params = new URLSearchParams(location.search);
+const ref = params.get('ref');
+if (ref) {
+  sessionStorage.setItem('ref', ref);
+  document.querySelectorAll('a[href$=".html"]').forEach(a => {
+    if (a.href.includes('://')) return;
+    try {
+      const url = new URL(a.href, location.href);
+      url.searchParams.set('ref', ref);
+      a.href = url.toString();
+    } catch (e) {}
+  });
+  document.getElementById('refName').textContent = ref;
+  document.getElementById('refTag').classList.add('show');
+}
+
+// ── Show real URL on hub ─────────────────────────
+const realUrl = location.protocol + '//' + location.host + '/demos.html' + (ref ? '?ref=' + ref : '');
+document.getElementById('demoUrl').textContent = realUrl;
+
+// ── Copy URL ─────────────────────────────────────
+function copyUrl() {
+  navigator.clipboard.writeText(realUrl).then(() => {
+    const btn = event.target;
+    const orig = btn.textContent;
+    btn.textContent = '✓ 已复制';
+    btn.style.background = '#22c55e';
+    btn.style.color = '#fff';
+    setTimeout(() => {
+      btn.textContent = orig;
+      btn.style.background = '';
+      btn.style.color = '';
+    }, 1500);
+  }).catch(() => alert('链接：\n' + realUrl));
+}
+</script>
+</body>
+</html>
