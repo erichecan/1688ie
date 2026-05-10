@@ -227,12 +227,14 @@
       margin-top: 0.75rem;
       padding-top: 0.6rem;
       border-top: 1px solid var(--pm);
-      font-size: 0.8rem;
-      color: var(--pt);
-      font-weight: 700;
-      line-height: 1.7;
+      line-height: 1.9;
     }
-    .module-card-price del { font-size: 0.72rem; }
+    .module-card-price del { font-size: 0.88rem; color: #bbb; font-weight: 500; }
+    .price-row { display: flex; align-items: center; gap: 0.25rem; flex-wrap: wrap; }
+    .price-now { font-size: 1.3rem; font-weight: 800; color: var(--pt); }
+    .price-now-sm { font-size: 1.05rem; font-weight: 800; color: var(--pt); }
+    .price-label { font-size: 0.75rem; color: var(--pt); font-weight: 500; }
+    .price-badge { display: inline-block; background: #FDDDE6; color: #C03060; font-size: 0.62rem; font-weight: 700; padding: 0.1rem 0.42rem; border-radius: 20px; vertical-align: middle; }
 
     /* ── PAIN POINT BLOCK ── */
     .pain-block {
@@ -560,8 +562,8 @@
         <li>防鸽鸟预约押金</li>
       </ul>
       <div class="module-card-price" id="price-booking">
-        <del>€599</del> €399 开发费<br>
-        + <del>€44</del> €29 / 月
+        <div class="price-row"><del>€599</del><span class="price-now">€399</span><span class="price-label">开发费</span><span class="price-badge">省 €200</span></div>
+        <div class="price-row"><span class="price-label">+</span><del>€44</del><span class="price-now-sm">€29</span><span class="price-label">/ 月</span><span class="price-badge">省 34%</span></div>
       </div>
     </div>
     <div class="module-card">
@@ -574,8 +576,8 @@
         <li>会员专属活动</li>
       </ul>
       <div class="module-card-price" id="price-member">
-        <del>€299</del> €199 开发费<br>
-        + <del>€29</del> €19 / 月
+        <div class="price-row"><del>€299</del><span class="price-now">€199</span><span class="price-label">开发费</span><span class="price-badge">省 €100</span></div>
+        <div class="price-row"><span class="price-label">+</span><del>€29</del><span class="price-now-sm">€19</span><span class="price-label">/ 月</span><span class="price-badge">省 34%</span></div>
       </div>
     </div>
     <div class="module-card">
@@ -588,8 +590,8 @@
         <li>积分消费明细</li>
       </ul>
       <div class="module-card-price" id="price-points">
-        <del>€299</del> €199 开发费<br>
-        + <del>€29</del> €19 / 月
+        <div class="price-row"><del>€299</del><span class="price-now">€199</span><span class="price-label">开发费</span><span class="price-badge">省 €100</span></div>
+        <div class="price-row"><span class="price-label">+</span><del>€29</del><span class="price-now-sm">€19</span><span class="price-label">/ 月</span><span class="price-badge">省 34%</span></div>
       </div>
     </div>
   </div>
@@ -654,7 +656,7 @@
         <del style="font-size:0.85rem;font-weight:400;color:var(--gray2)">€1,049</del> €699
         <span style="font-size:0.75rem;font-weight:500;color:var(--gray3)" data-zh="开发" data-en="setup">开发</span>
       </div>
-      <div class="small" id="bundle-small">+ <del>€89</del> €59 / 月（含全套月费服务）</div>
+      <div class="small" id="bundle-small">+ <del>€89</del> <strong style="color:var(--pt)">€59</strong> / 月（含全套月费服务）<span class="price-badge" style="margin-left:0.3rem">省 €30</span></div>
     </div>
   </div>
 
@@ -931,24 +933,24 @@
       en: '<li>24/7 self-service booking</li><li>Staff schedule management</li><li>Automated SMS reminders</li><li>Booking history lookup</li><li>No-show deposit protection</li>'
     },
     'price-booking': {
-      zh: '<del>€599</del> €399 开发费<br>+ <del>€44</del> €29 / 月',
-      en: '<del>€599</del> €399 setup<br>+ <del>€44</del> €29 / mo'
+      zh: '<div class="price-row"><del>€599</del><span class="price-now">€399</span><span class="price-label">开发费</span><span class="price-badge">省 €200</span></div><div class="price-row"><span class="price-label">+</span><del>€44</del><span class="price-now-sm">€29</span><span class="price-label">/ 月</span><span class="price-badge">省 34%</span></div>',
+      en: '<div class="price-row"><del>€599</del><span class="price-now">€399</span><span class="price-label">setup</span><span class="price-badge">save €200</span></div><div class="price-row"><span class="price-label">+</span><del>€44</del><span class="price-now-sm">€29</span><span class="price-label">/ mo</span><span class="price-badge">save 34%</span></div>'
     },
     'ul-member': {
       zh: '<li>等级会员体系</li><li>专属折扣设置</li><li>生日福利自动提醒</li><li>消费记录档案</li><li>会员专属活动</li>',
       en: '<li>Tiered membership levels</li><li>Exclusive discount settings</li><li>Automated birthday rewards</li><li>Spending history records</li><li>Members-only promotions</li>'
     },
     'price-member': {
-      zh: '<del>€299</del> €199 开发费<br>+ <del>€29</del> €19 / 月',
-      en: '<del>€299</del> €199 setup<br>+ <del>€29</del> €19 / mo'
+      zh: '<div class="price-row"><del>€299</del><span class="price-now">€199</span><span class="price-label">开发费</span><span class="price-badge">省 €100</span></div><div class="price-row"><span class="price-label">+</span><del>€29</del><span class="price-now-sm">€19</span><span class="price-label">/ 月</span><span class="price-badge">省 34%</span></div>',
+      en: '<div class="price-row"><del>€299</del><span class="price-now">€199</span><span class="price-label">setup</span><span class="price-badge">save €100</span></div><div class="price-row"><span class="price-label">+</span><del>€29</del><span class="price-now-sm">€19</span><span class="price-label">/ mo</span><span class="price-badge">save 34%</span></div>'
     },
     'ul-points': {
       zh: '<li>消费自动累积积分</li><li>积分兑换优惠</li><li>推荐好友奖励</li><li>积分到期提醒</li><li>积分消费明细</li>',
       en: '<li>Auto-earn points on every purchase</li><li>Redeem points for discounts</li><li>Referral bonus rewards</li><li>Points expiry reminders</li><li>Full points transaction history</li>'
     },
     'price-points': {
-      zh: '<del>€299</del> €199 开发费<br>+ <del>€29</del> €19 / 月',
-      en: '<del>€299</del> €199 setup<br>+ <del>€29</del> €19 / mo'
+      zh: '<div class="price-row"><del>€299</del><span class="price-now">€199</span><span class="price-label">开发费</span><span class="price-badge">省 €100</span></div><div class="price-row"><span class="price-label">+</span><del>€29</del><span class="price-now-sm">€19</span><span class="price-label">/ 月</span><span class="price-badge">省 34%</span></div>',
+      en: '<div class="price-row"><del>€299</del><span class="price-now">€199</span><span class="price-label">setup</span><span class="price-badge">save €100</span></div><div class="price-row"><span class="price-label">+</span><del>€29</del><span class="price-now-sm">€19</span><span class="price-label">/ mo</span><span class="price-badge">save 34%</span></div>'
     },
     'monthly-1': {
       zh: '<strong>Google Cloud 云端托管</strong><span>高可用服务器，99.9% 在线保障</span>',
@@ -975,8 +977,8 @@
       en: '<strong>48-Hour Technical Support</strong><span>Business day response, issues resolved within 48 hours</span>'
     },
     'bundle-small': {
-      zh: '+ <del>€89</del> €59 / 月（含全套月费服务）',
-      en: '+ <del>€89</del> €59 / mo (all monthly services included)'
+      zh: '+ <del>€89</del> <strong style="color:var(--pt)">€59</strong> / 月（含全套月费服务）<span class="price-badge" style="margin-left:0.3rem">省 €30</span>',
+      en: '+ <del>€89</del> <strong style="color:var(--pt)">€59</strong> / mo (all monthly services included)<span class="price-badge" style="margin-left:0.3rem">save €30</span>'
     },
     'fbig-count-note': {
       zh: '双平台同步发布，每周约 3 次更新<br>内容本地化，针对爱尔兰华人 + 本地受众',
