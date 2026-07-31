@@ -443,6 +443,122 @@
       opacity: 0.85;
     }
 
+    /* ===== FLAGSHIP CASE ===== */
+    #flagship {
+      padding: 90px 0 100px;
+      background: linear-gradient(180deg, var(--cream) 0%, var(--paper) 100%);
+    }
+    .flagship-eyebrow {
+      display: block;
+      text-align: center;
+      font-family: 'JetBrains Mono', 'Courier New', monospace;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 3px;
+      color: var(--red);
+      margin-bottom: 14px;
+    }
+    .flagship-lede {
+      max-width: 680px;
+      margin: 0 auto 56px;
+      text-align: center;
+      color: var(--ink-soft);
+      font-size: 0.95rem;
+    }
+    .flow-strip {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      max-width: 980px;
+      margin: 0 auto 56px;
+      padding: 32px 24px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+    }
+    .flow-node {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      width: 150px;
+      padding: 6px 8px;
+    }
+    .flow-node .emoji {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      background: var(--paper);
+      border: 1.5px solid var(--line);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem;
+      margin-bottom: 10px;
+    }
+    .flow-node b { font-size: 0.85rem; display: block; margin-bottom: 2px; }
+    .flow-node span { font-size: 0.7rem; color: var(--ink-mute); }
+    .flow-arrow { color: var(--gold); font-size: 1.4rem; margin: 0 4px; flex-shrink: 0; }
+    .stat-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--line);
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      overflow: hidden;
+      max-width: 980px;
+      margin: 0 auto 60px;
+    }
+    .stat-cell { background: #fff; padding: 24px 16px; text-align: center; }
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.7rem;
+      font-weight: 900;
+      color: var(--red);
+      margin-bottom: 4px;
+    }
+    .stat-label { font-size: 0.75rem; color: var(--ink-mute); }
+    .entry-heading { text-align: center; font-size: 0.85rem; color: var(--ink-soft); font-weight: 700; margin-bottom: 22px; }
+    .entry-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      max-width: 980px;
+      margin: 0 auto;
+    }
+    .entry-card {
+      display: block;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 26px 18px;
+      text-align: center;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+    .entry-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--red);
+      transform: scaleX(0);
+      transition: transform 0.25s;
+    }
+    .entry-card:hover { transform: translateY(-4px); box-shadow: 0 10px 28px rgba(0,0,0,0.09); border-color: var(--gold); }
+    .entry-card:hover::after { transform: scaleX(1); }
+    .entry-emoji { font-size: 2rem; display: block; margin-bottom: 10px; }
+    .entry-card h4 { font-size: 0.92rem; margin-bottom: 6px; color: var(--ink); }
+    .entry-card p { font-size: 0.74rem; color: var(--ink-mute); line-height: 1.5; }
+    .entry-note { text-align: center; font-size: 0.78rem; color: var(--ink-mute); margin-top: 20px; }
+    @media (max-width: 860px) {
+      .flow-arrow { transform: rotate(90deg); margin: 4px 0; }
+      .stat-strip { grid-template-columns: repeat(2, 1fr); }
+      .entry-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
     /* ===== STORIES ===== */
     #stories {
       padding: 100px 0;
@@ -942,6 +1058,8 @@
     body.en span[data-lang="en"] { display: inline; }
     /* Hero eyebrow badge needs inline-flex */
     body.en span.hero-eyebrow[data-lang="en"] { display: inline-flex; }
+    /* Flagship eyebrow badge needs block (full-width centered label) */
+    body.en span.flagship-eyebrow[data-lang="en"] { display: block; }
     /* Buttons and badges need inline-block */
     body.en .subsidy-badge[data-lang="en"],
     body.en .story-result[data-lang="en"],
@@ -1331,6 +1449,130 @@
         <p class="industry-proof" data-lang="en">A 200-SKU accessories shop sees &lt;2% conversion from group blasts; tagged push hits 12%+</p>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- ===== SCREEN 3.5：旗舰案例 ===== -->
+<section id="flagship">
+  <div class="container">
+    <span class="flagship-eyebrow" data-lang="zh">FLAGSHIP CASE · 旗舰案例</span>
+    <span class="flagship-eyebrow" data-lang="en">FLAGSHIP CASE</span>
+    <h2 class="section-title fade-in" data-lang="zh">这不是一个小工具，是一整套<span>企业管理系统</span></h2>
+    <h2 class="section-title fade-in" data-lang="en">Not a small tool — a full <span>enterprise management system</span></h2>
+    <p class="flagship-lede fade-in" data-lang="zh">
+      我们不只做预约页、点单页。这套系统跑在一家真实的蔬菜批发生意里——
+      从供应商询价、仓库收发货，到客户下单、司机配送、月底对账，全流程都在里面。
+      这是目前我们做过复杂度最高的项目，能做这个，你的生意需求大概率也能做。
+    </p>
+    <p class="flagship-lede fade-in" data-lang="en">
+      We don't just build booking pages and ordering forms. This system runs a real vegetable
+      wholesale business — from supplier quotes and warehouse receiving to customer ordering,
+      driver dispatch, and month-end reconciliation, all in one place.
+      It's the most complex project we've shipped — if we can build this, we can likely build what you need.
+    </p>
+
+    <div class="flow-strip fade-in">
+      <div class="flow-node">
+        <div class="emoji">🔗</div>
+        <b data-lang="zh">供应链采购</b>
+        <b data-lang="en">Procurement</b>
+        <span data-lang="zh">询价单 · PDF识别 · 汇率</span>
+        <span data-lang="en">Quotes · PDF OCR · FX rates</span>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node">
+        <div class="emoji">🏭</div>
+        <b data-lang="zh">仓库管理</b>
+        <b data-lang="en">Warehouse</b>
+        <span data-lang="zh">分区库存 · 波次拣货</span>
+        <span data-lang="en">Zone stock · wave picking</span>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node">
+        <div class="emoji">🛒</div>
+        <b data-lang="zh">客户下单</b>
+        <b data-lang="en">Ordering</b>
+        <span data-lang="zh">B2B自助 · 账期</span>
+        <span data-lang="en">B2B self-serve · credit terms</span>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node">
+        <div class="emoji">🚚</div>
+        <b data-lang="zh">配送调度</b>
+        <b data-lang="en">Dispatch</b>
+        <span data-lang="zh">司机端 · GPS</span>
+        <span data-lang="en">Driver app · GPS</span>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node">
+        <div class="emoji">📊</div>
+        <b data-lang="zh">财务对账</b>
+        <b data-lang="en">Finance</b>
+        <span data-lang="zh">应收账款 · 供应商账单</span>
+        <span data-lang="en">AR aging · vendor bills</span>
+      </div>
+    </div>
+
+    <div class="stat-strip fade-in">
+      <div class="stat-cell">
+        <div class="stat-num" data-lang="zh">28 家</div>
+        <div class="stat-num" data-lang="en">28</div>
+        <div class="stat-label" data-lang="zh">稳定供货的中餐馆客户</div>
+        <div class="stat-label" data-lang="en">restaurants served weekly</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-num">12%→5%</div>
+        <div class="stat-label" data-lang="zh">生鲜损耗率下降</div>
+        <div class="stat-label" data-lang="en">spoilage rate reduction</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-num" style="font-size:1.15rem;" data-lang="zh">2人1天→1人1小时</div>
+        <div class="stat-num" style="font-size:1.15rem;" data-lang="en">2 staff·1 day → 1 staff·1hr</div>
+        <div class="stat-label" data-lang="zh">月度对账耗时</div>
+        <div class="stat-label" data-lang="en">monthly reconciliation time</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-num" data-lang="zh">7 种</div>
+        <div class="stat-num" data-lang="en">7</div>
+        <div class="stat-label" data-lang="zh">角色权限（老板/仓库/司机…）</div>
+        <div class="stat-label" data-lang="en">role-based permission levels</div>
+      </div>
+    </div>
+
+    <p class="entry-heading fade-in" data-lang="zh">选一个模块，直接进真实系统体验 ↓</p>
+    <p class="entry-heading fade-in" data-lang="en">Pick a module — go straight into the live system ↓</p>
+    <div class="entry-grid fade-in">
+      <a class="entry-card" href="https://veggie-dfd7b2qpra-ew.a.run.app/enter" target="_blank" rel="noopener">
+        <span class="entry-emoji">🏭</span>
+        <h4 data-lang="zh">仓库管理</h4>
+        <h4 data-lang="en">Warehouse</h4>
+        <p data-lang="zh">分区库存 · 波次拣货 · 盘点</p>
+        <p data-lang="en">Zone stock · wave picking · stock-take</p>
+      </a>
+      <a class="entry-card" href="https://veggie-dfd7b2qpra-ew.a.run.app/enter" target="_blank" rel="noopener">
+        <span class="entry-emoji">🔗</span>
+        <h4 data-lang="zh">供应链管理</h4>
+        <h4 data-lang="en">Procurement</h4>
+        <p data-lang="zh">询价单 · PDF识别 · 补货预测</p>
+        <p data-lang="en">Quotes · PDF OCR · reorder forecasts</p>
+      </a>
+      <a class="entry-card" href="https://veggie-dfd7b2qpra-ew.a.run.app/enter" target="_blank" rel="noopener">
+        <span class="entry-emoji">🛒</span>
+        <h4 data-lang="zh">B2B 采购下单</h4>
+        <h4 data-lang="en">B2B Ordering</h4>
+        <p data-lang="zh">客户自助下单 · 账期</p>
+        <p data-lang="en">Self-serve ordering · credit terms</p>
+      </a>
+      <a class="entry-card" href="https://veggie-dfd7b2qpra-ew.a.run.app/enter" target="_blank" rel="noopener">
+        <span class="entry-emoji">👔</span>
+        <h4 data-lang="zh">老板总览</h4>
+        <h4 data-lang="en">Owner Overview</h4>
+        <p data-lang="zh">全局经营数据一屏看</p>
+        <p data-lang="en">Full business metrics at a glance</p>
+      </a>
+    </div>
+    <p class="entry-note fade-in" data-lang="zh">点进去后，在登录页选择对应角色即可一键体验（无需自己找账号密码）</p>
+    <p class="entry-note fade-in" data-lang="en">Once inside, pick a role on the login page for one-click access (no need to find credentials yourself)</p>
   </div>
 </section>
 
