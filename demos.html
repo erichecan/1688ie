@@ -103,6 +103,8 @@
   }
   .demo-card.overseas .role-btn-icon { background: rgba(13,79,60,.1); }
   .demo-card.local .role-btn-icon { background: rgba(30,58,95,.1); }
+  .demo-card.wholesale .role-btn-icon { background: rgba(22,163,74,.1); }
+  .demo-card.wholesale .role-btn:hover { border-color: #16a34a; }
 
   /* Primary CTA */
   .primary-cta {
@@ -420,7 +422,7 @@
     </a>
 
     <!-- 蔬菜批发 -->
-    <a href="https://veggie-demo-dfd7b2qpra-ew.a.run.app/guide" target="_blank" rel="noopener" class="demo-card fade-up delay-4" style="background:#fff; text-decoration:none; color:inherit;">
+    <div class="demo-card wholesale fade-up delay-4" style="background:#fff;">
       <div class="demo-card-header" style="background:linear-gradient(135deg,#16a34a 0%,#15803d 100%);">
         <span class="stamp">LIVE · 批发实战</span>
         <div class="text-5xl mb-3">🥬</div>
@@ -439,14 +441,46 @@
         </div>
       </div>
       <div class="p-6">
-        <div style="background:linear-gradient(135deg,#16a34a,#15803d); color:#fff;" class="primary-cta">
-          🌟 进入蔬菜批发演示 →
+        <div class="text-xs text-gray-500 font-mono uppercase tracking-wider mb-3">这是我们目前做过最复杂的项目 · 4 个入口都能进</div>
+        <div class="space-y-2">
+          <a href="https://veggie-dfd7b2qpra-ew.a.run.app/enter" target="_blank" rel="noopener" class="role-btn">
+            <div class="role-btn-icon">🏭</div>
+            <div class="flex-1">
+              <div class="font-bold text-gray-900">仓库管理</div>
+              <div class="text-xs text-gray-500">分区库存 · 波次拣货 · 盘点</div>
+            </div>
+            <span class="text-green-700 font-bold">→</span>
+          </a>
+          <a href="https://veggie-dfd7b2qpra-ew.a.run.app/enter" target="_blank" rel="noopener" class="role-btn">
+            <div class="role-btn-icon">🔗</div>
+            <div class="flex-1">
+              <div class="font-bold text-gray-900">供应链管理</div>
+              <div class="text-xs text-gray-500">询价单 · PDF识别 · 补货预测</div>
+            </div>
+            <span class="text-green-700 font-bold">→</span>
+          </a>
+          <a href="https://veggie-dfd7b2qpra-ew.a.run.app/enter" target="_blank" rel="noopener" class="role-btn">
+            <div class="role-btn-icon">🛒</div>
+            <div class="flex-1">
+              <div class="font-bold text-gray-900">B2B 采购下单</div>
+              <div class="text-xs text-gray-500">客户自助下单 · 账期</div>
+            </div>
+            <span class="text-green-700 font-bold">→</span>
+          </a>
+          <a href="https://veggie-dfd7b2qpra-ew.a.run.app/enter" target="_blank" rel="noopener" class="role-btn">
+            <div class="role-btn-icon">👔</div>
+            <div class="flex-1">
+              <div class="font-bold text-gray-900">老板总览</div>
+              <div class="text-xs text-gray-500">全局经营数据一屏看</div>
+            </div>
+            <span class="text-green-700 font-bold">→</span>
+          </a>
         </div>
-        <div class="text-xs text-gray-500 mt-2 text-center">
-          外部 ↗ 适合中超 / 餐厅食材 / 冷链批发
+        <div class="text-xs text-gray-500 mt-3 text-center">
+          点进去后，在登录页选择对应角色即可一键体验
         </div>
       </div>
-    </a>
+    </div>
   </div>
 
   <!-- ─── 更多行业 满宽提示 ─── -->
