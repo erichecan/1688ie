@@ -5,6 +5,7 @@ import { Hero } from "@/components/sections/hero";
 import { CoverWall } from "@/components/sections/cover-wall";
 import { Leak } from "@/components/sections/leak";
 import { Stages } from "@/components/sections/stages";
+import { VersusHire } from "@/components/sections/versus-hire";
 import { Plans } from "@/components/sections/plans";
 import { Howto } from "@/components/sections/howto";
 import { Faq } from "@/components/sections/faq";
@@ -27,6 +28,7 @@ export default async function HomePage({
         <CoverWall />
         <Leak />
         <Stages />
+        <VersusHire />
         <Plans />
         <Howto />
         <Faq />

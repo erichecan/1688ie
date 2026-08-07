@@ -117,6 +117,41 @@
       }
     ]
   },
+  "versus": {
+    "eyebrow": "This replaces a hire",
+    "title": "Everything a marketing executive ships in a month, we ship too.",
+    "lede": "You pay a fifth to a seventh of what they cost — and exactly how many posts, images and replies you get each month is written into the contract. Hiring doesn't come with that.",
+    "colRole": "Hiring in Ireland",
+    "colCost": "Total monthly cost",
+    "colPlan": "Equivalent plan",
+    "colRatio": "You pay",
+    "rows": [
+      {
+        "role": "Full-time minimum wage employee",
+        "roleNote": "Assistant / intern level",
+        "cost": "€2,606",
+        "plan": "Reach €390/mo",
+        "ratio": "15%"
+      },
+      {
+        "role": "Marketing Executive",
+        "roleNote": "Dublin, 0–3 years",
+        "cost": "€3,708",
+        "plan": "Growth €790/mo",
+        "ratio": "21%"
+      },
+      {
+        "role": "Marketing Executive",
+        "roleNote": "Plus a loyalty system you own",
+        "cost": "€3,708",
+        "plan": "Full cycle €1,090/mo",
+        "ratio": "29%"
+      }
+    ],
+    "note": "Employer cost on 2026 Irish rates: minimum wage €14.15/hour (aged 20+) × 39 hours/week, employer Class A PRSI 9% (weekly pay ≤€552); Marketing Executive at €40,000/year, employer PRSI 11.25% (weekly pay >€552). Excludes 20 days statutory annual leave plus 10 public holidays, recruitment costs, equipment and software subscriptions.",
+    "sourceLabel": "Sources",
+    "sources": "Minimum wage: IBEC · Employer PRSI: gov.ie SW 14 (January 2026) · Salary: Morgan McKinley 2026 Ireland Salary Guide"
+  },
   "plans": {
     "eyebrow": "Plans and pricing",
     "title": "Pick by how far you need to go.",

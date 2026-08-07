@@ -182,6 +182,41 @@
       }
     ]
   },
+  "versus": {
+    "eyebrow": "这笔钱替代的是一个人",
+    "title": "一个市场推广一个月能交出来的东西，我们照样交。",
+    "lede": "你付的是他成本的五分之一到七分之一，而且每月交多少条、多少张、多少次，白纸黑字写在合同上——雇人可没这个。",
+    "colRole": "在爱尔兰雇一个人",
+    "colCost": "月总成本",
+    "colPlan": "对应套餐",
+    "colRatio": "你付的比例",
+    "rows": [
+      {
+        "role": "全职最低工资员工",
+        "roleNote": "助理 / 实习级",
+        "cost": "€2,606",
+        "plan": "曝光 €390/月",
+        "ratio": "15%"
+      },
+      {
+        "role": "Marketing Executive",
+        "roleNote": "都柏林，0–3 年",
+        "cost": "€3,708",
+        "plan": "增长 €790/月",
+        "ratio": "21%"
+      },
+      {
+        "role": "Marketing Executive",
+        "roleNote": "外加一套归你的会员系统",
+        "cost": "€3,708",
+        "plan": "全周期 €1,090/月",
+        "ratio": "29%"
+      }
+    ],
+    "note": "雇人成本按 2026 年爱尔兰口径计算：最低工资 €14.15/小时（20 岁以上）× 39 小时/周，雇主 Class A PRSI 9%（周薪 ≤€552）；Marketing Executive 按年薪 €40,000 计，雇主 PRSI 11.25%（周薪 >€552）。均未计入 20 天法定年假 + 10 个公共假日、招聘费、设备与软件订阅。",
+    "sourceLabel": "数据来源",
+    "sources": "最低工资：IBEC 公告 · 雇主 PRSI：gov.ie SW 14（2026 年 1 月版）· 薪资：Morgan McKinley 2026 爱尔兰薪资指南"
+  },
   "plans": {
     "eyebrow": "套餐与价格",
     "title": "按你要补到第几段来选。",
