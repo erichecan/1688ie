@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IdeaRise — Local Growth Proposal</title>
+<style>
+  :root{
+    --paper:#FFFCF7; --sunk:#F6F0E6; --ink:#16120F; --muted:#6C6459;
+    --rule:#E5DDD0; --flare:#FF3B1F; --flare-soft:#FFE9E3;
+    --s1:#FF3B1F; --s2:#1B3A6B; --s3:#16120F; --s4:#0F5F46;
+    --sans:"Helvetica Neue",Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,"SFMono-Regular","Menlo","Consolas",monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--sunk);color:var(--ink);font-family:var(--sans);font-size:13px;line-height:1.65}
+  .sheet{width:210mm;margin:24px auto;padding:15mm 14mm;background:var(--paper)}
+  .num{font-family:var(--mono);font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+  .fill{border-bottom:1px solid var(--rule);min-height:16px;display:block}
+
+  .head{display:flex;justify-content:space-between;align-items:flex-end;
+        border-bottom:3px solid var(--ink);padding-bottom:12px}
+  .brand{font-size:24px;font-weight:800;letter-spacing:-.02em}
+  .brand span{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+              color:var(--flare);margin-left:8px;font-weight:700}
+  .brand-sub{margin-top:3px;font-size:10.5px;color:var(--muted)}
+  .doc h1{font-size:19px;font-weight:700;letter-spacing:-.01em;text-align:right}
+  .doc p{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;
+         color:var(--muted);text-align:right;margin-top:2px}
+
+  .meta{display:grid;grid-template-columns:1fr 1fr;gap:0 30px;margin-top:16px;
+        border-bottom:1px solid var(--rule);padding-bottom:14px}
+  .kv{display:flex;gap:10px;padding:3px 0;font-size:12px}
+  .kv dt{width:112px;flex:none;color:var(--muted)}
+  .kv dd{flex:1}
+
+  section{margin-top:22px}
+  h2{font-size:15px;font-weight:800;letter-spacing:-.01em;display:flex;align-items:baseline;gap:9px}
+  h2 .n{font-family:var(--mono);font-size:12px;color:var(--flare);font-weight:700}
+  .lede{margin-top:6px;font-size:12px;color:var(--muted);max-width:62em}
+
+  table{width:100%;border-collapse:collapse;margin-top:10px}
+  th{font-size:9px;text-transform:uppercase;letter-spacing:.12em;font-weight:700;color:var(--muted);
+     text-align:left;padding:6px 8px 6px 0;border-bottom:2px solid var(--ink)}
+  td{padding:8px 8px 8px 0;border-bottom:1px solid var(--rule);vertical-align:top;font-size:12px}
+  th:last-child,td:last-child{padding-right:0}
+  .r{text-align:right}
+  .ch{font-weight:700;border-left:3px solid var(--rule);padding-left:8px;line-height:1.35}
+  .st1{border-left-color:var(--s1)} .st2{border-left-color:var(--s2)}
+  .st3{border-left-color:var(--s3)} .st4{border-left-color:var(--s4)}
+  .qty{font-family:var(--mono);font-variant-numeric:tabular-nums;font-weight:600;font-size:13px;white-space:nowrap}
+  .sub{color:var(--muted);font-size:10.5px;margin-top:2px;line-height:1.5}
+
+  .plans{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+  .plan{border:1px solid var(--rule);border-radius:10px;padding:12px}
+  .plan.pick{border:2px solid var(--flare);background:var(--flare-soft)}
+  .plan .pt{font-size:9px;font-weight:700;color:var(--flare);text-transform:uppercase;letter-spacing:.1em;line-height:1.4}
+  .plan h3{font-size:14px;font-weight:800;margin-top:4px}
+  .plan .p{font-family:var(--mono);font-size:22px;font-weight:700;letter-spacing:-.02em;margin-top:6px}
+  .plan .p small{font-size:10px;font-weight:400;color:var(--muted);letter-spacing:0}
+  .plan ul{margin-top:8px;list-style:none}
+  .plan li{font-size:10.5px;line-height:1.55;color:var(--muted);padding-left:12px;position:relative;margin-bottom:3px}
+  .plan li::before{content:"\\2713";position:absolute;left:0;color:var(--flare);font-size:9px}
+
+  .box{margin-top:10px;border:1px dashed var(--rule);border-radius:10px;padding:12px 14px}
+  .box strong{font-size:12.5px}
+  .note{margin-top:6px;font-size:10.5px;color:var(--muted)}
+
+  ol.terms{margin-top:8px;padding-left:16px}
+  ol.terms li{font-size:11px;line-height:1.7;color:var(--muted);margin-bottom:5px}
+  ol.terms b{color:var(--ink);font-weight:700}
+  ul.excl{margin-top:8px;list-style:none}
+  ul.excl li{font-size:11px;line-height:1.7;color:var(--muted);margin-bottom:6px;padding-left:16px;position:relative}
+  ul.excl li::before{content:"\\2715";position:absolute;left:0;color:var(--flare);font-size:10px}
+  ul.excl b{color:var(--ink);font-weight:700}
+
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:0 30px}
+
+  .timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px}
+  .tl{border-top:3px solid var(--ink);padding-top:8px}
+  .tl .w{font-family:var(--mono);font-size:10px;font-weight:700;color:var(--flare)}
+  .tl h4{font-size:12px;font-weight:700;margin-top:3px}
+  .tl p{font-size:10.5px;color:var(--muted);margin-top:4px;line-height:1.55}
+
+  .totals{margin-top:10px;margin-left:auto;width:58%}
+  .totals div{display:flex;justify-content:space-between;padding:6px 0;font-size:12px;border-bottom:1px solid var(--rule)}
+  .totals .grand{border-bottom:none;border-top:2px solid var(--ink);margin-top:2px;padding-top:9px;font-size:15px;font-weight:800}
+
+  .sign{display:grid;grid-template-columns:1fr 1fr;gap:0 40px;margin-top:22px;
+        border-top:1px solid var(--rule);padding-top:16px}
+  .sign p{font-size:10px;color:var(--muted);margin-bottom:24px}
+  .sline{border-bottom:1px solid var(--ink)}
+  .scap{display:flex;justify-content:space-between;font-size:9px;color:var(--muted);margin-top:5px}
+
+  footer{margin-top:18px;border-top:1px solid var(--rule);padding-top:9px;font-size:9.5px;
+         color:var(--muted);display:flex;justify-content:space-between;gap:16px}
+  .todo{color:var(--flare)}
+
+  @media print{
+    body{background:#fff}
+    .sheet{width:auto;margin:0;padding:0}
+    tr,li,.plan,.tl,.sign,.totals,.box{break-inside:avoid}
+    h2{break-after:avoid}
+  }
+  @page{size:A4;margin:13mm 12mm}
+  @media (max-width:860px){
+    .sheet{width:auto;padding:20px}
+    .meta,.cols,.plans,.timeline,.sign{grid-template-columns:1fr}
+    .totals{width:100%}
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <div class="head">
+    <div>
+      <div class="brand">IdeaRise<span>万合</span></div>
+      <p class="brand-sub">Greater Toronto Area · Short-form video, local search and loyalty</p>
+    </div>
+    <div class="doc">
+      <h1>Local Growth Proposal</h1>
+      <p>Proposal &amp; Quotation</p>
+    </div>
+  </div>
+
+  <div class="meta">
+    <div>
+      <dl class="kv"><dt>Business</dt><dd><span class="fill"></span></dd></dl>
+      <dl class="kv"><dt>Industry / locations</dt><dd><span class="fill"></span></dd></dl>
+      <dl class="kv"><dt>Contact</dt><dd><span class="fill"></span></dd></dl>
+    </div>
+    <div>
+      <dl class="kv"><dt>Proposal no.</dt><dd class="num">IR-P-<span class="fill" style="display:inline-block;width:120px"></span></dd></dl>
+      <dl class="kv"><dt>Date / valid for</dt><dd><span class="fill" style="display:inline-block;width:86px"></span> / 30 days</dd></dl>
+      <dl class="kv"><dt>Currency</dt><dd class="num">CAD (HST not incl.)</dd></dl>
+    </div>
+  </div>
+
+  <section>
+    <h2><span class="n">01</span>Where you are leaking today</h2>
+    <p class="lede">Figures come from the free check, taken from publicly visible information and compared against the ten businesses on the first page of local search for your category. The benchmark is that group's median — there is no absolute standard, only a local one.</p>
+    <table>
+      <thead>
+        <tr>
+          <th style="width:118px">Stage</th>
+          <th>Measure</th>
+          <th style="width:66px" class="r">You</th>
+          <th style="width:92px" class="r">Local median</th>
+          <th style="width:104px">Read</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="ch st1" rowspan="3">01 Get found</td><td>Short-form posts, last 90 days<div class="sub">TikTok, Reels and Shorts combined</div></td><td class="r"><span class="fill"></span></td><td class="r"><span class="fill"></span></td><td><span class="fill"></span></td></tr>
+        <tr><td>Appearances on local search page one</td><td class="r"><span class="fill"></span></td><td class="r"><span class="fill"></span></td><td><span class="fill"></span></td></tr>
+        <tr><td>Google profile completeness<div class="sub">Category, hours, services, photos</div></td><td class="r"><span class="fill"></span></td><td class="r"><span class="fill"></span></td><td><span class="fill"></span></td></tr>
+        <tr><td class="ch st2" rowspan="2">02 Get remembered</td><td>A line a customer could repeat<div class="sub">Can they describe you to a friend?</div></td><td class="r"><span class="fill"></span></td><td class="r"><span class="fill"></span></td><td><span class="fill"></span></td></tr>
+        <tr><td>Visual consistency across channels</td><td class="r"><span class="fill"></span></td><td class="r"><span class="fill"></span></td><td><span class="fill"></span></td></tr>
+        <tr><td class="ch st3" rowspan="3">03 Keep them</td><td>Total reviews<div class="sub">The base for local ranking and trust</div></td><td class="r"><span class="fill"></span></td><td class="r"><span class="fill"></span></td><td><span class="fill"></span></td></tr>
+        <tr><td>Reply rate<div class="sub">The only measure fully in your control</div></td><td class="r"><span class="fill"></span></td><td class="r"><span class="fill"></span></td><td><span class="fill"></span></td></tr>
+        <tr><td>New reviews, last 90 days<div class="sub">Flow matters more than stock</div></td><td class="r"><span class="fill"></span></td><td class="r"><span class="fill"></span></td><td><span class="fill"></span></td></tr>
+        <tr><td class="ch st4" rowspan="2">04 Bring them back</td><td>Any loyalty or repeat mechanism</td><td class="r"><span class="fill"></span></td><td class="r"><span class="fill"></span></td><td><span class="fill"></span></td></tr>
+        <tr><td>Known share of sales from regulars<div class="sub">If you cannot answer, treat it as zero</div></td><td class="r"><span class="fill"></span></td><td class="r"><span class="fill"></span></td><td><span class="fill"></span></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2><span class="n">02</span>Why all four move together</h2>
+    <p class="lede">
+      Say a thousand people come across you this month: <b>180 click, 36 show up, 7 come back.</b>
+      Double the ad spend and those seven become fourteen. Give people a reason to stay and a reason to return, and the same thousand are worth three or four times as much.
+      Stage one is the only one you have to keep paying for; the other three are fixed once and pay out indefinitely. <b>Fix the back end first, then turn up the front — reverse that order and you are burning money.</b>
+    </p>
+    <p class="lede" style="margin-top:8px">
+      The last two stages are rare in this market because they need software rather than posts: review pipelines, loyalty points, spend dashboards.
+      <b>We build the loyalty system ourselves. It deploys on your domain and the database is yours.</b>
+    </p>
+  </section>
+
+  <section>
+    <h2><span class="n">03</span>Recommended plan</h2>
+    <p class="lede">Tick the recommended tier. The tiers differ in how far down the four stages they reach; delivery standards and response times are identical.</p>
+    <div class="plans">
+      <div class="plan">
+        <div class="pt">&#9744; REACH · covers 01</div>
+        <h3>Be findable first</h3>
+        <div class="p">$499<small> /mo</small></div>
+        <ul>
+          <li>8 short-form videos a month (TikTok, Reels, Shorts)</li>
+          <li>Hook and caption written for each</li>
+          <li>Full Google profile correction + description rewrite</li>
+          <li>4 profile updates a month</li>
+          <li>20 review replies a month</li>
+        </ul>
+      </div>
+      <div class="plan pick">
+        <div class="pt">&#9632; GROWTH · covers 01&ndash;03 · recommended</div>
+        <h3>Close recall and conversion</h3>
+        <div class="p">$999<small> /mo</small></div>
+        <ul>
+          <li>Everything in Reach, video raised to 12/month</li>
+          <li>12 Instagram and Facebook posts a month</li>
+          <li>Recall design: the one line, signature naming, visual hook</li>
+          <li>One visual system + in-store materials</li>
+          <li>Review request flow + DM script library</li>
+          <li>Monthly 30-minute review</li>
+        </ul>
+      </div>
+      <div class="plan">
+        <div class="pt">&#9744; FULL CYCLE · covers 01&ndash;04</div>
+        <h3>Turn customers into regulars</h3>
+        <div class="p">$1,799<small> /mo</small></div>
+        <ul>
+          <li>Everything in Growth</li>
+          <li>Loyalty system operation and maintenance</li>
+          <li>Member dashboard (returning share, lapsed list)</li>
+          <li>Birthday, holiday and lapsed triggers</li>
+          <li>One member campaign written each month</li>
+          <li>Stored value and package design</li>
+        </ul>
+      </div>
+    </div>
+    <div class="box">
+      <strong>&#9744; Loyalty system build &middot; from $2,800 one-time</strong>
+      <p class="note">Built by us, not an off-the-shelf tool resold. Scan to join, points on spend, redemption and a member back office carrying your brand, <b>deployed on your domain with the database in your name</b>. Multi-location and stored value quoted separately. Typically live in three to four weeks; runs under Full cycle afterwards, or $300/mo maintenance on its own.</p>
+    </div>
+    <div class="box">
+      <strong>&#9744; Reach the Chinese-speaking market &middot; +$400/month</strong>
+      <p class="note">More than a third of Greater Toronto speaks a language other than English at home, and a large share of those buyers decide on RED (Xiaohongshu) and WeChat — channels where your competitors typically have no presence at all. 8 posts a month written natively in Chinese, not translated. Adds to any tier.</p>
+    </div>
+    <div class="box">
+      <strong>&#9744; Four-stage diagnostic &middot; $299 one-time</strong>
+      <p class="note">Stage by stage: where you are leaking, how badly, and what the businesses beating you are doing, with a 30 / 60 / 90-day order of work. <b>Sign any plan and the fee comes off your first month.</b> The findings are yours to keep either way.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="n">04</span>Monthly deliverables</h2>
+    <p class="lede">This table is the contract schedule. Every line is countable and auditable in any month. These numbers are what we commit to — not views, followers or ranking.</p>
+    <table>
+      <thead>
+        <tr>
+          <th style="width:112px">Stage</th>
+          <th>Deliverable</th>
+          <th style="width:56px" class="r">Reach</th>
+          <th style="width:56px" class="r">Growth</th>
+          <th style="width:62px" class="r">Full</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="ch st1" rowspan="4">01 Get found</td><td>Short-form videos, edited and captioned<div class="sub">Vertical, cut for TikTok / Reels / Shorts</div></td><td class="r qty">8</td><td class="r qty">12</td><td class="r qty">12</td></tr>
+        <tr><td>Instagram and Facebook posts</td><td class="r qty">&mdash;</td><td class="r qty">12</td><td class="r qty">12</td></tr>
+        <tr><td>Google profile updates published</td><td class="r qty">4</td><td class="r qty">4</td><td class="r qty">4</td></tr>
+        <tr><td>Profile and category correction<div class="sub">Full pass month one, maintained after</div></td><td class="r qty">&#10003;</td><td class="r qty">&#10003;</td><td class="r qty">&#10003;</td></tr>
+        <tr><td class="ch st2" rowspan="3">02 Get remembered</td><td>The one line + signature item naming</td><td class="r qty">&mdash;</td><td class="r qty">Month 1</td><td class="r qty">Month 1</td></tr>
+        <tr><td>One visual system across channels</td><td class="r qty">&mdash;</td><td class="r qty">&#10003;</td><td class="r qty">&#10003;</td></tr>
+        <tr><td>In-store materials<div class="sub">Table card, window decal, packaging</div></td><td class="r qty">&mdash;</td><td class="r qty">&#10003;</td><td class="r qty">&#10003;</td></tr>
+        <tr><td class="ch st3" rowspan="3">03 Keep them</td><td>Review replies within 48 hours</td><td class="r qty">20</td><td class="r qty">30</td><td class="r qty">30</td></tr>
+        <tr><td>Review request kit<div class="sub">QR code, table card, follow-up templates</div></td><td class="r qty">Month 1</td><td class="r qty">Month 1</td><td class="r qty">Month 1</td></tr>
+        <tr><td>DM and comment script library</td><td class="r qty">&mdash;</td><td class="r qty">&#10003;</td><td class="r qty">&#10003;</td></tr>
+        <tr><td class="ch st4" rowspan="3">04 Bring them back</td><td>Loyalty system operation<div class="sub">Requires the build to be complete</div></td><td class="r qty">&mdash;</td><td class="r qty">&mdash;</td><td class="r qty">&#10003;</td></tr>
+        <tr><td>Member campaign planned and written</td><td class="r qty">&mdash;</td><td class="r qty">&mdash;</td><td class="r qty">1</td></tr>
+        <tr><td>Member data report<div class="sub">Returning share, repeat interval, lapsed list</div></td><td class="r qty">&mdash;</td><td class="r qty">&mdash;</td><td class="r qty">1</td></tr>
+        <tr><td class="ch">All tiers</td><td>Review call (topics and rhythm, 30 min)</td><td class="r qty">&mdash;</td><td class="r qty">1</td><td class="r qty">1</td></tr>
+      </tbody>
+    </table>
+    <p class="note">Beyond these volumes: review replies $4 each, short-form video $60 each, Instagram / Facebook post $30 each.</p>
+  </section>
+
+  <section>
+    <h2><span class="n">05</span>Timeline</h2>
+    <div class="timeline">
+      <div class="tl"><div class="w">Days 1&ndash;2</div><h4>Sign and authorise</h4><p>You approve access through each platform's own consent screen, on your own computer. No passwords change hands.</p></div>
+      <div class="tl"><div class="w">Days 3&ndash;4</div><h4>Shot list and profile pass</h4><p>Google profile corrected in full. You get your first shot list — three to five clips, filmed on your phone during a normal shift.</p></div>
+      <div class="tl"><div class="w">Day 5</div><h4>First delivery</h4><p>First batch of edited, captioned video and posts lands. If month one disappoints you, the remaining months are refunded.</p></div>
+      <div class="tl"><div class="w">Weeks 3&ndash;4</div><h4>Loyalty system live</h4><p>If Full cycle or a standalone build: back office handed over, staff trained, scan materials in store.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="n">06</span>Pricing</h2>
+    <div class="totals">
+      <div><span>Selected plan (monthly)</span><span class="num">$&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+      <div><span>Chinese-market add-on, if selected</span><span class="num">$&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+      <div><span>Diagnostic credit, if already purchased</span><span class="num">&minus;$&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+      <div><span>Subtotal</span><span class="num">$&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+      <div><span>HST 13%</span><span class="num">$&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+      <div class="grand"><span>Due for month one (CAD)</span><span class="num">$&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+    </div>
+  </section>
+
+  <div class="cols">
+    <section>
+      <h2><span class="n">07</span>Terms</h2>
+      <ol class="terms">
+        <li><b>Validity.</b> This proposal is valid for 30 days from the date issued.</li>
+        <li><b>Payment.</b> Billed monthly in advance by e-Transfer or cheque. Prices exclude HST (13% in Ontario).</li>
+        <li><b>No contract.</b> No minimum term. Cancel with 15 days' written notice; the current month is not prorated.</li>
+        <li><b>Month-one guarantee.</b> If the first month's delivery disappoints you, remaining prepaid months are refunded in full.</li>
+        <li><b>Account security.</b> We never request or store your login credentials. Access is granted through each platform's official consent flow and can be revoked by you at any time.</li>
+        <li><b>Filming.</b> Clips are filmed by you from our shot list unless a separate shoot day is quoted. We edit, caption and write every hook.</li>
+        <li><b>Publishing.</b> Where an official scheduling API is available and approved, we publish on your behalf. Otherwise finished files are delivered for you to post.</li>
+        <li><b>Intellectual property.</b> On payment, all copy, images and video delivered are yours to use without restriction.</li>
+        <li><b>Member data.</b> The loyalty system deploys on your domain and the database is yours, exportable at any time. On termination we hand over the data and back-office access in full.</li>
+        <li><b>Source material.</b> Premises, product and staff footage is supplied by you, and you confirm you hold the rights and releases to use it.</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2><span class="n">08</span>Not included</h2>
+      <ul class="excl">
+        <li><b>Guaranteed views, followers or ranking.</b> We commit to monthly output volume and quality. Reach and ranking sit with the platforms; we do not promise them and do not bill against them.</li>
+        <li><b>Review removal.</b> Removal is the platform's decision. We write replies and can file appeals ($299 each), without guaranteeing the outcome.</li>
+        <li><b>Account custody.</b> We do not take ownership of your accounts and do not hold your credentials.</li>
+        <li><b>Paid advertising.</b> Google Ads, Meta Ads and TikTok Ads spend and management are not included.</li>
+        <li><b>Professional shoots.</b> On-location filming, crew and talent are quoted separately; this proposal covers editing, design and copy.</li>
+        <li><b>Loyalty hardware and third-party costs.</b> Scanners, payment processing fees, SMS and email delivery, and hosting are billed at cost.</li>
+        <li><b>Profile ownership recovery.</b> If your Google profile is held by a former vendor, we can run the claim from $399; the outcome is Google's decision.</li>
+      </ul>
+    </section>
+  </div>
+
+  <section>
+    <h2><span class="n">09</span>Next step</h2>
+    <p class="lede">Tick a tier above, sign, and send this page back. Within one business day you will receive the authorisation links and your first shot list.</p>
+    <div class="sign">
+      <div>
+        <p>Client acceptance</p>
+        <div class="sline"></div>
+        <div class="scap"><span>Signature</span><span>Date</span></div>
+      </div>
+      <div>
+        <p>IdeaRise</p>
+        <div class="sline"></div>
+        <div class="scap"><span>Signature</span><span>Date</span></div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>IdeaRise 万合 &middot; <span class="todo">[registered company name]</span> &middot; <span class="todo">[HST number]</span></span>
+    <span><span class="todo">[address]</span> &middot; <span class="todo">[phone]</span> &middot; hello@idearise.ca</span>
+  </footer>
+
+</div>
+</body>
+</html>
