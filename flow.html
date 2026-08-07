@@ -568,7 +568,15 @@
     if (urlLang === 'en' || urlLang === 'zh') {
       localStorage.setItem('site-lang', urlLang);
     }
-    const saved = localStorage.getItem('site-lang');
+    let saved = localStorage.getItem('site-lang');
+    if (!saved) {
+      // 兼容本页此前独立持久化时用的旧 key，一次性迁移到统一的 site-lang
+      const legacy = localStorage.getItem('lang');
+      if (legacy === 'en' || legacy === 'zh') {
+        saved = legacy;
+        localStorage.setItem('site-lang', legacy);
+      }
+    }
     if (saved === 'en') setLang('en');
   } catch (e) {}
 </script>

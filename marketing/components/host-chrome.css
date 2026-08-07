@@ -45,14 +45,26 @@
 .host-logo span { color: var(--host-gold); }
 
 .host-links {
-  display: none;
+  display: flex;
   align-items: center;
-  gap: 28px;
+  gap: 20px;
   list-style: none;
   margin: 0;
-  padding: 0;
+  padding: 0 4px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
 }
-@media (min-width: 900px) { .host-links { display: flex; } }
+.host-links::-webkit-scrollbar { display: none; }
+.host-links li { flex: 0 0 auto; }
+@media (min-width: 900px) {
+  .host-links {
+    gap: 28px;
+    padding: 0;
+    overflow-x: visible;
+  }
+}
 
 .host-links a {
   color: var(--host-ink-soft);

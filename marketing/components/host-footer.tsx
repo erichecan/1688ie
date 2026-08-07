@@ -6,6 +6,7 @@ export function HostFooter() {
   const isEn = locale === "en";
 
   const hostLink = (hash: string) => (isEn ? `/?lang=en${hash}` : `/${hash}`);
+  const pageLink = (page: string) => (isEn ? `/${page}?lang=en` : `/${page}`);
   const proposal = isEn ? "/marketing/proposal-en.html" : "/marketing/proposal.html";
 
   const quickLinks = [
@@ -13,6 +14,8 @@ export function HostFooter() {
     { href: hostLink("#industries"), label: t("navIndustries") },
     { href: hostLink("#pricing"), label: t("navPricing") },
     { href: isEn ? "/marketing/en/" : "/marketing/", label: t("navMarketing") },
+    { href: pageLink("flow.html"), label: t("navFlow") },
+    { href: pageLink("help.html"), label: t("navHelp") },
   ];
 
   return (
