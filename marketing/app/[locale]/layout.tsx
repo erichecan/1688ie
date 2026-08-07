@@ -51,7 +51,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
   setRequestLocale(locale);
 
   return (
-    <html lang={locale === "zh" ? "zh-CN" : "en-CA"}>
+    <html lang={locale === "zh" ? "zh-CN" : "en-IE"}>
       <body className={`${plexSans.variable} ${plexMono.variable}`}>
         <NextIntlClientProvider>{children}</NextIntlClientProvider>
       </body>

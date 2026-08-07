@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "IdeaRise — More people through the door, more of them coming back",
-    "description": "Short-form video for TikTok, Instagram and Facebook, a Google profile people trust, and a loyalty system we build ourselves. Monthly output written into the contract. Serving the Greater Toronto Area."
+    "description": "Google Business Profile, WhatsApp broadcasts, Instagram and Facebook content, plus day-to-day loyalty-system operations for Irish local businesses. Monthly output written into the contract."
   },
   "nav": {
     "brand": "IdeaRise",
@@ -14,30 +14,30 @@
     "langLabel": "中文"
   },
   "hero": {
-    "eyebrow": "Greater Toronto · Growth for independent local businesses",
+    "eyebrow": "Ireland · Growth for independent local businesses",
     "headlineA": "More people through the door.",
     "headlineB": "More of them coming back.",
-    "sub": "TikToks and Reels that actually get made. A Google profile that survives being clicked. And a loyalty system that gives people a reason to return. How many videos, posts and replies land each month goes in the contract.",
+    "sub": "Findable on Google, reachable on WhatsApp, active on Instagram and Facebook — people who visit want to stay, and people who leave want to come back. How many posts, replies and messages land each month is written into the contract.",
     "primary": "Show me what I'm missing — free",
     "secondary": "See plans and prices",
     "notes": ["Answer in 1 business day", "Every price published", "We never ask for your password", "Monthly, cancel anytime"]
   },
   "covers": {
-    "eyebrow": "Hooks we wrote for clients last month",
-    "note": "Sample hooks and covers. Generating the image was never the hard part — knowing what will stop a thumb is. That is where most of the monthly work goes.",
+    "eyebrow": "Content we write for clients every month",
+    "note": "These are sample topics and covers. The hard part was never making the image — it's knowing what to post. That's where most of the monthly work goes.",
     "items": [
-      { "tag": "TikTok", "title": "POV: you searched\n\"near me\" and we\nweren't there", "color": 6 },
-      { "tag": "Local SEO", "title": "3 things missing\nfrom your Google\nlisting", "color": 2 },
-      { "tag": "Reels", "title": "Filmed in 40 seconds.\nPosted at 6pm.\n11k views.", "color": 1 },
-      { "tag": "Reviews", "title": "A 2-star landed.\nWhat to say\nin the first line", "color": 3 },
-      { "tag": "Loyalty", "title": "What share of sales\ncomes from people\nwho came before?", "color": 4 },
-      { "tag": "Trades", "title": "Your quote sheet:\nwhat clients\nactually read", "color": 8 },
-      { "tag": "Clinic", "title": "One line at the desk.\nThree times\nthe reviews.", "color": 5 },
-      { "tag": "TikTok", "title": "Posting daily and\nstill no bookings?\nIt's the first 2s", "color": 7 },
-      { "tag": "Growth", "title": "The free traffic\nmost shops\nnever claim", "color": 2 },
+      { "tag": "Food & Drink", "title": "Your first year in Dublin:\n5 mistakes we see\nevery time", "color": 1 },
+      { "tag": "Local SEO", "title": "Why locals search\nfor you and still\ncan't find you", "color": 2 },
+      { "tag": "Reviews", "title": "A 2-star review lands.\nWhat to say\nin the first line", "color": 6 },
+      { "tag": "Loyalty", "title": "What share of revenue\nis regulars? Most\nowners can't say", "color": 4 },
+      { "tag": "Trades", "title": "Your quote sheet:\nwhat customers\nactually read", "color": 8 },
+      { "tag": "Clinic", "title": "One line at reception.\nThree times\nthe reviews.", "color": 5 },
+      { "tag": "WhatsApp", "title": "Your WhatsApp Business\nlist sits there,\nunused", "color": 7 },
+      { "tag": "Growth", "title": "The free local traffic\nmost Irish shops\nnever claim", "color": 2 },
       { "tag": "Loyalty", "title": "Stored value isn't\na discount. It's\nthe next visit.", "color": 1 },
-      { "tag": "Facebook", "title": "Your last post\nwas 2023. Customers\nnotice that.", "color": 6 },
-      { "tag": "Reviews", "title": "One table card.\n40 more reviews\na month.", "color": 3 }
+      { "tag": "Estate Agents", "title": "Your WhatsApp group\nfor past clients —\nand nobody's asking", "color": 6 },
+      { "tag": "Reviews", "title": "One table card.\n40 more reviews\na month.", "color": 3 },
+      { "tag": "Chinese community", "title": "Reaching Dublin's\nChinese-speaking customers\non Xiaohongshu", "color": 3 }
     ]
   },
   "leak": {
@@ -61,28 +61,28 @@
         "no": "01",
         "name": "Get found",
         "en": "Reach",
-        "goal": "Show up in search, show up on the feed",
-        "symptom": "Someone within two kilometres searches for exactly what you sell, and you are on page four. Meanwhile the shop down the road posts three TikToks a week and half the neighbourhood already knows their name.",
+        "goal": "Show up in Google search, show up on Instagram and Facebook",
+        "symptom": "Someone nearby searches for exactly what you sell, and you're on page two — where nobody scrolls. A customer messages your Facebook page asking about a booking, and there's no WhatsApp number anywhere for them to reach you faster.",
         "does": [
-          "8 to 12 short-form videos a month, cut for TikTok, Reels and Shorts",
-          "Hooks written first — the first two seconds decide everything",
-          "Instagram and Facebook posts on a fixed weekly rhythm",
-          "Google Business Profile: categories, hours, services and photos corrected",
-          "Profile description rewritten around how people actually search"
+          "Google Business Profile fully corrected: categories, hours, services, photos",
+          "WhatsApp Business set up: profile, auto-replies, product / service catalogue",
+          "Bilingual profile rewrite, English and Chinese — not a straight translation",
+          "Instagram and Facebook posts on a monthly rhythm; TikTok used where it fits the business",
+          "Monthly business updates posted to your Google profile"
         ]
       },
       {
         "no": "02",
         "name": "Get remembered",
         "en": "Recall",
-        "goal": "A month later they can still name you",
-        "symptom": "They liked it. A month later they want to go back and all they have is \"that place near the plaza\" — no name, nothing to search, so they pick somewhere else.",
+        "goal": "A month later, they can still name you",
+        "symptom": "They had a good meal. A month later they want to go back, and all they remember is \"that place near the Luas stop\" — no name to search, so they pick somewhere else.",
         "does": [
           "The one line a customer can repeat to a friend",
           "Naming your signature item, plus a visual hook — one dish, one service, one colour",
-          "A recurring series people start watching for, not one-off posts",
+          "A recurring content slot people start watching for, not one-off posts",
           "In-store materials unified: table cards, window decals, packaging",
-          "One look across TikTok, Instagram and Facebook — not three different brands"
+          "One consistent look across every channel — not three different brands"
         ]
       },
       {
@@ -90,13 +90,13 @@
         "name": "Keep them",
         "en": "Convert",
         "goal": "Don't lose the people who already found you",
-        "symptom": "Someone watched the video, tapped through to Google — 23 reviews, newest from two years ago, two complaints nobody answered. They backed out and tapped the place next door with 180. You never knew they came.",
+        "symptom": "Someone finds you on Google — 23 reviews, the newest from two years ago, two complaints nobody answered. They back out and pick the place next door with 180 reviews instead. You never even knew they looked.",
         "does": [
-          "Every new review answered within 48 hours, negatives first",
-          "Review request flow: QR code, table card, follow-up text templates",
-          "DMs and comments answered from a script library, not improvised",
+          "Every new review answered in English within 48 hours, negatives first",
+          "Review request flow: QR code, table card, SMS and WhatsApp follow-up",
           "Profile info, buttons, hours and booking links all corrected",
-          "The questions you always get, answered on the page so nobody asks twice"
+          "First-response script library for DMs and enquiries",
+          "The questions you always get, answered on the page so nobody has to ask"
         ]
       },
       {
@@ -104,16 +104,16 @@
         "name": "Bring them back",
         "en": "Retain",
         "goal": "Turn a one-time customer into someone you know",
-        "symptom": "You don't know who came twice. What share of revenue comes from regulars? No answer. So when you run a promotion you blast a discount at everyone — including the people who were already coming.",
+        "symptom": "You don't know who came back a second time. What share of revenue comes from regulars? No answer. So when you run a promotion, you discount everyone — including the people who were coming anyway.",
         "does": [
-          "Loyalty system: scan to join, points on spend, points redemption",
+          "Loyalty system operations: scan to join, points on spend, points redemption",
           "Stored value and packages — lock in the next visit instead of discounting this one",
-          "Automatic triggers for birthdays, holidays and customers who have gone quiet",
-          "Member dashboard: who is a regular, who lapsed, what share of sales they are",
+          "Automatic triggers for birthdays, holidays and customers who've gone quiet (WhatsApp and SMS)",
+          "Member dashboard: who's a regular, who's lapsed, what share of sales they are",
           "One member campaign planned and written each month"
         ],
-        "badge": "This one runs on software we built",
-        "note": "We develop the loyalty system ourselves instead of configuring an off-the-shelf tool and reselling it. It deploys on your domain, the database is yours, nobody takes a cut per member, and it doesn't break because a vendor raised prices or shut down. Most agencies cannot deliver this stage at all — it is the most concrete difference between us and them."
+        "badge": "The system is yours; we run it day to day",
+        "note": "The loyalty system comes from the 1688.ie Essential Wangpu plan — a one-off build on your own website, not a rented SaaS tool resold to you. The data sits in your own back office, nobody takes a cut, and it doesn't stop working because a vendor raised prices or shut down. Day-to-day operation — scan-to-join, points redemption, member campaigns — is what the Full cycle plan does. Most marketing agencies can't deliver this stage at all."
       }
     ]
   },
@@ -163,67 +163,68 @@
     "items": [
       {
         "name": "Reach",
-        "en": "Stage 1",
-        "price": "$499",
+        "en": "Reach",
+        "price": "€390",
         "covers": "01",
-        "for": "First, be findable",
+        "for": "Get found first",
         "includes": [
-          "8 short-form videos a month for TikTok, Reels and Shorts",
-          "Hook and caption written for every one",
-          "Full Google Business Profile correction + description rewrite",
-          "4 profile updates a month",
-          "20 review replies a month"
+          "Full Google Business Profile cleanup + bilingual description rewrite (one-off, first month)",
+          "8 social posts per month (Instagram / Facebook, images included)",
+          "4 Google Business updates per month",
+          "20 review replies per month (Google + Facebook, English and Chinese)",
+          "Industry content bank (updated quarterly)",
+          "Monthly data brief"
         ],
         "highlight": false
       },
       {
         "name": "Growth",
-        "en": "Stages 1–3",
-        "price": "$999",
+        "en": "Growth",
+        "price": "€790",
         "covers": "01 · 02 · 03",
-        "for": "Close the two widest leaks: recall and conversion",
+        "for": "Fix the two biggest leaks: memory and conversion",
         "includes": [
-          "Everything in Reach, with video raised to 12 a month",
-          "12 Instagram and Facebook posts a month",
-          "Recall design: the one line, signature item naming, visual hook",
-          "One visual system across all channels + in-store materials",
-          "Review request flow + DM and comment script library",
-          "Monthly 30-minute review"
+          "Everything in Reach, social posts increased to 16 per month",
+          "WhatsApp Business contact list setup + 2 broadcast campaigns per month",
+          "Memorability design: one-line proposition, signature item naming, visual hook (one-off)",
+          "Unified visual guidelines across three channels + in-store materials (menus, posters, stickers)",
+          "Review request flow + enquiry response scripts (English and Chinese)",
+          "30-minute monthly review call"
         ],
         "highlight": true
       },
       {
         "name": "Full cycle",
-        "en": "Stages 1–4",
-        "price": "$1,799",
+        "en": "Full cycle",
+        "price": "€1,090",
         "covers": "01 · 02 · 03 · 04",
-        "for": "Turn one-time customers into regulars",
+        "for": "Turn one-time visitors into regulars",
         "includes": [
           "Everything in Growth",
-          "Loyalty system operation and maintenance",
-          "Member dashboard: returning share, repeat interval, lapsed list",
-          "Birthday, holiday and lapsed-customer triggers",
+          "Loyalty system operations: sign-up QR, points accrual and redemption, day-to-day upkeep",
+          "Member dashboard: repeat-customer share, purchase cycle, dormant list",
+          "Birthday / holiday / dormant-customer triggers (WhatsApp and SMS copy included)",
           "One member campaign planned and written each month",
-          "Stored value and package design"
+          "Stored-value and package deal design"
         ],
         "highlight": false
       }
     ],
     "extras": [
       {
-        "name": "Loyalty system build",
-        "price": "$2,800",
-        "unit": "from · one-time",
-        "desc": "Built by us, not resold. Scan to join, points on spend, redemption, and a member back office carrying your brand. Deploys on your domain; the database is yours. Multi-location and stored value quoted separately. Typically live in three to four weeks."
+        "name": "Four-stage diagnostic report",
+        "price": "€249",
+        "unit": "one-off",
+        "desc": "Stage by stage: where you're leaking, how much, and how far local Irish competitors have got. Includes a 30 / 60 / 90-day fix order. Fully credited against your first month on any plan."
       },
       {
-        "name": "Reach the Chinese-speaking market",
-        "price": "+$400",
-        "unit": "per month",
-        "desc": "Over a third of the GTA speaks a language other than English at home, and a large share of them make buying decisions on RED (Xiaohongshu) and WeChat — where your competitors have no presence at all. 8 posts a month, written in Chinese by native writers, not translated. Add to any plan."
+        "name": "Full cycle prerequisite: Essential Wangpu plan",
+        "price": "€999",
+        "unit": "one-off + €79/month hosting",
+        "desc": "The loyalty system Full cycle operates comes from the 1688.ie Essential Wangpu plan — built on your own site, data and assets yours permanently, not rented. Already on Essential or above? Start at €1,090/month. Not yet? Build Essential first."
       }
     ],
-    "footnote": "All prices in Canadian dollars, HST not included. Billed monthly, no contract, 15 days' notice to cancel. If month one disappoints you, the remaining months are refunded in full. Multi-location quoted separately."
+    "footnote": "All prices in euro, excluding 23% VAT. Monthly billing, no lock-in contract, cancel with 15 days' notice. Not satisfied in the first month — remaining months refunded in full. Multi-location and additional languages quoted separately. Full cycle requires the Essential Wangpu plan or above."
   },
   "howto": {
     "eyebrow": "How to start",
@@ -245,7 +246,7 @@
         "no": "03",
         "name": "Sign, delivery starts",
         "time": "Day 5",
-        "desc": "Your first batch of videos and posts arrives on the fifth business day. The loyalty system runs as its own project, typically live in three to four weeks."
+        "desc": "Your first batch of content arrives on the fifth business day. The loyalty system (Essential Wangpu plan) runs as its own project, typically live in three to four weeks."
       }
     ]
   },
@@ -254,28 +255,28 @@
     "title": "The six things you are about to ask.",
     "items": [
       {
-        "q": "Do you film the videos, or do I?",
-        "a": "You film, we do everything else. We send a shot list on Monday — usually three to five clips, thirty seconds each, shot on your phone during a normal shift. We cut, caption, write the hook and hand back finished vertical video. Nobody needs to come to your location and no camera crew gets billed to you. If you would rather we shoot, that is a separate day rate and we will quote it."
+        "q": "We don't have a Google Business Profile, or the password is with an old agency — what happens?",
+        "a": "This is common — profiles are often set up years ago by a web developer or a former employee, and the login gets lost along the way. The free check doesn't need admin access; public information is enough. Getting management access back is something we can arrange for you, quoted separately, and it needs proof that you own the business. That step is decided by Google, not us, so we can't guarantee the outcome."
       },
       {
-        "q": "Who publishes — you or me?",
-        "a": "Either. Where the platform has an official scheduling API — Instagram, Facebook, and TikTok once your account is approved — you authorise us through the platform's own consent screen and we schedule from there. You click once and can revoke it any time. We never ask for a password, because handing one over breaks the platforms' terms and the account that gets suspended is yours. On accounts without API access you get the finished file and a caption, and publishing takes you about two minutes."
+        "q": "Can you also reach Chinese-speaking customers?",
+        "a": "If it's relevant to your customers, yes. Every plan already includes bilingual review replies and a bilingual profile rewrite, in English and Chinese, from day one. For businesses that want a presence on Xiaohongshu specifically, to reach Dublin's Chinese-speaking community, we scope that separately — it's a smaller, more specific audience than Google or Instagram, so it's worth a quick conversation about fit rather than bundling it into every plan by default."
       },
       {
-        "q": "Can you reach Chinese-speaking customers too?",
-        "a": "Yes, and it is worth asking about. More than a third of Greater Toronto speaks a language other than English at home, and a large share of those buyers make decisions on RED and WeChat rather than Google — channels most of your competitors have no presence on whatsoever. We write those posts in Chinese, natively, not machine-translated. It is $400 a month on top of any plan."
+        "q": "Is the loyalty system something you build, or something off the shelf?",
+        "a": "It comes from the 1688.ie Essential Wangpu plan — a one-off build on your own website, so the data and the system are yours for good, not rented software. Off-the-shelf options like Square Loyalty or Smile.io switch on faster, but the monthly fee grows with your member count, your data sits on their servers, and adding a feature means waiting on their roadmap. Building it (in-house, not resold) is what the Essential Wangpu plan does; the Full cycle plan runs it day to day — scan-to-join, points redemption, the member dashboard. That's the clearest difference between us and a typical marketing agency."
       },
       {
-        "q": "Is the loyalty system bought or built?",
-        "a": "Built by us. Square Loyalty and Smile.io exist and switch on fast; the trade-off is a monthly fee that scales with your member count, your customer data sitting on someone else's servers, and joining a queue whenever you want a feature added. Ours deploys on your domain, the database is yours and exportable at any time, and features follow your business. If we ever stop working together you keep the system and the data — that goes in the contract."
+        "q": "I'm not in food and drink — does this still work for my business?",
+        "a": "Yes. Clinics, salons, garages, tradespeople, solicitors and estate agents all run this. The four stages stay the same; what changes is what happens inside each one — a café's stage four is stored value and points, an estate agent's is referrals and staying in touch with past clients."
       },
       {
         "q": "How many case studies do you have?",
-        "a": "We are not going to win you over with case-study numbers. They are trivially easy to invent in this industry and impossible for you to verify. Four things you can verify instead: the quality of the hooks on this page, how specific the free check turns out to be, the output volume in month one, and a live demo of the loyalty back office. If month one disappoints you, the remaining months are refunded. That beats any case study."
+        "a": "We're not going to try to win you over with a case-study count — numbers like that are easy to inflate and impossible for you to check. What you can check is on this page: the quality of the content ideas, how specific the free check turns out to be, the volume delivered in month one, and a live look at the loyalty back office. If month one disappoints you, the remaining months are refunded in full — that's worth more than any case study."
       },
       {
-        "q": "Can you guarantee views, followers or first-page ranking?",
-        "a": "No, and we won't claim it. Anyone who does deserves a follow-up question about how, because reach and ranking both sit with the platform. What we commit to is output volume and output quality, and both are written into the contract."
+        "q": "Can you guarantee a page-one ranking or more followers?",
+        "a": "No, and we won't say we can. Any agency that promises that is worth a follow-up question about how — rankings and reach both sit with the platform, not with us. What we commit to is output volume and output quality, and both go in the contract."
       }
     ]
   },
@@ -287,8 +288,8 @@
     "note": "Or write to us"
   },
   "footer": {
-    "tagline": "Greater Toronto Area · Short-form video, local search and loyalty",
-    "legal": "We commit to monthly output volume and output quality. We do not commit to views, followers, search ranking or foot traffic. Member data belongs to the business. All prices in Canadian dollars, HST not included.",
+    "tagline": "Ireland · The four-stage growth system for local business",
+    "legal": "We commit to monthly output volume and output quality — not search ranking, referral volume or foot traffic. Member data belongs to the business. All prices in euro, excluding 23% VAT.",
     "quote": "Proposal & pricing"
   },
   "host": {
