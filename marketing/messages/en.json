@@ -120,7 +120,7 @@
   "versus": {
     "eyebrow": "This replaces a hire",
     "title": "Everything a marketing executive ships in a month, we ship too.",
-    "lede": "You pay a fifth to a seventh of what they cost — and exactly how many posts, images and replies you get each month is written into the contract. Hiring doesn't come with that.",
+    "lede": "Our cheapest plan costs less than a sixth of what hiring someone would — and exactly how many posts, images and replies you get each month is written into the contract. Hiring doesn't come with that.",
     "colRole": "Hiring in Ireland",
     "colCost": "Total monthly cost",
     "colPlan": "Equivalent plan",
@@ -129,7 +129,7 @@
       {
         "role": "Full-time minimum wage employee",
         "roleNote": "Assistant / intern level",
-        "cost": "€2,606",
+        "cost": "€2,607",
         "plan": "Reach €390/mo",
         "ratio": "15%"
       },
