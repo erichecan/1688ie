@@ -2248,11 +2248,23 @@
   // LANG
   const langBtn = document.getElementById('langBtn');
   let isEn = false;
+  // 语言状态跨页延续：URL 参数优先于 localStorage（子站链接过来时带 ?lang=）
+  const urlLang = new URLSearchParams(location.search).get('lang');
+  if (urlLang === 'en' || urlLang === 'zh') {
+    localStorage.setItem('site-lang', urlLang);
+  }
+  if (localStorage.getItem('site-lang') === 'en') {
+    isEn = true;
+    document.body.classList.add('en');
+    langBtn.textContent = '中文';
+    document.documentElement.lang = 'en';
+  }
   langBtn.addEventListener('click', () => {
     isEn = !isEn;
     document.body.classList.toggle('en', isEn);
     langBtn.textContent = isEn ? '中文' : 'EN';
     document.documentElement.lang = isEn ? 'en' : 'zh-CN';
+    localStorage.setItem('site-lang', isEn ? 'en' : 'zh');
   });
 
   // HAMBURGER

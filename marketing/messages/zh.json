@@ -320,5 +320,25 @@
     "tagline": "大多伦多地区 · 本地生意的四段获客",
     "legal": "我们承诺每月的交付量与交付质量，不承诺搜索排名、推荐量或客流。会员系统数据归商户所有。所有价格为加元，不含 HST。",
     "quote": "方案书与报价"
+  },
+  "host": {
+    "brand": "1688",
+    "brandSuffix": ".ie",
+    "navSolutions": "解决方案",
+    "navIndustries": "行业覆盖",
+    "navPricing": "旺铺套餐",
+    "navMarketing": "营销服务",
+    "navFlow": "业务流程",
+    "navHelp": "帮助中心",
+    "navContact": "立即咨询",
+    "langLabel": "EN",
+    "footerTagline": "爱尔兰华人生意的数字化搭档。定制开发，量身打造，让每一个勤劳的华人生意都能被看见、被找到。",
+    "footerQuickLinks": "快速导航",
+    "footerContact": "联系方式",
+    "footerWhatsapp": "WhatsApp 咨询",
+    "footerEmail": "hello@1688.ie",
+    "footerProposal": "方案书",
+    "footerCopyright": "© 2026 1688.ie · 爱尔兰华人生意平台 · 版权所有",
+    "footerLocation": "Dublin, Ireland · 爱尔兰注册企业"
   }
 }

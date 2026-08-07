@@ -255,5 +255,25 @@
     "tagline": "Greater Toronto Area · Short-form video, local search and loyalty",
     "legal": "We commit to monthly output volume and output quality. We do not commit to views, followers, search ranking or foot traffic. Member data belongs to the business. All prices in Canadian dollars, HST not included.",
     "quote": "Proposal & pricing"
+  },
+  "host": {
+    "brand": "1688",
+    "brandSuffix": ".ie",
+    "navSolutions": "Solutions",
+    "navIndustries": "Industries",
+    "navPricing": "Pricing",
+    "navMarketing": "Marketing",
+    "navFlow": "How It Works",
+    "navHelp": "Help",
+    "navContact": "Contact",
+    "langLabel": "中文",
+    "footerTagline": "The digital partner for Chinese businesses in Ireland. Custom-built, tailored to you — making every hard-working business visible and findable.",
+    "footerQuickLinks": "Quick Links",
+    "footerContact": "Contact",
+    "footerWhatsapp": "WhatsApp",
+    "footerEmail": "hello@1688.ie",
+    "footerProposal": "Proposal (print-ready)",
+    "footerCopyright": "© 2026 1688.ie · Irish Chinese Business Platform · All rights reserved",
+    "footerLocation": "Dublin, Ireland · Registered in Ireland"
   }
 }

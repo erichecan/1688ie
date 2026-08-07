@@ -559,11 +559,16 @@
       langBtn.textContent = 'EN';
       document.documentElement.lang = 'zh-CN';
     }
-    try { localStorage.setItem('lang', lang); } catch (e) {}
+    try { localStorage.setItem('site-lang', lang); } catch (e) {}
   }
   langBtn.addEventListener('click', () => setLang(body.classList.contains('en') ? 'zh' : 'en'));
+  // 语言状态跨页延续：URL 参数优先于 localStorage（子站链接过来时带 ?lang=）
   try {
-    const saved = localStorage.getItem('lang');
+    const urlLang = new URLSearchParams(location.search).get('lang');
+    if (urlLang === 'en' || urlLang === 'zh') {
+      localStorage.setItem('site-lang', urlLang);
+    }
+    const saved = localStorage.getItem('site-lang');
     if (saved === 'en') setLang('en');
   } catch (e) {}
 </script>

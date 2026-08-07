@@ -1,6 +1,6 @@
 import { setRequestLocale } from "next-intl/server";
-import { SiteHeader } from "@/components/site-header";
-import { SiteFooter } from "@/components/site-footer";
+import { HostHeader } from "@/components/host-header";
+import { HostFooter } from "@/components/host-footer";
 import { Hero } from "@/components/sections/hero";
 import { CoverWall } from "@/components/sections/cover-wall";
 import { Leak } from "@/components/sections/leak";
@@ -9,6 +9,7 @@ import { Plans } from "@/components/sections/plans";
 import { Howto } from "@/components/sections/howto";
 import { Faq } from "@/components/sections/faq";
 import { FinalCta } from "@/components/sections/final-cta";
+import "@/components/host-chrome.css";
 
 export default async function HomePage({
   params,
@@ -20,7 +21,7 @@ export default async function HomePage({
 
   return (
     <>
-      <SiteHeader />
+      <HostHeader />
       <main>
         <Hero />
         <CoverWall />
@@ -31,7 +32,7 @@ export default async function HomePage({
         <Faq />
         <FinalCta />
       </main>
-      <SiteFooter />
+      <HostFooter />
     </>
   );
 }
