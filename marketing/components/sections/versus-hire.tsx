@@ -106,7 +106,7 @@ export function VersusHire() {
           {t("note")}
         </p>
         <p className="mt-2 max-w-3xl text-xs leading-relaxed text-ink-muted">
-          <span className="font-semibold">{t("sourceLabel")}：</span>
+          <span className="font-semibold">{t("sourceLabel")}</span>
           {t("sources")}
         </p>
       </Container>

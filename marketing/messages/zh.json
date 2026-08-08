@@ -3,16 +3,6 @@
     "title": "万合 IdeaRise — 让更多人进店，让来过的再来",
     "description": "爱尔兰华人小生意的获客与回头客。Google 商户、WhatsApp、小红书、Instagram / Facebook，加自研会员积分系统的日常运营。每月做多少，合同里写死。"
   },
-  "nav": {
-    "brand": "万合",
-    "brandEn": "IdeaRise",
-    "leak": "你丢了多少",
-    "stages": "我们做什么",
-    "plans": "套餐价格",
-    "faq": "常见问题",
-    "cta": "免费诊断",
-    "langLabel": "EN"
-  },
   "hero": {
     "eyebrow": "爱尔兰 · 华人小生意获客",
     "headlineA": "让更多人进店，",
@@ -214,8 +204,8 @@
       }
     ],
     "note": "雇人成本按 2026 年爱尔兰口径计算：最低工资 €14.15/小时（20 岁以上）× 39 小时/周，雇主 Class A PRSI 9%（周薪 ≤€552）；Marketing Executive 按年薪 €40,000 计，雇主 PRSI 11.25%（周薪 >€552）。均未计入 20 天法定年假 + 10 个公共假日、招聘费、设备与软件订阅。",
-    "sourceLabel": "数据来源",
-    "sources": "最低工资：IBEC 公告 · 雇主 PRSI：gov.ie SW 14（2026 年 1 月版）· 薪资：Morgan McKinley 2026 爱尔兰薪资指南"
+    "sourceLabel": "数据来源：",
+    "sources": "最低工资：gov.ie（依 Low Pay Commission 建议公布）· 雇主 PRSI：gov.ie SW 14（2026 年 1 月版）· 薪资：Morgan McKinley 2026 爱尔兰薪资指南"
   },
   "plans": {
     "eyebrow": "套餐与价格",
@@ -343,13 +333,11 @@
     "title": "先看看你漏在哪一段。",
     "sub": "免费，1 个工作日出结果，给个店名和地址就够了。四段逐一列出，看完再决定要不要往下走——诊断结果是你的，拿去给任何人做都行。",
     "button": "申请免费诊断",
-    "secondary": "下载方案书（PDF）",
+    "secondary": "查看方案书（可打印）",
     "note": "或直接写信"
   },
   "footer": {
-    "tagline": "爱尔兰 · 本地生意的四段获客",
-    "legal": "我们承诺每月的交付量与交付质量，不承诺搜索排名、推荐量或客流。会员系统数据归商户所有。所有价格为欧元，不含 23% VAT。",
-    "quote": "方案书与报价"
+    "legal": "我们承诺每月的交付量与交付质量，不承诺搜索排名、推荐量或客流。会员系统数据归商户所有。所有价格为欧元，不含 23% VAT。"
   },
   "host": {
     "brand": "1688",

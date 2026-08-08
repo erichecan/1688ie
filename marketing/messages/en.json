@@ -3,16 +3,6 @@
     "title": "IdeaRise — More people through the door, more of them coming back",
     "description": "Google Business Profile, WhatsApp broadcasts, Instagram and Facebook content, plus day-to-day loyalty-system operations for Irish local businesses. Monthly output written into the contract."
   },
-  "nav": {
-    "brand": "IdeaRise",
-    "brandEn": "万合",
-    "leak": "What you're losing",
-    "stages": "What we do",
-    "plans": "Plans",
-    "faq": "FAQ",
-    "cta": "Free check",
-    "langLabel": "中文"
-  },
   "hero": {
     "eyebrow": "Ireland · Growth for independent local businesses",
     "headlineA": "More people through the door.",
@@ -149,8 +139,8 @@
       }
     ],
     "note": "Employer cost on 2026 Irish rates: minimum wage €14.15/hour (aged 20+) × 39 hours/week, employer Class A PRSI 9% (weekly pay ≤€552); Marketing Executive at €40,000/year, employer PRSI 11.25% (weekly pay >€552). Excludes 20 days statutory annual leave plus 10 public holidays, recruitment costs, equipment and software subscriptions.",
-    "sourceLabel": "Sources",
-    "sources": "Minimum wage: IBEC · Employer PRSI: gov.ie SW 14 (January 2026) · Salary: Morgan McKinley 2026 Ireland Salary Guide"
+    "sourceLabel": "Sources: ",
+    "sources": "Minimum wage: gov.ie (on Low Pay Commission advice) · Employer PRSI: gov.ie SW 14 (January 2026) · Salary: Morgan McKinley 2026 Ireland Salary Guide"
   },
   "plans": {
     "eyebrow": "Plans and pricing",
@@ -278,13 +268,11 @@
     "title": "Start by finding out which stage is leaking.",
     "sub": "Free, back within one business day, and a business name and address is all we need. Decide afterwards — the findings are yours either way, take them to anyone you like.",
     "button": "Request the free check",
-    "secondary": "Download the proposal (PDF)",
+    "secondary": "View the proposal (print-ready)",
     "note": "Or write to us"
   },
   "footer": {
-    "tagline": "Ireland · The four-stage growth system for local business",
-    "legal": "We commit to monthly output volume and output quality — not search ranking, referral volume or foot traffic. Member data belongs to the business. All prices in euro, excluding 23% VAT.",
-    "quote": "Proposal & pricing"
+    "legal": "We commit to monthly output volume and output quality — not search ranking, referral volume or foot traffic. Member data belongs to the business. All prices in euro, excluding 23% VAT."
   },
   "host": {
     "brand": "1688",

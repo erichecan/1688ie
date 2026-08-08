@@ -6,9 +6,10 @@ export function HostHeader() {
   const isEn = locale === "en";
 
   // 回主站带上语言状态，主站读 ?lang= 后写入 localStorage
-  const hostHome = isEn ? "/?lang=en" : "/";
-  const hostLink = (hash: string) => (isEn ? `/?lang=en${hash}` : `/${hash}`);
-  const pageLink = (page: string) => (isEn ? `/${page}?lang=en` : `/${page}`);
+  // 两个方向都要带上 lang，否则 localStorage 里残留的旧语言会覆盖当前子站语言
+  const hostHome = isEn ? "/?lang=en" : "/?lang=zh";
+  const hostLink = (hash: string) => (isEn ? `/?lang=en${hash}` : `/?lang=zh${hash}`);
+  const pageLink = (page: string) => (isEn ? `/${page}?lang=en` : `/${page}?lang=zh`);
   const langHref = isEn ? "/marketing/" : "/marketing/en/";
 
   const links = [

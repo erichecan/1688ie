@@ -6,8 +6,8 @@ export function HostFooter() {
   const locale = useLocale();
   const isEn = locale === "en";
 
-  const hostLink = (hash: string) => (isEn ? `/?lang=en${hash}` : `/${hash}`);
-  const pageLink = (page: string) => (isEn ? `/${page}?lang=en` : `/${page}`);
+  const hostLink = (hash: string) => (isEn ? `/?lang=en${hash}` : `/?lang=zh${hash}`);
+  const pageLink = (page: string) => (isEn ? `/${page}?lang=en` : `/${page}?lang=zh`);
   const proposal = isEn ? "/marketing/proposal-en.html" : "/marketing/proposal.html";
 
   const quickLinks = [
@@ -24,7 +24,7 @@ export function HostFooter() {
       <footer className="host-footer">
         <div className="host-footer-inner">
           <div>
-            <a href={isEn ? "/?lang=en" : "/"} className="host-logo">
+            <a href={isEn ? "/?lang=en" : "/?lang=zh"} className="host-logo">
               {t("brand")}
               <span>{t("brandSuffix")}</span>
             </a>
