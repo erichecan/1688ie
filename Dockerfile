@@ -15,6 +15,8 @@ COPY help.html /usr/share/nginx/html/help.html
 COPY flow.html /usr/share/nginx/html/flow.html
 COPY demos.html /usr/share/nginx/html/demos.html
 COPY nail-salon.html /usr/share/nginx/html/salon.html
+COPY robots.txt /usr/share/nginx/html/robots.txt
+COPY sitemap.xml /usr/share/nginx/html/sitemap.xml
 COPY warehouse-demo/ /usr/share/nginx/html/warehouse-demo/
 COPY local-warehouse-demo/ /usr/share/nginx/html/local-warehouse-demo/
 COPY --from=marketing-build /build/out/ /usr/share/nginx/html/marketing/
