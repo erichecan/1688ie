@@ -31,12 +31,12 @@
       { "tag": "Reviews", "title": "A 2-star review lands.\nWhat to say\nin the first line", "color": 6 },
       { "tag": "Loyalty", "title": "What share of revenue\nis regulars? Most\nowners can't say", "color": 4 },
       { "tag": "Trades", "title": "Your quote sheet:\nwhat customers\nactually read", "color": 8 },
-      { "tag": "Clinic", "title": "One line at reception.\nThree times\nthe reviews.", "color": 5 },
+      { "tag": "Clinic", "title": "One line at reception:\nhow much can it\nmove your reviews?", "color": 5 },
       { "tag": "WhatsApp", "title": "Your WhatsApp Business\nlist sits there,\nunused", "color": 7 },
       { "tag": "Growth", "title": "The free local traffic\nmost Irish shops\nnever claim", "color": 2 },
       { "tag": "Loyalty", "title": "Stored value isn't\na discount. It's\nthe next visit.", "color": 1 },
       { "tag": "Estate Agents", "title": "Your WhatsApp group\nfor past clients —\nand nobody's asking", "color": 6 },
-      { "tag": "Reviews", "title": "One table card.\n40 more reviews\na month.", "color": 3 },
+      { "tag": "Reviews", "title": "One table card:\nhow many more\nreviews a month?", "color": 3 },
       { "tag": "Chinese community", "title": "Reaching Dublin's\nChinese-speaking customers\non Xiaohongshu", "color": 3 }
     ]
   },
