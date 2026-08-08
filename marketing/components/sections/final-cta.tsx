@@ -1,12 +1,12 @@
 import { useLocale, useTranslations } from "next-intl";
 import { Container } from "@/components/ui/container";
 
-const CONTACT_EMAIL = "hello@idearise.ca";
+const CONTACT_EMAIL = "hello@1688.ie";
 
 export function FinalCta() {
   const t = useTranslations("cta");
   const locale = useLocale();
-  const proposal = locale === "en" ? "/proposal-en.html" : "/proposal.html";
+  const proposal = locale === "en" ? "/marketing/proposal-en.html" : "/marketing/proposal.html";
 
   return (
     <section id="start" className="bg-flare py-20 text-white sm:py-28">
