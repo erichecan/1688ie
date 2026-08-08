@@ -212,19 +212,13 @@
     ],
     "extras": [
       {
-        "name": "Four-stage diagnostic report",
-        "price": "€249",
-        "unit": "one-off",
-        "desc": "Stage by stage: where you're leaking, how much, and how far local Irish competitors have got. Includes a 30 / 60 / 90-day fix order. Fully credited against your first month on any plan."
-      },
-      {
         "name": "Full cycle prerequisite: Essential Wangpu plan",
         "price": "€999",
         "unit": "one-off + €79/month hosting",
         "desc": "The loyalty system Full cycle operates comes from the 1688.ie Essential Wangpu plan — built on your own site, data and assets yours permanently, not rented. Already on Essential or above? Start at €1,090/month. Not yet? Build Essential first."
       }
     ],
-    "footnote": "All prices in euro, excluding 23% VAT. Monthly billing, no lock-in contract, cancel with 15 days' notice. Not satisfied in the first month — remaining months refunded in full. Multi-location and additional languages quoted separately. Full cycle requires the Essential Wangpu plan or above."
+    "footnote": "All prices in euro, excluding 23% VAT. Monthly billing, no lock-in contract, cancel with 15 days' notice. Not satisfied in the first month — remaining months refunded in full. Multi-location and additional languages quoted separately. Full cycle requires the Essential Wangpu plan or above. Beyond plan volumes: review replies €4 each, Instagram / Facebook posts €25 each, short-form video €45 each (on request). Review appeal filing €250 each; the outcome is the platform's decision."
   },
   "howto": {
     "eyebrow": "How to start",
@@ -256,7 +250,7 @@
     "items": [
       {
         "q": "We don't have a Google Business Profile, or the password is with an old agency — what happens?",
-        "a": "This is common — profiles are often set up years ago by a web developer or a former employee, and the login gets lost along the way. The free check doesn't need admin access; public information is enough. Getting management access back is something we can arrange for you, quoted separately, and it needs proof that you own the business. That step is decided by Google, not us, so we can't guarantee the outcome."
+        "a": "This is common — profiles are often set up years ago by a web developer or a former employee, and the login gets lost along the way. The free check doesn't need admin access; public information is enough. Getting management access back is something we can arrange for you, from €350, and it needs proof that you own the business. That step is decided by Google, not us, so we can't guarantee the outcome."
       },
       {
         "q": "Can you also reach Chinese-speaking customers?",
