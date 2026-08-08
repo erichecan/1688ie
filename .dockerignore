@@ -1,0 +1,11 @@
+.git
+docs
+preview
+*.docx
+*.pdf
+*.tmp
+.~lock*
+.DS_Store
+marketing/node_modules
+marketing/.next
+marketing/out

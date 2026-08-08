@@ -1,0 +1,144 @@
+/* 取自 1688.ie index.html 的 :root，用于让子站的导航页脚与主站一致 */
+.host-chrome {
+  --host-red: #C8102E;
+  --host-gold: #D4AF37;
+  --host-cream: #FAF6F0;
+  --host-ink: #1C1C1C;
+  --host-ink-soft: #3A3A3A;
+  --host-ink-mute: #6B6B6B;
+  --host-line: #E0D6C2;
+  --host-nav-h: 64px;
+}
+
+.host-nav {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  height: var(--host-nav-h);
+  display: flex;
+  align-items: center;
+  background: rgba(250, 246, 240, 0.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--host-line);
+  font-family: 'Noto Serif SC', serif;
+}
+
+.host-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.host-logo {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--host-red);
+  text-decoration: none;
+  letter-spacing: -0.5px;
+  white-space: nowrap;
+}
+.host-logo span { color: var(--host-gold); }
+
+.host-links {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  list-style: none;
+  margin: 0;
+  padding: 0 4px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.host-links::-webkit-scrollbar { display: none; }
+.host-links li { flex: 0 0 auto; }
+@media (min-width: 900px) {
+  .host-links {
+    gap: 28px;
+    padding: 0;
+    overflow-x: visible;
+  }
+}
+
+.host-links a {
+  color: var(--host-ink-soft);
+  text-decoration: none;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  transition: color 0.2s;
+}
+.host-links a:hover { color: var(--host-red); }
+.host-links a[aria-current="page"] {
+  color: var(--host-red);
+  font-weight: 700;
+}
+
+.host-lang {
+  background: var(--host-ink);
+  color: var(--host-cream);
+  border: none;
+  padding: 6px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-family: inherit;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.2s;
+}
+.host-lang:hover { background: var(--host-red); }
+
+.host-footer {
+  background: var(--host-cream);
+  border-top: 1px solid var(--host-line);
+  padding: 48px 0 28px;
+  font-family: 'Noto Serif SC', serif;
+  color: var(--host-ink-soft);
+}
+.host-footer-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+}
+@media (min-width: 780px) {
+  .host-footer-inner { grid-template-columns: 2fr 1fr 1fr; }
+}
+.host-footer p { margin: 10px 0 0; font-size: 0.875rem; line-height: 1.7; }
+.host-footer h4 { margin: 0 0 12px; font-size: 0.9rem; color: var(--host-ink); }
+.host-footer-col a {
+  display: block;
+  color: var(--host-ink-mute);
+  text-decoration: none;
+  font-size: 0.875rem;
+  padding: 3px 0;
+}
+.host-footer-col a:hover { color: var(--host-red); }
+.host-footer-bottom {
+  max-width: 1100px;
+  margin: 32px auto 0;
+  padding: 20px 20px 0;
+  border-top: 1px solid var(--host-line);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  font-size: 0.8rem;
+  color: var(--host-ink-mute);
+}
+.host-footer-legal {
+  max-width: 1100px;
+  margin: 8px auto 0;
+  padding: 0 20px;
+  font-size: 0.75rem;
+  line-height: 1.6;
+  color: var(--host-ink-mute);
+  opacity: 0.85;
+}

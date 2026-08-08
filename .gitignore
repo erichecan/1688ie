@@ -9,3 +9,9 @@ node_modules/
 # SDD 执行工作区与 git worktree（本地 scratch，不入库）
 .worktrees/
 .superpowers/
+
+marketing/node_modules/
+marketing/.next/
+marketing/out/
+marketing/tsconfig.tsbuildinfo
+marketing/next-env.d.ts

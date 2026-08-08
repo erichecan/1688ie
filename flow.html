@@ -559,11 +559,24 @@
       langBtn.textContent = 'EN';
       document.documentElement.lang = 'zh-CN';
     }
-    try { localStorage.setItem('lang', lang); } catch (e) {}
+    try { localStorage.setItem('site-lang', lang); } catch (e) {}
   }
   langBtn.addEventListener('click', () => setLang(body.classList.contains('en') ? 'zh' : 'en'));
+  // 语言状态跨页延续：URL 参数优先于 localStorage（子站链接过来时带 ?lang=）
   try {
-    const saved = localStorage.getItem('lang');
+    const urlLang = new URLSearchParams(location.search).get('lang');
+    if (urlLang === 'en' || urlLang === 'zh') {
+      localStorage.setItem('site-lang', urlLang);
+    }
+    let saved = localStorage.getItem('site-lang');
+    if (!saved) {
+      // 兼容本页此前独立持久化时用的旧 key，一次性迁移到统一的 site-lang
+      const legacy = localStorage.getItem('lang');
+      if (legacy === 'en' || legacy === 'zh') {
+        saved = legacy;
+        localStorage.setItem('site-lang', legacy);
+      }
+    }
     if (saved === 'en') setLang('en');
   } catch (e) {}
 </script>

@@ -1,0 +1,297 @@
+{
+  "meta": {
+    "title": "IdeaRise — More people through the door, more of them coming back",
+    "description": "Google Business Profile, WhatsApp broadcasts, Instagram and Facebook content, plus day-to-day loyalty-system operations for Irish local businesses. Monthly output written into the contract."
+  },
+  "hero": {
+    "eyebrow": "Ireland · Growth for independent local businesses",
+    "headlineA": "More people through the door.",
+    "headlineB": "More of them coming back.",
+    "sub": "Findable on Google, reachable on WhatsApp, active on Instagram and Facebook — people who visit want to stay, and people who leave want to come back. How many posts, replies and messages land each month is written into the contract.",
+    "primary": "Show me what I'm missing — free",
+    "secondary": "See plans and prices",
+    "notes": ["Answer in 1 business day", "Every price published", "We never ask for your password", "Monthly, cancel anytime"]
+  },
+  "covers": {
+    "eyebrow": "Content we write for clients every month",
+    "note": "These are sample topics and covers. The hard part was never making the image — it's knowing what to post. That's where most of the monthly work goes.",
+    "items": [
+      { "tag": "Food & Drink", "title": "Your first year in Dublin:\n5 mistakes we see\nevery time", "color": 1 },
+      { "tag": "Local SEO", "title": "Why locals search\nfor you and still\ncan't find you", "color": 2 },
+      { "tag": "Reviews", "title": "A 2-star review lands.\nWhat to say\nin the first line", "color": 6 },
+      { "tag": "Loyalty", "title": "What share of revenue\nis regulars? Most\nowners can't say", "color": 4 },
+      { "tag": "Trades", "title": "Your quote sheet:\nwhat customers\nactually read", "color": 8 },
+      { "tag": "Clinic", "title": "One line at reception:\nhow much can it\nmove your reviews?", "color": 5 },
+      { "tag": "WhatsApp", "title": "Your WhatsApp Business\nlist sits there,\nunused", "color": 7 },
+      { "tag": "Growth", "title": "The free local traffic\nmost Irish shops\nnever claim", "color": 2 },
+      { "tag": "Loyalty", "title": "Stored value isn't\na discount. It's\nthe next visit.", "color": 1 },
+      { "tag": "Estate Agents", "title": "Your WhatsApp group\nfor past clients —\nand nobody's asking", "color": 6 },
+      { "tag": "Reviews", "title": "One table card:\nhow many more\nreviews a month?", "color": 3 },
+      { "tag": "Chinese community", "title": "Reaching Dublin's\nChinese-speaking customers\non Xiaohongshu", "color": 3 }
+    ]
+  },
+  "leak": {
+    "eyebrow": "Run the numbers first",
+    "title": "A thousand people see you. Seven come back.",
+    "steps": [
+      { "n": "1000", "label": "Saw you" },
+      { "n": "180", "label": "Clicked" },
+      { "n": "36", "label": "Showed up" },
+      { "n": "7", "label": "Came back" }
+    ],
+    "line1": "The 993 who dropped off already cost you money. You just didn't keep them.",
+    "line2": "Double the ad spend and seven becomes fourteen. Give people a reason to stay and a reason to return, and the same thousand are worth three or four times as much.",
+    "note": "Illustrative figures, to show where the money goes. Your own numbers get worked out in the free check."
+  },
+  "stages": {
+    "eyebrow": "What we do",
+    "title": "Four things, done together.",
+    "items": [
+      {
+        "no": "01",
+        "name": "Get found",
+        "en": "Reach",
+        "goal": "Show up in Google search, show up on Instagram and Facebook",
+        "symptom": "Someone nearby searches for exactly what you sell, and you're on page two — where nobody scrolls. A customer messages your Facebook page asking about a booking, and there's no WhatsApp number anywhere for them to reach you faster.",
+        "does": [
+          "Google Business Profile fully corrected: categories, hours, services, photos",
+          "WhatsApp Business set up: profile, auto-replies, product / service catalogue",
+          "Bilingual profile rewrite, English and Chinese — not a straight translation",
+          "Instagram and Facebook posts on a monthly rhythm; TikTok used where it fits the business",
+          "Monthly business updates posted to your Google profile"
+        ]
+      },
+      {
+        "no": "02",
+        "name": "Get remembered",
+        "en": "Recall",
+        "goal": "A month later, they can still name you",
+        "symptom": "They had a good meal. A month later they want to go back, and all they remember is \"that place near the Luas stop\" — no name to search, so they pick somewhere else.",
+        "does": [
+          "The one line a customer can repeat to a friend",
+          "Naming your signature item, plus a visual hook — one dish, one service, one colour",
+          "A recurring content slot people start watching for, not one-off posts",
+          "In-store materials unified: table cards, window decals, packaging",
+          "One consistent look across every channel — not three different brands"
+        ]
+      },
+      {
+        "no": "03",
+        "name": "Keep them",
+        "en": "Convert",
+        "goal": "Don't lose the people who already found you",
+        "symptom": "Someone finds you on Google — 23 reviews, the newest from two years ago, two complaints nobody answered. They back out and pick the place next door with 180 reviews instead. You never even knew they looked.",
+        "does": [
+          "Every new review answered in English within 48 hours, negatives first",
+          "Review request flow: QR code, table card, SMS and WhatsApp follow-up",
+          "Profile info, buttons, hours and booking links all corrected",
+          "First-response script library for DMs and enquiries",
+          "The questions you always get, answered on the page so nobody has to ask"
+        ]
+      },
+      {
+        "no": "04",
+        "name": "Bring them back",
+        "en": "Retain",
+        "goal": "Turn a one-time customer into someone you know",
+        "symptom": "You don't know who came back a second time. What share of revenue comes from regulars? No answer. So when you run a promotion, you discount everyone — including the people who were coming anyway.",
+        "does": [
+          "Loyalty system operations: scan to join, points on spend, points redemption",
+          "Stored value and packages — lock in the next visit instead of discounting this one",
+          "Automatic triggers for birthdays, holidays and customers who've gone quiet (WhatsApp and SMS)",
+          "Member dashboard: who's a regular, who's lapsed, what share of sales they are",
+          "One member campaign planned and written each month"
+        ],
+        "badge": "The system is yours; we run it day to day",
+        "note": "The loyalty system comes from the 1688.ie Essential Wangpu plan — a one-off build on your own website, not a rented SaaS tool resold to you. The data sits in your own back office, nobody takes a cut, and it doesn't stop working because a vendor raised prices or shut down. Day-to-day operation — scan-to-join, points redemption, member campaigns — is what the Full cycle plan does. Most marketing agencies can't deliver this stage at all."
+      }
+    ]
+  },
+  "versus": {
+    "eyebrow": "This replaces a hire",
+    "title": "Everything a marketing executive ships in a month, we ship too.",
+    "lede": "Our cheapest plan costs less than a sixth of what hiring someone would — and exactly how many posts, images and replies you get each month is written into the contract. Hiring doesn't come with that.",
+    "colRole": "Hiring in Ireland",
+    "colCost": "Total monthly cost",
+    "colPlan": "Equivalent plan",
+    "colRatio": "You pay",
+    "rows": [
+      {
+        "role": "Full-time minimum wage employee",
+        "roleNote": "Assistant / intern level",
+        "cost": "€2,607",
+        "plan": "Reach €390/mo",
+        "ratio": "15%"
+      },
+      {
+        "role": "Marketing Executive",
+        "roleNote": "Dublin, 0–3 years",
+        "cost": "€3,708",
+        "plan": "Growth €790/mo",
+        "ratio": "21%"
+      },
+      {
+        "role": "Marketing Executive",
+        "roleNote": "Plus a loyalty system you own",
+        "cost": "€3,708",
+        "plan": "Full cycle €1,090/mo",
+        "ratio": "29%"
+      }
+    ],
+    "note": "Employer cost on 2026 Irish rates: minimum wage €14.15/hour (aged 20+) × 39 hours/week, employer Class A PRSI 9% (weekly pay ≤€552); Marketing Executive at €40,000/year, employer PRSI 11.25% (weekly pay >€552). Excludes 20 days statutory annual leave plus 10 public holidays, recruitment costs, equipment and software subscriptions.",
+    "sourceLabel": "Sources: ",
+    "sources": "Minimum wage: gov.ie (on Low Pay Commission advice) · Employer PRSI: gov.ie SW 14 (January 2026) · Salary: Morgan McKinley 2026 Ireland Salary Guide"
+  },
+  "plans": {
+    "eyebrow": "Plans and pricing",
+    "title": "Pick by how far you need to go.",
+    "lede": "Price and monthly output printed together, so you can see exactly what you get. The industry standard around here is two calls before anyone gives you a number.",
+    "popularTag": "Most clients pick this",
+    "monthly": "/mo",
+    "coversLabel": "Covers",
+    "planCta": "Start with the free check",
+    "items": [
+      {
+        "name": "Reach",
+        "en": "Reach",
+        "price": "€390",
+        "covers": "01",
+        "for": "Get found first",
+        "includes": [
+          "Full Google Business Profile cleanup + bilingual description rewrite (one-off, first month)",
+          "8 social posts per month (Instagram / Facebook, images included)",
+          "4 Google Business updates per month",
+          "20 review replies per month (Google + Facebook, English and Chinese)",
+          "Industry content bank (updated quarterly)",
+          "Monthly data brief"
+        ],
+        "highlight": false
+      },
+      {
+        "name": "Growth",
+        "en": "Growth",
+        "price": "€790",
+        "covers": "01 · 02 · 03",
+        "for": "Fix the two biggest leaks: memory and conversion",
+        "includes": [
+          "Everything in Reach, social posts increased to 16 per month",
+          "WhatsApp Business contact list setup + 2 broadcast campaigns per month",
+          "Memorability design: one-line proposition, signature item naming, visual hook (one-off)",
+          "Unified visual guidelines across three channels + in-store materials (menus, posters, stickers)",
+          "Review request flow + enquiry response scripts (English and Chinese)",
+          "30-minute monthly review call"
+        ],
+        "highlight": true
+      },
+      {
+        "name": "Full cycle",
+        "en": "Full cycle",
+        "price": "€1,090",
+        "covers": "01 · 02 · 03 · 04",
+        "for": "Turn one-time visitors into regulars",
+        "includes": [
+          "Everything in Growth",
+          "Loyalty system operations: sign-up QR, points accrual and redemption, day-to-day upkeep",
+          "Member dashboard: repeat-customer share, purchase cycle, dormant list",
+          "Birthday / holiday / dormant-customer triggers (WhatsApp and SMS copy included)",
+          "One member campaign planned and written each month",
+          "Stored-value and package deal design"
+        ],
+        "highlight": false
+      }
+    ],
+    "extras": [
+      {
+        "name": "Full cycle prerequisite: Essential Wangpu plan",
+        "price": "€999",
+        "unit": "one-off + €79/month hosting",
+        "desc": "The loyalty system Full cycle operates comes from the 1688.ie Essential Wangpu plan — built on your own site, data and assets yours permanently, not rented. Already on Essential or above? Start at €1,090/month. Not yet? Build Essential first."
+      }
+    ],
+    "footnote": "All prices in euro, excluding 23% VAT. Monthly billing, no lock-in contract, cancel with 15 days' notice. Not satisfied in the first month — remaining months refunded in full. Multi-location and additional languages quoted separately. Full cycle requires the Essential Wangpu plan or above. Beyond plan volumes: review replies €4 each, Instagram / Facebook posts €25 each, short-form video €45 each (on request). Review appeal filing €250 each; the outcome is the platform's decision."
+  },
+  "howto": {
+    "eyebrow": "How to start",
+    "title": "Three steps. First content in your hands within a week.",
+    "steps": [
+      {
+        "no": "01",
+        "name": "Free check",
+        "time": "1 business day",
+        "desc": "Send us a business name and address. We look at all four stages and tell you which one is leaking, how badly, and what the businesses beating you in search are actually doing. No charge, and nothing to decide first."
+      },
+      {
+        "no": "02",
+        "name": "Read it, pick a plan",
+        "time": "30 minutes",
+        "desc": "We walk through what we found and what we would recommend. Take the findings and do the work in-house, or hand them to another agency. We won't chase you."
+      },
+      {
+        "no": "03",
+        "name": "Sign, delivery starts",
+        "time": "Day 5",
+        "desc": "Your first batch of content arrives on the fifth business day. The loyalty system (Essential Wangpu plan) runs as its own project, typically live in three to four weeks."
+      }
+    ]
+  },
+  "faq": {
+    "eyebrow": "FAQ",
+    "title": "The six things you are about to ask.",
+    "items": [
+      {
+        "q": "We don't have a Google Business Profile, or the password is with an old agency — what happens?",
+        "a": "This is common — profiles are often set up years ago by a web developer or a former employee, and the login gets lost along the way. The free check doesn't need admin access; public information is enough. Getting management access back is something we can arrange for you, from €350, and it needs proof that you own the business. That step is decided by Google, not us, so we can't guarantee the outcome."
+      },
+      {
+        "q": "Can you also reach Chinese-speaking customers?",
+        "a": "If it's relevant to your customers, yes. Every plan already includes bilingual review replies and a bilingual profile rewrite, in English and Chinese, from day one. For businesses that want a presence on Xiaohongshu specifically, to reach Dublin's Chinese-speaking community, we scope that separately — it's a smaller, more specific audience than Google or Instagram, so it's worth a quick conversation about fit rather than bundling it into every plan by default."
+      },
+      {
+        "q": "Is the loyalty system something you build, or something off the shelf?",
+        "a": "It comes from the 1688.ie Essential Wangpu plan — a one-off build on your own website, so the data and the system are yours for good, not rented software. Off-the-shelf options like Square Loyalty or Smile.io switch on faster, but the monthly fee grows with your member count, your data sits on their servers, and adding a feature means waiting on their roadmap. Building it (in-house, not resold) is what the Essential Wangpu plan does; the Full cycle plan runs it day to day — scan-to-join, points redemption, the member dashboard. That's the clearest difference between us and a typical marketing agency."
+      },
+      {
+        "q": "I'm not in food and drink — does this still work for my business?",
+        "a": "Yes. Clinics, salons, garages, tradespeople, solicitors and estate agents all run this. The four stages stay the same; what changes is what happens inside each one — a café's stage four is stored value and points, an estate agent's is referrals and staying in touch with past clients."
+      },
+      {
+        "q": "How many case studies do you have?",
+        "a": "We're not going to try to win you over with a case-study count — numbers like that are easy to inflate and impossible for you to check. What you can check is on this page: the quality of the content ideas, how specific the free check turns out to be, the volume delivered in month one, and a live look at the loyalty back office. If month one disappoints you, the remaining months are refunded in full — that's worth more than any case study."
+      },
+      {
+        "q": "Can you guarantee a page-one ranking or more followers?",
+        "a": "No, and we won't say we can. Any agency that promises that is worth a follow-up question about how — rankings and reach both sit with the platform, not with us. What we commit to is output volume and output quality, and both go in the contract."
+      }
+    ]
+  },
+  "cta": {
+    "title": "Start by finding out which stage is leaking.",
+    "sub": "Free, back within one business day, and a business name and address is all we need. Decide afterwards — the findings are yours either way, take them to anyone you like.",
+    "button": "Request the free check",
+    "secondary": "View the proposal (print-ready)",
+    "note": "Or write to us"
+  },
+  "footer": {
+    "legal": "We commit to monthly output volume and output quality — not search ranking, referral volume or foot traffic. Member data belongs to the business. All prices in euro, excluding 23% VAT."
+  },
+  "host": {
+    "brand": "1688",
+    "brandSuffix": ".ie",
+    "navSolutions": "Solutions",
+    "navIndustries": "Industries",
+    "navPricing": "Pricing",
+    "navMarketing": "Marketing",
+    "navFlow": "How It Works",
+    "navHelp": "Help",
+    "navContact": "Contact",
+    "langLabel": "中文",
+    "footerTagline": "The digital partner for Chinese businesses in Ireland. Custom-built, tailored to you — making every hard-working business visible and findable.",
+    "footerQuickLinks": "Quick Links",
+    "footerContact": "Contact",
+    "footerWhatsapp": "WhatsApp",
+    "footerEmail": "hello@1688.ie",
+    "footerProposal": "Proposal (print-ready)",
+    "footerCopyright": "© 2026 1688.ie · Irish Chinese Business Platform · All rights reserved",
+    "footerLocation": "Dublin, Ireland · Registered in Ireland"
+  }
+}

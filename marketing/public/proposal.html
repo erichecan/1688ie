@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>万合 IdeaRise — 本地获客方案书</title>
+<style>
+  :root{
+    --paper:#FFFCF7; --sunk:#F6F0E6; --ink:#16120F; --muted:#6C6459;
+    --rule:#E5DDD0; --flare:#FF3B1F; --flare-soft:#FFE9E3;
+    --s1:#FF3B1F; --s2:#1B3A6B; --s3:#16120F; --s4:#0F5F46;
+    --sans:"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Helvetica Neue",Arial,sans-serif;
+    --mono:ui-monospace,"SFMono-Regular","Menlo","Consolas",monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--sunk);color:var(--ink);font-family:var(--sans);font-size:13px;line-height:1.7}
+  .sheet{width:210mm;margin:24px auto;padding:15mm 14mm;background:var(--paper)}
+  .num{font-family:var(--mono);font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+  .eyebrow{text-transform:uppercase;letter-spacing:.16em;font-size:9px;font-weight:700;color:var(--flare)}
+  .fill{border-bottom:1px solid var(--rule);min-height:16px;display:block}
+
+  /* 封面头 */
+  .head{display:flex;justify-content:space-between;align-items:flex-end;
+        border-bottom:3px solid var(--ink);padding-bottom:12px}
+  .brand{font-size:24px;font-weight:800;letter-spacing:-.02em}
+  .brand span{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+              color:var(--flare);margin-left:8px;font-weight:700}
+  .brand-sub{margin-top:3px;font-size:10.5px;color:var(--muted)}
+  .doc h1{font-size:19px;font-weight:700;letter-spacing:-.01em;text-align:right}
+  .doc p{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;
+         color:var(--muted);text-align:right;margin-top:2px}
+
+  .meta{display:grid;grid-template-columns:1fr 1fr;gap:0 30px;margin-top:16px;
+        border-bottom:1px solid var(--rule);padding-bottom:14px}
+  .kv{display:flex;gap:10px;padding:3px 0;font-size:12px}
+  .kv dt{width:82px;flex:none;color:var(--muted);white-space:nowrap}
+  .kv dd{flex:1}
+
+  /* 章节 */
+  section{margin-top:22px}
+  h2{font-size:15px;font-weight:800;letter-spacing:-.01em;display:flex;align-items:baseline;gap:9px}
+  h2 .n{font-family:var(--mono);font-size:12px;color:var(--flare);font-weight:700}
+  h2 .en{font-weight:400;color:var(--muted);font-size:10.5px}
+  .lede{margin-top:6px;font-size:12px;color:var(--muted);max-width:62em}
+
+  table{width:100%;border-collapse:collapse;margin-top:10px}
+  th{font-size:9px;text-transform:uppercase;letter-spacing:.12em;font-weight:700;color:var(--muted);
+     text-align:left;padding:6px 8px 6px 0;border-bottom:2px solid var(--ink)}
+  td{padding:8px 8px 8px 0;border-bottom:1px solid var(--rule);vertical-align:top;font-size:12px}
+  th:last-child,td:last-child{padding-right:0}
+  .r{text-align:right}
+  .ch{font-weight:700;white-space:nowrap;border-left:3px solid var(--rule);padding-left:8px}
+  .st1{border-left-color:var(--s1)} .st2{border-left-color:var(--s2)}
+  .st3{border-left-color:var(--s3)} .st4{border-left-color:var(--s4)}
+  .qty{font-family:var(--mono);font-variant-numeric:tabular-nums;font-weight:600;font-size:13px;white-space:nowrap}
+  .sub{color:var(--muted);font-size:10.5px;margin-top:2px;line-height:1.55}
+
+  /* 套餐三栏 */
+  .plans{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+  .plan{border:1px solid var(--rule);border-radius:10px;padding:12px}
+  .plan.pick{border:2px solid var(--flare);background:var(--flare-soft)}
+  .plan .pt{font-size:9px;font-weight:700;color:var(--flare);text-transform:uppercase;letter-spacing:.12em}
+  .plan h3{font-size:14px;font-weight:800;margin-top:4px}
+  .plan .p{font-family:var(--mono);font-size:22px;font-weight:700;letter-spacing:-.02em;margin-top:6px}
+  .plan .p small{font-size:10px;font-weight:400;color:var(--muted);letter-spacing:0}
+  .plan ul{margin-top:8px;list-style:none}
+  .plan li{font-size:10.5px;line-height:1.6;color:var(--muted);padding-left:12px;position:relative;margin-bottom:3px}
+  .plan li::before{content:"✓";position:absolute;left:0;color:var(--flare);font-size:9px}
+
+  .box{margin-top:12px;border:1px dashed var(--rule);border-radius:10px;padding:12px 14px}
+  .box strong{font-size:12.5px}
+
+  ol.terms{margin-top:8px;padding-left:16px}
+  ol.terms li{font-size:11px;line-height:1.75;color:var(--muted);margin-bottom:5px}
+  ol.terms b{color:var(--ink);font-weight:700}
+  ul.excl{margin-top:8px;list-style:none}
+  ul.excl li{font-size:11px;line-height:1.75;color:var(--muted);margin-bottom:6px;padding-left:16px;position:relative}
+  ul.excl li::before{content:"✕";position:absolute;left:0;color:var(--flare);font-size:10px}
+  ul.excl b{color:var(--ink);font-weight:700}
+
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:0 30px}
+
+  /* 时间表 */
+  .timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px}
+  .tl{border-top:3px solid var(--ink);padding-top:8px}
+  .tl .w{font-family:var(--mono);font-size:10px;font-weight:700;color:var(--flare)}
+  .tl h4{font-size:12px;font-weight:700;margin-top:3px}
+  .tl p{font-size:10.5px;color:var(--muted);margin-top:4px;line-height:1.6}
+
+  .totals{margin-top:10px;margin-left:auto;width:56%}
+  .totals div{display:flex;justify-content:space-between;padding:6px 0;font-size:12px;border-bottom:1px solid var(--rule)}
+  .totals .grand{border-bottom:none;border-top:2px solid var(--ink);margin-top:2px;padding-top:9px;font-size:15px;font-weight:800}
+
+  .sign{display:grid;grid-template-columns:1fr 1fr;gap:0 40px;margin-top:22px;
+        border-top:1px solid var(--rule);padding-top:16px}
+  .sign p{font-size:10px;color:var(--muted);margin-bottom:24px}
+  .sline{border-bottom:1px solid var(--ink)}
+  .scap{display:flex;justify-content:space-between;font-size:9px;color:var(--muted);margin-top:5px}
+
+  footer{margin-top:18px;border-top:1px solid var(--rule);padding-top:9px;font-size:9.5px;
+         color:var(--muted);display:flex;justify-content:space-between;gap:16px}
+  .todo{color:var(--flare)}
+  .note{margin-top:7px;font-size:10.5px;color:var(--muted)}
+
+  @media print{
+    body{background:#fff}
+    .sheet{width:auto;margin:0;padding:0}
+    tr,li,.plan,.tl,.sign,.totals,.box{break-inside:avoid}
+    h2{break-after:avoid}
+    section{break-inside:auto}
+  }
+  @page{size:A4;margin:13mm 12mm}
+  @media (max-width:860px){
+    .sheet{width:auto;padding:20px}
+    .meta,.cols,.plans,.timeline,.sign{grid-template-columns:1fr}
+    .totals{width:100%}
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <div class="head">
+    <div>
+      <div class="brand">万合<span>IdeaRise</span></div>
+      <p class="brand-sub">爱尔兰 · 本地生意的四段获客</p>
+    </div>
+    <div class="doc">
+      <h1>本地获客方案书</h1>
+      <p>Proposal &amp; Quotation</p>
+    </div>
+  </div>
+
+  <div class="meta">
+    <div>
+      <dl class="kv"><dt>商户名称</dt><dd><span class="fill"></span></dd></dl>
+      <dl class="kv"><dt>行业 / 门店数</dt><dd><span class="fill"></span></dd></dl>
+      <dl class="kv"><dt>联系人</dt><dd><span class="fill"></span></dd></dl>
+    </div>
+    <div>
+      <dl class="kv"><dt>方案编号</dt><dd class="num">IR-P-<span class="fill" style="display:inline-block;width:120px"></span></dd></dl>
+      <dl class="kv"><dt>日期 / 有效期</dt><dd><span class="fill" style="display:inline-block;width:90px"></span> ／ 30 天</dd></dl>
+      <dl class="kv"><dt>币种</dt><dd class="num">EUR（不含 23% VAT）</dd></dl>
+    </div>
+  </div>
+
+  <!-- 一 -->
+  <section>
+    <h2><span class="n">01</span>你现在漏在哪一段<span class="en">Where you are leaking</span></h2>
+    <p class="lede">数据来自免费诊断，取自公开可见的信息，与你所在类目、所在地区搜索第一屏的十家同行对比。基准是那十家的中位数——没有绝对标准，只有相对标准。</p>
+    <table>
+      <thead>
+        <tr>
+          <th style="width:118px">段位</th>
+          <th>关键指标</th>
+          <th style="width:70px" class="r">你</th>
+          <th style="width:92px" class="r">本地中位数</th>
+          <th style="width:110px">判定</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="ch st1" rowspan="3">01 让人知道</td><td>Google 类目与简介完整度</td><td class="r"><span class="fill"></span></td><td class="r"><span class="fill"></span></td><td><span class="fill"></span></td></tr>
+        <tr><td>本地搜索首屏出现次数</td><td class="r"><span class="fill"></span></td><td class="r"><span class="fill"></span></td><td><span class="fill"></span></td></tr>
+        <tr><td>小红书相关笔记数 / 近 90 天更新</td><td class="r"><span class="fill"></span></td><td class="r"><span class="fill"></span></td><td><span class="fill"></span></td></tr>
+        <tr><td class="ch st2" rowspan="2">02 让人记住</td><td>是否有可复述的一句话主张<div class="sub">客人能不能跟朋友说清你是谁</div></td><td class="r"><span class="fill"></span></td><td class="r"><span class="fill"></span></td><td><span class="fill"></span></td></tr>
+        <tr><td>三渠道视觉一致性</td><td class="r"><span class="fill"></span></td><td class="r"><span class="fill"></span></td><td><span class="fill"></span></td></tr>
+        <tr><td class="ch st3" rowspan="3">03 让人别走掉</td><td>评价总数<div class="sub">数量是本地排序与信任的基础</div></td><td class="r"><span class="fill"></span></td><td class="r"><span class="fill"></span></td><td><span class="fill"></span></td></tr>
+        <tr><td>评价回复率<div class="sub">唯一完全由你控制的一项</div></td><td class="r"><span class="fill"></span></td><td class="r"><span class="fill"></span></td><td><span class="fill"></span></td></tr>
+        <tr><td>近 90 天新评价<div class="sub">流速比存量更重要</div></td><td class="r"><span class="fill"></span></td><td class="r"><span class="fill"></span></td><td><span class="fill"></span></td></tr>
+        <tr><td class="ch st4" rowspan="2">04 让人常来</td><td>是否有会员或复购机制</td><td class="r"><span class="fill"></span></td><td class="r"><span class="fill"></span></td><td><span class="fill"></span></td></tr>
+        <tr><td>能否说出老客占营业额比例<div class="sub">答不上来即为零</div></td><td class="r"><span class="fill"></span></td><td class="r"><span class="fill"></span></td><td><span class="fill"></span></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 二 -->
+  <section>
+    <h2><span class="n">02</span>为什么四段要一起做<span class="en">Why all four</span></h2>
+    <p class="lede">
+      假设这个月 1000 个人刷到你：<b>180 个点进来，36 个真的来了，7 个再来第二次。</b>
+      把第一段预算翻倍，最后也只是 7 变 14；而把第三段的评价补上、第四段的回头客做起来，同样的 1000 个人能变出三四倍的生意。
+      第一段是唯一需要持续花钱买的，后面三段是一次修好长期受益。<b>先修后面，再加大前面，顺序反了就是烧钱。</b>
+    </p>
+    <p class="lede" style="margin-top:8px">
+      而后两段之所以市面上少有人做，是因为要写代码：评价流程、会员积分、消费数据看板不是配模板能解决的。会员积分系统来自 1688.ie 旺铺基础套餐（自研，非转售现成 SaaS），买断后建在你自己的网站上，数据归你、不跟第三方分账。<b>日常运营——扫码入会、积分兑换、会员活动——是「全周期」套餐做的事，普通营销公司通常连这一步都接不了。</b>
+    </p>
+  </section>
+
+  <!-- 三 -->
+  <section>
+    <h2><span class="n">03</span>建议方案<span class="en">Recommended plan</span></h2>
+    <p class="lede">请在推荐档上打勾。三档的差别在于覆盖到第几段，交付标准与响应时效完全相同。</p>
+    <div class="plans">
+      <div class="plan">
+        <div class="pt">□ 曝光 REACH · 覆盖 01</div>
+        <h3>先让人找得到你</h3>
+        <div class="p">€390<small> ／月</small></div>
+        <ul>
+          <li>Google Business Profile 全套校正 + 中英双语简介重写（首月一次性）</li>
+          <li>每月 8 条社媒成稿（Instagram / Facebook，含配图）</li>
+          <li>每月 4 条 Google 商户动态</li>
+          <li>每月 20 条评价回复（Google + Facebook，中英双语）</li>
+          <li>行业选题库（每季度更新）</li>
+          <li>月度数据简报</li>
+        </ul>
+      </div>
+      <div class="plan pick">
+        <div class="pt">■ 增长 GROWTH · 覆盖 01 · 02 · 03 · 推荐</div>
+        <h3>补上记忆点和转化这两个大漏斗</h3>
+        <div class="p">€790<small> ／月</small></div>
+        <ul>
+          <li>「曝光」全部内容，社媒成稿增至每月 16 条</li>
+          <li>WhatsApp Business 客户名单搭建 + 每月 2 次群发文案</li>
+          <li>记忆点设计：一句话主张 + 招牌项命名 + 视觉锤（一次性）</li>
+          <li>三渠道统一视觉规范 + 店内物料（菜单、海报、贴纸）</li>
+          <li>邀评流程 + 询盘应答话术库（中英双语）</li>
+          <li>每月 30 分钟复盘会</li>
+        </ul>
+      </div>
+      <div class="plan">
+        <div class="pt">□ 全周期 FULL · 覆盖 01 · 02 · 03 · 04</div>
+        <h3>把一次性客人变成回头客</h3>
+        <div class="p">€1,090<small> ／月</small></div>
+        <ul>
+          <li>「增长」全部内容</li>
+          <li>会员积分系统运营：扫码入会、消费积分、积分兑换的日常维护</li>
+          <li>会员数据看板：老客占比、复购周期、沉睡名单</li>
+          <li>生日 / 节日 / 沉睡客自动触发（含 WhatsApp 与短信文案）</li>
+          <li>每月一次会员活动策划与文案</li>
+          <li>储值与套票方案设计</li>
+        </ul>
+      </div>
+    </div>
+    <div class="box">
+      <strong>□ 全周期的前置：旺铺基础套餐 · €999 一次性 + €79／月托管</strong>
+      <p class="note">全周期要运营的会员积分系统，来自 1688.ie 旺铺基础套餐——系统建在你自己的网站上，数据和资产永久归你，不是租的。<b>已有旺铺基础及以上套餐，直接按 €1,090／月 起步；还没有，先建旺铺基础。</b></p>
+    </div>
+    <p class="note">所有价格为欧元，不含 23% VAT。月付，无合约，提前 15 天通知即可停。首月不满意，剩余月份全额退。多门店与多语言另议。全周期需搭配旺铺基础套餐及以上。</p>
+  </section>
+
+  <!-- 四 -->
+  <section>
+    <h2><span class="n">04</span>每月交付明细<span class="en">Monthly deliverables</span></h2>
+    <p class="lede">这一张表就是合同附件。每一项都能数出来，你随时可以对账；我们承诺的是这些数字，不是排名或客流。</p>
+    <table>
+      <thead>
+        <tr>
+          <th style="width:112px">段位</th>
+          <th>交付项</th>
+          <th style="width:56px" class="r">曝光</th>
+          <th style="width:56px" class="r">增长</th>
+          <th style="width:62px" class="r">全周期</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="ch st1" rowspan="4">01 让人知道</td><td>Google Business Profile 校正 + 中英双语简介重写<div class="sub">首月全套，之后按需维护</div></td><td class="r qty">✓</td><td class="r qty">✓</td><td class="r qty">✓</td></tr>
+        <tr><td>社媒成稿（Instagram / Facebook，含配图）</td><td class="r qty">8</td><td class="r qty">16</td><td class="r qty">16</td></tr>
+        <tr><td>Google 商户动态发布</td><td class="r qty">4</td><td class="r qty">4</td><td class="r qty">4</td></tr>
+        <tr><td>行业选题库 + 月度数据简报</td><td class="r qty">✓</td><td class="r qty">✓</td><td class="r qty">✓</td></tr>
+        <tr><td class="ch st2" rowspan="3">02 让人记住</td><td>WhatsApp Business 名单搭建 + 群发文案</td><td class="r qty">—</td><td class="r qty">首月搭建<br>每月 2 次</td><td class="r qty">每月 2 次</td></tr>
+        <tr><td>一句话主张 + 招牌项命名 + 视觉锤</td><td class="r qty">—</td><td class="r qty">首月</td><td class="r qty">首月</td></tr>
+        <tr><td>三渠道统一视觉规范 + 店内物料<div class="sub">菜单 · 海报 · 贴纸</div></td><td class="r qty">—</td><td class="r qty">✓</td><td class="r qty">✓</td></tr>
+        <tr><td class="ch st3" rowspan="2">03 让人别走掉</td><td>评价回复（Google + Facebook，中英双语，48 小时内）</td><td class="r qty">20</td><td class="r qty">20</td><td class="r qty">20</td></tr>
+        <tr><td>邀评流程 + 询盘应答话术库（中英双语）<div class="sub">二维码 · 桌卡 · 短信与 WhatsApp 话术</div></td><td class="r qty">—</td><td class="r qty">✓</td><td class="r qty">✓</td></tr>
+        <tr><td class="ch st4" rowspan="4">04 让人常来</td><td>会员积分系统日常运营<div class="sub">需先建旺铺基础套餐</div></td><td class="r qty">—</td><td class="r qty">—</td><td class="r qty">✓</td></tr>
+        <tr><td>会员数据看板<div class="sub">老客占比 · 复购周期 · 沉睡名单</div></td><td class="r qty">—</td><td class="r qty">—</td><td class="r qty">✓</td></tr>
+        <tr><td>生日 / 节日 / 沉睡客自动触发（WhatsApp 与短信）</td><td class="r qty">—</td><td class="r qty">—</td><td class="r qty">✓</td></tr>
+        <tr><td>会员活动策划与文案 + 储值套票方案设计</td><td class="r qty">—</td><td class="r qty">—</td><td class="r qty">1</td></tr>
+        <tr><td class="ch">共同</td><td>月度复盘（选题与节奏，30 分钟）</td><td class="r qty">—</td><td class="r qty">1</td><td class="r qty">1</td></tr>
+      </tbody>
+    </table>
+    <p class="note">超出上表数量或额外定制发布：评价回复 €4／条，Instagram / Facebook 图文 €25／条，小红书成稿（视情况定制发布）€35／条。</p>
+  </section>
+
+  <!-- 五 -->
+  <section>
+    <h2><span class="n">05</span>时间表<span class="en">Timeline</span></h2>
+    <div class="timeline">
+      <div class="tl"><div class="w">第 1–2 天</div><h4>签约与授权</h4><p>你在自己的电脑上完成 Google 官方授权。全程不需要提供密码。</p></div>
+      <div class="tl"><div class="w">第 3–4 天</div><h4>资料校正与选题</h4><p>商户资料全套校正，同时交付第一版行业选题库供你确认。</p></div>
+      <div class="tl"><div class="w">第 5 天</div><h4>首批内容交付</h4><p>第一批成稿与配图到你手上，你在自己手机上点发布。首月不满意，剩余月份全额退。</p></div>
+      <div class="tl"><div class="w">第 3–4 周</div><h4>旺铺基础套餐上线</h4><p>还没有旺铺基础套餐的，作为独立项目排期，通常 3–4 周上线；已有旺铺基础及以上的，全周期运营从签约当月即可开始。</p></div>
+    </div>
+  </section>
+
+  <!-- 六 -->
+  <section>
+    <h2><span class="n">06</span>价格与合计<span class="en">Pricing</span></h2>
+    <div class="totals">
+      <div><span>所选套餐（月费）</span><span class="num">€&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+      <div><span>小计 Subtotal</span><span class="num">€&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+      <div><span>VAT 23%</span><span class="num">€&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+      <div class="grand"><span>首月应付 Total (EUR)</span><span class="num">€&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+    </div>
+  </section>
+
+  <div class="cols">
+    <section>
+      <h2><span class="n">07</span>条款<span class="en">Terms</span></h2>
+      <ol class="terms">
+        <li><b>有效期。</b>本方案自出具之日起 30 天内有效。</li>
+        <li><b>付款。</b>按月预付，支持银行转账（SEPA）与信用卡。价格不含 23% VAT。</li>
+        <li><b>无合约。</b>不设最短签约期，提前 15 天书面通知即可终止，不按日折算当期。</li>
+        <li><b>首月保障。</b>首月交付完成后如不满意，剩余已付月份全额退还。</li>
+        <li><b>账号安全。</b>我们不索取、不存储你的任何登录凭据。需要授权时一律走平台官方流程，你可随时撤销。</li>
+        <li><b>发布责任。</b>小红书与 IG / FB 由你方或你方指定人员发布。我方不代持、不代发。</li>
+        <li><b>知识产权。</b>付款后，成稿、配图与物料的使用权归你方所有。</li>
+        <li><b>会员数据归属。</b>会员系统部署在你方域名下，数据库归你方所有，随时可导出。终止合作时我方交出全部数据与后台权限。</li>
+        <li><b>内容素材。</b>门店实拍、菜品图、员工肖像由你方提供并确保已获授权。</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2><span class="n">08</span>不包含<span class="en">Not included</span></h2>
+      <ul class="excl">
+        <li><b>排名、推荐量与客流承诺。</b>我们承诺每月交付量与交付质量，不承诺搜索排名、平台推荐量或到店量，也不以这些指标计费。</li>
+        <li><b>差评删除。</b>评价移除权在平台。可代写回复、可代办申诉（每条 €250），不保证结果。</li>
+        <li><b>账号代持与代发。</b>不接管你的账号，不代替你发布。</li>
+        <li><b>广告投放。</b>Google Ads、Meta Ads、小红书薯条等投放费用与代投服务不含在内。</li>
+        <li><b>拍摄。</b>门店与产品实拍需另行安排，本方案仅含平面设计与文案。</li>
+        <li><b>会员系统运营的第三方费用。</b>短信与邮件发送费用、支付通道手续费按实际产生另计；旺铺基础套餐本身的一次性与托管费用见上方「全周期的前置」说明，不重复收取。</li>
+        <li><b>账号所有权找回。</b>如资料在前外包商手中，代办认领与验证 €350 起，结果由平台决定。</li>
+      </ul>
+    </section>
+  </div>
+
+  <section>
+    <h2><span class="n">09</span>下一步<span class="en">Next step</span></h2>
+    <p class="lede">在上方套餐处打勾，签字后回传本页即可。我们会在 1 个工作日内发出授权链接与首月选题清单。</p>
+    <div class="sign">
+      <div>
+        <p>商户确认 / Client acceptance</p>
+        <div class="sline"></div>
+        <div class="scap"><span>签字 Signature</span><span>日期 Date</span></div>
+      </div>
+      <div>
+        <p>万合 IdeaRise</p>
+        <div class="sline"></div>
+        <div class="scap"><span>签字 Signature</span><span>日期 Date</span></div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>万合 IdeaRise · <span class="todo">[公司注册名称]</span> · <span class="todo">[VAT 登记号]</span></span>
+    <span><span class="todo">[地址]</span> · <span class="todo">[电话]</span> · hello@1688.ie</span>
+  </footer>
+
+</div>
+</body>
+</html>

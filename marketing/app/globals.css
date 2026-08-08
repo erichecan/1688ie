@@ -1,0 +1,120 @@
+@import "tailwindcss";
+
+@theme {
+  /* 画布：暖白，不是冷灰。新媒体品牌不能是体检报告 */
+  --color-paper: #fffcf7;
+  --color-paper-sunk: #f6f0e6;
+  --color-ink: #16120f;
+  --color-ink-muted: #6c6459;
+  --color-rule: #e5ddd0;
+
+  /* 主色：电光橙红。仅用于 CTA、关键数字、强调标记 */
+  --color-flare: #ff3b1f;
+  --color-flare-soft: #ffe9e3;
+
+  /* 四段专用色 —— 每色只拥有它那一整段的通版底色，不得挪作它用 */
+  --color-stage-1: #ff3b1f;
+  --color-stage-2: #1b3a6b;
+  --color-stage-3: #16120f;
+  --color-stage-4: #0f5f46;
+
+  /* 封面卡专用色板 —— 只允许出现在封面卡内，不得用作 UI 表面 */
+  --color-cover-1: #ff3b1f;
+  --color-cover-2: #1b3a6b;
+  --color-cover-3: #17805f;
+  --color-cover-4: #f2b705;
+  --color-cover-5: #b02a6f;
+  --color-cover-6: #2b2a28;
+  --color-cover-7: #e0552c;
+  --color-cover-8: #38618c;
+
+  --font-sans: var(--font-plex-sans), "PingFang SC", "Hiragino Sans GB",
+    "Microsoft YaHei", system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, "SFMono-Regular", monospace;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+.metric {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.6875rem;
+  font-weight: 700;
+}
+
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+::selection {
+  background: var(--color-flare);
+  color: #fff;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-flare);
+  outline-offset: 3px;
+}
+
+/* 封面墙：两条反向滚动的轨道。hover 暂停，尊重减弱动效偏好 */
+@keyframes marquee-left {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+@keyframes marquee-right {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.track {
+  display: flex;
+  gap: 1rem;
+  width: max-content;
+  animation: marquee-left 62s linear infinite;
+}
+.track-reverse {
+  animation-name: marquee-right;
+  animation-duration: 78s;
+}
+.marquee:hover .track {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track {
+    animation: none;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}
