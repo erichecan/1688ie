@@ -1074,8 +1074,17 @@
     body.en .value-list > li[data-lang="zh"] { display: none; }
     body.en .pricing-features > li[data-lang="en"],
     body.en .value-list > li[data-lang="en"] { display: flex; }
+    /* Value/flow/story elements set their own element-level display rule, which beats
+       the generic [data-lang="en"] hide rule above (specificity) — explicit hide +
+       paired body.en restore needed so neither language leaks into the other. */
+    .value-side > h3[data-lang="en"],
+    .flow-node > b[data-lang="en"],
+    .story-author-info > strong[data-lang="en"] { display: none; }
     /* Value section heading needs inline-block (for bottom border decoration) */
     body.en .value-side > h3[data-lang="en"] { display: inline-block; }
+    /* Flow-strip labels and story bylines are block-level (see .flow-node b / .story-author-info strong) */
+    body.en .flow-node > b[data-lang="en"],
+    body.en .story-author-info > strong[data-lang="en"] { display: block; }
     /* Pricing card full-width buttons — pushed to bottom of flex card */
     .pricing-btn { display: block; width: 100%; text-align: center; margin-top: auto; }
     /* Explicit hide: .pricing-btn specificity equals [data-lang="en"], so must be more specific */
