@@ -2,6 +2,7 @@ import { useLocale, useTranslations } from "next-intl";
 
 export function HostFooter() {
   const t = useTranslations("host");
+  const tFooter = useTranslations("footer");
   const locale = useLocale();
   const isEn = locale === "en";
 
@@ -48,6 +49,7 @@ export function HostFooter() {
           <span>{t("footerCopyright")}</span>
           <span>{t("footerLocation")}</span>
         </div>
+        <p className="host-footer-legal">{tFooter("legal")}</p>
       </footer>
     </div>
   );
