@@ -35,9 +35,35 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "meta" });
 
+  const canonicalPath = locale === "en" ? "/marketing/en/" : "/marketing/";
+  const title = t("title");
+  const description = t("description");
+
   return {
-    title: t("title"),
-    description: t("description"),
+    metadataBase: new URL("https://1688.ie"),
+    title,
+    description,
+    alternates: {
+      canonical: canonicalPath,
+      languages: {
+        "zh-Hans": "/marketing/",
+        "en-IE": "/marketing/en/",
+        "x-default": "/marketing/",
+      },
+    },
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      url: canonicalPath,
+      locale: locale === "en" ? "en_IE" : "zh_CN",
+      siteName: "1688.ie",
+    },
+    twitter: {
+      card: "summary",
+      title,
+      description,
+    },
   };
 }
 
