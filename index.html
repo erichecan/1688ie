@@ -217,9 +217,9 @@
       font-weight: 600;
     }
     .hero-title {
-      font-size: clamp(2rem, 5.5vw, 3.6rem);
+      font-size: clamp(1.75rem, 3.3vw, 2.75rem);
       font-weight: 700;
-      line-height: 1.2;
+      line-height: 1.25;
       margin-bottom: 20px;
       font-family: 'Playfair Display', 'Noto Serif SC', serif;
     }
@@ -227,10 +227,102 @@
     .hero-title .gold { color: var(--gold); }
 
     .hero-desc {
-      font-size: 1.05rem;
+      font-size: 1.02rem;
       color: var(--ink-soft);
-      margin-bottom: 48px;
-      max-width: 580px;
+      margin-bottom: 30px;
+      line-height: 1.85;
+    }
+
+    /* Birdeye 式 Hero：左侧悬浮白卡 + 右侧大圆角视觉块。
+       原来是纯文字居中，信息密度高但没有「产品在运转」的画面感。 */
+    .hero-layout {
+      display: grid;
+      grid-template-columns: 1.04fr 0.96fr;
+      gap: 54px;
+      align-items: center;
+      width: 100%;
+    }
+    .hero-card {
+      background: #fff;
+      border-radius: var(--r-md);
+      padding: 46px 42px;
+      box-shadow: var(--shadow-float);
+      position: relative;
+      z-index: 2;
+    }
+    .hero-visual-wrap { position: relative; }
+    .hero-visual {
+      position: relative;
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      min-height: 460px;
+      /* ⬇⬇ 实拍照到位后，把 background-image 加在这里即可，其余不用动 ⬇⬇ */
+      background:
+        radial-gradient(120% 90% at 15% 10%, rgba(212,175,55,0.35) 0%, transparent 55%),
+        linear-gradient(155deg, #8B0A1F 0%, #C8102E 48%, #7A0A1A 100%);
+      background-size: cover;
+      background-position: center;
+      box-shadow: var(--shadow-float);
+    }
+    .hero-visual::after {
+      content: '旺';
+      position: absolute;
+      right: -8%; bottom: -14%;
+      font-family: var(--font-display);
+      font-size: 24rem;
+      font-weight: 700;
+      color: rgba(255,255,255,0.07);
+      line-height: 1;
+      pointer-events: none;
+    }
+    .hero-bubble {
+      position: absolute;
+      background: #fff;
+      border-radius: var(--r-sm);
+      padding: 12px 15px;
+      box-shadow: var(--shadow-lift);
+      font-size: 0.78rem;
+      line-height: 1.55;
+      max-width: 244px;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      z-index: 3;
+    }
+    .hero-bubble .b-icon { font-size: 1.1rem; line-height: 1.2; flex-shrink: 0; }
+    .hero-bubble b { display: block; color: var(--ink); font-weight: 700; margin-bottom: 2px; }
+    /* .hero-bubble b 的 display 权重(0,0,1,1)高于通用的 [data-lang="en"]{display:none}(0,0,1,0)，
+       必须显式再隐一次，否则气泡里中英两行同时出现 */
+    .hero-bubble b[data-lang="en"] { display: none; }
+    body.en .hero-bubble b[data-lang="en"] { display: block; }
+    .hero-bubble span.b-sub { color: var(--ink-mute); }
+    .hero-bubble.b1 { top: 7%;  left: -7%; }
+    .hero-bubble.b2 { top: 45%; right: -9%; }
+    .hero-bubble.b3 { bottom: 8%; left: 4%; }
+    .hero-trust {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px 18px;
+      margin-top: 26px;
+      padding-top: 22px;
+      border-top: 1px solid var(--line);
+      font-size: 0.8rem;
+      color: var(--ink-mute);
+    }
+    .hero-trust strong { color: var(--red); font-weight: 700; }
+
+    /* 痛点四卡从 Hero 内移出，成为独立区块 */
+    #pains {
+      padding: var(--sec-pad) 0 calc(var(--sec-pad) - 20px);
+      background: var(--cream);
+    }
+    .pains-lede {
+      text-align: center;
+      max-width: 680px;
+      margin: 0 auto 40px;
+      color: var(--ink-soft);
+      font-size: 1rem;
       line-height: 1.85;
     }
 
@@ -877,6 +969,7 @@
       .nav-links { display: none; }
       .hamburger { display: flex; }
       .pain-grid { grid-template-columns: 1fr; }
+      .hero-bubble.b3 { display: none; }
       .industries-grid { grid-template-columns: repeat(2, 1fr); }
       .stories-grid { grid-template-columns: 1fr; }
       .pricing-grid { grid-template-columns: repeat(2, 1fr); }
@@ -1084,6 +1177,15 @@
     #module-3 .capability-card p { color: var(--ink-soft); }
     /* 注意：.capability-grid.cols-3 是两个类（0,0,2,0），媒体查询不提升权重，
        断点里必须写同样具体的选择器，否则三列会一直生效到手机上把内容撑出屏幕 */
+    @media (max-width: 1050px) {
+      .hero-layout { grid-template-columns: 1fr; gap: 40px; }
+      .hero-card { padding: 34px 26px; }
+      .hero-visual { min-height: 320px; }
+      .hero-visual::after { font-size: 15rem; }
+      .hero-bubble.b1 { left: 0; }
+      .hero-bubble.b2 { right: 0; }
+      #hero { min-height: 0; }
+    }
     @media (max-width: 900px) {
       .capability-grid,
       .capability-grid.cols-3 { grid-template-columns: repeat(2, 1fr); }
@@ -1155,32 +1257,91 @@
 <!-- ===== SCREEN 1：解决什么问题 ===== -->
 <section id="hero">
   <div class="container">
-    <span class="hero-eyebrow" data-lang="zh">🇮🇪 专为爱尔兰华人小生意而生</span>
-    <span class="hero-eyebrow" data-lang="en">🇮🇪 Built for Chinese small businesses in Ireland</span>
+    <div class="hero-layout">
 
-    <h1 class="hero-title" data-lang="zh">
-      让更多人找到你，<br>
-      <span class="red">让来过的再回来</span><br>
-      <span class="gold">——还能少雇一个人</span>
-    </h1>
-    <h1 class="hero-title" data-lang="en">
-      Get found. Get remembered.<br>
-      <span class="red">Get them coming back.</span><br>
-      <span class="gold">— with fewer hands.</span>
-    </h1>
+      <div class="hero-card">
+        <span class="hero-eyebrow" data-lang="zh">🇮🇪 专为爱尔兰华人小生意而生</span>
+        <span class="hero-eyebrow" data-lang="en">🇮🇪 Built for Chinese small businesses in Ireland</span>
 
-    <p class="hero-desc" data-lang="zh">
-      在爱尔兰做小生意，技术不差、服务不差，但生意就是难做大。
-      问题从来不是一件事，而是<strong>四件事</strong>：别人不知道你、知道了记不住你、
-      来过一次不再来、生意稍微一忙就全靠人扛。这四件我们分开做，你缺哪件补哪件。
-    </p>
-    <p class="hero-desc" data-lang="en">
-      Running a small business in Ireland — good skills, good service, but growth stalls.
-      It's never one problem, it's <strong>four</strong>: nobody knows you, those who do can't remember you,
-      the ones who came never came back, and every busy day runs on manual labour.
-      We handle the four separately — take only the ones you're missing.
-    </p>
+        <h1 class="hero-title" data-lang="zh">
+          让更多人找到你，<br>
+          <span class="red">让来过的再回来</span><br>
+          <span class="gold">——还能少雇一个人</span>
+        </h1>
+        <h1 class="hero-title" data-lang="en">
+          Get found. Get remembered.<br>
+          <span class="red">Get them coming back.</span><br>
+          <span class="gold">— with fewer hands.</span>
+        </h1>
 
+        <p class="hero-desc" data-lang="zh">
+          别人不知道你、知道了记不住你、来过一次不再来、生意一忙全靠人扛——
+          这<strong>四件事</strong>我们分开做，你缺哪件补哪件。价格和交付时间一起印在页面上。
+        </p>
+        <p class="hero-desc" data-lang="en">
+          Nobody knows you, those who do can't remember you, the ones who came never came back,
+          and every busy day runs on manual labour. We handle these <strong>four things</strong> separately —
+          take only what you're missing. Prices and delivery times are printed right on this page.
+        </p>
+
+        <div class="hero-ctas">
+          <a href="#module-1" class="btn-primary" data-lang="zh">看这四件事怎么做 →</a>
+          <a href="#module-1" class="btn-primary" data-lang="en">See How the Four Work →</a>
+          <a href="#contact" class="btn-secondary" data-lang="zh">免费咨询</a>
+          <a href="#contact" class="btn-secondary" data-lang="en">Free Consultation</a>
+        </div>
+
+        <div class="hero-trust">
+          <span data-lang="zh">🇮🇪 都柏林 · 利默里克 · 科克 的华人生意在用</span>
+          <span data-lang="en">🇮🇪 Used by Chinese businesses in Dublin, Limerick &amp; Cork</span>
+          <span data-lang="zh"><strong>28 家</strong>中餐馆的食材供应跑在我们系统上</span>
+          <span data-lang="en">Supply for <strong>28</strong> Chinese restaurants runs on our system</span>
+        </div>
+      </div>
+
+      <div class="hero-visual-wrap">
+        <div class="hero-visual"></div>
+
+        <div class="hero-bubble b1">
+          <span class="b-icon">⭐</span>
+          <span>
+            <b data-lang="zh">新评价已回复</b>
+            <b data-lang="en">Review answered</b>
+            <span class="b-sub" data-lang="zh">48 小时内，中英双语</span>
+            <span class="b-sub" data-lang="en">within 48 hours, bilingual</span>
+          </span>
+        </div>
+        <div class="hero-bubble b2">
+          <span class="b-icon">📍</span>
+          <span>
+            <b data-lang="zh">Google Maps 已收录</b>
+            <b data-lang="en">Live on Google Maps</b>
+            <span class="b-sub" data-lang="zh">本地搜索出得来了</span>
+            <span class="b-sub" data-lang="en">now showing in local search</span>
+          </span>
+        </div>
+        <div class="hero-bubble b3">
+          <span class="b-icon">🎫</span>
+          <span>
+            <b data-lang="zh">积分兑换成功</b>
+            <b data-lang="en">Points redeemed</b>
+            <span class="b-sub" data-lang="zh">老客第 4 次到店</span>
+            <span class="b-sub" data-lang="en">regular's 4th visit</span>
+          </span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== 四件事：痛点入口 ===== -->
+<section id="pains">
+  <div class="container">
+    <h2 class="section-title fade-in" data-lang="zh">生意做不大，<span>通常是这四件事</span></h2>
+    <h2 class="section-title fade-in" data-lang="en">Growth Stalls for <span>Four Reasons</span></h2>
+    <p class="pains-lede fade-in" data-lang="zh">技术不差、服务不差，问题从来不是一件事。对号入座，看你缺哪一件。</p>
+    <p class="pains-lede fade-in" data-lang="en">Good skills, good service — the problem is never just one thing. Find yours below.</p>
     <div class="pain-grid">
       <div class="pain-card">
         <span class="pain-icon">😶</span>
@@ -1218,13 +1379,6 @@
           <p data-lang="en">Orders by phone, rosters over WeChat, reconciliation in Excel, stock in your head. Growth means hiring more people — and it's still chaos, with wages eating the margin.</p>
         </div>
       </div>
-    </div>
-
-    <div class="hero-ctas">
-      <a href="#module-1" class="btn-primary" data-lang="zh">看这四件事怎么做 →</a>
-      <a href="#module-1" class="btn-primary" data-lang="en">See How the Four Work →</a>
-      <a href="#contact" class="btn-secondary" data-lang="zh">免费咨询</a>
-      <a href="#contact" class="btn-secondary" data-lang="en">Free Consultation</a>
     </div>
   </div>
 </section>
