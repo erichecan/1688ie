@@ -1208,6 +1208,21 @@
       color: rgba(250,246,240,0.72);
     }
     .capability-icon { font-size: 1.6rem; display: block; margin-bottom: 12px; }
+    .capability-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+    .capability-tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      padding: 3px 9px;
+      border-radius: 3px;
+      margin-bottom: 12px;
+      background: var(--red);
+      color: var(--cream);
+    }
+    body.en .capability-tag[data-lang="en"] { display: inline-block; }
+    .capability-card.is-extra { border-style: dashed; }
+    .capability-card.is-extra .capability-tag { background: var(--gold); color: var(--ink); }
     #module-3 .capability-card {
       border-color: var(--line);
       background: #fff;
@@ -2096,6 +2111,102 @@
     <p class="module-footnote" data-lang="en">
       All prices in EUR, excluding 23% VAT. Monthly, no lock-in, cancel with 15 days' notice; full refund of remaining months if the first month disappoints.
       TikTok video content, multi-location and additional languages are quoted separately. Appeal outcomes are decided by the platform — we never promise removal.
+    </p>
+  </div>
+</section>
+
+<!-- ===== 模块③ 让别人消费更多：会员 · 积分 · 核销 ===== -->
+<section id="module-3">
+  <div class="container">
+    <div class="module-eyebrow fade-in">
+      <span class="module-no">③</span>
+      <span data-lang="zh">让别人消费更多</span>
+      <span data-lang="en">Spend More</span>
+    </div>
+    <h2 class="section-title fade-in" data-lang="zh">会员 · 积分 · 核销，<span>让下一次有理由回来</span></h2>
+    <h2 class="section-title fade-in" data-lang="en">Membership · Points · Redemption — <span>a Reason to Come Back</span></h2>
+    <p class="section-sub fade-in" data-lang="zh">不是广撒网发折扣，把本来就要来的人也一起打了折。三种上线方式，看你现在有什么就用什么</p>
+    <p class="section-sub fade-in" data-lang="en">Not blanket discounts that also cut margin on customers who were coming anyway. Three ways to run it — pick the one that fits what you already have</p>
+
+    <div class="capability-grid cols-3">
+      <div class="capability-card fade-in">
+        <span class="capability-tag" data-lang="zh">方式一 · 插件</span>
+        <span class="capability-tag" data-lang="en">OPTION 1 · PLUG-IN</span>
+        <span class="capability-icon">🔌</span>
+        <h4 data-lang="zh">装在你的网站上</h4>
+        <h4 data-lang="en">Plugged into your site</h4>
+        <p data-lang="zh">网站是我们做的（见模块 ①），会员积分核销作为功能模块直接装上去。客人在你自己的站上入会、累积、兑换，不用跳去第三方。</p>
+        <p data-lang="en">If we built your site (Module ①), membership, points and redemption drop straight in as a module. Customers join, earn and redeem on your own site — no third-party detour.</p>
+      </div>
+      <div class="capability-card fade-in">
+        <span class="capability-tag" data-lang="zh">方式二 · 独立</span>
+        <span class="capability-tag" data-lang="en">OPTION 2 · STANDALONE</span>
+        <span class="capability-icon">📱</span>
+        <h4 data-lang="zh">体外独立运行</h4>
+        <h4 data-lang="en">Runs alongside, standalone</h4>
+        <p data-lang="zh">你现在的网站和收银一动不动。会员系统单独跑：客人扫码入会，店员用手机核销，数据进你自己的后台。适合已经有网站、但不想改动的店。</p>
+        <p data-lang="en">Your current website and till stay exactly as they are. The loyalty system runs on its own: customers scan to join, staff redeem from a phone, data lands in your own back office. Best if you already have a site you don't want touched.</p>
+      </div>
+      <div class="capability-card is-extra fade-in">
+        <span class="capability-tag" data-lang="zh">方式三 · 整合（加价）</span>
+        <span class="capability-tag" data-lang="en">OPTION 3 · INTEGRATED (EXTRA)</span>
+        <span class="capability-icon">🔗</span>
+        <h4 data-lang="zh">打通你现有的系统</h4>
+        <h4 data-lang="en">Integrated into your existing system</h4>
+        <p data-lang="zh">要跟你现在的 POS 收银、电商平台或预约系统对接，让积分随每笔消费自动累计——这是额外开发，按对方接口的开放程度单独评估报价。</p>
+        <p data-lang="en">Hooking into your current POS, e-commerce platform or booking system so points accrue automatically on every sale. That's extra development, quoted case by case depending on how open their API is.</p>
+      </div>
+    </div>
+
+    <div class="addon-bar">
+      <span class="addon-item" data-lang="zh"><strong>扫码入会</strong>，不用下载 App</span>
+      <span class="addon-item" data-lang="en"><strong>Scan to join</strong> — no app download</span>
+      <span class="addon-item" data-lang="zh"><strong>消费积分</strong>与积分兑换</span>
+      <span class="addon-item" data-lang="en"><strong>Points</strong> earned and redeemed</span>
+      <span class="addon-item" data-lang="zh"><strong>门店核销</strong>：店员手机一扫，防重复使用</span>
+      <span class="addon-item" data-lang="en"><strong>In-store redemption</strong>: one scan, no double-spending</span>
+      <span class="addon-item" data-lang="zh"><strong>储值与套票</strong>：锁住下一次，不是打折</span>
+      <span class="addon-item" data-lang="en"><strong>Prepaid &amp; packages</strong>: lock in the next visit</span>
+      <span class="addon-item" data-lang="zh"><strong>会员看板</strong>：谁常来、谁多久没来</span>
+      <span class="addon-item" data-lang="en"><strong>Member dashboard</strong>: who's regular, who's gone quiet</span>
+      <span class="addon-item" data-lang="zh"><strong>数据归你</strong>，用你自己的品牌视觉</span>
+      <span class="addon-item" data-lang="en"><strong>Your data, your brand</strong> — not ours</span>
+    </div>
+
+    <div class="pricing-enterprise">
+      <div class="pricing-ent-card fade-in">
+        <div class="pricing-ent-info">
+          <h4 data-lang="zh">会员积分核销系统</h4>
+          <h4 data-lang="en">Membership &amp; Loyalty System</h4>
+          <p data-lang="zh">方式一与方式二都在这个价内：系统建在你自己的域名下，数据永久归你，不跟第三方分账，不会因为对方涨价或倒闭而中断。方式三的系统对接另行评估。</p>
+          <p data-lang="en">Options 1 and 2 are both covered by this price: built under your own domain, data yours permanently, no revenue share, no risk of a third party raising prices or shutting down. Option 3 integration is scoped separately.</p>
+          <div class="pricing-ent-price">
+            <span data-lang="zh">€999 起</span>
+            <span data-lang="en">from €999</span>
+            <small data-lang="zh">一次性 + €79/月 托管维护</small>
+            <small data-lang="en">one-off + €79/mo hosting</small>
+          </div>
+        </div>
+        <a href="#contact" class="btn-secondary pricing-btn pricing-ent-btn" data-lang="zh">聊聊会员系统</a>
+        <a href="#contact" class="btn-secondary pricing-btn pricing-ent-btn" data-lang="en">Talk to Us</a>
+      </div>
+    </div>
+
+    <p class="pricing-more-link" data-lang="zh">
+      系统建好只是第一步，谁来发活动、看数据、催沉睡客？
+      <a href="#module-2">→ 模块 ② 的「全周期 €1,090/月」就是做这件事的</a>
+    </p>
+    <p class="pricing-more-link" data-lang="en">
+      Building it is step one — but who runs the campaigns and watches the data?
+      <a href="#module-2">→ That's what Module ②'s "Full cycle, €1,090/mo" does</a>
+    </p>
+    <p class="module-footnote" data-lang="zh">
+      所有价格为欧元，不含 23% VAT。「起」价按门店数量、积分规则复杂度与是否需要储值评估，开工前给一口价。
+      方式三（打通现有 POS / 电商 / 预约系统）属于额外开发，需先确认对方是否开放接口。
+    </p>
+    <p class="module-footnote" data-lang="en">
+      All prices in EUR, excluding 23% VAT. "From" pricing is scoped by number of locations, points-rule complexity and whether prepaid balances are needed — fixed quote before we start.
+      Option 3 (integrating an existing POS / e-commerce / booking system) is extra development and depends on whether that system exposes an API.
     </p>
   </div>
 </section>
