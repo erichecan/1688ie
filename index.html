@@ -525,26 +525,44 @@
     .flow-node b { font-size: 0.85rem; display: block; margin-bottom: 2px; }
     .flow-node span { font-size: 0.7rem; color: var(--ink-mute); }
     .flow-arrow { color: var(--gold); font-size: 1.4rem; margin: 0 4px; flex-shrink: 0; }
+    /* Birdeye 式数据卡：深色底 + 巨大数字。原来是白底细格子表，
+       数字被边框切碎，没有「结果很硬」的分量感。 */
     .stat-strip {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 1px;
-      background: var(--line);
-      border: 1px solid var(--line);
-      border-radius: var(--r-sm);
-      overflow: hidden;
-      max-width: 980px;
+      gap: 16px;
+      max-width: 1000px;
       margin: 0 auto 60px;
     }
-    .stat-cell { background: #fff; padding: 24px 16px; text-align: center; }
+    .stat-cell {
+      background: var(--ink);
+      color: var(--cream);
+      padding: 30px 20px 26px;
+      text-align: left;
+      border-radius: var(--r-md);
+      box-shadow: var(--shadow-lift);
+      position: relative;
+      overflow: hidden;
+      /* ⬇ 实拍照到位后：给单个 .stat-cell 加 background-image + 下面这层压暗即可 ⬇ */
+    }
+    .stat-cell::after {
+      content: '';
+      position: absolute;
+      right: -18px; bottom: -30px;
+      width: 110px; height: 110px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(212,175,55,0.22) 0%, transparent 70%);
+      pointer-events: none;
+    }
     .stat-num {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.7rem;
+      font-family: var(--font-display);
+      font-size: 2.15rem;
       font-weight: 700;
-      color: var(--red);
+      line-height: 1.1;
+      color: var(--gold-light);
       margin-bottom: 4px;
     }
-    .stat-label { font-size: 0.75rem; color: var(--ink-mute); }
+    .stat-label { font-size: 0.78rem; color: rgba(250,246,240,0.62); line-height: 1.55; margin-top: 8px; }
     .entry-heading { text-align: center; font-size: 0.85rem; color: var(--ink-soft); font-weight: 700; margin-bottom: 22px; }
     .entry-grid {
       display: grid;
@@ -901,10 +919,24 @@
     }
     .footer-inner {
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-columns: 1.35fr 1fr 1fr 1fr;
       gap: 40px;
-      margin-bottom: 40px;
+      margin-bottom: 36px;
     }
+    @media (max-width: 900px) {
+      .footer-inner { grid-template-columns: 1fr 1fr; }
+    }
+    /* 合规链接单独成组 —— B 端信任设计的标配（Birdeye 页脚同样单列出 Terms/Privacy/GDPR） */
+    .footer-legal {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      padding-top: 22px;
+      border-top: 1px solid rgba(250,246,240,0.12);
+      margin-bottom: 18px;
+      font-size: 0.76rem;
+    }
+    .footer-legal span { color: rgba(250,246,240,0.42); }
     .footer-brand p { font-size: 0.82rem; line-height: 1.8; margin-top: 12px; }
     .footer-col h4 { color: var(--cream); font-size: 0.9rem; margin-bottom: 14px; font-weight: 700; }
     .footer-col a {
@@ -1873,8 +1905,8 @@
         <div class="stat-label" data-lang="en">spoilage rate reduction</div>
       </div>
       <div class="stat-cell">
-        <div class="stat-num" style="font-size:1.15rem;" data-lang="zh">2人1天→1人1小时</div>
-        <div class="stat-num" style="font-size:1.15rem;" data-lang="en">2 staff·1 day → 1 staff·1hr</div>
+        <div class="stat-num" style="font-size:1.35rem;" data-lang="zh">2人1天→1人1小时</div>
+        <div class="stat-num" style="font-size:1.35rem;" data-lang="en">2 staff·1 day → 1 staff·1hr</div>
         <div class="stat-label" data-lang="zh">月度对账耗时</div>
         <div class="stat-label" data-lang="en">monthly reconciliation time</div>
       </div>
@@ -2373,6 +2405,18 @@
         <a href="#faq" data-lang="en">FAQ</a>
       </div>
       <div class="footer-col">
+        <h4 data-lang="zh">资源与演示</h4>
+        <h4 data-lang="en">Resources</h4>
+        <a href="flow.html" data-lang="zh">业务流程：从咨询到上线</a>
+        <a href="flow.html" data-lang="en">How It Works</a>
+        <a href="help.html" data-lang="zh">帮助中心</a>
+        <a href="help.html" data-lang="en">Help Centre</a>
+        <a href="demos.html" data-lang="zh">行业演示中心</a>
+        <a href="demos.html" data-lang="en">Demo Hub</a>
+        <a href="#stories" data-lang="zh">客户故事</a>
+        <a href="#stories" data-lang="en">Customer Stories</a>
+      </div>
+      <div class="footer-col">
         <h4 data-lang="zh">联系方式</h4>
         <h4 data-lang="en">Contact</h4>
         <a href="https://wa.me/353XXXXXXXXX" data-lang="zh">WhatsApp 咨询</a>
@@ -2383,9 +2427,17 @@
         <a href="mailto:hello@1688.ie">hello@1688.ie</a>
       </div>
     </div>
+    <div class="footer-legal">
+      <span data-lang="zh">爱尔兰注册企业 · 所有价格不含 23% VAT</span>
+      <span data-lang="en">Registered in Ireland · All prices exclude 23% VAT</span>
+      <span data-lang="zh">数据归商户所有，不与第三方分账</span>
+      <span data-lang="en">Your data stays yours — no third-party revenue share</span>
+      <span data-lang="zh">不做评价门控，不代写评价</span>
+      <span data-lang="en">No review gating, no ghost-written reviews</span>
+    </div>
     <div class="footer-bottom">
-      <span data-lang="zh">© 2024 1688.ie · 爱尔兰华人生意平台 · 版权所有</span>
-      <span data-lang="en">© 2024 1688.ie · Irish Chinese Business Platform · All rights reserved</span>
+      <span data-lang="zh">© 2026 1688.ie · 爱尔兰华人生意平台 · 版权所有</span>
+      <span data-lang="en">© 2026 1688.ie · Irish Chinese Business Platform · All rights reserved</span>
       <span data-lang="zh">Dublin, Ireland · 爱尔兰注册企业</span>
       <span data-lang="en">Dublin, Ireland · Registered in Ireland</span>
     </div>
