@@ -1,12 +1,6 @@
-# ---- 阶段 1：构建 /marketing 子站（Next.js 静态导出）----
-FROM node:22-alpine AS marketing-build
-WORKDIR /build
-COPY marketing/package.json marketing/package-lock.json ./
-RUN npm ci
-COPY marketing/ ./
-RUN npm run build
-
-# ---- 阶段 2：nginx 静态托管 ----
+# ---- nginx 静态托管 ----
+# /marketing 子站已于 2026-08-11 下线（内容并入主站模块②），
+# 原本的 Next.js 构建阶段一并移除；旧 URL 由 nginx.conf 的 301 承接。
 FROM nginx:alpine
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY index.html /usr/share/nginx/html/index.html
@@ -19,6 +13,5 @@ COPY robots.txt /usr/share/nginx/html/robots.txt
 COPY sitemap.xml /usr/share/nginx/html/sitemap.xml
 COPY warehouse-demo/ /usr/share/nginx/html/warehouse-demo/
 COPY local-warehouse-demo/ /usr/share/nginx/html/local-warehouse-demo/
-COPY --from=marketing-build /build/out/ /usr/share/nginx/html/marketing/
 EXPOSE 8080
 CMD ["nginx", "-g", "daemon off;"]
