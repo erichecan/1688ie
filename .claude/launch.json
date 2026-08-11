@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "nail-salon",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "52000", "--directory", "/Volumes/datacenter/ericworkspace/1688"],
+      "port": 52000
+    }
+  ]
+}

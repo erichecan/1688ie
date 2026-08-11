@@ -1103,6 +1103,55 @@
     body.en .footer-col h4[data-lang="en"],
     body.en .footer-brand p[data-lang="en"] { display: block; }
     body.en .footer-bottom span[data-lang="en"] { display: inline; }
+
+    /* ===== 四大模块通用 ===== */
+    .anchor-alias {
+      display: block;
+      height: 0;
+      scroll-margin-top: var(--nav-h);
+    }
+    .module-eyebrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-family: 'JetBrains Mono', 'Courier New', monospace;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 3px;
+      color: var(--red);
+      margin-bottom: 14px;
+      text-transform: uppercase;
+    }
+    .module-eyebrow .module-no {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--red);
+      color: var(--cream);
+      font-size: 0.9rem;
+      letter-spacing: 0;
+      flex-shrink: 0;
+    }
+    .module-eyebrow span[data-lang] { letter-spacing: 3px; }
+    body.en .module-eyebrow span[data-lang="en"] { display: inline; }
+    #module-2 .module-eyebrow,
+    #module-4 .module-eyebrow { color: var(--gold); }
+    #module-2 .module-eyebrow .module-no,
+    #module-4 .module-eyebrow .module-no { background: var(--gold); color: var(--ink); }
+    .module-footnote {
+      max-width: 760px;
+      margin: 22px auto 0;
+      text-align: center;
+      font-size: 0.8rem;
+      line-height: 1.8;
+      color: var(--ink-mute);
+    }
+    #module-2 .module-footnote,
+    #module-4 .module-footnote { color: rgba(250,246,240,0.5); }
   </style>
 </head>
 <body>
@@ -1112,10 +1161,10 @@
   <div class="container">
     <a href="#hero" class="nav-logo">1688<span>.ie</span></a>
     <ul class="nav-links">
-      <li><a href="#solutions" data-lang="zh">解决方案</a><a href="#solutions" data-lang="en">Solutions</a></li>
-      <li><a href="#industries" data-lang="zh">行业覆盖</a><a href="#industries" data-lang="en">Industries</a></li>
-      <li><a href="#pricing" data-lang="zh">旺铺套餐</a><a href="#pricing" data-lang="en">Pricing</a></li>
-      <li><a href="/marketing/" data-lang="zh">营销服务</a><a href="/marketing/en/" data-lang="en">Marketing</a></li>
+      <li><a href="#module-1" data-lang="zh">做网站</a><a href="#module-1" data-lang="en">Get Found</a></li>
+      <li><a href="#module-2" data-lang="zh">做口碑</a><a href="#module-2" data-lang="en">Be Remembered</a></li>
+      <li><a href="#module-3" data-lang="zh">做复购</a><a href="#module-3" data-lang="en">Spend More</a></li>
+      <li><a href="#module-4" data-lang="zh">做系统</a><a href="#module-4" data-lang="en">Work Less</a></li>
       <li><a href="flow.html" data-lang="zh">业务流程</a><a href="flow.html" data-lang="en">How It Works</a></li>
       <li><a href="help.html" data-lang="zh">帮助中心</a><a href="help.html" data-lang="en">Help</a></li>
       <li><a href="#contact" data-lang="zh">立即咨询</a><a href="#contact" data-lang="en">Contact</a></li>
@@ -1128,14 +1177,14 @@
 </nav>
 
 <div class="mobile-menu" id="mobileMenu">
-  <a href="#solutions" data-lang="zh" onclick="closeMobile()">解决方案</a>
-  <a href="#solutions" data-lang="en" onclick="closeMobile()">Solutions</a>
-  <a href="#industries" data-lang="zh" onclick="closeMobile()">行业覆盖</a>
-  <a href="#industries" data-lang="en" onclick="closeMobile()">Industries</a>
-  <a href="#pricing" data-lang="zh" onclick="closeMobile()">旺铺套餐</a>
-  <a href="#pricing" data-lang="en" onclick="closeMobile()">Pricing</a>
-  <a href="/marketing/" data-lang="zh" onclick="closeMobile()">营销服务</a>
-  <a href="/marketing/en/" data-lang="en" onclick="closeMobile()">Marketing</a>
+  <a href="#module-1" data-lang="zh" onclick="closeMobile()">做网站 · 让别人知道你</a>
+  <a href="#module-1" data-lang="en" onclick="closeMobile()">Get Found</a>
+  <a href="#module-2" data-lang="zh" onclick="closeMobile()">做口碑 · 让人记住你</a>
+  <a href="#module-2" data-lang="en" onclick="closeMobile()">Be Remembered</a>
+  <a href="#module-3" data-lang="zh" onclick="closeMobile()">做复购 · 让人消费更多</a>
+  <a href="#module-3" data-lang="en" onclick="closeMobile()">Spend More</a>
+  <a href="#module-4" data-lang="zh" onclick="closeMobile()">做系统 · 省人工提效率</a>
+  <a href="#module-4" data-lang="en" onclick="closeMobile()">Work Less</a>
   <a href="flow.html" data-lang="zh" onclick="closeMobile()">业务流程</a>
   <a href="flow.html" data-lang="en" onclick="closeMobile()">How It Works</a>
   <a href="help.html" data-lang="zh" onclick="closeMobile()">帮助中心</a>
@@ -1151,67 +1200,70 @@
     <span class="hero-eyebrow" data-lang="en">🇮🇪 Built for Chinese small businesses in Ireland</span>
 
     <h1 class="hero-title" data-lang="zh">
-      你的生意够好，<br>
-      <span class="red">但没人知道</span><br>
-      <span class="gold">——这才是问题所在</span>
+      让更多人找到你，<br>
+      <span class="red">让来过的再回来</span><br>
+      <span class="gold">——还能少雇一个人</span>
     </h1>
     <h1 class="hero-title" data-lang="en">
-      Your business is great.<br>
-      <span class="red">But nobody knows it.</span><br>
-      <span class="gold">That's the real problem.</span>
+      Get found. Get remembered.<br>
+      <span class="red">Get them coming back.</span><br>
+      <span class="gold">— with fewer hands.</span>
     </h1>
 
     <p class="hero-desc" data-lang="zh">
       在爱尔兰做小生意，技术不差、服务不差，但生意就是难做大。
-      根源往往是同一件事：<strong>没有系统</strong>——没有稳定的获客渠道，没有留住老客户的方法，没有让生意自己跑起来的工具。
+      问题从来不是一件事，而是<strong>四件事</strong>：别人不知道你、知道了记不住你、
+      来过一次不再来、生意稍微一忙就全靠人扛。这四件我们分开做，你缺哪件补哪件。
     </p>
     <p class="hero-desc" data-lang="en">
       Running a small business in Ireland — good skills, good service, but growth stalls.
-      The root cause is almost always the same: <strong>no system</strong> — no reliable way to attract customers, no way to retain regulars, no tools to make the business run itself.
+      It's never one problem, it's <strong>four</strong>: nobody knows you, those who do can't remember you,
+      the ones who came never came back, and every busy day runs on manual labour.
+      We handle the four separately — take only the ones you're missing.
     </p>
 
     <div class="pain-grid">
       <div class="pain-card">
         <span class="pain-icon">😶</span>
         <div>
-          <h4 data-lang="zh">搜不到你</h4>
-          <h4 data-lang="en">You're invisible online</h4>
+          <h4 data-lang="zh">① 别人不知道你</h4>
+          <h4 data-lang="en">① Nobody knows you</h4>
           <p data-lang="zh">Google 搜"附近美甲"，出来的全是竞争对手。你没有网站，没有 Google 地图标注，没人知道你在哪。</p>
           <p data-lang="en">Search "nail salon nearby" and only competitors show up. No website, no Google Maps listing — you're invisible to new customers.</p>
         </div>
       </div>
       <div class="pain-card">
-        <span class="pain-icon">📞</span>
+        <span class="pain-icon">🫥</span>
         <div>
-          <h4 data-lang="zh">全靠口口相传</h4>
-          <h4 data-lang="en">100% word of mouth</h4>
-          <p data-lang="zh">新客人全靠老客介绍，淡季一来生意就断。没有主动获客的方式，生意每年都在靠运气。</p>
-          <p data-lang="en">Every new customer comes from a referral. In slow seasons, business dries up completely. Growth depends entirely on luck.</p>
+          <h4 data-lang="zh">② 知道了也记不住你</h4>
+          <h4 data-lang="en">② They can't remember you</h4>
+          <p data-lang="zh">客人挺满意，一个月后想再来，只记得"那家中餐"，想不起店名。Google 上 23 条评价，最新一条两年前，两条差评没人回——他退出去点了隔壁。</p>
+          <p data-lang="en">A happy customer wants to come back a month later, but only remembers "that Chinese place." On Google: 23 reviews, the latest two years old, two bad ones unanswered — so they clicked the shop next door instead.</p>
         </div>
       </div>
       <div class="pain-card">
         <span class="pain-icon">🔄</span>
         <div>
-          <h4 data-lang="zh">老客来了就走，留不住</h4>
-          <h4 data-lang="en">One-time visitors, no repeat business</h4>
-          <p data-lang="zh">客人做完就走，下次来不来靠缘分。没有积分、没有会员、没有优惠券，没有任何理由让他们回来。</p>
-          <p data-lang="en">Customers visit once and disappear. No loyalty points, no membership, no coupons — nothing to bring them back.</p>
+          <h4 data-lang="zh">③ 来过一次就不再来</h4>
+          <h4 data-lang="en">③ They never come back</h4>
+          <p data-lang="zh">客人做完就走，下次来不来靠缘分。没有积分、没有会员、没有核销记录——你连谁来过第二次都不知道，做活动只能广撒网打折。</p>
+          <p data-lang="en">Customers visit once and disappear. No points, no membership, no redemption records — you don't even know who came twice, so every promotion is a blanket discount.</p>
         </div>
       </div>
       <div class="pain-card">
-        <span class="pain-icon">🌐</span>
+        <span class="pain-icon">😮‍💨</span>
         <div>
-          <h4 data-lang="zh">接不了线上订单</h4>
-          <h4 data-lang="en">Can't take orders online</h4>
-          <p data-lang="zh">客人想网上下单、提前预约、买礼品卡，你给不了。每笔生意都要电话或者当面谈，错失大量收入。</p>
-          <p data-lang="en">Customers want to order online, book ahead, buy gift cards. You can't offer that — every sale requires a phone call or walk-in.</p>
+          <h4 data-lang="zh">④ 一忙起来全靠人扛</h4>
+          <h4 data-lang="en">④ Everything runs on manual labour</h4>
+          <p data-lang="zh">接单靠电话、排班靠微信、对账靠 Excel、库存靠脑子。生意一大就得多雇人，雇了人还是乱，利润全被人工吃掉。</p>
+          <p data-lang="en">Orders by phone, rosters over WeChat, reconciliation in Excel, stock in your head. Growth means hiring more people — and it's still chaos, with wages eating the margin.</p>
         </div>
       </div>
     </div>
 
     <div class="hero-ctas">
-      <a href="#solutions" class="btn-primary" data-lang="zh">看我们怎么解决 →</a>
-      <a href="#solutions" class="btn-primary" data-lang="en">See How We Solve It →</a>
+      <a href="#module-1" class="btn-primary" data-lang="zh">看这四件事怎么做 →</a>
+      <a href="#module-1" class="btn-primary" data-lang="en">See How the Four Work →</a>
       <a href="#contact" class="btn-secondary" data-lang="zh">免费咨询</a>
       <a href="#contact" class="btn-secondary" data-lang="en">Free Consultation</a>
     </div>
@@ -1666,181 +1718,142 @@
 </section>
 
 <!-- ===== SCREEN 5：旺铺套餐 ===== -->
-<section id="pricing">
+<span id="pricing" class="anchor-alias"></span>
+<section id="module-1">
   <div class="container">
-    <h2 class="section-title fade-in" data-lang="zh">选择你的<span>旺铺套餐</span></h2>
-    <h2 class="section-title fade-in" data-lang="en">Choose Your <span>Wangpu Plan</span></h2>
-    <p class="section-sub fade-in" data-lang="zh">四档标准方案 + 企业定制，按需选择，随时升级。全部定制开发，绝不套模板</p>
-    <p class="section-sub fade-in" data-lang="en">Four tiers + enterprise bespoke — pick your fit, upgrade anytime. All custom-built, never templated</p>
+    <div class="module-eyebrow fade-in">
+      <span class="module-no">①</span>
+      <span data-lang="zh">让别人知道你</span>
+      <span data-lang="en">Get Found</span>
+    </div>
+    <h2 class="section-title fade-in" data-lang="zh">做一个网站，<span>四个版本</span></h2>
+    <h2 class="section-title fade-in" data-lang="en">One Website, <span>Four Versions</span></h2>
+    <p class="section-sub fade-in" data-lang="zh">从翻新旧站到全能旗舰，价格与交付时间一起印出来。全部定制开发，绝不套模板</p>
+    <p class="section-sub fade-in" data-lang="en">From refreshing an old site to a full flagship build — price and delivery time printed together. All custom-built, never templated</p>
 
     <div class="pricing-grid">
 
-      <!-- STARTER 入门旺铺 -->
+      <!-- 旧网站翻新升级 -->
       <div class="pricing-card fade-in">
-        <div class="pricing-name" data-lang="zh">入门旺铺</div>
-        <div class="pricing-name" data-lang="en">Starter</div>
-        <div class="pricing-tagline" data-lang="zh">先上线，先被搜到</div>
-        <div class="pricing-tagline" data-lang="en">Get online, get found</div>
-        <div class="pricing-price">€499</div>
-        <div class="pricing-period" data-lang="zh">一次性建站费</div>
-        <div class="pricing-period" data-lang="en">one-time setup fee</div>
+        <div class="pricing-name" data-lang="zh">⭐ 旧网站翻新升级</div>
+        <div class="pricing-name" data-lang="en">⭐ Website Refresh</div>
+        <div class="pricing-tagline" data-lang="zh">已经有网站，但留不住人</div>
+        <div class="pricing-tagline" data-lang="en">You have a site — it just doesn't convert</div>
+        <div class="pricing-price">€299</div>
+        <div class="pricing-period" data-lang="zh">一次性起价</div>
+        <div class="pricing-period" data-lang="en">one-off starting price</div>
         <ul class="pricing-features">
-          <li data-lang="zh">3–5 页企业官网（行业模板）</li>
-          <li data-lang="en">3–5 page website (industry template)</li>
-          <li data-lang="zh">.ie / .com 域名首年免费</li>
-          <li data-lang="en">.ie/.com domain (first year free)</li>
-          <li data-lang="zh">爱尔兰服务器 + SSL + 每日备份</li>
-          <li data-lang="en">Irish server + SSL + daily backup</li>
-          <li data-lang="zh">在线留言 / 报价表单</li>
-          <li data-lang="en">Online enquiry / quote form</li>
-          <li data-lang="zh">基础 SEO + Google Analytics</li>
-          <li data-lang="en">Basic SEO + Google Analytics</li>
-          <li data-lang="zh">中文客服 5×8</li>
-          <li data-lang="en">CN support 5×8</li>
+          <li data-lang="zh">基于现有网站内容重新设计，文案不用重写</li>
+          <li data-lang="en">Redesigned around your existing content — no rewriting needed</li>
+          <li data-lang="zh">高转化现代设计风格，手机端优先</li>
+          <li data-lang="en">High-conversion modern design, mobile-first</li>
+          <li data-lang="zh">高速服务器，打开速度提升带动搜索排名</li>
+          <li data-lang="en">High-speed hosting — faster load times lift search ranking</li>
+          <li data-lang="zh">原域名、邮箱、已收录页面全部平移，不断线</li>
+          <li data-lang="en">Domain, email and indexed pages all carried over — zero downtime</li>
         </ul>
-        <div class="pricing-monthly" data-lang="zh">+ €39/月 维护托管</div>
-        <div class="pricing-monthly" data-lang="en">+ €39/month hosting &amp; maintenance</div>
-        <a href="#contact" class="btn-secondary pricing-btn" data-lang="zh">咨询入门旺铺</a>
+        <div class="pricing-monthly" data-lang="zh">交付周期：按现有网站规模评估</div>
+        <div class="pricing-monthly" data-lang="en">Timeline: scoped to your current site</div>
+        <a href="#contact" class="btn-secondary pricing-btn" data-lang="zh">咨询翻新升级</a>
         <a href="#contact" class="btn-secondary pricing-btn" data-lang="en">Enquire Now</a>
       </div>
 
-      <!-- ESSENTIAL 基础旺铺 (featured) -->
+      <!-- 快速启动方案 -->
+      <div class="pricing-card fade-in">
+        <div class="pricing-name" data-lang="zh">🚀 快速启动方案</div>
+        <div class="pricing-name" data-lang="en">🚀 Quick Launch</div>
+        <div class="pricing-tagline" data-lang="zh">最快上线，先被搜到</div>
+        <div class="pricing-tagline" data-lang="en">Live fast, get found first</div>
+        <div class="pricing-price">€599</div>
+        <div class="pricing-period" data-lang="zh">一次性起价</div>
+        <div class="pricing-period" data-lang="en">one-off starting price</div>
+        <ul class="pricing-features">
+          <li data-lang="zh">高转化单页网站 + 移动端适配</li>
+          <li data-lang="en">High-conversion one-page site + mobile adaptation</li>
+          <li data-lang="zh">Google Maps 商家入驻，本地搜索出得来</li>
+          <li data-lang="en">Google Maps business listing — show up in local search</li>
+          <li data-lang="zh">企业专属域名邮箱（you@yourshop.ie）</li>
+          <li data-lang="en">Branded domain email (you@yourshop.ie)</li>
+          <li data-lang="zh">上线后售后技术支持</li>
+          <li data-lang="en">Post-launch technical support</li>
+        </ul>
+        <div class="pricing-monthly" data-lang="zh">上线时间：约 5 个工作日</div>
+        <div class="pricing-monthly" data-lang="en">Live in: ~5 working days</div>
+        <a href="#contact" class="btn-secondary pricing-btn" data-lang="zh">咨询快速启动</a>
+        <a href="#contact" class="btn-secondary pricing-btn" data-lang="en">Enquire Now</a>
+      </div>
+
+      <!-- 商业流量方案 (featured) -->
       <div class="pricing-card featured fade-in">
         <div class="pricing-badge" data-lang="zh">⭐ 最多人选</div>
         <div class="pricing-badge" data-lang="en">⭐ Most Popular</div>
-        <div class="pricing-name" data-lang="zh">基础旺铺</div>
-        <div class="pricing-name" data-lang="en">Essential</div>
-        <div class="pricing-tagline" data-lang="zh">开始收款，留住老客</div>
-        <div class="pricing-tagline" data-lang="en">Start selling, retain regulars</div>
-        <div class="pricing-price">€999</div>
-        <div class="pricing-period" data-lang="zh">一次性建站费</div>
-        <div class="pricing-period" data-lang="en">one-time setup fee</div>
+        <div class="pricing-name" data-lang="zh">📈 商业流量方案</div>
+        <div class="pricing-name" data-lang="en">📈 Traffic &amp; Growth</div>
+        <div class="pricing-tagline" data-lang="zh">本地客和华人客，两边都接得住</div>
+        <div class="pricing-tagline" data-lang="en">Catch both Irish locals and Chinese customers</div>
+        <div class="pricing-price">€799</div>
+        <div class="pricing-period" data-lang="zh">一次性起价</div>
+        <div class="pricing-period" data-lang="en">one-off starting price</div>
         <ul class="pricing-features">
-          <li data-lang="zh">含入门旺铺全部功能</li>
-          <li data-lang="en">Everything in Starter</li>
-          <li data-lang="zh">✨ 完整电商（100 SKU + 购物车）</li>
-          <li data-lang="en">✨ Full e-commerce (100 SKUs)</li>
-          <li data-lang="zh">✨ Stripe / 微信 / 支付宝收款</li>
-          <li data-lang="en">✨ Stripe / WeChat / Alipay</li>
-          <li data-lang="zh">✨ 会员积分 + 优惠券系统</li>
-          <li data-lang="en">✨ Loyalty points + coupons</li>
-          <li data-lang="zh">✨ 中英双语切换</li>
-          <li data-lang="en">✨ Bilingual (CN + EN)</li>
-          <li data-lang="zh">✨ 爱尔兰 23% VAT 自动计算</li>
-          <li data-lang="en">✨ Auto Irish VAT (23%)</li>
+          <li data-lang="zh">含快速启动方案全部内容</li>
+          <li data-lang="en">Everything in Quick Launch</li>
+          <li data-lang="zh">✨ 中英双语网站，营销导向视觉设计</li>
+          <li data-lang="en">✨ Bilingual CN/EN site, marketing-led visual design</li>
+          <li data-lang="zh">✨ Google Maps 入驻 + 企业专属邮箱</li>
+          <li data-lang="en">✨ Google Maps listing + branded email</li>
+          <li data-lang="zh">✨ 1v1 专属技术顾问全程对接</li>
+          <li data-lang="en">✨ Dedicated 1-on-1 technical consultant</li>
         </ul>
-        <div class="pricing-monthly" data-lang="zh">+ €79/月 维护托管</div>
-        <div class="pricing-monthly" data-lang="en">+ €79/month hosting &amp; maintenance</div>
-        <a href="#contact" class="btn-primary pricing-btn" data-lang="zh">立即咨询基础旺铺</a>
+        <div class="pricing-monthly" data-lang="zh">上线时间：约 10 个工作日精细打磨</div>
+        <div class="pricing-monthly" data-lang="en">Live in: ~10 working days, fully polished</div>
+        <a href="#contact" class="btn-primary pricing-btn" data-lang="zh">立即咨询商业流量</a>
         <a href="#contact" class="btn-primary pricing-btn" data-lang="en">Enquire Now</a>
       </div>
 
-      <!-- GROWTH 成长旺铺 -->
+      <!-- 全能旗舰方案 -->
       <div class="pricing-card fade-in">
-        <div class="pricing-name" data-lang="zh">成长旺铺</div>
-        <div class="pricing-name" data-lang="en">Growth</div>
-        <div class="pricing-tagline" data-lang="zh">多店连锁，系统化管理</div>
-        <div class="pricing-tagline" data-lang="en">Multi-location, systematic ops</div>
-        <div class="pricing-price">€4,999</div>
-        <div class="pricing-period" data-lang="zh">一次性建站费</div>
-        <div class="pricing-period" data-lang="en">one-time setup fee</div>
+        <div class="pricing-name" data-lang="zh">👑 全能旗舰方案</div>
+        <div class="pricing-name" data-lang="en">👑 Flagship</div>
+        <div class="pricing-tagline" data-lang="zh">品牌官网或电商站，一次做到位</div>
+        <div class="pricing-tagline" data-lang="en">Brand site or full e-commerce, done properly</div>
+        <div class="pricing-price">€1,599</div>
+        <div class="pricing-period" data-lang="zh">一次性起价</div>
+        <div class="pricing-period" data-lang="en">one-off starting price</div>
         <ul class="pricing-features">
-          <li data-lang="zh">含基础旺铺全部功能</li>
-          <li data-lang="en">Everything in Essential</li>
-          <li data-lang="zh">✨ 在线预约 + 员工排期</li>
-          <li data-lang="en">✨ Booking + staff scheduling</li>
-          <li data-lang="zh">✨ 进阶库存（多仓 / 条码）</li>
-          <li data-lang="en">✨ Inventory (multi-warehouse)</li>
-          <li data-lang="zh">✨ 基础 CRM + 客户标签</li>
-          <li data-lang="en">✨ CRM + customer tags</li>
-          <li data-lang="zh">✨ 3–15 员工账号 + 排班</li>
-          <li data-lang="en">✨ 3–15 staff + scheduling</li>
-          <li data-lang="zh">✨ 多门店（最多 5 家）</li>
-          <li data-lang="en">✨ Multi-location (up to 5)</li>
+          <li data-lang="zh">含商业流量方案全部内容</li>
+          <li data-lang="en">Everything in Traffic &amp; Growth</li>
+          <li data-lang="zh">✨ 多页品牌官网 / 完整电商站</li>
+          <li data-lang="en">✨ Multi-page brand site / full e-commerce store</li>
+          <li data-lang="zh">✨ 在线预约 + 在线支付系统</li>
+          <li data-lang="en">✨ Online booking + online payment</li>
+          <li data-lang="zh">✨ 企业级安全防护</li>
+          <li data-lang="en">✨ Enterprise-grade security</li>
+          <li data-lang="zh">✨ VIP 全天候技术支持</li>
+          <li data-lang="en">✨ VIP round-the-clock support</li>
         </ul>
-        <div class="pricing-monthly" data-lang="zh">+ €299/月 SaaS 运营</div>
-        <div class="pricing-monthly" data-lang="en">+ €299/month SaaS ops</div>
-        <a href="#contact" class="btn-secondary pricing-btn" data-lang="zh">咨询成长旺铺</a>
-        <a href="#contact" class="btn-secondary pricing-btn" data-lang="en">Enquire Now</a>
-      </div>
-
-      <!-- BUSINESS 商务旺铺 -->
-      <div class="pricing-card fade-in">
-        <div class="pricing-name" data-lang="zh">商务旺铺</div>
-        <div class="pricing-name" data-lang="en">Business</div>
-        <div class="pricing-tagline" data-lang="zh">全套自动化，规模扩张</div>
-        <div class="pricing-tagline" data-lang="en">Full automation, built to scale</div>
-        <div class="pricing-price">€14,999</div>
-        <div class="pricing-period" data-lang="zh">一次性建站费</div>
-        <div class="pricing-period" data-lang="en">one-time setup fee</div>
-        <ul class="pricing-features">
-          <li data-lang="zh">含成长旺铺全部功能</li>
-          <li data-lang="en">Everything in Growth</li>
-          <li data-lang="zh">✨ 营销自动化工作流</li>
-          <li data-lang="en">✨ Marketing automation</li>
-          <li data-lang="zh">✨ 社媒统一发布（含小红书）</li>
-          <li data-lang="en">✨ Unified social (incl. Xiaohongshu)</li>
-          <li data-lang="zh">✨ 短信 + AI 电话（按量）</li>
-          <li data-lang="en">✨ SMS + AI calling (metered)</li>
-          <li data-lang="zh">✨ 多公司 / 多币种收款</li>
-          <li data-lang="en">✨ Multi-entity / multi-currency</li>
-        </ul>
-        <div class="pricing-monthly" data-lang="zh">+ €699/月 SaaS 运营</div>
-        <div class="pricing-monthly" data-lang="en">+ €699/month SaaS ops</div>
-        <a href="#contact" class="btn-secondary pricing-btn" data-lang="zh">咨询商务旺铺</a>
+        <div class="pricing-monthly" data-lang="zh">上线时间：约 2–4 周深度开发</div>
+        <div class="pricing-monthly" data-lang="en">Live in: ~2–4 weeks of deep build</div>
+        <a href="#contact" class="btn-secondary pricing-btn" data-lang="zh">咨询全能旗舰</a>
         <a href="#contact" class="btn-secondary pricing-btn" data-lang="en">Enquire Now</a>
       </div>
 
     </div><!-- /.pricing-grid -->
 
-    <!-- Enterprise 2-banner row -->
-    <div class="pricing-enterprise">
-      <div class="pricing-ent-card fade-in">
-        <div class="pricing-ent-info">
-          <h4 data-lang="zh">企业旺铺 ENTERPRISE</h4>
-          <h4 data-lang="en">Enterprise Plan</h4>
-          <p data-lang="zh">50–150 人 / 跨境集团 / 大型连锁，含 ERP + MRP + 多国税务，专属 CSM</p>
-          <p data-lang="en">50–150 staff / cross-border group / large chain — ERP + MRP + multi-country tax, dedicated CSM</p>
-          <div class="pricing-ent-price">
-            <span data-lang="zh">€39,999 起</span>
-            <span data-lang="en">from €39,999</span>
-            <small data-lang="zh">+ €1,499/月 · 1h SLA</small>
-            <small data-lang="en">+ €1,499/mo · 1h SLA</small>
-          </div>
-        </div>
-        <a href="#contact" class="btn-secondary pricing-btn pricing-ent-btn" data-lang="zh">联系咨询</a>
-        <a href="#contact" class="btn-secondary pricing-btn pricing-ent-btn" data-lang="en">Contact Us</a>
-      </div>
-      <div class="pricing-ent-card fade-in">
-        <div class="pricing-ent-info">
-          <h4 data-lang="zh">完全定制 BESPOKE</h4>
-          <h4 data-lang="en">Bespoke / Custom</h4>
-          <p data-lang="zh">行业定制 / 源码交付 / 私有部署 / 独立 SaaS 平台 / 专属开发团队</p>
-          <p data-lang="en">Industry-specific / source code delivery / private deployment / standalone SaaS / dedicated dev team</p>
-          <div class="pricing-ent-price">
-            <span data-lang="zh">€69,999 起</span>
-            <span data-lang="en">from €69,999</span>
-            <small data-lang="zh">· 所有参数单议</small>
-            <small data-lang="en">· All terms negotiable</small>
-          </div>
-        </div>
-        <a href="#contact" class="btn-secondary pricing-btn pricing-ent-btn" data-lang="zh">联系咨询</a>
-        <a href="#contact" class="btn-secondary pricing-btn pricing-ent-btn" data-lang="en">Contact Us</a>
-      </div>
-    </div><!-- /.pricing-enterprise -->
-
-    <!-- View full pricing page -->
-    <div class="pricing-more-link fade-in">
-      <a href="pricing-demo.html" data-lang="zh">查看完整功能对比与定价详情 →</a>
-      <a href="pricing-demo.html" data-lang="en">View full feature comparison &amp; pricing details →</a>
-    </div>
     <p class="pricing-more-link" data-lang="zh">
-      旺铺帮你把系统建起来，但人从哪来？
-      <a href="/marketing/">→ 看营销服务：从 €390/月，替代一个市场推广</a>
+      网站建好了，但客人怎么记住你、怎么再回来？
+      <a href="#module-2">→ 看模块 ②：口碑与社媒代运营，从 €390/月</a>
     </p>
     <p class="pricing-more-link" data-lang="en">
-      Wangpu builds the system. But where do the customers come from?
-      <a href="/marketing/en/">→ See Marketing: from €390/month, replacing a marketing hire</a>
+      The site is live — but how do they remember you and come back?
+      <a href="#module-2">→ See Module ②: reputation &amp; social, from €390/month</a>
+    </p>
+    <p class="module-footnote" data-lang="zh">
+      所有价格为欧元，不含 23% VAT。标「起」的价格按实际页数与功能范围评估，开工前给你一口价，做超了不加钱。
+      域名、服务器托管与后续维护按实际方案另行报价。
+    </p>
+    <p class="module-footnote" data-lang="en">
+      All prices in EUR, excluding 23% VAT. "From" prices are scoped by page count and feature set — you get a fixed quote before we start, and overruns are on us.
+      Domain, hosting and ongoing maintenance are quoted separately.
     </p>
   </div>
 </section>
