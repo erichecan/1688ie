@@ -292,85 +292,6 @@
       background: var(--ink);
       color: var(--cream);
     }
-    #solutions .section-title { color: var(--cream); }
-    #solutions .section-title span { color: var(--gold); }
-    #solutions .section-sub { color: rgba(250,246,240,0.55); }
-
-    .solutions-intro {
-      text-align: center;
-      max-width: 680px;
-      margin: 0 auto 60px;
-    }
-    .solutions-intro p {
-      color: rgba(250,246,240,0.7);
-      font-size: 1rem;
-      line-height: 1.9;
-    }
-
-    .solutions-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2px;
-    }
-    .solution-item {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.07);
-      padding: 36px 28px;
-      position: relative;
-      transition: background 0.3s;
-    }
-    .solution-item:hover { background: rgba(255,255,255,0.08); }
-
-    .solution-item.highlight {
-      background: var(--red);
-      border-color: var(--red);
-    }
-    .solution-item.highlight:hover { background: var(--red-dark); }
-
-    .solution-num {
-      font-size: 0.7rem;
-      font-weight: 700;
-      color: var(--gold);
-      letter-spacing: 2px;
-      margin-bottom: 14px;
-      display: block;
-    }
-    .solution-item.highlight .solution-num { color: rgba(255,255,255,0.6); }
-
-    .solution-icon {
-      font-size: 2rem;
-      margin-bottom: 14px;
-      display: block;
-    }
-    .solution-item h3 {
-      font-size: 1.05rem;
-      font-weight: 700;
-      margin-bottom: 8px;
-      color: var(--cream);
-    }
-    .solution-item p {
-      font-size: 0.82rem;
-      line-height: 1.75;
-      color: rgba(250,246,240,0.55);
-    }
-    .solution-item.highlight p { color: rgba(255,255,255,0.75); }
-
-    .solutions-note {
-      text-align: center;
-      margin-top: 48px;
-      padding: 24px;
-      border: 1px solid rgba(212,175,55,0.3);
-      border-radius: 4px;
-      max-width: 680px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    .solutions-note p {
-      font-size: 0.9rem;
-      color: rgba(250,246,240,0.6);
-      line-height: 1.8;
-    }
-    .solutions-note strong { color: var(--gold); }
 
     /* ===== INDUSTRIES ===== */
     #industries {
@@ -768,36 +689,6 @@
       padding: 100px 0;
       background: var(--cream);
     }
-    .value-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: stretch; }
-    .value-side { display: flex; flex-direction: column; }
-    .value-side .value-list { flex: 1; }
-    .value-side h3 {
-      font-size: 1.3rem;
-      margin-bottom: 20px;
-      padding-bottom: 12px;
-      border-bottom: 3px solid var(--red);
-      display: inline-block;
-    }
-    .value-list { list-style: none; }
-    .value-list li {
-      padding: 12px 0;
-      border-bottom: 1px solid var(--line);
-      font-size: 0.9rem;
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-    }
-    .value-list li .icon {
-      width: 28px; height: 28px;
-      background: var(--red);
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      color: white; font-size: 0.8rem;
-      flex-shrink: 0;
-      margin-top: 2px;
-    }
-    .value-cta { text-align: center; margin-top: 48px; }
-    .value-cta .btn-primary { margin-top: 16px; }
 
     /* ===== SUBSIDY ===== */
     #subsidy {
@@ -806,45 +697,6 @@
       color: white;
       text-align: center;
     }
-    .subsidy-inner { max-width: 680px; margin: 0 auto; }
-    .subsidy-badge {
-      display: inline-block;
-      background: rgba(255,255,255,0.2);
-      border: 1px solid rgba(255,255,255,0.4);
-      color: white;
-      font-size: 0.8rem;
-      padding: 4px 14px;
-      border-radius: 20px;
-      margin-bottom: 20px;
-      letter-spacing: 1px;
-    }
-    #subsidy .section-title { color: white; margin-bottom: 16px; }
-    #subsidy .section-title span { color: #FFE066; }
-    .subsidy-amount {
-      font-size: clamp(3rem, 8vw, 5rem);
-      font-weight: 900;
-      color: #FFE066;
-      line-height: 1;
-      margin: 24px 0;
-      font-family: 'Playfair Display', serif;
-    }
-    #subsidy p { font-size: 1rem; opacity: 0.85; line-height: 1.8; margin-bottom: 16px; }
-    .subsidy-steps {
-      display: flex;
-      justify-content: center;
-      gap: 0;
-      margin: 32px 0;
-      flex-wrap: nowrap;
-    }
-    .subsidy-step { flex: 1 1 0; min-width: 0; text-align: center; padding: 0 8px; position: relative; }
-    .subsidy-step:not(:last-child)::after {
-      content: '→';
-      position: absolute; right: -8px; top: 50%;
-      transform: translateY(-50%);
-      font-size: 1.2rem; opacity: 0.5;
-    }
-    .subsidy-step-num { display: block; font-size: 1.8rem; font-weight: 900; color: #FFE066; }
-    .subsidy-step-label { font-size: 0.72rem; opacity: 0.75; display: block; line-height: 1.3; word-break: keep-all; }
 
     /* ===== FAQ ===== */
     #faq {
@@ -1015,21 +867,16 @@
       .nav-links { display: none; }
       .hamburger { display: flex; }
       .pain-grid { grid-template-columns: 1fr; }
-      .solutions-grid { grid-template-columns: 1fr 1fr; }
       .industries-grid { grid-template-columns: repeat(2, 1fr); }
       .stories-grid { grid-template-columns: 1fr; }
       .pricing-grid { grid-template-columns: repeat(2, 1fr); }
       .pricing-enterprise { grid-template-columns: 1fr; }
       .pricing-card.featured { transform: none; }
-      .value-grid { grid-template-columns: 1fr; }
       .contact-grid { grid-template-columns: 1fr; }
       .footer-inner { grid-template-columns: 1fr; gap: 24px; }
       .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
     }
     @media (max-width: 540px) {
-      .solutions-grid { grid-template-columns: 1fr; }
-      .subsidy-steps { gap: 16px; }
-      .subsidy-step:not(:last-child)::after { display: none; }
       .pricing-grid { grid-template-columns: 1fr; }
       .pricing-ent-card { flex-direction: column; text-align: center; }
       .pricing-ent-price { justify-content: center; }
@@ -1044,9 +891,6 @@
       color: var(--green);
       box-shadow: 4px 4px 0 rgba(0,0,0,0.15);
     }
-    .subsidy-cta-btn[data-lang="en"] { display: none; }
-    body.en .subsidy-cta-btn[data-lang="en"] { display: inline-block; }
-    body.en .subsidy-cta-btn[data-lang="zh"] { display: none; }
 
     /* ===== LANG ===== */
     [data-lang="en"] { display: none; }
@@ -1064,15 +908,9 @@
     body.en .story-result[data-lang="en"],
     body.en .btn-primary[data-lang="en"],
     body.en .btn-secondary[data-lang="en"],
-    body.en .contact-action[data-lang="en"] { display: inline-block; }
-    /* List items in pricing and value sections need flex (for ✓ icon + text layout) */
+    body.en .contact-action[data-lang="en"] { display: inline-block; }/* List items in pricing and value sections need flex (for ✓ icon + text layout) */
     /* Higher specificity hide rules — required because .pricing-features li sets display:flex */
-    .pricing-features > li[data-lang="en"],
-    .value-list > li[data-lang="en"] { display: none; }
-    body.en .pricing-features > li[data-lang="zh"],
-    body.en .value-list > li[data-lang="zh"] { display: none; }
-    body.en .pricing-features > li[data-lang="en"],
-    body.en .value-list > li[data-lang="en"] { display: flex; }
+    .pricing-features > li[data-lang="en"] { display: none; }body.en .pricing-features > li[data-lang="zh"] { display: none; }body.en .pricing-features > li[data-lang="en"] { display: flex; }
     /* Value/flow/story elements set their own element-level display rule, which beats
        the generic [data-lang="en"] hide rule above (specificity) — explicit hide +
        paired body.en restore needed so neither language leaks into the other. */
@@ -1388,332 +1226,12 @@
   </div>
 </section>
 
-<!-- ===== SCREEN 2：我们提供什么解决方案 ===== -->
-<section id="solutions">
-  <div class="container">
-    <h2 class="section-title fade-in" data-lang="zh">我们提供的<span>解决方案</span></h2>
-    <h2 class="section-title fade-in" data-lang="en">Our <span>Solutions</span></h2>
 
-    <div class="solutions-intro fade-in">
-      <p data-lang="zh">
-        以下每一项都是针对爱尔兰华人生意的<strong style="color:var(--gold)">定制开发</strong>，不是模板套壳。
-        你选择套餐，我们根据你的生意量身打造——你的品牌、你的语言、你的客户群。
-      </p>
-      <p data-lang="en">
-        Every solution below is <strong style="color:var(--gold)">custom-built</strong> for your business — not a template.
-        You choose a plan, we build around your brand, your language, and your customers.
-      </p>
-    </div>
-
-    <div class="solutions-grid">
-
-      <div class="solution-item fade-in">
-        <span class="solution-num">01</span>
-        <span class="solution-icon">🌐</span>
-        <h3 data-lang="zh">中英双语商户网站</h3>
-        <h3 data-lang="en">Bilingual Business Website</h3>
-        <p data-lang="zh">定制开发的中英文网站，展示你的服务、价格、地址、客户评价。手机端优化，一搜就到，让爱尔兰本地人和华人都能找到你。</p>
-        <p data-lang="en">Custom-built site in Chinese and English. Services, prices, location, reviews — mobile-first, Google-ready, discoverable by both local Irish and Chinese customers.</p>
-      </div>
-
-      <div class="solution-item fade-in">
-        <span class="solution-num">02</span>
-        <span class="solution-icon">🛍️</span>
-        <h3 data-lang="zh">电商 &amp; 在线下单系统</h3>
-        <h3 data-lang="en">E-Commerce &amp; Online Ordering</h3>
-        <p data-lang="zh">让客人在手机上直接下单、支付、选取货时间。支持外卖接单、预约到店、礼品卡购买，24 小时替你做生意。</p>
-        <p data-lang="en">Customers order, pay, and schedule pickups directly from their phone. Supports takeaway, appointments, and gift card sales — your business works 24/7 without you.</p>
-      </div>
-
-      <div class="solution-item highlight fade-in">
-        <span class="solution-num">03</span>
-        <span class="solution-icon">🏆</span>
-        <h3 data-lang="zh">会员 &amp; 积分系统</h3>
-        <h3 data-lang="en">Membership &amp; Loyalty Points</h3>
-        <p data-lang="zh">客人消费自动累积积分，积分换折扣、换礼品。会员专属价格让老客感受到被重视，回头率直接翻倍。</p>
-        <p data-lang="en">Spending earns points. Points unlock discounts and gifts. Exclusive member pricing makes regulars feel valued — repeat visit rates typically double.</p>
-      </div>
-
-      <div class="solution-item fade-in">
-        <span class="solution-num">04</span>
-        <span class="solution-icon">🎟️</span>
-        <h3 data-lang="zh">优惠券 &amp; 折扣活动</h3>
-        <h3 data-lang="en">Coupons &amp; Discount Campaigns</h3>
-        <p data-lang="zh">数字优惠券系统内置，一键生成节假日限时折扣、首单优惠、老带新奖励——精准触达客人，比朋友圈发图效果强十倍。想要人帮你规划节奏并持续投放，交给营销服务。</p>
-        <p data-lang="en">Digital coupon creation is built into the platform — holiday deals, first-order discounts, referral rewards, created in minutes and far more trackable than WeChat Moments posts. Want someone to plan the calendar and run campaigns for you? That's what the marketing service does.</p>
-      </div>
-
-      <div class="solution-item fade-in">
-        <span class="solution-num">05</span>
-        <span class="solution-icon">📅</span>
-        <h3 data-lang="zh">在线预约系统</h3>
-        <h3 data-lang="en">Online Booking System</h3>
-        <p data-lang="zh">客人自助选时间、选服务、在线付定金。自动发确认短信，减少爽约率，你不用守着电话接预约了。</p>
-        <p data-lang="en">Customers self-book, choose services, pay deposits online. Automated SMS confirmations reduce no-shows — no more waiting by the phone for bookings.</p>
-      </div>
-
-      <div class="solution-item fade-in">
-        <span class="solution-num">06</span>
-        <span class="solution-icon">📣</span>
-        <h3 data-lang="zh">广告投放管理</h3>
-        <h3 data-lang="en">Digital Ad Management</h3>
-        <p data-lang="zh">Google Ads、Facebook / Instagram 广告账户与转化追踪一次搭通，覆盖爱尔兰华人社区和本地居民。素材怎么写、受众怎么调、数据怎么看，交给营销服务持续打理。</p>
-        <p data-lang="en">Google Ads and Facebook/Instagram accounts and conversion tracking wired up from day one, covering both the Chinese community and local Irish residents. Ongoing copy, audience tuning, and data monitoring are handled by the marketing service.</p>
-      </div>
-
-      <div class="solution-item fade-in">
-        <span class="solution-num">07</span>
-        <span class="solution-icon">🔍</span>
-        <h3 data-lang="zh">SEO 搜索排名优化</h3>
-        <h3 data-lang="en">SEO &amp; Google Rankings</h3>
-        <p data-lang="zh">网站从结构到技术标签按 SEO 规范搭建，Google 地图标注一次设置到位。关键词研究、内容更新、持续排名优化，交给营销服务来做。</p>
-        <p data-lang="en">Your site is built SEO-ready from the ground up — structure, technical tags, and Google Maps listing set up correctly from day one. Ongoing keyword research, content updates, and ranking optimisation are handled by the marketing service.</p>
-      </div>
-
-      <div class="solution-item fade-in">
-        <span class="solution-num">08</span>
-        <span class="solution-icon">💬</span>
-        <h3 data-lang="zh">WhatsApp / 微信营销</h3>
-        <h3 data-lang="en">WhatsApp &amp; WeChat Marketing</h3>
-        <p data-lang="zh">建立客户联系人列表，定期发优惠信息、新品上市、节日问候。让沉睡客户重新活跃，让老客人想起你。</p>
-        <p data-lang="en">Build a customer contact list and send targeted offers, new service announcements, and seasonal greetings. Re-activate dormant customers and stay top of mind.</p>
-      </div>
-
-      <div class="solution-item fade-in">
-        <span class="solution-num">09</span>
-        <span class="solution-icon">📊</span>
-        <h3 data-lang="zh">数据分析 &amp; 月度报告</h3>
-        <h3 data-lang="en">Analytics &amp; Monthly Reports</h3>
-        <p data-lang="zh">每个月告诉你：有多少人看了你的页面，多少人点了电话，哪个广告带来最多客人，哪些服务最受欢迎——用数据做决定，不靠感觉。</p>
-        <p data-lang="en">Monthly report: how many viewed your page, how many clicked your number, which ad brought the most customers, which services are most popular — decisions driven by data, not gut feeling.</p>
-      </div>
-
-    </div>
-
-    <div class="solutions-note fade-in">
-      <p data-lang="zh">
-        以上所有功能均为<strong>定制开发</strong>，根据你选择的套餐组合搭配。
-        没有现成模板，每一个旺铺都是为你的生意单独搭建的。
-        <br>→ <a href="#pricing" style="color:var(--gold)">查看套餐组合</a>
-      </p>
-      <p data-lang="en">
-        All of the above are <strong>custom-built</strong> for your business based on your chosen plan.
-        No templates — every Wangpu is built specifically for you.
-        <br>→ <a href="#pricing" style="color:var(--gold)">View pricing plans</a>
-      </p>
-    </div>
-  </div>
-</section>
-
-<!-- ===== SCREEN 3：8 大行业 ===== -->
-<section id="industries">
-  <div class="container">
-    <h2 class="section-title fade-in" data-lang="zh">覆盖 <span>8 大行业</span>，你的生意在其中</h2>
-    <h2 class="section-title fade-in" data-lang="en"><span>8 Industries</span> We Cover</h2>
-    <p class="section-sub fade-in" data-lang="zh">爱尔兰华人常见的生意类型，我们都深入了解过，所以能真正帮到你</p>
-    <p class="section-sub fade-in" data-lang="en">We've worked with all the most common Chinese-run businesses in Ireland — we understand your specific challenges</p>
-
-    <div class="industries-grid">
-      <!-- 美甲美睫 -->
-      <a class="industry-card fade-in" href="https://beauty-549968261036.europe-west1.run.app/guide" target="_blank" rel="noopener">
-        <span class="industry-emoji">💅</span>
-        <h3 data-lang="zh">美甲美睫</h3>
-        <h3 data-lang="en">Nail &amp; Lash</h3>
-        <p class="industry-headline" data-lang="zh">客人自己订时间、付定金，No-show 爽约率掉 70%</p>
-        <p class="industry-headline" data-lang="en">Self-booking with deposits — cut no-shows by 70%</p>
-        <p class="industry-desc" data-lang="zh">在线预约 + 定金锁档 + 作品集展示 + 6 周自动召回短信，周末档不再被放鸽子</p>
-        <p class="industry-desc" data-lang="en">Online booking + deposit lock-in + portfolio + 6-week auto-recall SMS — never lose a weekend slot to no-shows</p>
-        <p class="industry-proof" data-lang="zh">Lucan 陈姐美甲上线 3 个月，周末档 95% 提前订满</p>
-        <p class="industry-proof" data-lang="en">Sister Chen's Nails (Dublin Lucan) — 95% weekend slots pre-booked after 3 months</p>
-        <span class="industry-demo-link" data-lang="zh">查看在线演示 →</span>
-        <span class="industry-demo-link" data-lang="en">View Live Demo →</span>
-      </a>
-      <!-- 理发造型 -->
-      <div class="industry-card fade-in">
-        <span class="industry-emoji">✂️</span>
-        <h3 data-lang="zh">理发造型</h3>
-        <h3 data-lang="en">Hair Salon</h3>
-        <p class="industry-headline" data-lang="zh">客人指定 Tony、记住每次发型，6 周到期自动短信召回</p>
-        <p class="industry-headline" data-lang="en">Stylist preference + cut history + 6-week auto SMS recall</p>
-        <p class="industry-desc" data-lang="zh">多 Tony 排班 + 客户发型档案 + 染烫时长智能预留，告别"上次怎么剪的我忘了"</p>
-        <p class="industry-desc" data-lang="en">Multi-stylist scheduling + client cut profiles + smart time blocks for colour/perm — never ask "how did we cut it last time?" again</p>
-        <p class="industry-proof" data-lang="zh">行业平均回头率 35%，系统化召回后可提升至 60%+</p>
-        <p class="industry-proof" data-lang="en">Industry average repeat rate is 35% — systematic recall pushes it past 60%</p>
-      </div>
-      <!-- 手机维修 -->
-      <div class="industry-card fade-in">
-        <span class="industry-emoji">📱</span>
-        <h3 data-lang="zh">手机维修</h3>
-        <h3 data-lang="en">Phone Repair</h3>
-        <p class="industry-headline" data-lang="zh">客人在网上输手机型号秒看价，你不用接电话报价了</p>
-        <p class="industry-headline" data-lang="en">Customers self-quote by phone model — stop fielding price calls</p>
-        <p class="industry-desc" data-lang="zh">透明价目 + 在线下单 + 当日取件提醒 + 维修历史档案，新客自助、老客复购</p>
-        <p class="industry-desc" data-lang="en">Transparent pricing + online orders + same-day pickup alerts + repair history — self-service for new clients, easy returns for regulars</p>
-        <p class="industry-proof" data-lang="zh">Cork 阿强手机维修上线 5 个月，月营业额 +€1,800</p>
-        <p class="industry-proof" data-lang="en">A-Qiang Phone Repair (Cork) — +€1,800 monthly revenue after 5 months</p>
-      </div>
-      <!-- 汽车修理 -->
-      <div class="industry-card fade-in">
-        <span class="industry-emoji">🔧</span>
-        <h3 data-lang="zh">汽车修理</h3>
-        <h3 data-lang="en">Auto Service</h3>
-        <p class="industry-headline" data-lang="zh">NCT / Tax / 保养自动到期提醒，客户车没出问题先想到你</p>
-        <p class="industry-headline" data-lang="en">Auto reminders for NCT, Tax &amp; service — be the first call before things break</p>
-        <p class="industry-desc" data-lang="zh">NCT 在线预约 + 完整车辆服务档案 + 保险公司报价单一键导出，客户的车你比他更懂</p>
-        <p class="industry-desc" data-lang="en">NCT online booking + full service history per vehicle + one-click insurance quotes — know each car better than the owner</p>
-        <p class="industry-proof" data-lang="zh">一台车一年触达 4–6 次提醒，主动复购率提升 2 倍</p>
-        <p class="industry-proof" data-lang="en">4–6 reminder touchpoints per car per year — doubles proactive return visits</p>
-      </div>
-      <!-- 园艺草坪 -->
-      <div class="industry-card fade-in">
-        <span class="industry-emoji">🌿</span>
-        <h3 data-lang="zh">园艺草坪</h3>
-        <h3 data-lang="en">Gardening</h3>
-        <p class="industry-headline" data-lang="zh">客人发花园照片直接出报价，你不用每单跑一趟</p>
-        <p class="industry-headline" data-lang="en">Customers send photos, get quotes — stop driving to every site</p>
-        <p class="industry-desc" data-lang="zh">照片报价表单 + 14 天自动排期 + 雨天顺延通知 + 施工前后对比相册，锁定一整个夏天的活</p>
-        <p class="industry-desc" data-lang="en">Photo-based quote forms + 14-day auto-scheduling + rain-day reschedule alerts + before/after gallery — book out your entire summer</p>
-        <p class="industry-proof" data-lang="zh">上门估价转化率约 40%，远程报价转化率 70%+，跑空成本直接省掉</p>
-        <p class="industry-proof" data-lang="en">On-site quotes convert at ~40%; remote photo quotes hit 70%+ — eliminate wasted trips entirely</p>
-      </div>
-      <!-- 中餐外卖 -->
-      <div class="industry-card fade-in">
-        <span class="industry-emoji">🍜</span>
-        <h3 data-lang="zh">中餐外卖</h3>
-        <h3 data-lang="en">Chinese Takeaway</h3>
-        <p class="industry-headline" data-lang="zh">自家下单平台，告别 Just Eat 30% 抽成，客户数据归你</p>
-        <p class="industry-headline" data-lang="en">Your own ordering site — no 30% commission, customer data stays yours</p>
-        <p class="industry-desc" data-lang="zh">在线点单 + Stripe 直收 + 中英双语菜单 + 老客积分召回，平台只是你的渠道之一</p>
-        <p class="industry-desc" data-lang="en">Online ordering + direct Stripe payments + bilingual menu + loyalty points — make platforms just one of your channels, not your only one</p>
-        <p class="industry-proof" data-lang="zh">月营业额 €10,000 的店，自家下单一年省下 €34,200 平台佣金</p>
-        <p class="industry-proof" data-lang="en">A €10k/month shop saves €34,200/year in platform fees by selling direct</p>
-      </div>
-      <!-- 仓储物流 -->
-      <div class="industry-card fade-in">
-        <span class="industry-emoji">📦</span>
-        <h3 data-lang="zh">仓储物流</h3>
-        <h3 data-lang="en">Storage &amp; Logistics</h3>
-        <p class="industry-headline" data-lang="zh">货主自助查货 + 货位条码扫描 + 自动对账单 + 中英双语出入库单</p>
-        <p class="industry-headline" data-lang="en">Self-service stock tracking + barcode bin location + auto reconciliation + bilingual docs</p>
-        <p class="industry-desc" data-lang="zh">海外仓（替别人保管）和本地仓（自己进货卖）是两套生意，我们都做了完整 demo</p>
-        <p class="industry-desc" data-lang="en">Overseas freight warehouse (storing others' goods) vs. local import warehouse (your own inventory) — full live demos for both</p>
-        <div style="display:flex; gap:8px; margin-top:14px; flex-wrap:wrap;">
-          <a href="warehouse-demo/index.html" target="_blank" rel="noopener" style="flex:1; min-width:140px; padding:10px 12px; background:#0d4f3c; color:#fff; border-radius:8px; font-size:0.78rem; font-weight:700; text-decoration:none; text-align:center; transition:all .2s;" onmouseover="this.style.background='#1a7a5e'" onmouseout="this.style.background='#0d4f3c'">
-            <span data-lang="zh">📦 海外仓 Demo →</span>
-            <span data-lang="en">📦 Overseas Demo →</span>
-          </a>
-          <a href="local-warehouse-demo/index.html" target="_blank" rel="noopener" style="flex:1; min-width:140px; padding:10px 12px; background:#1e3a5f; color:#fff; border-radius:8px; font-size:0.78rem; font-weight:700; text-decoration:none; text-align:center; transition:all .2s;" onmouseover="this.style.background='#ea580c'" onmouseout="this.style.background='#1e3a5f'">
-            <span data-lang="zh">🏗️ 本地仓 Demo →</span>
-            <span data-lang="en">🏗️ Local Demo →</span>
-          </a>
-        </div>
-      </div>
-      <!-- 手机配件店 -->
-      <div class="industry-card fade-in">
-        <span class="industry-emoji">🛒</span>
-        <h3 data-lang="zh">手机配件店</h3>
-        <h3 data-lang="en">Accessories Shop</h3>
-        <p class="industry-headline" data-lang="zh">B 端 C 端两套价格自动切换，新款到货按客户标签精准推送</p>
-        <p class="industry-headline" data-lang="en">Wholesale &amp; retail pricing auto-switch; new arrivals push to tagged customers</p>
-        <p class="industry-desc" data-lang="zh">双价体系 + 客户分组标签 + 新品到货自动通知，告别"半夜在群里发壳子图"</p>
-        <p class="industry-desc" data-lang="en">Dual pricing tiers + customer tagging + automated new-arrival notifications — stop blasting case photos in WeChat groups at midnight</p>
-        <p class="industry-proof" data-lang="zh">一个 200 SKU 的配件店，微信群手动通知转化率 &lt;2%，标签精准推送可达 12%+</p>
-        <p class="industry-proof" data-lang="en">A 200-SKU accessories shop sees &lt;2% conversion from group blasts; tagged push hits 12%+</p>
-      </div>
-    </div>
-  </div>
-</section>
 
 <!-- ===== SCREEN 3.5：旗舰案例 ===== -->
 
-<!-- ===== SCREEN 4：真实故事 ===== -->
-<section id="stories">
-  <div class="container">
-    <h2 class="section-title fade-in" data-lang="zh"><span>真实故事</span>，真实生意</h2>
-    <h2 class="section-title fade-in" data-lang="en"><span>Real Stories</span>, Real Results</h2>
-    <p class="section-sub fade-in" data-lang="zh">这些是和我们合作的华人老板，他们的原话</p>
-    <p class="section-sub fade-in" data-lang="en">These are the actual words of Chinese business owners who work with us</p>
 
-    <div class="stories-grid">
-      <div class="story-card fade-in">
-        <p class="story-text" data-lang="zh">
-          以前靠老客介绍，每个月最担心淡季。上了旺铺之后，
-          帮我加了预约系统和积分，客人主动回来了——上个月积分兑换的就有十几单。
-          还有爱尔兰女生专门 Google 到我的，说搜"nail salon Lucan"就看到我了。
-        </p>
-        <p class="story-text" data-lang="en">
-          Before, I relied on referrals and dreaded slow months. After Wangpu added my booking system and loyalty points,
-          clients started coming back on their own — last month alone, over a dozen redemptions.
-          An Irish girl even found me on Google by searching "nail salon Lucan."
-        </p>
-        <div class="story-author">
-          <div class="story-avatar">陈</div>
-          <div class="story-author-info">
-            <strong data-lang="zh">陈姐美甲 · Dublin Lucan</strong>
-            <strong data-lang="en">Sister Chen's Nails · Dublin Lucan</strong>
-            <span data-lang="zh">上线 3 个月</span>
-            <span data-lang="en">3 months live</span>
-            <div class="story-result" data-lang="zh">新客增加 +40%</div>
-            <div class="story-result" data-lang="en">+40% new customers</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="story-card fade-in">
-        <p class="story-text" data-lang="zh">
-          我一个人修手机，不会做宣传。旺铺帮我建了个页面，
-          写清楚我修什么型号、多少钱、几小时出来，还开了在线下单。
-          现在有客人下班前在网上下单，我备好零件，他下班直接来取，
-          省了他等待时间，也省了我反复接电话。
-        </p>
-        <p class="story-text" data-lang="en">
-          I run the shop alone with zero marketing. Wangpu built my page — listing models, prices, turnaround times —
-          and added online ordering. Now customers place orders before they finish work,
-          I prep the parts, they pick it up after work. Saves everyone time, and I stopped losing calls.
-        </p>
-        <div class="story-author">
-          <div class="story-avatar">强</div>
-          <div class="story-author-info">
-            <strong data-lang="zh">阿强手机维修 · Cork 市中心</strong>
-            <strong data-lang="en">A-Qiang Phone Repair · Cork City Centre</strong>
-            <span data-lang="zh">上线 5 个月</span>
-            <span data-lang="en">5 months live</span>
-            <div class="story-result" data-lang="zh">月营业额增加 €1,800</div>
-            <div class="story-result" data-lang="en">+€1,800 monthly revenue</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="story-card fade-in">
-        <p class="story-text" data-lang="zh">
-          我们在 Limerick 做华人货物批发，以前客人全靠微信群，
-          旺铺帮我们搭了一个批发客户系统，企业客户登录后看专属报价，
-          在线下单，自动出入库单。效率提升了很多，
-          还帮我们申请了政府的 €2,500 补贴，等于前两年月费全免了。
-        </p>
-        <p class="story-text" data-lang="en">
-          We run Chinese goods wholesale in Limerick — previously all managed through WeChat.
-          Wangpu built us a wholesale client system: business clients log in, see their pricing, order online,
-          get automatic fulfilment documents. Far more efficient.
-          They also helped us get the €2,500 government grant, which covered almost two years of fees.
-        </p>
-        <div class="story-author">
-          <div class="story-avatar">李</div>
-          <div class="story-author-info">
-            <strong data-lang="zh">李氏批发仓 · Limerick</strong>
-            <strong data-lang="en">Li Family Wholesale · Limerick</strong>
-            <span data-lang="zh">上线 8 个月</span>
-            <span data-lang="en">8 months live</span>
-            <div class="story-result" data-lang="zh">政府补贴 €2,500 已到账</div>
-            <div class="story-result" data-lang="en">€2,500 gov grant received</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== SCREEN 5：旺铺套餐 ===== -->
+<!-- ===== 模块① 让别人知道你：建站四套餐 ===== -->
 <span id="pricing" class="anchor-alias"></span>
 <section id="module-1">
   <div class="container">
@@ -2293,158 +1811,208 @@
   </div>
 </section>
 
-<!-- ===== SCREEN 6：系统 vs 运营分工，导流 /marketing ===== -->
-<section id="value">
+
+
+<!-- ===== SCREEN 3：8 大行业 ===== -->
+<section id="industries">
   <div class="container">
-    <h2 class="section-title fade-in" data-lang="zh">系统建好了，<span>客人从哪来？</span></h2>
-    <h2 class="section-title fade-in" data-lang="en">Your System Is Ready. <span>Where Do the Customers Come From?</span></h2>
-    <p class="section-sub fade-in" data-lang="zh">旺铺把系统建起来，营销服务把人带进来、留下来——两条产品线，各管一段</p>
-    <p class="section-sub fade-in" data-lang="en">Wangpu builds the system. The marketing service brings customers in — and keeps them. Two products, two jobs.</p>
+    <h2 class="section-title fade-in" data-lang="zh">覆盖 <span>8 大行业</span>，你的生意在其中</h2>
+    <h2 class="section-title fade-in" data-lang="en"><span>8 Industries</span> We Cover</h2>
+    <p class="section-sub fade-in" data-lang="zh">爱尔兰华人常见的生意类型，我们都深入了解过，所以能真正帮到你</p>
+    <p class="section-sub fade-in" data-lang="en">We've worked with all the most common Chinese-run businesses in Ireland — we understand your specific challenges</p>
 
-    <div class="value-grid">
-      <div class="value-side fade-in">
-        <h3 data-lang="zh">旺铺负责</h3>
-        <h3 data-lang="en">Wangpu Handles</h3>
-        <ul class="value-list">
-          <li>
-            <span class="icon">🌐</span>
-            <div>
-              <strong data-lang="zh">官网 / 微店铺搭建</strong>
-              <strong data-lang="en">Website &amp; mini-store build</strong>
-              <p data-lang="zh">中英双语展示站，产品与服务信息一次搭好</p>
-              <p data-lang="en">A bilingual site with your products and services set up once</p>
-            </div>
-          </li>
-          <li>
-            <span class="icon">🛒</span>
-            <div>
-              <strong data-lang="zh">电商下单能力</strong>
-              <strong data-lang="en">E-commerce ordering</strong>
-              <p data-lang="zh">选品、下单、支付，客人在你自己的站上一站完成</p>
-              <p data-lang="en">Browse, order, and pay — all on your own site</p>
-            </div>
-          </li>
-          <li>
-            <span class="icon">👥</span>
-            <div>
-              <strong data-lang="zh">会员 + 预约系统</strong>
-              <strong data-lang="en">Membership &amp; booking system</strong>
-              <p data-lang="zh">会员注册、积分记录、在线预约整合在一起</p>
-              <p data-lang="en">Sign-ups, points tracking, and online booking in one place</p>
-            </div>
-          </li>
-          <li>
-            <span class="icon">🔧</span>
-            <div>
-              <strong data-lang="zh">技术维护不停歇</strong>
-              <strong data-lang="en">24/7 technical maintenance</strong>
-              <p data-lang="zh">网站更新、信息修改、宕机响应，你无需操心任何技术问题</p>
-              <p data-lang="en">Content updates, info changes, uptime monitoring — zero technical worries for you</p>
-            </div>
-          </li>
-        </ul>
+    <div class="industries-grid">
+      <!-- 美甲美睫 -->
+      <a class="industry-card fade-in" href="https://beauty-549968261036.europe-west1.run.app/guide" target="_blank" rel="noopener">
+        <span class="industry-emoji">💅</span>
+        <h3 data-lang="zh">美甲美睫</h3>
+        <h3 data-lang="en">Nail &amp; Lash</h3>
+        <p class="industry-headline" data-lang="zh">客人自己订时间、付定金，No-show 爽约率掉 70%</p>
+        <p class="industry-headline" data-lang="en">Self-booking with deposits — cut no-shows by 70%</p>
+        <p class="industry-desc" data-lang="zh">在线预约 + 定金锁档 + 作品集展示 + 6 周自动召回短信，周末档不再被放鸽子</p>
+        <p class="industry-desc" data-lang="en">Online booking + deposit lock-in + portfolio + 6-week auto-recall SMS — never lose a weekend slot to no-shows</p>
+        <p class="industry-proof" data-lang="zh">Lucan 陈姐美甲上线 3 个月，周末档 95% 提前订满</p>
+        <p class="industry-proof" data-lang="en">Sister Chen's Nails (Dublin Lucan) — 95% weekend slots pre-booked after 3 months</p>
+        <span class="industry-demo-link" data-lang="zh">查看在线演示 →</span>
+        <span class="industry-demo-link" data-lang="en">View Live Demo →</span>
+      </a>
+      <!-- 理发造型 -->
+      <div class="industry-card fade-in">
+        <span class="industry-emoji">✂️</span>
+        <h3 data-lang="zh">理发造型</h3>
+        <h3 data-lang="en">Hair Salon</h3>
+        <p class="industry-headline" data-lang="zh">客人指定 Tony、记住每次发型，6 周到期自动短信召回</p>
+        <p class="industry-headline" data-lang="en">Stylist preference + cut history + 6-week auto SMS recall</p>
+        <p class="industry-desc" data-lang="zh">多 Tony 排班 + 客户发型档案 + 染烫时长智能预留，告别"上次怎么剪的我忘了"</p>
+        <p class="industry-desc" data-lang="en">Multi-stylist scheduling + client cut profiles + smart time blocks for colour/perm — never ask "how did we cut it last time?" again</p>
+        <p class="industry-proof" data-lang="zh">行业平均回头率 35%，系统化召回后可提升至 60%+</p>
+        <p class="industry-proof" data-lang="en">Industry average repeat rate is 35% — systematic recall pushes it past 60%</p>
       </div>
-
-      <div class="value-side fade-in">
-        <h3 data-lang="zh">营销服务负责</h3>
-        <h3 data-lang="en">Marketing Service Handles</h3>
-        <ul class="value-list">
-          <li>
-            <span class="icon" style="background:var(--ink-mute)">📝</span>
-            <div>
-              <strong data-lang="zh">内容制作 + 广告投放</strong>
-              <strong data-lang="en">Content creation &amp; ad placement</strong>
-              <p data-lang="zh">社媒成稿、Google 动态、广告持续优化投放</p>
-              <p data-lang="en">Social posts, Google updates, and ongoing ad optimisation</p>
-            </div>
-          </li>
-          <li>
-            <span class="icon" style="background:var(--ink-mute)">⭐</span>
-            <div>
-              <strong data-lang="zh">评价 + 口碑管理</strong>
-              <strong data-lang="en">Reviews &amp; reputation management</strong>
-              <p data-lang="zh">评价回复、口碑维护，把好评变成新客</p>
-              <p data-lang="en">Review responses and reputation care that turn ratings into new customers</p>
-            </div>
-          </li>
-          <li>
-            <span class="icon" style="background:var(--ink-mute)">🎫</span>
-            <div>
-              <strong data-lang="zh">会员活动运营</strong>
-              <strong data-lang="en">Loyalty &amp; member campaigns</strong>
-              <p data-lang="zh">优惠券、积分活动的策划与执行，把老客留住</p>
-              <p data-lang="en">Coupon and points campaigns that keep existing customers coming back</p>
-            </div>
-          </li>
-        </ul>
+      <!-- 手机维修 -->
+      <div class="industry-card fade-in">
+        <span class="industry-emoji">📱</span>
+        <h3 data-lang="zh">手机维修</h3>
+        <h3 data-lang="en">Phone Repair</h3>
+        <p class="industry-headline" data-lang="zh">客人在网上输手机型号秒看价，你不用接电话报价了</p>
+        <p class="industry-headline" data-lang="en">Customers self-quote by phone model — stop fielding price calls</p>
+        <p class="industry-desc" data-lang="zh">透明价目 + 在线下单 + 当日取件提醒 + 维修历史档案，新客自助、老客复购</p>
+        <p class="industry-desc" data-lang="en">Transparent pricing + online orders + same-day pickup alerts + repair history — self-service for new clients, easy returns for regulars</p>
+        <p class="industry-proof" data-lang="zh">Cork 阿强手机维修上线 5 个月，月营业额 +€1,800</p>
+        <p class="industry-proof" data-lang="en">A-Qiang Phone Repair (Cork) — +€1,800 monthly revenue after 5 months</p>
       </div>
-    </div>
-
-    <div class="value-cta fade-in">
-      <p data-lang="zh">系统你有了，运营交给营销服务——从 <strong style="color:var(--gold)">€390/月</strong>起，替代一个市场推广</p>
-      <p data-lang="en">System covered — hand operations to the marketing service, from <strong style="color:var(--gold)">€390/month</strong>, replacing a marketing hire</p>
-      <a href="/marketing/" class="btn-primary" data-lang="zh">查看营销服务 →</a>
-      <a href="/marketing/en/" class="btn-primary" data-lang="en">See Marketing Service →</a>
+      <!-- 汽车修理 -->
+      <div class="industry-card fade-in">
+        <span class="industry-emoji">🔧</span>
+        <h3 data-lang="zh">汽车修理</h3>
+        <h3 data-lang="en">Auto Service</h3>
+        <p class="industry-headline" data-lang="zh">NCT / Tax / 保养自动到期提醒，客户车没出问题先想到你</p>
+        <p class="industry-headline" data-lang="en">Auto reminders for NCT, Tax &amp; service — be the first call before things break</p>
+        <p class="industry-desc" data-lang="zh">NCT 在线预约 + 完整车辆服务档案 + 保险公司报价单一键导出，客户的车你比他更懂</p>
+        <p class="industry-desc" data-lang="en">NCT online booking + full service history per vehicle + one-click insurance quotes — know each car better than the owner</p>
+        <p class="industry-proof" data-lang="zh">一台车一年触达 4–6 次提醒，主动复购率提升 2 倍</p>
+        <p class="industry-proof" data-lang="en">4–6 reminder touchpoints per car per year — doubles proactive return visits</p>
+      </div>
+      <!-- 园艺草坪 -->
+      <div class="industry-card fade-in">
+        <span class="industry-emoji">🌿</span>
+        <h3 data-lang="zh">园艺草坪</h3>
+        <h3 data-lang="en">Gardening</h3>
+        <p class="industry-headline" data-lang="zh">客人发花园照片直接出报价，你不用每单跑一趟</p>
+        <p class="industry-headline" data-lang="en">Customers send photos, get quotes — stop driving to every site</p>
+        <p class="industry-desc" data-lang="zh">照片报价表单 + 14 天自动排期 + 雨天顺延通知 + 施工前后对比相册，锁定一整个夏天的活</p>
+        <p class="industry-desc" data-lang="en">Photo-based quote forms + 14-day auto-scheduling + rain-day reschedule alerts + before/after gallery — book out your entire summer</p>
+        <p class="industry-proof" data-lang="zh">上门估价转化率约 40%，远程报价转化率 70%+，跑空成本直接省掉</p>
+        <p class="industry-proof" data-lang="en">On-site quotes convert at ~40%; remote photo quotes hit 70%+ — eliminate wasted trips entirely</p>
+      </div>
+      <!-- 中餐外卖 -->
+      <div class="industry-card fade-in">
+        <span class="industry-emoji">🍜</span>
+        <h3 data-lang="zh">中餐外卖</h3>
+        <h3 data-lang="en">Chinese Takeaway</h3>
+        <p class="industry-headline" data-lang="zh">自家下单平台，告别 Just Eat 30% 抽成，客户数据归你</p>
+        <p class="industry-headline" data-lang="en">Your own ordering site — no 30% commission, customer data stays yours</p>
+        <p class="industry-desc" data-lang="zh">在线点单 + Stripe 直收 + 中英双语菜单 + 老客积分召回，平台只是你的渠道之一</p>
+        <p class="industry-desc" data-lang="en">Online ordering + direct Stripe payments + bilingual menu + loyalty points — make platforms just one of your channels, not your only one</p>
+        <p class="industry-proof" data-lang="zh">月营业额 €10,000 的店，自家下单一年省下 €34,200 平台佣金</p>
+        <p class="industry-proof" data-lang="en">A €10k/month shop saves €34,200/year in platform fees by selling direct</p>
+      </div>
+      <!-- 仓储物流 -->
+      <div class="industry-card fade-in">
+        <span class="industry-emoji">📦</span>
+        <h3 data-lang="zh">仓储物流</h3>
+        <h3 data-lang="en">Storage &amp; Logistics</h3>
+        <p class="industry-headline" data-lang="zh">货主自助查货 + 货位条码扫描 + 自动对账单 + 中英双语出入库单</p>
+        <p class="industry-headline" data-lang="en">Self-service stock tracking + barcode bin location + auto reconciliation + bilingual docs</p>
+        <p class="industry-desc" data-lang="zh">海外仓（替别人保管）和本地仓（自己进货卖）是两套生意，我们都做了完整 demo</p>
+        <p class="industry-desc" data-lang="en">Overseas freight warehouse (storing others' goods) vs. local import warehouse (your own inventory) — full live demos for both</p>
+        <div style="display:flex; gap:8px; margin-top:14px; flex-wrap:wrap;">
+          <a href="warehouse-demo/index.html" target="_blank" rel="noopener" style="flex:1; min-width:140px; padding:10px 12px; background:#0d4f3c; color:#fff; border-radius:8px; font-size:0.78rem; font-weight:700; text-decoration:none; text-align:center; transition:all .2s;" onmouseover="this.style.background='#1a7a5e'" onmouseout="this.style.background='#0d4f3c'">
+            <span data-lang="zh">📦 海外仓 Demo →</span>
+            <span data-lang="en">📦 Overseas Demo →</span>
+          </a>
+          <a href="local-warehouse-demo/index.html" target="_blank" rel="noopener" style="flex:1; min-width:140px; padding:10px 12px; background:#1e3a5f; color:#fff; border-radius:8px; font-size:0.78rem; font-weight:700; text-decoration:none; text-align:center; transition:all .2s;" onmouseover="this.style.background='#ea580c'" onmouseout="this.style.background='#1e3a5f'">
+            <span data-lang="zh">🏗️ 本地仓 Demo →</span>
+            <span data-lang="en">🏗️ Local Demo →</span>
+          </a>
+        </div>
+      </div>
+      <!-- 手机配件店 -->
+      <div class="industry-card fade-in">
+        <span class="industry-emoji">🛒</span>
+        <h3 data-lang="zh">手机配件店</h3>
+        <h3 data-lang="en">Accessories Shop</h3>
+        <p class="industry-headline" data-lang="zh">B 端 C 端两套价格自动切换，新款到货按客户标签精准推送</p>
+        <p class="industry-headline" data-lang="en">Wholesale &amp; retail pricing auto-switch; new arrivals push to tagged customers</p>
+        <p class="industry-desc" data-lang="zh">双价体系 + 客户分组标签 + 新品到货自动通知，告别"半夜在群里发壳子图"</p>
+        <p class="industry-desc" data-lang="en">Dual pricing tiers + customer tagging + automated new-arrival notifications — stop blasting case photos in WeChat groups at midnight</p>
+        <p class="industry-proof" data-lang="zh">一个 200 SKU 的配件店，微信群手动通知转化率 &lt;2%，标签精准推送可达 12%+</p>
+        <p class="industry-proof" data-lang="en">A 200-SKU accessories shop sees &lt;2% conversion from group blasts; tagged push hits 12%+</p>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- ===== SCREEN 7：政府补贴 ===== -->
-<section id="subsidy">
+<!-- ===== SCREEN 4：真实故事 ===== -->
+<section id="stories">
   <div class="container">
-    <div class="subsidy-inner fade-in">
-      <span class="subsidy-badge" data-lang="zh">🇮🇪 爱尔兰政府资助计划</span>
-      <span class="subsidy-badge" data-lang="en">🇮🇪 Irish Government Grant Scheme</span>
+    <h2 class="section-title fade-in" data-lang="zh"><span>真实故事</span>，真实生意</h2>
+    <h2 class="section-title fade-in" data-lang="en"><span>Real Stories</span>, Real Results</h2>
+    <p class="section-sub fade-in" data-lang="zh">这些是和我们合作的华人老板，他们的原话</p>
+    <p class="section-sub fade-in" data-lang="en">These are the actual words of Chinese business owners who work with us</p>
 
-      <h2 class="section-title" data-lang="zh">政府给你<span>€2,500</span><br>补贴建网站</h2>
-      <h2 class="section-title" data-lang="en">The Government Gives You<br><span>€2,500</span> to Go Digital</h2>
-
-      <div class="subsidy-amount">€2,500</div>
-
-      <p data-lang="zh">
-        爱尔兰政府的 <strong>Trading Online Voucher（TOV）</strong> 计划，专为帮助小生意上网而设。
-        申请成功后，政府直接出 €2,500 用于你的网站建设费用。
-        小旺铺建站费 €3,800，申请后你自己只需出 <strong>€1,300</strong>。
-      </p>
-      <p data-lang="en">
-        The Irish Government's <strong>Trading Online Voucher (TOV)</strong> scheme helps small businesses go digital.
-        If approved, the government covers €2,500 of your setup cost.
-        On the Starter plan (€3,800), you only pay <strong>€1,300</strong> out of pocket.
-      </p>
-
-      <div class="subsidy-steps">
-        <div class="subsidy-step">
-          <span class="subsidy-step-num">①</span>
-          <span class="subsidy-step-label" data-lang="zh">联系我们</span>
-          <span class="subsidy-step-label" data-lang="en">Contact Us</span>
-        </div>
-        <div class="subsidy-step">
-          <span class="subsidy-step-num">②</span>
-          <span class="subsidy-step-label" data-lang="zh">确认资格</span>
-          <span class="subsidy-step-label" data-lang="en">Check Eligibility</span>
-        </div>
-        <div class="subsidy-step">
-          <span class="subsidy-step-num">③</span>
-          <span class="subsidy-step-label" data-lang="zh">我们全程协助申请</span>
-          <span class="subsidy-step-label" data-lang="en">We Handle the Application</span>
-        </div>
-        <div class="subsidy-step">
-          <span class="subsidy-step-num">④</span>
-          <span class="subsidy-step-label" data-lang="zh">拿到补贴</span>
-          <span class="subsidy-step-label" data-lang="en">Grant Approved</span>
-        </div>
-        <div class="subsidy-step">
-          <span class="subsidy-step-num">⑤</span>
-          <span class="subsidy-step-label" data-lang="zh">生意开始旺</span>
-          <span class="subsidy-step-label" data-lang="en">Business Grows</span>
+    <div class="stories-grid">
+      <div class="story-card fade-in">
+        <p class="story-text" data-lang="zh">
+          以前靠老客介绍，每个月最担心淡季。上了旺铺之后，
+          帮我加了预约系统和积分，客人主动回来了——上个月积分兑换的就有十几单。
+          还有爱尔兰女生专门 Google 到我的，说搜"nail salon Lucan"就看到我了。
+        </p>
+        <p class="story-text" data-lang="en">
+          Before, I relied on referrals and dreaded slow months. After Wangpu added my booking system and loyalty points,
+          clients started coming back on their own — last month alone, over a dozen redemptions.
+          An Irish girl even found me on Google by searching "nail salon Lucan."
+        </p>
+        <div class="story-author">
+          <div class="story-avatar">陈</div>
+          <div class="story-author-info">
+            <strong data-lang="zh">陈姐美甲 · Dublin Lucan</strong>
+            <strong data-lang="en">Sister Chen's Nails · Dublin Lucan</strong>
+            <span data-lang="zh">上线 3 个月</span>
+            <span data-lang="en">3 months live</span>
+            <div class="story-result" data-lang="zh">新客增加 +40%</div>
+            <div class="story-result" data-lang="en">+40% new customers</div>
+          </div>
         </div>
       </div>
 
-      <p data-lang="zh">⚠️ 补贴名额有限，先到先得。我们负责所有申请文件，你只需提供基础资料。</p>
-      <p data-lang="en">⚠️ Places are limited and first-come, first-served. We prepare all paperwork — you just provide the basics.</p>
+      <div class="story-card fade-in">
+        <p class="story-text" data-lang="zh">
+          我一个人修手机，不会做宣传。旺铺帮我建了个页面，
+          写清楚我修什么型号、多少钱、几小时出来，还开了在线下单。
+          现在有客人下班前在网上下单，我备好零件，他下班直接来取，
+          省了他等待时间，也省了我反复接电话。
+        </p>
+        <p class="story-text" data-lang="en">
+          I run the shop alone with zero marketing. Wangpu built my page — listing models, prices, turnaround times —
+          and added online ordering. Now customers place orders before they finish work,
+          I prep the parts, they pick it up after work. Saves everyone time, and I stopped losing calls.
+        </p>
+        <div class="story-author">
+          <div class="story-avatar">强</div>
+          <div class="story-author-info">
+            <strong data-lang="zh">阿强手机维修 · Cork 市中心</strong>
+            <strong data-lang="en">A-Qiang Phone Repair · Cork City Centre</strong>
+            <span data-lang="zh">上线 5 个月</span>
+            <span data-lang="en">5 months live</span>
+            <div class="story-result" data-lang="zh">月营业额增加 €1,800</div>
+            <div class="story-result" data-lang="en">+€1,800 monthly revenue</div>
+          </div>
+        </div>
+      </div>
 
-      <a href="#contact" class="btn-primary subsidy-cta-btn" data-lang="zh">立即查询补贴资格 →</a>
-      <a href="#contact" class="btn-primary subsidy-cta-btn" data-lang="en">Check My Eligibility →</a>
+      <div class="story-card fade-in">
+        <p class="story-text" data-lang="zh">
+          我们在 Limerick 做华人货物批发，以前客人全靠微信群，
+          旺铺帮我们搭了一个批发客户系统，企业客户登录后看专属报价，
+          在线下单，自动出入库单。以前一个人专门在微信群里抄单子，现在这个人不用干这活了。
+        </p>
+        <p class="story-text" data-lang="en">
+          We run Chinese goods wholesale in Limerick — previously all managed through WeChat.
+          Wangpu built us a wholesale client system: business clients log in, see their pricing, order online,
+          get automatic fulfilment documents. We used to have someone transcribing orders out of WeChat groups all day — that job is gone now.
+        </p>
+        <div class="story-author">
+          <div class="story-avatar">李</div>
+          <div class="story-author-info">
+            <strong data-lang="zh">李氏批发仓 · Limerick</strong>
+            <strong data-lang="en">Li Family Wholesale · Limerick</strong>
+            <span data-lang="zh">上线 8 个月</span>
+            <span data-lang="en">8 months live</span>
+            <div class="story-result" data-lang="zh">抄单人力省掉 1 人</div>
+            <div class="story-result" data-lang="en">1 full-time order clerk saved</div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -2509,13 +2077,13 @@
 
       <div class="faq-item">
         <button class="faq-question">
-          <span data-lang="zh">€2,500 政府补贴是真的吗？我能申请吗？</span>
-          <span data-lang="en">Is the €2,500 government grant real? Can I apply?</span>
+          <span data-lang="zh">四个模块必须一起做吗？</span>
+          <span data-lang="en">Do I have to take all four modules?</span>
           <span class="faq-icon">+</span>
         </button>
         <div class="faq-answer"><div class="faq-answer-inner">
-          <span data-lang="zh">是真实的政策，由爱尔兰当地企业局（Local Enterprise Office）管理，叫 Trading Online Voucher（TOV）。符合条件的小生意最高可申请 €2,500 用于网站建设。基本条件：爱尔兰注册公司、年营业额低于 €2M、目前没有专业网站。我们会帮你确认资格，协助准备全部申请文件。</span>
-          <span data-lang="en">Yes, it's a real scheme run by the Local Enterprise Office (LEO) called the Trading Online Voucher (TOV). Eligible small businesses can claim up to €2,500 for website costs. Basic criteria: Irish-registered business, turnover under €2M, no existing professional website. We verify your eligibility and prepare the entire application for you.</span>
+          <span data-lang="zh">不用。四个模块各自独立计费，缺哪件补哪件：还没有网站就从模块 ① 开始；网站够用但没人知道、评价没人回，直接上模块 ②；只想做会员积分核销，模块 ③ 可以体外独立运行，不动你现在的网站和收银；人手不够、流程太乱，那是模块 ④。唯一的前置关系是：模块 ② 的「全周期」要运营会员活动，得先有模块 ③ 的会员系统。</span>
+          <span data-lang="en">No. The four modules are billed separately — take only what you're missing. No website yet? Start with Module ①. Site is fine but nobody finds you and reviews go unanswered? Go straight to Module ②. Only want membership and redemption? Module ③ can run standalone without touching your current site or till. Short-staffed and drowning in manual work? That's Module ④. The only prerequisite: Module ②'s "Full cycle" runs member campaigns, so it needs Module ③'s loyalty system in place first.</span>
         </div></div>
       </div>
 
@@ -2634,16 +2202,16 @@
       <div class="footer-col">
         <h4 data-lang="zh">快速导航</h4>
         <h4 data-lang="en">Quick Links</h4>
-        <a href="#solutions" data-lang="zh">解决方案</a>
-        <a href="#solutions" data-lang="en">Solutions</a>
+        <a href="#module-1" data-lang="zh">① 做网站 · 让别人知道你</a>
+        <a href="#module-1" data-lang="en">① Get Found</a>
+        <a href="#module-2" data-lang="zh">② 做口碑 · 让人记住你</a>
+        <a href="#module-2" data-lang="en">② Be Remembered</a>
+        <a href="#module-3" data-lang="zh">③ 做复购 · 让人消费更多</a>
+        <a href="#module-3" data-lang="en">③ Spend More</a>
+        <a href="#module-4" data-lang="zh">④ 做系统 · 省人工提效率</a>
+        <a href="#module-4" data-lang="en">④ Work Less</a>
         <a href="#industries" data-lang="zh">行业覆盖</a>
         <a href="#industries" data-lang="en">Industries</a>
-        <a href="#pricing" data-lang="zh">旺铺套餐</a>
-        <a href="#pricing" data-lang="en">Pricing</a>
-        <a href="/marketing/" data-lang="zh">营销服务</a>
-        <a href="/marketing/en/" data-lang="en">Marketing</a>
-        <a href="#subsidy" data-lang="zh">政府补贴</a>
-        <a href="#subsidy" data-lang="en">Gov Grant</a>
         <a href="#faq" data-lang="zh">常见问题</a>
         <a href="#faq" data-lang="en">FAQ</a>
       </div>
