@@ -1183,6 +1183,21 @@
     #module-2 .pricing-card:not(.featured) .pricing-price { color: var(--gold-light); }
     #module-2 .pricing-card:not(.featured) .pricing-features li { color: rgba(250,246,240,0.8); }
     #module-2 .pricing-more-link { color: rgba(250,246,240,0.6); }
+    /* 深色底上的次要按钮：原样式是深字深框，会糊在背景里 */
+    #module-2 .btn-secondary {
+      color: var(--cream);
+      border-color: rgba(250,246,240,0.45);
+    }
+    #module-2 .btn-secondary:hover {
+      background: var(--cream);
+      color: var(--ink);
+      border-color: var(--cream);
+    }
+    /* featured 卡与深色底同色，靠金边拉开层次 */
+    #module-2 .pricing-card.featured {
+      background: #101010;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.55);
+    }
 
     .capability-grid {
       display: grid;
@@ -1220,7 +1235,11 @@
       background: var(--red);
       color: var(--cream);
     }
+    /* .capability-tag 的 display 会盖掉通用的 [data-lang="en"]{display:none}，必须显式再隐一次 */
+    .capability-tag[data-lang="en"] { display: none; }
     body.en .capability-tag[data-lang="en"] { display: inline-block; }
+    /* 单张横幅卡时占满整行，不留半幅空白 */
+    .pricing-enterprise.single { grid-template-columns: 1fr; }
     .capability-card.is-extra { border-style: dashed; }
     .capability-card.is-extra .capability-tag { background: var(--gold); color: var(--ink); }
     #module-3 .capability-card {
@@ -2130,27 +2149,27 @@
 
     <div class="capability-grid cols-3">
       <div class="capability-card fade-in">
+        <span class="capability-icon">🔌</span>
         <span class="capability-tag" data-lang="zh">方式一 · 插件</span>
         <span class="capability-tag" data-lang="en">OPTION 1 · PLUG-IN</span>
-        <span class="capability-icon">🔌</span>
         <h4 data-lang="zh">装在你的网站上</h4>
         <h4 data-lang="en">Plugged into your site</h4>
         <p data-lang="zh">网站是我们做的（见模块 ①），会员积分核销作为功能模块直接装上去。客人在你自己的站上入会、累积、兑换，不用跳去第三方。</p>
         <p data-lang="en">If we built your site (Module ①), membership, points and redemption drop straight in as a module. Customers join, earn and redeem on your own site — no third-party detour.</p>
       </div>
       <div class="capability-card fade-in">
+        <span class="capability-icon">📱</span>
         <span class="capability-tag" data-lang="zh">方式二 · 独立</span>
         <span class="capability-tag" data-lang="en">OPTION 2 · STANDALONE</span>
-        <span class="capability-icon">📱</span>
         <h4 data-lang="zh">体外独立运行</h4>
         <h4 data-lang="en">Runs alongside, standalone</h4>
         <p data-lang="zh">你现在的网站和收银一动不动。会员系统单独跑：客人扫码入会，店员用手机核销，数据进你自己的后台。适合已经有网站、但不想改动的店。</p>
         <p data-lang="en">Your current website and till stay exactly as they are. The loyalty system runs on its own: customers scan to join, staff redeem from a phone, data lands in your own back office. Best if you already have a site you don't want touched.</p>
       </div>
       <div class="capability-card is-extra fade-in">
+        <span class="capability-icon">🔗</span>
         <span class="capability-tag" data-lang="zh">方式三 · 整合（加价）</span>
         <span class="capability-tag" data-lang="en">OPTION 3 · INTEGRATED (EXTRA)</span>
-        <span class="capability-icon">🔗</span>
         <h4 data-lang="zh">打通你现有的系统</h4>
         <h4 data-lang="en">Integrated into your existing system</h4>
         <p data-lang="zh">要跟你现在的 POS 收银、电商平台或预约系统对接，让积分随每笔消费自动累计——这是额外开发，按对方接口的开放程度单独评估报价。</p>
@@ -2173,7 +2192,7 @@
       <span class="addon-item" data-lang="en"><strong>Your data, your brand</strong> — not ours</span>
     </div>
 
-    <div class="pricing-enterprise">
+    <div class="pricing-enterprise single">
       <div class="pricing-ent-card fade-in">
         <div class="pricing-ent-info">
           <h4 data-lang="zh">会员积分核销系统</h4>
