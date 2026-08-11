@@ -1083,11 +1083,15 @@
     }
     #module-3 .capability-card h4 { color: var(--red); }
     #module-3 .capability-card p { color: var(--ink-soft); }
+    /* 注意：.capability-grid.cols-3 是两个类（0,0,2,0），媒体查询不提升权重，
+       断点里必须写同样具体的选择器，否则三列会一直生效到手机上把内容撑出屏幕 */
     @media (max-width: 900px) {
-      .capability-grid { grid-template-columns: repeat(2, 1fr); }
+      .capability-grid,
+      .capability-grid.cols-3 { grid-template-columns: repeat(2, 1fr); }
     }
     @media (max-width: 540px) {
-      .capability-grid { grid-template-columns: 1fr; }
+      .capability-grid,
+      .capability-grid.cols-3 { grid-template-columns: 1fr; }
     }
 
     /* 加购单价条 */
