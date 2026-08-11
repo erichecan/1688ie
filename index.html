@@ -28,12 +28,33 @@
       --line: #E0D6C2;
       --green: #17844D;
       --nav-h: 64px;
+
+      /* 圆角体系 —— 借鉴 Birdeye：药丸按钮 + 大圆角容器是最强的风格识别信号。
+         原站统一 4px，读起来像后台管理系统，不像面向商家的商业站。 */
+      --r-pill: 999px;   /* 按钮、标签 */
+      --r-lg: 40px;      /* 大图容器、Hero 图 */
+      --r-md: 20px;      /* 卡片 */
+      --r-sm: 10px;      /* 小卡、输入框、标签块 */
+
+      /* 阴影：浅色底上靠阴影分层，替代原来的硬边框 */
+      --shadow-card: 0 4px 24px rgba(28,28,28,0.06);
+      --shadow-float: 0 20px 60px rgba(28,28,28,0.14);
+      --shadow-lift: 0 12px 36px rgba(28,28,28,0.10);
+
+      /* 区块节奏：Birdeye 全站 section 统一 80px 上下留白 */
+      --sec-pad: 80px;
+
+      /* 字体分层：标题保留衬线（中式识别），正文与 UI 走系统无衬线栈（零加载成本，
+         PingFang SC / 微软雅黑 的中文渲染质量优于网络字体回退） */
+      --font-display: 'Noto Serif SC', 'Songti SC', serif;
+      --font-ui: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB',
+                 'Microsoft YaHei', 'Helvetica Neue', Arial, sans-serif;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; font-size: 16px; }
     body {
-      font-family: 'Noto Serif SC', serif;
+      font-family: var(--font-ui);
       background-color: var(--cream);
       color: var(--ink);
       line-height: 1.7;
@@ -50,11 +71,13 @@
     }
 
     .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
-    h1, h2, h3 { font-weight: 700; line-height: 1.3; }
+    h1, h2, h3 { font-family: var(--font-display); font-weight: 700; line-height: 1.3; }
+    /* 数字用衬线体更有分量感（价格、统计数字） */
+    .pricing-price, .stat-num, .pricing-ent-price { font-family: var(--font-display); }
 
     .section-title {
       font-size: clamp(1.6rem, 4vw, 2.4rem);
-      font-weight: 900;
+      font-weight: 700;
       color: var(--ink);
       text-align: center;
       margin-bottom: 12px;
@@ -94,7 +117,7 @@
     }
     .nav-logo {
       font-size: 1.5rem;
-      font-weight: 900;
+      font-weight: 700;
       color: var(--red);
       text-decoration: none;
       letter-spacing: -0.5px;
@@ -118,7 +141,7 @@
       color: var(--cream);
       border: none;
       padding: 6px 14px;
-      border-radius: 4px;
+      border-radius: var(--r-pill);
       cursor: pointer;
       font-size: 0.8rem;
       font-family: inherit;
@@ -173,7 +196,7 @@
       right: -60px; top: 50%;
       transform: translateY(-50%);
       font-size: 50vw;
-      font-weight: 900;
+      font-weight: 700;
       color: var(--red);
       opacity: 0.025;
       pointer-events: none;
@@ -188,14 +211,14 @@
       color: white;
       font-size: 0.75rem;
       padding: 5px 14px;
-      border-radius: 2px;
+      border-radius: var(--r-pill);
       margin-bottom: 24px;
       letter-spacing: 1px;
       font-weight: 600;
     }
     .hero-title {
       font-size: clamp(2rem, 5.5vw, 3.6rem);
-      font-weight: 900;
+      font-weight: 700;
       line-height: 1.2;
       margin-bottom: 20px;
       font-family: 'Playfair Display', 'Noto Serif SC', serif;
@@ -220,9 +243,10 @@
     }
     .pain-card {
       background: white;
-      border: 1px solid var(--line);
+      border: 1px solid rgba(224,214,194,0.55);
+      box-shadow: var(--shadow-card);
       border-left: 4px solid var(--red);
-      border-radius: 4px;
+      border-radius: var(--r-md);
       padding: 18px 20px;
       display: flex;
       gap: 14px;
@@ -255,7 +279,7 @@
       color: white;
       padding: 14px 28px;
       border: none;
-      border-radius: 4px;
+      border-radius: var(--r-pill);
       font-size: 1rem;
       font-family: inherit;
       font-weight: 700;
@@ -275,7 +299,7 @@
       color: var(--ink);
       padding: 13px 28px;
       border: 2px solid var(--ink);
-      border-radius: 4px;
+      border-radius: var(--r-pill);
       font-size: 1rem;
       font-family: inherit;
       font-weight: 600;
@@ -286,16 +310,10 @@
     }
     .btn-secondary:hover { background: var(--ink); color: var(--cream); }
 
-    /* ===== SOLUTIONS — 我们提供什么 ===== */
-    #solutions {
-      padding: 100px 0;
-      background: var(--ink);
-      color: var(--cream);
-    }
 
     /* ===== INDUSTRIES ===== */
     #industries {
-      padding: 100px 0;
+      padding: var(--sec-pad) 0;
       background: var(--paper);
     }
     .industries-grid {
@@ -305,8 +323,9 @@
     }
     .industry-card {
       background: var(--cream);
-      border: 1px solid var(--line);
-      border-radius: 4px;
+      border: 1px solid rgba(224,214,194,0.55);
+      box-shadow: var(--shadow-card);
+      border-radius: var(--r-md);
       padding: 28px 20px;
       text-align: center;
       transition: all 0.3s;
@@ -392,7 +411,7 @@
       padding: 32px 24px;
       background: #fff;
       border: 1px solid var(--line);
-      border-radius: 4px;
+      border-radius: var(--r-sm);
     }
     .flow-node {
       display: flex;
@@ -420,7 +439,7 @@
       gap: 1px;
       background: var(--line);
       border: 1px solid var(--line);
-      border-radius: 4px;
+      border-radius: var(--r-sm);
       overflow: hidden;
       max-width: 980px;
       margin: 0 auto 60px;
@@ -429,7 +448,7 @@
     .stat-num {
       font-family: 'Playfair Display', serif;
       font-size: 1.7rem;
-      font-weight: 900;
+      font-weight: 700;
       color: var(--red);
       margin-bottom: 4px;
     }
@@ -446,7 +465,7 @@
       display: block;
       background: #fff;
       border: 1px solid var(--line);
-      border-radius: 4px;
+      border-radius: var(--r-md);
       padding: 26px 18px;
       text-align: center;
       text-decoration: none;
@@ -478,7 +497,7 @@
 
     /* ===== STORIES ===== */
     #stories {
-      padding: 100px 0;
+      padding: var(--sec-pad) 0;
       background: var(--cream);
     }
     .stories-grid {
@@ -488,8 +507,9 @@
     }
     .story-card {
       background: var(--paper);
-      border: 1px solid var(--line);
-      border-radius: 4px;
+      border: 1px solid rgba(224,214,194,0.55);
+      box-shadow: var(--shadow-card);
+      border-radius: var(--r-md);
       padding: 32px;
       position: relative;
       display: flex;
@@ -532,17 +552,17 @@
       font-size: 0.72rem;
       font-weight: 700;
       padding: 3px 10px;
-      border-radius: 2px;
+      border-radius: var(--r-pill);
       margin-top: 6px;
     }
 
     /* ===== PRICING ===== */
     #module-1 {
-      padding: 100px 0;
+      padding: var(--sec-pad) 0;
       background: var(--paper);
     }
     #module-2 {
-      padding: 100px 0;
+      padding: var(--sec-pad) 0;
       background: var(--ink);
       color: var(--cream);
     }
@@ -550,7 +570,7 @@
     #module-2 .section-title span { color: var(--gold); }
     #module-2 .section-sub { color: rgba(250,246,240,0.55); }
     #module-3 {
-      padding: 100px 0;
+      padding: var(--sec-pad) 0;
       background: var(--cream);
     }
     .pricing-grid {
@@ -560,9 +580,10 @@
       align-items: stretch;
     }
     .pricing-card {
-      background: var(--cream);
-      border: 2px solid var(--line);
-      border-radius: 4px;
+      background: #FFFDF9;
+      border: 1px solid rgba(224,214,194,0.55);
+      box-shadow: var(--shadow-card);
+      border-radius: var(--r-md);
       padding: 28px 18px;
       position: relative;
       transition: transform 0.3s, box-shadow 0.3s;
@@ -574,7 +595,7 @@
       background: var(--ink);
       color: var(--cream);
       transform: scale(1.04);
-      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+      box-shadow: var(--shadow-float);
     }
     .pricing-card:hover:not(.featured) {
       transform: translateY(-4px);
@@ -589,14 +610,14 @@
       font-size: 0.72rem;
       font-weight: 700;
       padding: 3px 14px;
-      border-radius: 20px;
+      border-radius: var(--r-pill);
       white-space: nowrap;
     }
-    .pricing-name { font-size: 1.3rem; font-weight: 900; margin-bottom: 4px; }
+    .pricing-name { font-size: 1.3rem; font-weight: 700; margin-bottom: 4px; }
     .pricing-card.featured .pricing-name { color: var(--gold); }
     .pricing-tagline { font-size: 0.82rem; color: var(--ink-mute); margin-bottom: 24px; }
     .pricing-card.featured .pricing-tagline { color: rgba(250,246,240,0.55); }
-    .pricing-price { font-size: 2.8rem; font-weight: 900; line-height: 1; margin-bottom: 4px; color: var(--red); }
+    .pricing-price { font-size: 2.8rem; font-weight: 700; line-height: 1; margin-bottom: 4px; color: var(--red); }
     .pricing-card.featured .pricing-price { color: var(--gold); }
     .pricing-period { font-size: 0.78rem; color: var(--ink-mute); margin-bottom: 28px; }
     .pricing-card.featured .pricing-period { color: rgba(250,246,240,0.45); }
@@ -632,7 +653,7 @@
     .pricing-ent-card {
       background: var(--ink);
       color: var(--cream);
-      border-radius: 4px;
+      border-radius: var(--r-md);
       padding: 28px 24px;
       display: flex;
       justify-content: space-between;
@@ -642,7 +663,7 @@
     .pricing-ent-info { flex: 1; }
     .pricing-ent-card h4 {
       font-size: 1.05rem;
-      font-weight: 900;
+      font-weight: 700;
       color: var(--gold);
       margin-bottom: 4px;
     }
@@ -654,7 +675,7 @@
     }
     .pricing-ent-price {
       font-size: 1.3rem;
-      font-weight: 900;
+      font-weight: 700;
       color: var(--cream);
       display: flex;
       align-items: baseline;
@@ -684,23 +705,11 @@
     }
     .pricing-more-link a:hover { color: var(--red-dark); border-color: var(--red-dark); }
 
-    /* ===== VALUE ===== */
-    #value {
-      padding: 100px 0;
-      background: var(--cream);
-    }
 
-    /* ===== SUBSIDY ===== */
-    #subsidy {
-      padding: 80px 0;
-      background: var(--green);
-      color: white;
-      text-align: center;
-    }
 
     /* ===== FAQ ===== */
     #faq {
-      padding: 100px 0;
+      padding: var(--sec-pad) 0;
       background: var(--paper);
     }
     .faq-list { max-width: 760px; margin: 0 auto; }
@@ -748,14 +757,15 @@
 
     /* ===== CONTACT ===== */
     #contact {
-      padding: 100px 0;
+      padding: var(--sec-pad) 0;
       background: var(--cream);
     }
     .contact-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
     .contact-card {
       background: var(--paper);
-      border: 1px solid var(--line);
-      border-radius: 4px;
+      border: 1px solid rgba(224,214,194,0.55);
+      box-shadow: var(--shadow-card);
+      border-radius: var(--r-md);
       padding: 36px 28px;
       text-align: center;
       transition: transform 0.3s, box-shadow 0.3s;
@@ -773,7 +783,7 @@
     .qr-placeholder {
       width: 120px; height: 120px;
       background: var(--line);
-      border-radius: 4px;
+      border-radius: var(--r-sm);
       margin: 0 auto 16px;
       display: flex; align-items: center; justify-content: center;
       font-size: 0.7rem; color: var(--ink-mute); text-align: center; line-height: 1.6;
@@ -783,7 +793,7 @@
       background: var(--red);
       color: white;
       padding: 10px 20px;
-      border-radius: 4px;
+      border-radius: var(--r-pill);
       text-decoration: none;
       font-size: 0.9rem;
       font-weight: 600;
@@ -846,7 +856,7 @@
       color: var(--cream);
       font-size: 0.75rem;
       padding: 6px 10px;
-      border-radius: 4px;
+      border-radius: var(--r-pill);
       white-space: nowrap;
       opacity: 0;
       transform: translateX(8px);
@@ -883,14 +893,6 @@
       .pricing-ent-btn { width: 100% !important; text-align: center; }
     }
 
-    /* ===== SUBSIDY CTA BTN ===== */
-    .subsidy-cta-btn {
-      display: inline-block;
-      margin-top: 20px;
-      background: white;
-      color: var(--green);
-      box-shadow: 4px 4px 0 rgba(0,0,0,0.15);
-    }
 
     /* ===== LANG ===== */
     [data-lang="en"] { display: none; }
@@ -904,7 +906,6 @@
     /* Flagship eyebrow badge needs block (full-width centered label) */
     body.en span.flagship-eyebrow[data-lang="en"] { display: block; }
     /* Buttons and badges need inline-block */
-    body.en .subsidy-badge[data-lang="en"],
     body.en .story-result[data-lang="en"],
     body.en .btn-primary[data-lang="en"],
     body.en .btn-secondary[data-lang="en"],
@@ -914,11 +915,8 @@
     /* Value/flow/story elements set their own element-level display rule, which beats
        the generic [data-lang="en"] hide rule above (specificity) — explicit hide +
        paired body.en restore needed so neither language leaks into the other. */
-    .value-side > h3[data-lang="en"],
     .flow-node > b[data-lang="en"],
     .story-author-info > strong[data-lang="en"] { display: none; }
-    /* Value section heading needs inline-block (for bottom border decoration) */
-    body.en .value-side > h3[data-lang="en"] { display: inline-block; }
     /* Flow-strip labels and story bylines are block-level (see .flow-node b / .story-author-info strong) */
     body.en .flow-node > b[data-lang="en"],
     body.en .story-author-info > strong[data-lang="en"] { display: block; }
@@ -996,7 +994,7 @@
       color: var(--ink-mute);
     }
     #module-2 .module-footnote { color: rgba(250,246,240,0.5); }
-    #module-4 { padding: 90px 0 100px; background: linear-gradient(180deg, var(--paper) 0%, var(--cream) 100%); }
+    #module-4 { padding: var(--sec-pad) 0; background: linear-gradient(180deg, var(--paper) 0%, var(--cream) 100%); }
     #module-4 .addon-item { border-color: var(--line); color: var(--ink-soft); }
     #module-4 .addon-item strong { color: var(--red); }
 
@@ -1041,8 +1039,9 @@
       margin-bottom: 56px;
     }
     .capability-card {
-      border: 1px solid rgba(250,246,240,0.16);
-      border-radius: 4px;
+      border: 1px solid rgba(250,246,240,0.14);
+      box-shadow: var(--shadow-card);
+      border-radius: var(--r-md);
       padding: 24px 20px;
       background: rgba(250,246,240,0.03);
     }
@@ -1065,7 +1064,7 @@
       font-weight: 700;
       letter-spacing: 1px;
       padding: 3px 9px;
-      border-radius: 3px;
+      border-radius: var(--r-pill);
       margin-bottom: 12px;
       background: var(--red);
       color: var(--cream);
@@ -1104,7 +1103,7 @@
     }
     .addon-item {
       border: 1px dashed rgba(250,246,240,0.28);
-      border-radius: 4px;
+      border-radius: var(--r-pill);
       padding: 10px 16px;
       font-size: 0.82rem;
       color: rgba(250,246,240,0.78);
