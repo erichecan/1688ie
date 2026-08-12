@@ -633,6 +633,26 @@
       color: rgba(250,246,240,0.82);
     }
     .pricing-features li::before { content: '✓'; color: var(--green); font-weight: 700; flex-shrink: 0; }
+    /* 每档收口：这一档实际把「被找到 / 被记住」推进到哪一步 */
+    .pricing-outcome {
+      font-size: 0.82rem;
+      line-height: 1.65;
+      padding: 12px 14px;
+      margin-bottom: 22px;
+      border-radius: var(--r-sm);
+      border-left: 3px solid var(--red);
+      background: rgba(200,16,46,0.055);
+      color: var(--ink-soft);
+    }
+    .pricing-outcome strong { color: var(--red); font-weight: 700; }
+    .pricing-card.featured .pricing-outcome,
+    #module-2 .pricing-card .pricing-outcome {
+      border-left-color: var(--gold);
+      background: rgba(212,175,55,0.10);
+      color: rgba(250,246,240,0.85);
+    }
+    .pricing-card.featured .pricing-outcome strong,
+    #module-2 .pricing-card .pricing-outcome strong { color: var(--gold-light); }
     .pricing-monthly {
       font-size: 0.82rem;
       color: var(--ink-mute);
@@ -926,6 +946,10 @@
     body.en .contact-action[data-lang="en"] { display: inline-block; }/* List items in pricing and value sections need flex (for ✓ icon + text layout) */
     /* Higher specificity hide rules — required because .pricing-features li sets display:flex */
     .pricing-features > li[data-lang="en"] { display: none; }body.en .pricing-features > li[data-lang="zh"] { display: none; }body.en .pricing-features > li[data-lang="en"] { display: flex; }
+    /* .pricing-outcome sets its own block display — same specificity trap as .pricing-btn */
+    .pricing-outcome[data-lang="en"] { display: none; }
+    body.en .pricing-outcome[data-lang="en"] { display: block; }
+    body.en .pricing-outcome[data-lang="zh"] { display: none; }
     /* Value/flow/story elements set their own element-level display rule, which beats
        the generic [data-lang="en"] hide rule above (specificity) — explicit hide +
        paired body.en restore needed so neither language leaks into the other. */
@@ -1332,21 +1356,27 @@
       <div class="pricing-card fade-in">
         <div class="pricing-name" data-lang="zh">⭐ 旧网站翻新升级</div>
         <div class="pricing-name" data-lang="en">⭐ Website Refresh</div>
-        <div class="pricing-tagline" data-lang="zh">已经有网站，但留不住人</div>
-        <div class="pricing-tagline" data-lang="en">You have a site — it just doesn't convert</div>
+        <div class="pricing-tagline" data-lang="zh">已经有网站，但人搜到了也留不住</div>
+        <div class="pricing-tagline" data-lang="en">You have a site — people find it and still leave</div>
         <div class="pricing-price">€299</div>
         <div class="pricing-period" data-lang="zh">一次性起价</div>
         <div class="pricing-period" data-lang="en">one-off starting price</div>
         <ul class="pricing-features">
           <li data-lang="zh">基于现有网站内容重新设计，文案不用重写</li>
           <li data-lang="en">Redesigned around your existing content — no rewriting needed</li>
-          <li data-lang="zh">高转化现代设计风格，手机端优先</li>
-          <li data-lang="en">High-conversion modern design, mobile-first</li>
-          <li data-lang="zh">高速服务器，打开速度提升带动搜索排名</li>
-          <li data-lang="en">High-speed hosting — faster load times lift search ranking</li>
-          <li data-lang="zh">原域名、邮箱、已收录页面全部平移，不断线</li>
-          <li data-lang="en">Domain, email and indexed pages all carried over — zero downtime</li>
+          <li data-lang="zh">手机端优先重做，客人不用放大就能看清、能点</li>
+          <li data-lang="en">Rebuilt mobile-first — readable and tappable without pinch-zooming</li>
+          <li data-lang="zh">换高速服务器，打开速度直接影响 Google 排名</li>
+          <li data-lang="en">Moved to fast hosting — load speed feeds straight into Google ranking</li>
+          <li data-lang="zh">原域名、邮箱、已收录页面全部平移，搜索排名不清零</li>
+          <li data-lang="en">Domain, email and indexed pages all carried over — ranking not reset to zero</li>
         </ul>
+        <div class="pricing-outcome" data-lang="zh">
+          这一档<strong>不新增新渠道</strong>，只把已经找上门的人接住——现在网站每流失一个客人，都是你已经花钱换来的。
+        </div>
+        <div class="pricing-outcome" data-lang="en">
+          This tier <strong>adds no new channels</strong> — it stops the leak. Everyone your current site loses is traffic you already paid for.
+        </div>
         <div class="pricing-monthly" data-lang="zh">交付周期：按现有网站规模评估</div>
         <div class="pricing-monthly" data-lang="en">Timeline: scoped to your current site</div>
         <a href="#contact" class="btn-secondary pricing-btn" data-lang="zh">咨询翻新升级</a>
@@ -1357,21 +1387,27 @@
       <div class="pricing-card fade-in">
         <div class="pricing-name" data-lang="zh">🚀 快速启动方案</div>
         <div class="pricing-name" data-lang="en">🚀 Quick Launch</div>
-        <div class="pricing-tagline" data-lang="zh">最快上线，先被搜到</div>
-        <div class="pricing-tagline" data-lang="en">Live fast, get found first</div>
+        <div class="pricing-tagline" data-lang="zh">从查无此人，到本地搜索里能出来</div>
+        <div class="pricing-tagline" data-lang="en">From invisible to showing up in local search</div>
         <div class="pricing-price">€599</div>
         <div class="pricing-period" data-lang="zh">一次性起价</div>
         <div class="pricing-period" data-lang="en">one-off starting price</div>
         <ul class="pricing-features">
-          <li data-lang="zh">高转化单页网站 + 移动端适配</li>
+          <li data-lang="zh">高转化单页网站 + 手机端适配</li>
           <li data-lang="en">High-conversion one-page site + mobile adaptation</li>
-          <li data-lang="zh">Google Maps 商家入驻，本地搜索出得来</li>
-          <li data-lang="en">Google Maps business listing — show up in local search</li>
+          <li data-lang="zh">Google Maps 商家入驻，营业时间、地址、电话一次校正到位</li>
+          <li data-lang="en">Google Maps listing set up — hours, address and phone corrected in one pass</li>
           <li data-lang="zh">企业专属域名邮箱（you@yourshop.ie）</li>
           <li data-lang="en">Branded domain email (you@yourshop.ie)</li>
           <li data-lang="zh">上线后售后技术支持</li>
           <li data-lang="en">Post-launch technical support</li>
         </ul>
+        <div class="pricing-outcome" data-lang="zh">
+          解决最要命的一件事：<strong>Google 上搜「附近＋你这行」，结果里根本没有你</strong>。这一档让你出现在本地搜索和地图上。
+        </div>
+        <div class="pricing-outcome" data-lang="en">
+          Fixes the one that hurts most: <strong>search "near me + your trade" on Google and you simply aren't there</strong>. This tier puts you on the map and in local results.
+        </div>
         <div class="pricing-monthly" data-lang="zh">上线时间：约 5 个工作日</div>
         <div class="pricing-monthly" data-lang="en">Live in: ~5 working days</div>
         <a href="#contact" class="btn-secondary pricing-btn" data-lang="zh">咨询快速启动</a>
@@ -1384,21 +1420,27 @@
         <div class="pricing-badge" data-lang="en">⭐ Most Popular</div>
         <div class="pricing-name" data-lang="zh">📈 商业流量方案</div>
         <div class="pricing-name" data-lang="en">📈 Traffic &amp; Growth</div>
-        <div class="pricing-tagline" data-lang="zh">本地客和华人客，两边都接得住</div>
-        <div class="pricing-tagline" data-lang="en">Catch both Irish locals and Chinese customers</div>
+        <div class="pricing-tagline" data-lang="zh">本地客用英文搜，华人客用中文找，两边都接得住</div>
+        <div class="pricing-tagline" data-lang="en">Locals search in English, Chinese customers in Chinese — catch both</div>
         <div class="pricing-price">€799</div>
         <div class="pricing-period" data-lang="zh">一次性起价</div>
         <div class="pricing-period" data-lang="en">one-off starting price</div>
         <ul class="pricing-features">
           <li data-lang="zh">含快速启动方案全部内容</li>
           <li data-lang="en">Everything in Quick Launch</li>
-          <li data-lang="zh">✨ 中英双语网站，营销导向视觉设计</li>
-          <li data-lang="en">✨ Bilingual CN/EN site, marketing-led visual design</li>
-          <li data-lang="zh">✨ Google Maps 入驻 + 企业专属邮箱</li>
-          <li data-lang="en">✨ Google Maps listing + branded email</li>
+          <li data-lang="zh">✨ 中英双语双版本，两种搜索习惯各有各的落地页</li>
+          <li data-lang="en">✨ Full CN/EN bilingual build — a landing page for each search habit</li>
+          <li data-lang="zh">✨ 营销导向视觉设计：搜到之后愿意点进来、愿意按下联系</li>
+          <li data-lang="en">✨ Marketing-led design: they click through, then actually hit contact</li>
           <li data-lang="zh">✨ 1v1 专属技术顾问全程对接</li>
           <li data-lang="en">✨ Dedicated 1-on-1 technical consultant</li>
         </ul>
+        <div class="pricing-outcome" data-lang="zh">
+          上一档解决「能不能被搜到」，这一档解决<strong>「被谁搜到」</strong>——本地客和华人客是两拨人、两种搜法，只做一种语言等于主动放掉一半。
+        </div>
+        <div class="pricing-outcome" data-lang="en">
+          The tier below answers "can they find you." This one answers <strong>"which of them finds you"</strong> — locals and Chinese customers search differently, and one language means giving up half of them.
+        </div>
         <div class="pricing-monthly" data-lang="zh">上线时间：约 10 个工作日精细打磨</div>
         <div class="pricing-monthly" data-lang="en">Live in: ~10 working days, fully polished</div>
         <a href="#contact" class="btn-primary pricing-btn" data-lang="zh">立即咨询商业流量</a>
@@ -1409,8 +1451,8 @@
       <div class="pricing-card fade-in">
         <div class="pricing-name" data-lang="zh">👑 全能旗舰方案</div>
         <div class="pricing-name" data-lang="en">👑 Flagship</div>
-        <div class="pricing-tagline" data-lang="zh">品牌官网或电商站，一次做到位</div>
-        <div class="pricing-tagline" data-lang="en">Brand site or full e-commerce, done properly</div>
+        <div class="pricing-tagline" data-lang="zh">找到你之后，当场就能下单、能预约</div>
+        <div class="pricing-tagline" data-lang="en">They find you — and book or buy on the spot</div>
         <div class="pricing-price">€1,599</div>
         <div class="pricing-period" data-lang="zh">一次性起价</div>
         <div class="pricing-period" data-lang="en">one-off starting price</div>
@@ -1419,13 +1461,17 @@
           <li data-lang="en">Everything in Traffic &amp; Growth</li>
           <li data-lang="zh">✨ 多页品牌官网 / 完整电商站</li>
           <li data-lang="en">✨ Multi-page brand site / full e-commerce store</li>
-          <li data-lang="zh">✨ 在线预约 + 在线支付系统</li>
-          <li data-lang="en">✨ Online booking + online payment</li>
-          <li data-lang="zh">✨ 企业级安全防护</li>
-          <li data-lang="en">✨ Enterprise-grade security</li>
-          <li data-lang="zh">✨ VIP 全天候技术支持</li>
-          <li data-lang="en">✨ VIP round-the-clock support</li>
+          <li data-lang="zh">✨ 在线预约 + 在线支付，客人不用打电话也能定下来</li>
+          <li data-lang="en">✨ Online booking + payment — no phone call needed to commit</li>
+          <li data-lang="zh">✨ 企业级安全防护 + VIP 全天候技术支持</li>
+          <li data-lang="en">✨ Enterprise-grade security + VIP round-the-clock support</li>
         </ul>
+        <div class="pricing-outcome" data-lang="zh">
+          前三档把人带到你面前，这一档让<strong>「知道你」直接变成「已经付了钱」</strong>——不用等你回电话，客人当场就定下来。
+        </div>
+        <div class="pricing-outcome" data-lang="en">
+          The tiers below bring people to your door. This one turns <strong>"knows you" straight into "already paid"</strong> — no waiting on a callback.
+        </div>
         <div class="pricing-monthly" data-lang="zh">上线时间：约 2–4 周深度开发</div>
         <div class="pricing-monthly" data-lang="en">Live in: ~2–4 weeks of deep build</div>
         <a href="#contact" class="btn-secondary pricing-btn" data-lang="zh">咨询全能旗舰</a>
