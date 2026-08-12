@@ -73,7 +73,7 @@
     .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
     h1, h2, h3 { font-family: var(--font-display); font-weight: 700; line-height: 1.3; }
     /* 数字用衬线体更有分量感（价格、统计数字） */
-    .pricing-price, .stat-num, .pricing-ent-price { font-family: var(--font-display); }
+    .pricing-price, .pricing-ent-price { font-family: var(--font-display); }
 
     .section-title {
       font-size: clamp(1.6rem, 4vw, 2.4rem);
@@ -492,117 +492,6 @@
       text-align: center;
       color: var(--ink-soft);
       font-size: 0.95rem;
-    }
-    .flow-strip {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-wrap: wrap;
-      max-width: 980px;
-      margin: 0 auto 56px;
-      padding: 32px 24px;
-      background: #fff;
-      border: 1px solid var(--line);
-      border-radius: var(--r-sm);
-    }
-    .flow-node {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      width: 150px;
-      padding: 6px 8px;
-    }
-    .flow-node .emoji {
-      width: 56px; height: 56px;
-      border-radius: 50%;
-      background: var(--paper);
-      border: 1.5px solid var(--line);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.6rem;
-      margin-bottom: 10px;
-    }
-    .flow-node b { font-size: 0.85rem; display: block; margin-bottom: 2px; }
-    .flow-node span { font-size: 0.7rem; color: var(--ink-mute); }
-    .flow-arrow { color: var(--gold); font-size: 1.4rem; margin: 0 4px; flex-shrink: 0; }
-    /* Birdeye 式数据卡：深色底 + 巨大数字。原来是白底细格子表，
-       数字被边框切碎，没有「结果很硬」的分量感。 */
-    .stat-strip {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-      max-width: 1000px;
-      margin: 0 auto 60px;
-    }
-    .stat-cell {
-      background: var(--ink);
-      color: var(--cream);
-      padding: 30px 20px 26px;
-      text-align: left;
-      border-radius: var(--r-md);
-      box-shadow: var(--shadow-lift);
-      position: relative;
-      overflow: hidden;
-      /* ⬇ 实拍照到位后：给单个 .stat-cell 加 background-image + 下面这层压暗即可 ⬇ */
-    }
-    .stat-cell::after {
-      content: '';
-      position: absolute;
-      right: -18px; bottom: -30px;
-      width: 110px; height: 110px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(212,175,55,0.22) 0%, transparent 70%);
-      pointer-events: none;
-    }
-    .stat-num {
-      font-family: var(--font-display);
-      font-size: 2.15rem;
-      font-weight: 700;
-      line-height: 1.1;
-      color: var(--gold-light);
-      margin-bottom: 4px;
-    }
-    .stat-label { font-size: 0.78rem; color: rgba(250,246,240,0.62); line-height: 1.55; margin-top: 8px; }
-    .entry-heading { text-align: center; font-size: 0.85rem; color: var(--ink-soft); font-weight: 700; margin-bottom: 22px; }
-    .entry-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 18px;
-      max-width: 980px;
-      margin: 0 auto;
-    }
-    .entry-card {
-      display: block;
-      background: #fff;
-      border: 1px solid var(--line);
-      border-radius: var(--r-md);
-      padding: 26px 18px;
-      text-align: center;
-      text-decoration: none;
-      color: inherit;
-      transition: all 0.25s;
-      position: relative;
-      overflow: hidden;
-    }
-    .entry-card::after {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      height: 3px;
-      background: var(--red);
-      transform: scaleX(0);
-      transition: transform 0.25s;
-    }
-    .entry-card:hover { transform: translateY(-4px); box-shadow: 0 10px 28px rgba(0,0,0,0.09); border-color: var(--gold); }
-    .entry-card:hover::after { transform: scaleX(1); }
-    .entry-emoji { font-size: 2rem; display: block; margin-bottom: 10px; }
-    .entry-card h4 { font-size: 0.92rem; margin-bottom: 6px; color: var(--ink); }
-    .entry-card p { font-size: 0.74rem; color: var(--ink-mute); line-height: 1.5; }
-    .entry-note { text-align: center; font-size: 0.78rem; color: var(--ink-mute); margin-top: 20px; }
-    @media (max-width: 860px) {
-      .flow-arrow { transform: rotate(90deg); margin: 4px 0; }
-      .stat-strip { grid-template-columns: repeat(2, 1fr); }
-      .entry-grid { grid-template-columns: repeat(2, 1fr); }
     }
 
     /* ===== STORIES ===== */
@@ -1040,10 +929,8 @@
     /* Value/flow/story elements set their own element-level display rule, which beats
        the generic [data-lang="en"] hide rule above (specificity) — explicit hide +
        paired body.en restore needed so neither language leaks into the other. */
-    .flow-node > b[data-lang="en"],
     .story-author-info > strong[data-lang="en"] { display: none; }
-    /* Flow-strip labels and story bylines are block-level (see .flow-node b / .story-author-info strong) */
-    body.en .flow-node > b[data-lang="en"],
+    /* Story bylines are block-level (see .story-author-info strong) */
     body.en .story-author-info > strong[data-lang="en"] { display: block; }
     /* Mobile drawer links: .mobile-menu a (0,1,1) beats [data-lang="en"] (0,1,0),
        so both languages leaked into the open drawer — explicit hide + body.en restore */
@@ -1830,133 +1717,20 @@
     <h2 class="section-title fade-in" data-lang="en">Build the System, <span>Free Up the People</span></h2>
     <p class="flagship-lede fade-in" data-lang="zh">
       前三件事解决的是「客人从哪来、怎么留住」。这一件解决的是「人手不够、事情太乱」。
-      我们做过不少行业的管理系统，下面这套跑在一家真实的蔬菜批发生意里——
+      我们做过不少行业的管理系统，最复杂的一套跑在一家真实的蔬菜批发生意里——
       从供应商询价、仓库收发货，到客户下单、司机配送、月底对账，全流程都在里面。
-      这是目前我们做过复杂度最高的项目，能做这个，你的生意需求大概率也能做。
+      能做这个，你的生意需求大概率也能做。
     </p>
     <p class="flagship-lede fade-in" data-lang="en">
       The first three modules answer "where do customers come from and how do we keep them."
       This one answers "we're short-staffed and everything is a mess."
-      We've built management systems across a range of industries — the one below runs a real vegetable
+      We've built management systems across a range of industries — the most complex one runs a real vegetable
       wholesale business: supplier quotes, warehouse receiving, customer ordering, driver dispatch and
       month-end reconciliation, all in one place.
-      It's the most complex project we've shipped — if we can build this, we can likely build what you need.
+      If we can build that, we can likely build what you need.
     </p>
 
 
-    <div class="addon-bar">
-      <span class="addon-item" data-lang="zh"><strong>海外仓 / 货代仓</strong>：多货主独立库存 · 仓储费与操作费</span>
-      <span class="addon-item" data-lang="en"><strong>Freight &amp; bonded warehousing</strong>: multi-client stock, storage &amp; handling fees</span>
-      <span class="addon-item" data-lang="zh"><strong>进口贸易 / 建材</strong>：集装箱追踪 · 落地成本 · 三渠道库存联动</span>
-      <span class="addon-item" data-lang="en"><strong>Import trade / building supplies</strong>: container tracking, landed cost, three-channel stock</span>
-      <span class="addon-item" data-lang="zh"><strong>生鲜批发配送</strong>：早盘下单 · 时价同步 · 件称两用 · 配送 GPS</span>
-      <span class="addon-item" data-lang="en"><strong>Fresh-produce wholesale</strong>: early-market ordering, daily pricing, weight/unit dual mode, GPS dispatch</span>
-      <span class="addon-item" data-lang="zh"><strong>美业门店</strong>：在线预约 · 定金锁档 · 6 周自动召回</span>
-      <span class="addon-item" data-lang="en"><strong>Beauty salons</strong>: online booking, deposit lock-in, 6-week auto recall</span>
-    </div>
-
-    <div class="flow-strip fade-in">
-      <div class="flow-node">
-        <div class="emoji">🔗</div>
-        <b data-lang="zh">供应链采购</b>
-        <b data-lang="en">Procurement</b>
-        <span data-lang="zh">询价单 · PDF识别 · 汇率</span>
-        <span data-lang="en">Quotes · PDF OCR · FX rates</span>
-      </div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-node">
-        <div class="emoji">🏭</div>
-        <b data-lang="zh">仓库管理</b>
-        <b data-lang="en">Warehouse</b>
-        <span data-lang="zh">分区库存 · 波次拣货</span>
-        <span data-lang="en">Zone stock · wave picking</span>
-      </div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-node">
-        <div class="emoji">🛒</div>
-        <b data-lang="zh">客户下单</b>
-        <b data-lang="en">Ordering</b>
-        <span data-lang="zh">B2B自助 · 账期</span>
-        <span data-lang="en">B2B self-serve · credit terms</span>
-      </div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-node">
-        <div class="emoji">🚚</div>
-        <b data-lang="zh">配送调度</b>
-        <b data-lang="en">Dispatch</b>
-        <span data-lang="zh">司机端 · GPS</span>
-        <span data-lang="en">Driver app · GPS</span>
-      </div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-node">
-        <div class="emoji">📊</div>
-        <b data-lang="zh">财务对账</b>
-        <b data-lang="en">Finance</b>
-        <span data-lang="zh">应收账款 · 供应商账单</span>
-        <span data-lang="en">AR aging · vendor bills</span>
-      </div>
-    </div>
-
-    <div class="stat-strip fade-in">
-      <div class="stat-cell">
-        <div class="stat-num" data-lang="zh">28 家</div>
-        <div class="stat-num" data-lang="en">28</div>
-        <div class="stat-label" data-lang="zh">稳定供货的中餐馆客户</div>
-        <div class="stat-label" data-lang="en">restaurants served weekly</div>
-      </div>
-      <div class="stat-cell">
-        <div class="stat-num">12%→5%</div>
-        <div class="stat-label" data-lang="zh">生鲜损耗率下降</div>
-        <div class="stat-label" data-lang="en">spoilage rate reduction</div>
-      </div>
-      <div class="stat-cell">
-        <div class="stat-num" style="font-size:1.35rem;" data-lang="zh">2人1天→1人1小时</div>
-        <div class="stat-num" style="font-size:1.35rem;" data-lang="en">2 staff·1 day → 1 staff·1hr</div>
-        <div class="stat-label" data-lang="zh">月度对账耗时</div>
-        <div class="stat-label" data-lang="en">monthly reconciliation time</div>
-      </div>
-      <div class="stat-cell">
-        <div class="stat-num" data-lang="zh">7 种</div>
-        <div class="stat-num" data-lang="en">7</div>
-        <div class="stat-label" data-lang="zh">角色权限（老板/仓库/司机…）</div>
-        <div class="stat-label" data-lang="en">role-based permission levels</div>
-      </div>
-    </div>
-
-    <p class="entry-heading fade-in" data-lang="zh">选一个模块，直接进真实系统体验 ↓</p>
-    <p class="entry-heading fade-in" data-lang="en">Pick a module — go straight into the live system ↓</p>
-    <div class="entry-grid fade-in">
-      <a class="entry-card" href="https://veggie-dfd7b2qpra-ew.a.run.app/enter" target="_blank" rel="noopener">
-        <span class="entry-emoji">🏭</span>
-        <h4 data-lang="zh">仓库管理</h4>
-        <h4 data-lang="en">Warehouse</h4>
-        <p data-lang="zh">分区库存 · 波次拣货 · 盘点</p>
-        <p data-lang="en">Zone stock · wave picking · stock-take</p>
-      </a>
-      <a class="entry-card" href="https://veggie-dfd7b2qpra-ew.a.run.app/enter" target="_blank" rel="noopener">
-        <span class="entry-emoji">🔗</span>
-        <h4 data-lang="zh">供应链管理</h4>
-        <h4 data-lang="en">Procurement</h4>
-        <p data-lang="zh">询价单 · PDF识别 · 补货预测</p>
-        <p data-lang="en">Quotes · PDF OCR · reorder forecasts</p>
-      </a>
-      <a class="entry-card" href="https://veggie-dfd7b2qpra-ew.a.run.app/enter" target="_blank" rel="noopener">
-        <span class="entry-emoji">🛒</span>
-        <h4 data-lang="zh">B2B 采购下单</h4>
-        <h4 data-lang="en">B2B Ordering</h4>
-        <p data-lang="zh">客户自助下单 · 账期</p>
-        <p data-lang="en">Self-serve ordering · credit terms</p>
-      </a>
-      <a class="entry-card" href="https://veggie-dfd7b2qpra-ew.a.run.app/enter" target="_blank" rel="noopener">
-        <span class="entry-emoji">👔</span>
-        <h4 data-lang="zh">老板总览</h4>
-        <h4 data-lang="en">Owner Overview</h4>
-        <p data-lang="zh">全局经营数据一屏看</p>
-        <p data-lang="en">Full business metrics at a glance</p>
-      </a>
-    </div>
-    <p class="entry-note fade-in" data-lang="zh">点进去后，在登录页选择对应角色即可一键体验（无需自己找账号密码）</p>
-    <p class="entry-note fade-in" data-lang="en">Once inside, pick a role on the login page for one-click access (no need to find credentials yourself)</p>
 
     <div class="pricing-enterprise">
       <div class="pricing-ent-card fade-in">
@@ -1979,8 +1753,8 @@
         <div class="pricing-ent-info">
           <h4 data-lang="zh">全流程企业系统</h4>
           <h4 data-lang="en">Full-process Enterprise System</h4>
-          <p data-lang="zh">像上面这套蔬菜批发系统：采购、仓储、下单、配送、对账串成一条链，多角色权限、多公司多币种、自动化工作流。</p>
-          <p data-lang="en">Like the wholesale system above: procurement, warehousing, ordering, dispatch and reconciliation chained end to end, with role-based permissions, multi-entity / multi-currency and automation.</p>
+          <p data-lang="zh">像上面提到的那套蔬菜批发系统：采购、仓储、下单、配送、对账串成一条链，多角色权限、多公司多币种、自动化工作流。</p>
+          <p data-lang="en">Like the wholesale system described above: procurement, warehousing, ordering, dispatch and reconciliation chained end to end, with role-based permissions, multi-entity / multi-currency and automation.</p>
           <div class="pricing-ent-price">
             <span data-lang="zh">€14,999 起</span>
             <span data-lang="en">from €14,999</span>
