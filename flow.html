@@ -87,7 +87,9 @@
 
   /* TIMELINE */
   .flow-wrap { padding: 60px 0 80px; }
-  .flow-step { display: grid; grid-template-columns: 60px 1fr; gap: 24px;
+  /* minmax(0,1fr) not 1fr: a bare 1fr floors at the card's min-content width,
+     which overflows the viewport by ~3px on narrow phones */
+  .flow-step { display: grid; grid-template-columns: 60px minmax(0, 1fr); gap: 24px;
     margin-bottom: 8px; scroll-margin-top: calc(var(--nav-h) + 20px); }
   .flow-marker { display: flex; flex-direction: column; align-items: center; }
   .flow-circle { width: 48px; height: 48px; border-radius: 50%;
@@ -176,7 +178,7 @@
     .page-hero { padding-top: calc(var(--nav-h) + 40px); padding-bottom: 40px; }
     .overview-grid { grid-template-columns: repeat(2, 1fr); }
     .overview-item:nth-child(2n)::after { display: none; }
-    .flow-step { grid-template-columns: 40px 1fr; gap: 14px; }
+    .flow-step { grid-template-columns: 40px minmax(0, 1fr); gap: 14px; }
     .flow-circle { width: 36px; height: 36px; font-size: 0.9rem; }
     .flow-card { padding: 20px; }
     .help-cta { flex-direction: column; text-align: center; }
@@ -553,7 +555,7 @@
   function setLang(lang) {
     if (lang === 'en') {
       body.classList.add('en');
-      langBtn.textContent = '中';
+      langBtn.textContent = '中文';
       document.documentElement.lang = 'en';
     } else {
       body.classList.remove('en');

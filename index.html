@@ -1045,6 +1045,11 @@
     /* Flow-strip labels and story bylines are block-level (see .flow-node b / .story-author-info strong) */
     body.en .flow-node > b[data-lang="en"],
     body.en .story-author-info > strong[data-lang="en"] { display: block; }
+    /* Mobile drawer links: .mobile-menu a (0,1,1) beats [data-lang="en"] (0,1,0),
+       so both languages leaked into the open drawer — explicit hide + body.en restore */
+    .mobile-menu a[data-lang="en"] { display: none; }
+    body.en .mobile-menu a[data-lang="en"] { display: block; }
+    body.en .mobile-menu a[data-lang="zh"] { display: none; }
     /* Pricing card full-width buttons — pushed to bottom of flex card */
     .pricing-btn { display: block; width: 100%; text-align: center; margin-top: auto; }
     /* Explicit hide: .pricing-btn specificity equals [data-lang="en"], so must be more specific */
@@ -1398,8 +1403,8 @@
         <div>
           <h4 data-lang="zh">③ 来过一次就不再来</h4>
           <h4 data-lang="en">③ They never come back</h4>
-          <p data-lang="zh">客人做完就走，下次来不来靠缘分。没有积分、没有会员、没有核销记录——你连谁来过第二次都不知道，做活动只能广撒网打折。</p>
-          <p data-lang="en">Customers visit once and disappear. No points, no membership, no redemption records — you don't even know who came twice, so every promotion is a blanket discount.</p>
+          <p data-lang="zh">客人做完就走，下次来不来靠缘分。没有积分、没有会员、没有优惠券记录——你连谁来过第二次都不知道，做活动只能广撒网打折。</p>
+          <p data-lang="en">Customers visit once and disappear. No points, no membership, no coupon records — you don't even know who came twice, so every promotion is a blanket discount.</p>
         </div>
       </div>
       <div class="pain-card">
@@ -1429,8 +1434,8 @@
       <span data-lang="zh">让别人知道你</span>
       <span data-lang="en">Get Found</span>
     </div>
-    <h2 class="section-title fade-in" data-lang="zh">做一个网站，<span>四个版本</span></h2>
-    <h2 class="section-title fade-in" data-lang="en">One Website, <span>Four Versions</span></h2>
+    <h2 class="section-title fade-in" data-lang="zh">做一个网站，<span>让人知道你</span></h2>
+    <h2 class="section-title fade-in" data-lang="en">One Website — <span>So People Find You</span></h2>
     <p class="section-sub fade-in" data-lang="zh">从翻新旧站到全能旗舰，价格与交付时间一起印出来。全部定制开发，绝不套模板</p>
     <p class="section-sub fade-in" data-lang="en">From refreshing an old site to a full flagship build — price and delivery time printed together. All custom-built, never templated</p>
 
@@ -1695,14 +1700,14 @@
     </div><!-- /.pricing-grid -->
 
     <div class="addon-bar">
-      <span class="addon-item" data-lang="zh">超出套餐加购：评价回复 <strong>€4</strong>／条</span>
-      <span class="addon-item" data-lang="en">Add-ons: review reply <strong>€4</strong> each</span>
-      <span class="addon-item" data-lang="zh">Instagram / Facebook 图文 <strong>€25</strong>／条</span>
-      <span class="addon-item" data-lang="en">Instagram / Facebook post <strong>€25</strong> each</span>
-      <span class="addon-item" data-lang="zh">小红书成稿 <strong>€35</strong>／条</span>
-      <span class="addon-item" data-lang="en">Xiaohongshu post <strong>€35</strong> each</span>
-      <span class="addon-item" data-lang="zh">差评申诉代办 <strong>€250</strong>／次</span>
-      <span class="addon-item" data-lang="en">Bad-review appeal <strong>€250</strong> each</span>
+      <span class="addon-item" data-lang="zh">超出套餐加购：评价回复 <strong>€2.5</strong>／条</span>
+      <span class="addon-item" data-lang="en">Add-ons: review reply <strong>€2.5</strong> each</span>
+      <span class="addon-item" data-lang="zh">Instagram / Facebook 图文 <strong>€15</strong>／条</span>
+      <span class="addon-item" data-lang="en">Instagram / Facebook post <strong>€15</strong> each</span>
+      <span class="addon-item" data-lang="zh">小红书成稿 <strong>€21</strong>／条</span>
+      <span class="addon-item" data-lang="en">Xiaohongshu post <strong>€21</strong> each</span>
+      <span class="addon-item" data-lang="zh">差评申诉代办 <strong>€150</strong>／次</span>
+      <span class="addon-item" data-lang="en">Bad-review appeal <strong>€150</strong> each</span>
     </div>
 
     <p class="module-footnote" data-lang="zh">
@@ -1716,7 +1721,7 @@
   </div>
 </section>
 
-<!-- ===== 模块③ 让别人消费更多：会员 · 积分 · 核销 ===== -->
+<!-- ===== 模块③ 让别人消费更多：会员 · 积分 · 优惠券 ===== -->
 <section id="module-3">
   <div class="container">
     <div class="module-eyebrow fade-in">
@@ -1724,8 +1729,8 @@
       <span data-lang="zh">让别人消费更多</span>
       <span data-lang="en">Spend More</span>
     </div>
-    <h2 class="section-title fade-in" data-lang="zh">会员 · 积分 · 核销，<span>让下一次有理由回来</span></h2>
-    <h2 class="section-title fade-in" data-lang="en">Membership · Points · Redemption — <span>a Reason to Come Back</span></h2>
+    <h2 class="section-title fade-in" data-lang="zh">会员 · 积分 · 优惠券，<span>让下一次有理由回来</span></h2>
+    <h2 class="section-title fade-in" data-lang="en">Membership · Points · Coupons — <span>a Reason to Come Back</span></h2>
     <p class="section-sub fade-in" data-lang="zh">不是广撒网发折扣，把本来就要来的人也一起打了折。三种上线方式，看你现在有什么就用什么</p>
     <p class="section-sub fade-in" data-lang="en">Not blanket discounts that also cut margin on customers who were coming anyway. Three ways to run it — pick the one that fits what you already have</p>
 
@@ -1736,8 +1741,8 @@
         <span class="capability-tag" data-lang="en">OPTION 1 · PLUG-IN</span>
         <h4 data-lang="zh">装在你的网站上</h4>
         <h4 data-lang="en">Plugged into your site</h4>
-        <p data-lang="zh">网站是我们做的（见模块 ①），会员积分核销作为功能模块直接装上去。客人在你自己的站上入会、累积、兑换，不用跳去第三方。</p>
-        <p data-lang="en">If we built your site (Module ①), membership, points and redemption drop straight in as a module. Customers join, earn and redeem on your own site — no third-party detour.</p>
+        <p data-lang="zh">网站是我们做的（见模块 ①），会员积分优惠券作为功能模块直接装上去。客人在你自己的站上入会、累积、兑换，不用跳去第三方。</p>
+        <p data-lang="en">If we built your site (Module ①), membership, points and coupons drop straight in as a module. Customers join, earn and redeem on your own site — no third-party detour.</p>
       </div>
       <div class="capability-card fade-in">
         <span class="capability-icon">📱</span>
@@ -1745,7 +1750,7 @@
         <span class="capability-tag" data-lang="en">OPTION 2 · STANDALONE</span>
         <h4 data-lang="zh">体外独立运行</h4>
         <h4 data-lang="en">Runs alongside, standalone</h4>
-        <p data-lang="zh">你现在的网站和收银一动不动。会员系统单独跑：客人扫码入会，店员用手机核销，数据进你自己的后台。适合已经有网站、但不想改动的店。</p>
+        <p data-lang="zh">你现在的网站和收银一动不动。会员系统单独跑：客人扫码入会，店员用手机核销优惠券，数据进你自己的后台。适合已经有网站、但不想改动的店。</p>
         <p data-lang="en">Your current website and till stay exactly as they are. The loyalty system runs on its own: customers scan to join, staff redeem from a phone, data lands in your own back office. Best if you already have a site you don't want touched.</p>
       </div>
       <div class="capability-card is-extra fade-in">
@@ -1764,8 +1769,8 @@
       <span class="addon-item" data-lang="en"><strong>Scan to join</strong> — no app download</span>
       <span class="addon-item" data-lang="zh"><strong>消费积分</strong>与积分兑换</span>
       <span class="addon-item" data-lang="en"><strong>Points</strong> earned and redeemed</span>
-      <span class="addon-item" data-lang="zh"><strong>门店核销</strong>：店员手机一扫，防重复使用</span>
-      <span class="addon-item" data-lang="en"><strong>In-store redemption</strong>: one scan, no double-spending</span>
+      <span class="addon-item" data-lang="zh"><strong>优惠券核销</strong>：店员手机一扫，防重复使用</span>
+      <span class="addon-item" data-lang="en"><strong>Coupon redemption</strong>: one scan, no double-spending</span>
       <span class="addon-item" data-lang="zh"><strong>储值与套票</strong>：锁住下一次，不是打折</span>
       <span class="addon-item" data-lang="en"><strong>Prepaid &amp; packages</strong>: lock in the next visit</span>
       <span class="addon-item" data-lang="zh"><strong>会员看板</strong>：谁常来、谁多久没来</span>
@@ -1777,13 +1782,13 @@
     <div class="pricing-enterprise single">
       <div class="pricing-ent-card fade-in">
         <div class="pricing-ent-info">
-          <h4 data-lang="zh">会员积分核销系统</h4>
-          <h4 data-lang="en">Membership &amp; Loyalty System</h4>
+          <h4 data-lang="zh">会员积分优惠券系统</h4>
+          <h4 data-lang="en">Membership, Points &amp; Coupons</h4>
           <p data-lang="zh">方式一与方式二都在这个价内：系统建在你自己的域名下，数据永久归你，不跟第三方分账，不会因为对方涨价或倒闭而中断。方式三的系统对接另行评估。</p>
           <p data-lang="en">Options 1 and 2 are both covered by this price: built under your own domain, data yours permanently, no revenue share, no risk of a third party raising prices or shutting down. Option 3 integration is scoped separately.</p>
           <div class="pricing-ent-price">
-            <span data-lang="zh">€999 起</span>
-            <span data-lang="en">from €999</span>
+            <span data-lang="zh">€1,999 起</span>
+            <span data-lang="en">from €1,999</span>
             <small data-lang="zh">一次性 + €79/月 托管维护</small>
             <small data-lang="en">one-off + €79/mo hosting</small>
           </div>
@@ -2271,8 +2276,8 @@
           <span class="faq-icon">+</span>
         </button>
         <div class="faq-answer"><div class="faq-answer-inner">
-          <span data-lang="zh">不用。四个模块各自独立计费，缺哪件补哪件：还没有网站就从模块 ① 开始；网站够用但没人知道、评价没人回，直接上模块 ②；只想做会员积分核销，模块 ③ 可以体外独立运行，不动你现在的网站和收银；人手不够、流程太乱，那是模块 ④。唯一的前置关系是：模块 ② 的「全周期」要运营会员活动，得先有模块 ③ 的会员系统。</span>
-          <span data-lang="en">No. The four modules are billed separately — take only what you're missing. No website yet? Start with Module ①. Site is fine but nobody finds you and reviews go unanswered? Go straight to Module ②. Only want membership and redemption? Module ③ can run standalone without touching your current site or till. Short-staffed and drowning in manual work? That's Module ④. The only prerequisite: Module ②'s "Full cycle" runs member campaigns, so it needs Module ③'s loyalty system in place first.</span>
+          <span data-lang="zh">不用。四个模块各自独立计费，缺哪件补哪件：还没有网站就从模块 ① 开始；网站够用但没人知道、评价没人回，直接上模块 ②；只想做会员积分优惠券，模块 ③ 可以体外独立运行，不动你现在的网站和收银；人手不够、流程太乱，那是模块 ④。唯一的前置关系是：模块 ② 的「全周期」要运营会员活动，得先有模块 ③ 的会员系统。</span>
+          <span data-lang="en">No. The four modules are billed separately — take only what you're missing. No website yet? Start with Module ①. Site is fine but nobody finds you and reviews go unanswered? Go straight to Module ②. Only want membership, points and coupons? Module ③ can run standalone without touching your current site or till. Short-staffed and drowning in manual work? That's Module ④. The only prerequisite: Module ②'s "Full cycle" runs member campaigns, so it needs Module ③'s loyalty system in place first.</span>
         </div></div>
       </div>
 
