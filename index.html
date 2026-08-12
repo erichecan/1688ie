@@ -256,7 +256,10 @@
       border-radius: var(--r-lg);
       overflow: hidden;
       min-height: 460px;
-      /* ⬇⬇ 实拍照到位后，把 background-image 加在这里即可，其余不用动 ⬇⬇ */
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-start;
+      padding: 64px 30px 40px;
       background:
         radial-gradient(120% 90% at 15% 10%, rgba(212,175,55,0.35) 0%, transparent 55%),
         linear-gradient(155deg, #8B0A1F 0%, #C8102E 48%, #7A0A1A 100%);
@@ -274,6 +277,136 @@
       color: rgba(255,255,255,0.07);
       line-height: 1;
       pointer-events: none;
+    }
+
+    /* ===== HERO 产品样机：浏览器窗口 + 手机端 ===== */
+    .mock-browser {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 322px;
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.32);
+    }
+    .mock-bar {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 9px 12px;
+      background: #F2EDE6;
+      border-bottom: 1px solid rgba(0,0,0,0.07);
+    }
+    .mock-dot { width: 7px; height: 7px; border-radius: 50%; background: #D6CDC1; flex-shrink: 0; }
+    .mock-url {
+      margin-left: 8px;
+      font-size: 0.62rem;
+      letter-spacing: 0.02em;
+      color: #8A8078;
+      background: #fff;
+      border-radius: 20px;
+      padding: 3px 12px;
+    }
+    .mock-app { display: flex; min-height: 190px; }
+    .mock-side {
+      width: 42px;
+      flex-shrink: 0;
+      background: #FBF8F4;
+      border-right: 1px solid rgba(0,0,0,0.05);
+      padding: 14px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 11px;
+    }
+    .mock-nav { width: 18px; height: 5px; border-radius: 3px; background: #E4DCD2; }
+    .mock-nav.is-on { background: var(--red); width: 22px; }
+    .mock-main { flex: 1; padding: 14px 16px 16px; min-width: 0; }
+    .mock-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px;
+      padding-bottom: 10px;
+      margin-bottom: 4px;
+      border-bottom: 1px solid rgba(0,0,0,0.07);
+    }
+    .mock-head b { font-size: 0.8rem; font-weight: 700; color: var(--ink); }
+    .mock-head em { font-style: normal; font-size: 0.64rem; color: var(--red); font-weight: 700; }
+    .mock-row {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(0,0,0,0.045);
+      font-size: 0.64rem;
+    }
+    .mock-row:last-child { border-bottom: none; }
+    .mock-row.is-dim { opacity: 0.55; }
+    .mock-time { font-weight: 700; color: var(--ink); flex-shrink: 0; font-variant-numeric: tabular-nums; }
+    .mock-who { flex: 1; color: var(--ink-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .mock-tag {
+      flex-shrink: 0;
+      font-size: 0.56rem;
+      padding: 2px 7px;
+      border-radius: 20px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .mock-tag.ok { background: rgba(46,125,50,0.12); color: #2E7D32; }
+    .mock-tag.pay { background: rgba(212,175,55,0.20); color: #8A6D0F; }
+    .mock-tag.wait { background: rgba(0,0,0,0.06); color: #7A7168; }
+
+    .mock-phone {
+      position: absolute;
+      z-index: 2;
+      right: 22px;
+      bottom: 34px;
+      width: 104px;
+      background: #fff;
+      border-radius: 16px;
+      padding: 7px;
+      box-shadow: 0 18px 44px rgba(0,0,0,0.38);
+    }
+    .mock-phone-top {
+      width: 30px; height: 3px;
+      border-radius: 3px;
+      background: #E4DCD2;
+      margin: 2px auto 7px;
+    }
+    .mock-phone-body { background: #FBF8F4; border-radius: 10px; padding: 9px 8px; }
+    .mock-card {
+      background: linear-gradient(140deg, #8B0A1F 0%, #C8102E 100%);
+      border-radius: 8px;
+      padding: 9px 9px 10px;
+      color: #fff;
+      margin-bottom: 7px;
+    }
+    .mock-card-label { display: block; font-size: 0.52rem; opacity: 0.75; letter-spacing: 0.05em; }
+    .mock-card strong {
+      display: block;
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      line-height: 1.1;
+      color: var(--gold-light);
+    }
+    .mock-card-sub { display: block; font-size: 0.52rem; opacity: 0.75; }
+    .mock-coupon {
+      font-size: 0.53rem;
+      color: var(--ink-soft);
+      background: #fff;
+      border: 1px dashed rgba(200,16,46,0.35);
+      border-radius: 6px;
+      padding: 5px 7px;
+      margin-bottom: 5px;
+      text-align: center;
+    }
+    .mock-coupon.is-ghost {
+      border-style: solid;
+      border-color: rgba(0,0,0,0.08);
+      color: var(--ink-mute);
+      margin-bottom: 0;
     }
     .hero-bubble {
       position: absolute;
@@ -296,9 +429,12 @@
     .hero-bubble b[data-lang="en"] { display: none; }
     body.en .hero-bubble b[data-lang="en"] { display: block; }
     .hero-bubble span.b-sub { color: var(--ink-mute); }
-    .hero-bubble.b1 { top: 7%;  left: -7%; }
-    .hero-bubble.b2 { top: 45%; right: -9%; }
-    .hero-bubble.b3 { bottom: 8%; left: 4%; }
+    /* 两个气泡浮在浏览器窗口上沿之外——压在窗口上会盖掉地址栏，
+       而地址栏正是「这是一个网站」的关键信号 */
+    .hero-bubble.b1 { top: -4%; left: -7%; }
+    .hero-bubble.b2 { top: -4%; right: -8%; }
+    /* b3（积分兑换）与手机屏上的会员卡内容重复，隐藏；样机本身已经在讲这件事 */
+    .hero-bubble.b3 { display: none; }
     .hero-trust {
       display: flex;
       flex-wrap: wrap;
@@ -1128,10 +1264,15 @@
     @media (max-width: 1050px) {
       .hero-layout { grid-template-columns: 1fr; gap: 40px; }
       .hero-card { padding: 34px 26px; }
-      .hero-visual { min-height: 320px; }
+      .hero-visual { min-height: 320px; padding: 58px 24px 34px; }
       .hero-visual::after { font-size: 15rem; }
+      .mock-browser { max-width: 100%; }
+      /* 单列后浏览器窗口铺满宽度，手机样机会压掉预约行右侧的状态标签
+         （已确认 / 定金已付），而那正是这张图最想说的事——小屏直接不放手机 */
+      .mock-phone { display: none; }
       .hero-bubble.b1 { left: 0; }
-      .hero-bubble.b2 { right: 0; }
+      /* b1 与 b2 在窄容器里会撞在一起，把 b2 放到窗口下沿 */
+      .hero-bubble.b2 { top: auto; bottom: -5%; right: 2%; }
       #hero { min-height: 0; }
     }
     @media (max-width: 900px) {
@@ -1248,7 +1389,65 @@
       </div>
 
       <div class="hero-visual-wrap">
-        <div class="hero-visual"></div>
+        <div class="hero-visual">
+
+          <div class="mock-browser">
+            <div class="mock-bar">
+              <i class="mock-dot"></i><i class="mock-dot"></i><i class="mock-dot"></i>
+              <span class="mock-url">yourshop.ie</span>
+            </div>
+            <div class="mock-app">
+              <div class="mock-side">
+                <i class="mock-nav is-on"></i><i class="mock-nav"></i><i class="mock-nav"></i>
+                <i class="mock-nav"></i><i class="mock-nav"></i>
+              </div>
+              <div class="mock-main">
+                <div class="mock-head">
+                  <b><span data-lang="zh">预约管理</span><span data-lang="en">Bookings</span></b>
+                  <em><span data-lang="zh">今天 · 8 单</span><span data-lang="en">today · 8</span></em>
+                </div>
+                <div class="mock-row">
+                  <span class="mock-time">10:00</span>
+                  <span class="mock-who"><span data-lang="zh">陈太太</span><span data-lang="en">Mrs Chen</span></span>
+                  <span class="mock-tag ok"><span data-lang="zh">已确认</span><span data-lang="en">confirmed</span></span>
+                </div>
+                <div class="mock-row">
+                  <span class="mock-time">11:30</span>
+                  <span class="mock-who">Aoife</span>
+                  <span class="mock-tag pay"><span data-lang="zh">定金已付</span><span data-lang="en">deposit paid</span></span>
+                </div>
+                <div class="mock-row">
+                  <span class="mock-time">14:00</span>
+                  <span class="mock-who"><span data-lang="zh">王先生</span><span data-lang="en">Mr Wang</span></span>
+                  <span class="mock-tag ok"><span data-lang="zh">已确认</span><span data-lang="en">confirmed</span></span>
+                </div>
+                <div class="mock-row is-dim">
+                  <span class="mock-time">15:30</span>
+                  <span class="mock-who">Siobhán</span>
+                  <span class="mock-tag wait"><span data-lang="zh">待确认</span><span data-lang="en">pending</span></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mock-phone">
+            <div class="mock-phone-top"></div>
+            <div class="mock-phone-body">
+              <div class="mock-card">
+                <span class="mock-card-label"><span data-lang="zh">会员卡</span><span data-lang="en">Member</span></span>
+                <strong>320</strong>
+                <span class="mock-card-sub"><span data-lang="zh">积分</span><span data-lang="en">points</span></span>
+              </div>
+              <div class="mock-coupon">
+                <span data-lang="zh">2 张优惠券</span><span data-lang="en">2 coupons</span>
+              </div>
+              <div class="mock-coupon is-ghost">
+                <span data-lang="zh">第 4 次到店</span><span data-lang="en">4th visit</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
 
         <div class="hero-bubble b1">
           <span class="b-icon">⭐</span>
