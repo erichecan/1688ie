@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<!--
+  组件：下单点餐（Ordering）
+  用途：可复用组件库 · 六块之一，供拼装行业 demo 用（餐馆外卖下单、门店自取等业态）
+
+  怎么改成新行业：
+  1. 顶部 :root 里的 --brand / --brand-light / --brand-dark 三个变量换成客户品牌色
+  2. SHOP 对象（脚本区最上面）改店名、logo 文字、货币符号、配送费
+  3. CATEGORIES 数组改成客户的商品分类，PRODUCTS 数组改成实际商品（分类/图标/名称/价格）
+  4. 不需要「配送」只做到店自取，把 DELIVERY_METHODS 里 delivery 那一项删掉即可，地址输入框会跟着自动不出现
+  5. 文案统一走 data-zh / data-en 双属性，改中文改 data-zh，改英文改 data-en，两个都要改
+  6. 凡是 JS 生成的 innerHTML（商品卡片、购物车明细、订单摘要）语言切换时都要重新渲染，见 toggleLang()
+-->
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>下单点餐组件 · 1688.ie</title>
+<style>
+  :root {
+    --brand: #0d4f3c;
+    --brand-light: #e8f3ef;
+    --brand-dark: #093a2c;
+    --ink: #1c1917;
+    --gray: #78716c;
+    --line: #e7e5e4;
+    --bg: #fafaf9;
+    --card: #ffffff;
+    --radius: 14px;
+    --danger: #dc2626;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+    padding: 24px 16px 96px;
+  }
+  .wrap { max-width: 480px; margin: 0 auto; }
+
+  /* ── 头部 ── */
+  .head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+  .shop-name { font-weight: 800; font-size: 1.05rem; color: var(--brand-dark); }
+  .lang-btn {
+    font-size: 0.78rem; font-weight: 700; color: var(--brand);
+    border: 1px solid var(--brand); border-radius: 99px;
+    padding: 4px 12px; cursor: pointer; background: var(--card);
+  }
+
+  /* ── 步骤条 ── */
+  .steps { display: flex; gap: 6px; margin-bottom: 20px; }
+  .step-dot { flex: 1; height: 4px; border-radius: 4px; background: var(--line); transition: background .2s; }
+  .step-dot.done, .step-dot.active { background: var(--brand); }
+
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 18px; margin-bottom: 14px;
+  }
+  .card-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 12px; color: var(--ink); }
+  .card-title .num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 20px; height: 20px; border-radius: 50%; background: var(--brand);
+    color: #fff; font-size: 0.72rem; margin-right: 8px;
+  }
+
+  /* ── 分类 tab ── */
+  .cat-tabs { display: flex; gap: 8px; overflow-x: auto; margin-bottom: 14px; padding-bottom: 2px; }
+  .cat-tab {
+    flex: 0 0 auto; padding: 8px 16px; border-radius: 99px; border: 1.5px solid var(--line);
+    font-size: 0.82rem; font-weight: 700; white-space: nowrap; cursor: pointer; background: var(--card); color: var(--ink);
+  }
+  .cat-tab.active { background: var(--brand); border-color: var(--brand); color: #fff; }
+
+  /* ── 商品网格 ── */
+  .prod-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .prod-card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+    padding: 12px; display: flex; flex-direction: column;
+  }
+  .prod-icon { font-size: 28px; margin-bottom: 6px; }
+  .prod-name { font-weight: 700; font-size: 0.84rem; margin-bottom: 2px; }
+  .prod-price { font-weight: 700; color: var(--brand-dark); font-size: 0.86rem; margin-bottom: 8px; }
+  .prod-add-row { margin-top: auto; display: flex; justify-content: flex-end; }
+  .add-btn {
+    width: 28px; height: 28px; border-radius: 50%; background: var(--brand); color: #fff;
+    border: none; font-size: 16px; font-weight: 700; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .qty-stepper { display: flex; align-items: center; gap: 8px; }
+  .qty-stepper button {
+    width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid var(--brand);
+    background: #fff; color: var(--brand); font-weight: 700; cursor: pointer; font-size: 14px;
+  }
+  .qty-stepper .qty-num { font-weight: 700; font-size: 0.86rem; min-width: 14px; text-align: center; }
+
+  /* ── 悬浮购物车条 ── */
+  .cart-bar {
+    position: fixed; left: 50%; transform: translateX(-50%); bottom: 16px;
+    max-width: 480px; width: calc(100% - 32px); background: var(--brand-dark); color: #fff;
+    border-radius: 14px; padding: 12px 18px; display: flex; align-items: center; justify-content: space-between;
+    cursor: pointer; box-shadow: 0 8px 24px rgba(0,0,0,.25); z-index: 50;
+  }
+  .cart-bar-info { display: flex; align-items: center; gap: 10px; }
+  .cart-bar-count {
+    background: rgba(255,255,255,.2); border-radius: 50%; width: 24px; height: 24px;
+    display: flex; align-items: center; justify-content: center; font-size: 0.76rem; font-weight: 800;
+  }
+  .cart-bar-total { font-weight: 800; font-size: 1rem; }
+  .cart-bar-cta { font-weight: 700; font-size: 0.86rem; }
+
+  /* ── 购物车浮层 ── */
+  .overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,.4);
+    display: flex; align-items: flex-end; justify-content: center; z-index: 100;
+  }
+  .drawer {
+    background: var(--card); width: 100%; max-width: 480px; border-radius: 20px 20px 0 0;
+    padding: 18px; max-height: 78vh; display: flex; flex-direction: column;
+  }
+  .drawer-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .drawer-title { font-weight: 800; font-size: 1rem; }
+  .drawer-close { cursor: pointer; font-size: 1.3rem; color: var(--gray); line-height: 1; }
+  .drawer-body { overflow-y: auto; flex: 1; margin-bottom: 10px; }
+  .cart-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--line); gap: 10px; }
+  .cart-item:last-child { border-bottom: none; }
+  .cart-item-name { font-weight: 600; font-size: 0.86rem; }
+  .cart-item-price { font-size: 0.78rem; color: var(--gray); margin-top: 2px; }
+  .cart-item-remove { color: var(--danger); font-size: 0.74rem; cursor: pointer; white-space: nowrap; }
+  .cart-empty { text-align: center; color: var(--gray); font-size: 0.84rem; padding: 30px 0; }
+
+  /* ── 配送方式 ── */
+  .method-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px; border: 1.5px solid var(--line); border-radius: 10px;
+    margin-bottom: 8px; cursor: pointer; transition: border-color .15s, background .15s;
+  }
+  .method-item:last-child { margin-bottom: 0; }
+  .method-item.selected { border-color: var(--brand); background: var(--brand-light); }
+  .method-icon { font-size: 20px; }
+  .method-name { font-weight: 700; font-size: 0.88rem; }
+  .method-desc { font-size: 0.76rem; color: var(--gray); margin-top: 2px; }
+
+  /* ── 表单 ── */
+  .field { margin-bottom: 10px; }
+  .field label { display: block; font-size: 0.78rem; color: var(--gray); margin-bottom: 5px; font-weight: 600; }
+  .field input {
+    width: 100%; padding: 10px 12px; border: 1.5px solid var(--line); border-radius: 8px;
+    font-size: 0.88rem; font-family: inherit;
+  }
+  .field input:focus { outline: none; border-color: var(--brand); }
+  .field-error { font-size: 0.74rem; color: var(--danger); margin-top: 4px; display: none; }
+
+  /* ── 汇总 & 按钮 ── */
+  .summary-row { display: flex; justify-content: space-between; font-size: 0.85rem; padding: 6px 0; }
+  .summary-row.total { border-top: 1px dashed var(--line); margin-top: 6px; padding-top: 10px; font-weight: 800; font-size: 0.95rem; }
+  .btn {
+    display: block; width: 100%; text-align: center; padding: 13px; border-radius: 10px;
+    font-weight: 700; font-size: 0.92rem; border: none; cursor: pointer;
+  }
+  .btn-primary { background: var(--brand); color: #fff; }
+  .btn-primary:disabled { background: var(--line); color: var(--gray); cursor: not-allowed; }
+  .btn-ghost { background: transparent; color: var(--gray); margin-top: 8px; }
+
+  /* ── 完成页 ── */
+  .done-wrap { text-align: center; padding: 30px 10px; }
+  .done-icon {
+    width: 64px; height: 64px; border-radius: 50%; background: var(--brand-light); color: var(--brand);
+    display: flex; align-items: center; justify-content: center; font-size: 30px; margin: 0 auto 16px;
+  }
+  .done-title { font-weight: 800; font-size: 1.1rem; margin-bottom: 4px; }
+  .done-sub { font-size: 0.84rem; color: var(--gray); margin-bottom: 20px; }
+  .code-box {
+    background: var(--brand-light); border-radius: 10px; padding: 12px; margin-bottom: 8px;
+    font-family: 'SFMono-Regular', Menlo, monospace; font-weight: 700; letter-spacing: 2px; color: var(--brand-dark);
+  }
+
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="head">
+    <div class="shop-name" id="shopName"></div>
+    <div class="lang-btn" onclick="toggleLang()">ZH / EN</div>
+  </div>
+
+  <div class="steps">
+    <div class="step-dot" data-step="1"></div>
+    <div class="step-dot" data-step="2"></div>
+    <div class="step-dot" data-step="3"></div>
+  </div>
+
+  <!-- ============ 第一步：选商品 ============ -->
+  <section id="step-1">
+    <div class="cat-tabs" id="catTabs"></div>
+    <div class="prod-grid" id="prodGrid"></div>
+  </section>
+
+  <!-- ============ 第二步：结算 ============ -->
+  <section id="step-2" class="hidden">
+    <div class="card">
+      <div class="card-title"><span class="num">2</span><span data-zh="配送方式" data-en="Delivery Method">配送方式</span></div>
+      <div id="methodList"></div>
+      <div class="field hidden" id="addressField">
+        <label data-zh="配送地址" data-en="Delivery Address">配送地址</label>
+        <input type="text" id="custAddress" data-zh-ph="详细地址（街道门牌号）" data-en-ph="Street address">
+        <div class="field-error" id="errAddress" data-zh="请填写配送地址" data-en="Please enter a delivery address">请填写配送地址</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span data-zh="订单汇总" data-en="Order Summary">订单汇总</span></div>
+      <div id="checkoutSummary"></div>
+    </div>
+    <button class="btn btn-primary" id="submitOrderBtn" onclick="submitOrder()" data-zh="确认下单" data-en="Confirm Order">确认下单</button>
+    <button class="btn btn-ghost" onclick="goStep(1)" data-zh="返回菜单" data-en="Back to Menu">返回菜单</button>
+  </section>
+
+  <!-- ============ 第三步：完成 ============ -->
+  <section id="step-3" class="hidden">
+    <div class="card done-wrap">
+      <div class="done-icon">✓</div>
+      <div class="done-title" data-zh="下单成功" data-en="Order Placed">下单成功</div>
+      <div class="done-sub" id="etaLine"></div>
+      <div class="code-box" id="orderCode"></div>
+      <div id="finalSummary" style="text-align:left; margin-top:16px;"></div>
+    </div>
+    <button class="btn btn-primary" onclick="resetOrder()" data-zh="再来一单" data-en="Order Again">再来一单</button>
+  </section>
+
+  <!-- ============ 悬浮购物车条 ============ -->
+  <div class="cart-bar hidden" id="cartBar" onclick="openCart()">
+    <div class="cart-bar-info">
+      <div class="cart-bar-count" id="cartBarCount">0</div>
+      <div class="cart-bar-total" id="cartBarTotal"></div>
+    </div>
+    <div class="cart-bar-cta" data-zh="去结算" data-en="Checkout">去结算</div>
+  </div>
+
+  <!-- ============ 购物车浮层 ============ -->
+  <div class="overlay hidden" id="cartOverlay" onclick="closeCartOnBackdrop(event)">
+    <div class="drawer">
+      <div class="drawer-head">
+        <div class="drawer-title" data-zh="我的购物车" data-en="My Cart">我的购物车</div>
+        <div class="drawer-close" onclick="closeCart()">&times;</div>
+      </div>
+      <div class="drawer-body" id="drawerBody"></div>
+      <button class="btn btn-primary" id="toCheckoutBtn" onclick="goCheckout()" data-zh="去结算" data-en="Checkout">去结算</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  /* ── 可替换配置区：换行业只改这里 ── */
+  const SHOP = { nameZh: '示例餐厅', nameEn: 'Sample Kitchen', currency: '€', deliveryFee: 2.5 };
+
+  const CATEGORIES = [
+    { id: 'hot', zh: '热销', en: 'Popular' },
+    { id: 'main', zh: '主食', en: 'Main' },
+    { id: 'drink', zh: '饮品', en: 'Drinks' },
+  ];
+
+  const PRODUCTS = [
+    { id: 'p1', cat: 'hot', icon: '🥟', zh: '招牌水饺', en: 'Signature Dumplings', price: 28 },
+    { id: 'p2', cat: 'hot', icon: '🍜', zh: '麻辣香锅', en: 'Spicy Mixed Pot', price: 42 },
+    { id: 'p3', cat: 'main', icon: '🍚', zh: '黑椒牛肉饭', en: 'Black Pepper Beef Rice', price: 32 },
+    { id: 'p4', cat: 'main', icon: '🍲', zh: '番茄牛腩面', en: 'Tomato Beef Noodles', price: 30 },
+    { id: 'p5', cat: 'main', icon: '🥡', zh: '扬州炒饭', en: 'Yangzhou Fried Rice', price: 26 },
+    { id: 'p6', cat: 'drink', icon: '🥤', zh: '珍珠奶茶', en: 'Bubble Milk Tea', price: 12 },
+    { id: 'p7', cat: 'drink', icon: '🍵', zh: '柠檬蜂蜜茶', en: 'Honey Lemon Tea', price: 10 },
+  ];
+
+  const DELIVERY_METHODS = [
+    { id: 'delivery', icon: '🛵', zh: '外送', en: 'Delivery', descZh: '预计 30-40 分钟送达', descEn: 'Est. 30-40 min delivery' },
+    { id: 'pickup', icon: '🏠', zh: '到店自取', en: 'Pickup', descZh: '预计 15 分钟后可取餐', descEn: 'Ready for pickup in ~15 min' },
+  ];
+
+  /* ── 状态 ── */
+  let currentLang = 'zh';
+  const state = { activeCat: CATEGORIES[0].id, cart: {}, method: null, address: '', code: null };
+
+  function t(zh, en) { return currentLang === 'zh' ? zh : en; }
+  function prodById(id) { return PRODUCTS.find(p => p.id === id); }
+  function methodById(id) { return DELIVERY_METHODS.find(m => m.id === id); }
+  function cartCount() { return Object.values(state.cart).reduce((a, b) => a + b, 0); }
+  function cartSubtotal() {
+    return Object.entries(state.cart).reduce((sum, [id, qty]) => sum + prodById(id).price * qty, 0);
+  }
+
+  /* ── 渲染：分类 tab ── */
+  function renderTabs() {
+    const box = document.getElementById('catTabs');
+    box.innerHTML = CATEGORIES.map(c => `
+      <div class="cat-tab ${state.activeCat === c.id ? 'active' : ''}" onclick="selectCat('${c.id}')">${t(c.zh, c.en)}</div>
+    `).join('');
+  }
+  function selectCat(id) { state.activeCat = id; renderTabs(); renderProducts(); }
+
+  /* ── 渲染：商品网格 ── */
+  function renderProducts() {
+    const grid = document.getElementById('prodGrid');
+    const list = PRODUCTS.filter(p => p.cat === state.activeCat);
+    grid.innerHTML = list.map(p => {
+      const qty = state.cart[p.id] || 0;
+      return `
+        <div class="prod-card">
+          <div class="prod-icon">${p.icon}</div>
+          <div class="prod-name">${t(p.zh, p.en)}</div>
+          <div class="prod-price">${SHOP.currency}${p.price}</div>
+          <div class="prod-add-row">
+            ${qty === 0
+              ? `<button class="add-btn" onclick="addToCart('${p.id}')">+</button>`
+              : `<div class="qty-stepper">
+                   <button onclick="decQty('${p.id}')">−</button>
+                   <span class="qty-num">${qty}</span>
+                   <button onclick="addToCart('${p.id}')">+</button>
+                 </div>`}
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function addToCart(id) {
+    state.cart[id] = (state.cart[id] || 0) + 1;
+    renderProducts();
+    renderCartBar();
+    if (!document.getElementById('cartOverlay').classList.contains('hidden')) renderDrawer();
+  }
+  function decQty(id) {
+    if (!state.cart[id]) return;
+    state.cart[id] -= 1;
+    if (state.cart[id] <= 0) delete state.cart[id];
+    renderProducts();
+    renderCartBar();
+    if (!document.getElementById('cartOverlay').classList.contains('hidden')) renderDrawer();
+  }
+  function removeFromCart(id) {
+    delete state.cart[id];
+    renderProducts();
+    renderCartBar();
+    renderDrawer();
+  }
+
+  /* ── 渲染：悬浮购物车条（只在第一步「选商品」显示，且购物车非空） ── */
+  function renderCartBar() {
+    const bar = document.getElementById('cartBar');
+    const count = cartCount();
+    const onStep1 = !document.getElementById('step-1').classList.contains('hidden');
+    bar.classList.toggle('hidden', !onStep1 || count === 0);
+    document.getElementById('cartBarCount').textContent = count;
+    document.getElementById('cartBarTotal').textContent = SHOP.currency + cartSubtotal();
+  }
+
+  /* ── 购物车浮层 ── */
+  function openCart() { document.getElementById('cartOverlay').classList.remove('hidden'); renderDrawer(); }
+  function closeCart() { document.getElementById('cartOverlay').classList.add('hidden'); }
+  function closeCartOnBackdrop(e) { if (e.target.id === 'cartOverlay') closeCart(); }
+
+  function renderDrawer() {
+    const body = document.getElementById('drawerBody');
+    const ids = Object.keys(state.cart);
+    if (!ids.length) {
+      body.innerHTML = `<div class="cart-empty" data-zh="购物车空空如也" data-en="Your cart is empty">${t('购物车空空如也', 'Your cart is empty')}</div>`;
+      document.getElementById('toCheckoutBtn').disabled = true;
+      document.getElementById('toCheckoutBtn').classList.add('hidden');
+      closeCartIfEmptyBar();
+      return;
+    }
+    document.getElementById('toCheckoutBtn').disabled = false;
+    document.getElementById('toCheckoutBtn').classList.remove('hidden');
+    body.innerHTML = ids.map(id => {
+      const p = prodById(id);
+      const qty = state.cart[id];
+      return `
+        <div class="cart-item">
+          <div>
+            <div class="cart-item-name">${t(p.zh, p.en)}</div>
+            <div class="cart-item-price">${SHOP.currency}${p.price} × ${qty}</div>
+          </div>
+          <div class="qty-stepper">
+            <button onclick="decQty('${id}')">−</button>
+            <span class="qty-num">${qty}</span>
+            <button onclick="addToCart('${id}')">+</button>
+          </div>
+          <div class="cart-item-remove" onclick="removeFromCart('${id}')">${t('删除', 'Remove')}</div>
+        </div>
+      `;
+    }).join('');
+  }
+  function closeCartIfEmptyBar() {
+    // 购物车清空后没有可结算内容，浮层没意义就自动收起
+    if (cartCount() === 0) closeCart();
+  }
+
+  function goCheckout() {
+    if (!cartCount()) return;
+    closeCart();
+    goStep(2);
+  }
+
+  /* ── 渲染：配送方式 ── */
+  function renderMethods() {
+    const box = document.getElementById('methodList');
+    box.innerHTML = DELIVERY_METHODS.map(m => `
+      <div class="method-item ${state.method === m.id ? 'selected' : ''}" onclick="selectMethod('${m.id}')">
+        <div class="method-icon">${m.icon}</div>
+        <div>
+          <div class="method-name">${t(m.zh, m.en)}</div>
+          <div class="method-desc">${t(m.descZh, m.descEn)}</div>
+        </div>
+      </div>
+    `).join('');
+    document.getElementById('addressField').classList.toggle('hidden', state.method !== 'delivery');
+  }
+  function selectMethod(id) {
+    state.method = id;
+    renderMethods();
+    renderCheckoutSummary();
+  }
+
+  /* ── 渲染：结算汇总 ── */
+  function deliveryFeeApplied() { return state.method === 'delivery' ? SHOP.deliveryFee : 0; }
+  function checkoutSummaryHTML() {
+    const ids = Object.keys(state.cart);
+    const rows = ids.map(id => {
+      const p = prodById(id);
+      const qty = state.cart[id];
+      return `<div class="summary-row"><span>${t(p.zh, p.en)} × ${qty}</span><span>${SHOP.currency}${(p.price * qty).toFixed(2)}</span></div>`;
+    }).join('');
+    const fee = deliveryFeeApplied();
+    const feeRow = fee > 0
+      ? `<div class="summary-row"><span>${t('配送费','Delivery Fee')}</span><span>${SHOP.currency}${fee.toFixed(2)}</span></div>`
+      : '';
+    const total = (cartSubtotal() + fee).toFixed(2);
+    return `${rows}${feeRow}<div class="summary-row total"><span>${t('合计','Total')}</span><span>${SHOP.currency}${total}</span></div>`;
+  }
+  function renderCheckoutSummary() {
+    document.getElementById('checkoutSummary').innerHTML = checkoutSummaryHTML();
+    document.getElementById('submitOrderBtn').disabled = !state.method;
+  }
+
+  /* ── 步骤切换 ── */
+  function goStep(n) {
+    [1,2,3].forEach(i => document.getElementById('step-' + i).classList.toggle('hidden', i !== n));
+    document.querySelectorAll('.step-dot').forEach(dot => {
+      const i = Number(dot.dataset.step);
+      dot.classList.toggle('active', i === n);
+      dot.classList.toggle('done', i < n);
+    });
+    renderCartBar();
+    if (n === 2) { renderMethods(); renderCheckoutSummary(); }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  /* ── 提交订单 ── */
+  function submitOrder() {
+    if (!state.method) return;
+    if (state.method === 'delivery') {
+      const addr = document.getElementById('custAddress').value.trim();
+      const addrOk = addr.length > 0;
+      document.getElementById('errAddress').style.display = addrOk ? 'none' : 'block';
+      if (!addrOk) return;
+      state.address = addr;
+    }
+    state.code = 'OD' + Math.abs(hashCode(Object.keys(state.cart).join(',') + state.method + Date.now())).toString().slice(0, 6);
+    document.getElementById('orderCode').textContent = t('订单号 ', 'Order No. ') + state.code;
+    document.getElementById('etaLine').textContent = state.method === 'delivery'
+      ? t('预计 30-40 分钟送达', 'Estimated delivery in 30-40 min')
+      : t('预计 15 分钟后可到店取餐', 'Ready for pickup in about 15 min');
+    document.getElementById('finalSummary').innerHTML = checkoutSummaryHTML();
+    goStep(3);
+  }
+  function hashCode(str) {
+    let h = 0;
+    for (let i = 0; i < str.length; i++) { h = (h << 5) - h + str.charCodeAt(i); h |= 0; }
+    return h;
+  }
+
+  function resetOrder() {
+    state.cart = {}; state.method = null; state.address = ''; state.code = null;
+    document.getElementById('custAddress').value = '';
+    renderTabs();
+    renderProducts();
+    renderCartBar();
+    goStep(1);
+  }
+
+  /* ── 语言切换 ── */
+  function toggleLang() {
+    currentLang = currentLang === 'zh' ? 'en' : 'zh';
+    document.documentElement.lang = currentLang;
+    document.getElementById('shopName').textContent = t(SHOP.nameZh, SHOP.nameEn);
+    document.querySelectorAll('[data-zh][data-en]').forEach(el => {
+      el.textContent = currentLang === 'zh' ? el.dataset.zh : el.dataset.en;
+    });
+    document.querySelectorAll('[data-zh-ph]').forEach(el => {
+      el.placeholder = currentLang === 'zh' ? el.dataset.zhPh : el.dataset.enPh;
+    });
+    renderTabs();
+    renderProducts();
+    renderCartBar();
+    if (!document.getElementById('cartOverlay').classList.contains('hidden')) renderDrawer();
+    if (!document.getElementById('step-2').classList.contains('hidden')) { renderMethods(); renderCheckoutSummary(); }
+    if (!document.getElementById('step-3').classList.contains('hidden')) {
+      document.getElementById('orderCode').textContent = t('订单号 ', 'Order No. ') + state.code;
+      document.getElementById('etaLine').textContent = state.method === 'delivery'
+        ? t('预计 30-40 分钟送达', 'Estimated delivery in 30-40 min')
+        : t('预计 15 分钟后可到店取餐', 'Ready for pickup in about 15 min');
+      document.getElementById('finalSummary').innerHTML = checkoutSummaryHTML();
+    }
+  }
+
+  /* ── 初始化 ── */
+  document.getElementById('shopName').textContent = SHOP.nameZh;
+  renderTabs();
+  renderProducts();
+  renderCartBar();
+  goStep(1);
+</script>
+</body>
+</html>

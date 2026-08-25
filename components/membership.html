@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<!--
+  组件：会员（Membership）
+  用途：可复用组件库 · 六块之一，供拼装行业 demo 用（美甲/美睫、美容院、餐馆、私教/瑜伽等有等级会员体系的业态）
+
+  怎么改成新行业：
+  1. 顶部 :root 里的 --brand / --brand-light / --brand-dark 三个变量换成客户品牌色
+  2. SHOP 对象（脚本区最上面）改店名、logo 文字、货币符号
+  3. TIERS 数组改客户的等级名称与成长值门槛（有几档改几档，不限 3 档）
+  4. BENEFITS 数组改客户的实际权益条目，minTierIdx 对应 TIERS 数组下标（0 = 第一档起就有）
+  5. MEMBER 改成当前登录会员的等级/编号/成长值（demo 用 mock 值）
+  6. RECORDS 改成客户的消费记录 mock 数据
+  7. 文案统一走 data-zh / data-en 双属性，改中文改 data-zh，改英文改 data-en，两个都要改
+-->
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>会员组件 · 1688.ie</title>
+<style>
+  :root {
+    --brand: #0d4f3c;
+    --brand-light: #e8f3ef;
+    --brand-dark: #093a2c;
+    --ink: #1c1917;
+    --gray: #78716c;
+    --line: #e7e5e4;
+    --bg: #fafaf9;
+    --card: #ffffff;
+    --radius: 14px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+    padding: 24px 16px 64px;
+  }
+  .wrap { max-width: 480px; margin: 0 auto; }
+
+  /* ── 头部 ── */
+  .head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+  .shop-name { font-weight: 800; font-size: 1.05rem; color: var(--brand-dark); }
+  .lang-btn {
+    font-size: 0.78rem; font-weight: 700; color: var(--brand);
+    border: 1px solid var(--brand); border-radius: 99px;
+    padding: 4px 12px; cursor: pointer; background: var(--card);
+  }
+
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 18px; margin-bottom: 14px;
+  }
+  .card-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 12px; color: var(--ink); }
+
+  /* ── 会员卡 ── */
+  .member-card {
+    background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%);
+    color: #fff; border-radius: var(--radius); padding: 20px; margin-bottom: 14px;
+  }
+  .member-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+  .member-level { font-weight: 800; font-size: 1.1rem; }
+  .member-no { font-size: 0.72rem; opacity: .85; font-family: 'SFMono-Regular', Menlo, monospace; }
+  .member-growth { font-size: 0.8rem; opacity: .9; margin: 10px 0 8px; }
+  .progress-track { height: 7px; border-radius: 99px; background: rgba(255,255,255,.28); overflow: hidden; }
+  .progress-fill { height: 100%; background: #fff; border-radius: 99px; transition: width .25s; }
+  .progress-label { font-size: 0.72rem; opacity: .9; margin-top: 8px; }
+
+  /* ── 权益列表 ── */
+  .benefit-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-bottom: 1px dashed var(--line); }
+  .benefit-item:last-child { border-bottom: none; }
+  .benefit-icon {
+    flex: 0 0 22px; width: 22px; height: 22px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; font-size: 0.72rem; margin-top: 1px;
+  }
+  .benefit-icon.on { background: var(--brand); color: #fff; }
+  .benefit-icon.off { background: var(--line); color: var(--gray); }
+  .benefit-text { font-size: 0.86rem; font-weight: 600; }
+  .benefit-text.off { color: var(--gray); font-weight: 500; }
+  .benefit-hint { font-size: 0.72rem; color: var(--gray); margin-top: 2px; }
+
+  /* ── 等级 tab ── */
+  .tier-tabs { display: flex; gap: 8px; margin-bottom: 14px; }
+  .tier-tab {
+    flex: 1; text-align: center; padding: 9px 0; border-radius: 10px; font-size: 0.82rem; font-weight: 700;
+    border: 1.5px solid var(--line); cursor: pointer; color: var(--gray);
+  }
+  .tier-tab.active { border-color: var(--brand); background: var(--brand-light); color: var(--brand-dark); }
+
+  /* ── 消费记录 ── */
+  .record-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px dashed var(--line); }
+  .record-row:last-child { border-bottom: none; }
+  .record-name { font-size: 0.86rem; font-weight: 600; }
+  .record-date { font-size: 0.72rem; color: var(--gray); margin-top: 2px; }
+  .record-amount { font-weight: 700; color: var(--brand-dark); font-size: 0.9rem; text-align: right; }
+  .record-growth { font-size: 0.72rem; color: var(--brand); text-align: right; margin-top: 2px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="head">
+    <div class="shop-name" id="shopName"></div>
+    <div class="lang-btn" onclick="toggleLang()">ZH / EN</div>
+  </div>
+
+  <!-- ============ 当前会员卡 ============ -->
+  <div class="member-card">
+    <div class="member-top">
+      <div class="member-level" id="memberLevelName"></div>
+      <div class="member-no" id="memberNo"></div>
+    </div>
+    <div class="member-growth" id="memberGrowth"></div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="progress-label" id="progressLabel"></div>
+  </div>
+
+  <!-- ============ 我的专属权益 ============ -->
+  <div class="card">
+    <div class="card-title" data-zh="我的专属权益" data-en="My Benefits">我的专属权益</div>
+    <div id="myBenefits"></div>
+  </div>
+
+  <!-- ============ 等级权益对比 ============ -->
+  <div class="card">
+    <div class="card-title" data-zh="等级权益对比" data-en="Compare Tier Benefits">等级权益对比</div>
+    <div class="tier-tabs" id="tierTabs"></div>
+    <div id="tierBenefits"></div>
+  </div>
+
+  <!-- ============ 消费记录 ============ -->
+  <div class="card">
+    <div class="card-title" data-zh="消费记录" data-en="Purchase History">消费记录</div>
+    <div id="recordList"></div>
+  </div>
+
+</div>
+
+<script>
+  /* ── 可替换配置区：换行业只改这里 ── */
+  const SHOP = { nameZh: '示例美甲工作室', nameEn: 'Sample Nail Studio', currency: '€' };
+
+  const TIERS = [
+    { id: 't1', zh: '普通会员', en: 'Basic Member', threshold: 0 },
+    { id: 't2', zh: '银卡会员', en: 'Silver Member', threshold: 1000 },
+    { id: 't3', zh: '金卡会员', en: 'Gold Member', threshold: 5000 },
+  ];
+
+  const BENEFITS = [
+    { zh: '生日专属折扣', en: 'Birthday discount', minTierIdx: 0 },
+    { zh: '积分兑换商品', en: 'Redeem points for gifts', minTierIdx: 0 },
+    { zh: '专属客服通道', en: 'Priority support line', minTierIdx: 1 },
+    { zh: '免费加钟升级服务', en: 'Free service upgrade', minTierIdx: 1 },
+    { zh: '年度专属礼盒', en: 'Annual gift box', minTierIdx: 2 },
+    { zh: '优先预约特权', en: 'Priority booking', minTierIdx: 2 },
+  ];
+
+  const MEMBER = { levelId: 't2', number: 'M-88291045', growth: 2380 };
+
+  const RECORDS = [
+    { date: '08-20', zh: '光疗甲', en: 'Gel Polish', amount: 45, growth: 45 },
+    { date: '08-05', zh: '延长甲 + 手绘', en: 'Extensions + Nail Art', amount: 68, growth: 68 },
+    { date: '07-22', zh: '基础美甲', en: 'Classic Manicure', amount: 35, growth: 35 },
+  ];
+
+  /* ── 状态 ── */
+  let currentLang = 'zh';
+  const state = { viewTierId: MEMBER.levelId };
+
+  function t(zh, en) { return currentLang === 'zh' ? zh : en; }
+  function tierIndex(id) { return TIERS.findIndex(tier => tier.id === id); }
+
+  /* ── 渲染：会员卡 ── */
+  function progressData() {
+    const idx = tierIndex(MEMBER.levelId);
+    const cur = TIERS[idx];
+    const next = TIERS[idx + 1];
+    if (!next) return { pct: 100, label: t('已是最高等级', 'You’ve reached the top tier') };
+    const span = next.threshold - cur.threshold;
+    const done = MEMBER.growth - cur.threshold;
+    const pct = Math.max(0, Math.min(100, Math.round(done / span * 100)));
+    const remain = next.threshold - MEMBER.growth;
+    const label = t(`还差 ${remain} 成长值升级${next.zh}`, `${remain} more points to reach ${next.en}`);
+    return { pct, label };
+  }
+  function renderMemberCard() {
+    const tier = TIERS[tierIndex(MEMBER.levelId)];
+    document.getElementById('memberLevelName').textContent = t(tier.zh, tier.en);
+    document.getElementById('memberNo').textContent = t('会员编号 ', 'Member No. ') + MEMBER.number;
+    document.getElementById('memberGrowth').textContent = t('成长值 ', 'Growth Points ') + MEMBER.growth;
+    const p = progressData();
+    document.getElementById('progressFill').style.width = p.pct + '%';
+    document.getElementById('progressLabel').textContent = p.label;
+  }
+
+  /* ── 渲染：权益列表（通用，按传入的等级下标判定解锁） ── */
+  function benefitListHTML(tierIdx) {
+    return BENEFITS.map(b => {
+      const unlocked = b.minTierIdx <= tierIdx;
+      const reqTier = TIERS[b.minTierIdx];
+      return `
+        <div class="benefit-item">
+          <div class="benefit-icon ${unlocked ? 'on' : 'off'}">${unlocked ? '✓' : '🔒'}</div>
+          <div>
+            <div class="benefit-text ${unlocked ? '' : 'off'}">${t(b.zh, b.en)}</div>
+            ${unlocked ? '' : `<div class="benefit-hint">${t(reqTier.zh + '解锁', 'Unlocks at ' + reqTier.en)}</div>`}
+          </div>
+        </div>`;
+    }).join('');
+  }
+  function renderMyBenefits() {
+    document.getElementById('myBenefits').innerHTML = benefitListHTML(tierIndex(MEMBER.levelId));
+  }
+
+  /* ── 渲染：等级 tab + 对比权益 ── */
+  function renderTierTabs() {
+    document.getElementById('tierTabs').innerHTML = TIERS.map(tier => `
+      <div class="tier-tab ${state.viewTierId === tier.id ? 'active' : ''}" onclick="selectTier('${tier.id}')">${t(tier.zh, tier.en)}</div>
+    `).join('');
+  }
+  function selectTier(id) { state.viewTierId = id; renderTierTabs(); renderTierBenefits(); }
+  function renderTierBenefits() {
+    document.getElementById('tierBenefits').innerHTML = benefitListHTML(tierIndex(state.viewTierId));
+  }
+
+  /* ── 渲染：消费记录 ── */
+  function renderRecords() {
+    document.getElementById('recordList').innerHTML = RECORDS.map(r => `
+      <div class="record-row">
+        <div>
+          <div class="record-name">${t(r.zh, r.en)}</div>
+          <div class="record-date">${r.date}</div>
+        </div>
+        <div>
+          <div class="record-amount">${SHOP.currency}${r.amount}</div>
+          <div class="record-growth">+${r.growth} ${t('成长值', 'pts')}</div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  /* ── 语言切换 ── */
+  function toggleLang() {
+    currentLang = currentLang === 'zh' ? 'en' : 'zh';
+    document.documentElement.lang = currentLang;
+    document.getElementById('shopName').textContent = t(SHOP.nameZh, SHOP.nameEn);
+    document.querySelectorAll('[data-zh][data-en]').forEach(el => {
+      el.textContent = currentLang === 'zh' ? el.dataset.zh : el.dataset.en;
+    });
+    renderMemberCard();
+    renderMyBenefits();
+    renderTierTabs();
+    renderTierBenefits();
+    renderRecords();
+  }
+
+  /* ── 初始化 ── */
+  document.getElementById('shopName').textContent = SHOP.nameZh;
+  renderMemberCard();
+  renderMyBenefits();
+  renderTierTabs();
+  renderTierBenefits();
+  renderRecords();
+</script>
+</body>
+</html>

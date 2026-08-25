@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<!--
+  行业 demo：美甲/美睫工作室（通用推销版，不绑定具体客户）
+  由组件库四块拼装：预约 + 会员 + 积分 + 优惠券（components/booking.html / membership.html / points.html / coupons.html）
+
+  怎么改成具体客户：
+  1. 顶部 :root 里的 --brand / --brand-light / --brand-dark 三个变量换成客户品牌色（现在是粉色系）
+  2. 全局 SHOP 对象（脚本区最上面）改店名、货币符号
+  3. 四个模块各自的 mock 数据（SERVICES/STAFF、TIERS/BENEFITS/MEMBER/RECORDS、PRODUCTS/TRANSACTIONS、COUPONS）按需替换
+  4. 文案统一走 data-zh / data-en 双属性，改中文改 data-zh，改英文改 data-en，两个都要改
+-->
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>示例美甲工作室 · 预约 · 会员 · 积分 · 优惠券</title>
+<style>
+  :root {
+    --brand: #C07090;
+    --brand-light: #FEF0F4;
+    --brand-dark: #A05070;
+    --ink: #332328;
+    --gray: #8a7680;
+    --line: #f3dce4;
+    --bg: #FEF8FA;
+    --card: #ffffff;
+    --radius: 14px;
+    --danger: #dc2626;
+    --good: #15803d;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+    padding-bottom: 84px;
+  }
+
+  /* ── 共享：顶部头部（sticky） ── */
+  .head-bar { position: sticky; top: 0; z-index: 10; background: var(--bg); border-bottom: 1px solid var(--line); }
+  .head-inner { max-width: 480px; margin: 0 auto; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; }
+  .shop-name { font-weight: 800; font-size: 1.05rem; color: var(--brand-dark); }
+  .lang-btn {
+    font-size: 0.78rem; font-weight: 700; color: var(--brand);
+    border: 1px solid var(--brand); border-radius: 99px;
+    padding: 4px 12px; cursor: pointer; background: var(--card);
+  }
+
+  /* ── 共享：内容容器 ── */
+  main.wrap { max-width: 480px; margin: 0 auto; padding: 16px; }
+
+  /* ── 共享：卡片（四模块通用，样式完全一致） ── */
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 18px; margin-bottom: 14px;
+  }
+  .card-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 12px; color: var(--ink); }
+  .card-title .num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 20px; height: 20px; border-radius: 50%; background: var(--brand);
+    color: #fff; font-size: 0.72rem; margin-right: 8px;
+  }
+
+  .hidden { display: none !important; }
+
+  /* ── 共享：底部 tab 导航（fixed） ── */
+  .bottom-nav { position: fixed; left: 0; right: 0; bottom: 0; background: #fff; border-top: 1px solid var(--line); z-index: 20; }
+  .nav-inner { max-width: 480px; margin: 0 auto; display: flex; }
+  .nav-item {
+    flex: 1; text-align: center; padding: 9px 0 8px; cursor: pointer; color: var(--gray);
+    font-size: 0.68rem; font-weight: 700; background: none; border: none; font-family: inherit;
+  }
+  .nav-item .nav-icon { font-size: 1.3rem; display: block; margin-bottom: 2px; }
+  .nav-item.active { color: var(--brand); }
+
+  /* ══════════════ 模块①：预约（scope: #panelBooking） ══════════════ */
+  #panelBooking .steps { display: flex; gap: 6px; margin-bottom: 20px; }
+  #panelBooking .step-dot { flex: 1; height: 4px; border-radius: 4px; background: var(--line); transition: background .2s; }
+  #panelBooking .step-dot.done, #panelBooking .step-dot.active { background: var(--brand); }
+
+  #panelBooking .svc-item {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px; border: 1.5px solid var(--line); border-radius: 10px;
+    margin-bottom: 8px; cursor: pointer; transition: border-color .15s, background .15s;
+  }
+  #panelBooking .svc-item:last-child { margin-bottom: 0; }
+  #panelBooking .svc-item.selected { border-color: var(--brand); background: var(--brand-light); }
+  #panelBooking .svc-name { font-weight: 600; font-size: 0.88rem; }
+  #panelBooking .svc-meta { font-size: 0.76rem; color: var(--gray); margin-top: 2px; }
+  #panelBooking .svc-price { font-weight: 700; color: var(--brand-dark); font-size: 0.9rem; white-space: nowrap; }
+
+  #panelBooking .date-row { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 2px; }
+  #panelBooking .date-cell {
+    flex: 0 0 56px; text-align: center; padding: 10px 0; border-radius: 10px;
+    border: 1.5px solid var(--line); cursor: pointer; user-select: none;
+  }
+  #panelBooking .date-cell.selected { border-color: var(--brand); background: var(--brand); color: #fff; }
+  #panelBooking .date-cell .dow { font-size: 0.68rem; color: inherit; opacity: .75; }
+  #panelBooking .date-cell .dom { font-size: 1.05rem; font-weight: 700; margin-top: 2px; }
+
+  #panelBooking .slot-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  #panelBooking .slot-cell {
+    text-align: center; padding: 9px 0; border-radius: 8px; font-size: 0.82rem; font-weight: 600;
+    border: 1.5px solid var(--line); cursor: pointer;
+  }
+  #panelBooking .slot-cell.selected { border-color: var(--brand); background: var(--brand); color: #fff; }
+  #panelBooking .slot-cell.full { opacity: .3; pointer-events: none; text-decoration: line-through; }
+
+  #panelBooking .staff-row { display: flex; gap: 10px; flex-wrap: wrap; }
+  #panelBooking .staff-item { text-align: center; cursor: pointer; padding: 8px 6px; border-radius: 10px; border: 1.5px solid transparent; width: 76px; }
+  #panelBooking .staff-item.selected { border-color: var(--brand); background: var(--brand-light); }
+  #panelBooking .staff-avatar {
+    width: 44px; height: 44px; border-radius: 50%; margin: 0 auto 6px;
+    background: var(--brand-light); color: var(--brand-dark); font-weight: 800;
+    display: flex; align-items: center; justify-content: center; font-size: 1rem;
+  }
+  #panelBooking .staff-name { font-size: 0.74rem; font-weight: 600; }
+
+  #panelBooking .field { margin-bottom: 10px; }
+  #panelBooking .field label { display: block; font-size: 0.78rem; color: var(--gray); margin-bottom: 5px; font-weight: 600; }
+  #panelBooking .field input {
+    width: 100%; padding: 10px 12px; border: 1.5px solid var(--line); border-radius: 8px;
+    font-size: 0.88rem; font-family: inherit;
+  }
+  #panelBooking .field input:focus { outline: none; border-color: var(--brand); }
+  #panelBooking .field-error { font-size: 0.74rem; color: var(--danger); margin-top: 4px; display: none; }
+
+  #panelBooking .summary-row { display: flex; justify-content: space-between; font-size: 0.85rem; padding: 6px 0; }
+  #panelBooking .summary-row.total { border-top: 1px dashed var(--line); margin-top: 6px; padding-top: 10px; font-weight: 800; font-size: 0.95rem; }
+  #panelBooking .btn {
+    display: block; width: 100%; text-align: center; padding: 13px; border-radius: 10px;
+    font-weight: 700; font-size: 0.92rem; border: none; cursor: pointer;
+  }
+  #panelBooking .btn-primary { background: var(--brand); color: #fff; }
+  #panelBooking .btn-primary:disabled { background: var(--line); color: var(--gray); cursor: not-allowed; }
+  #panelBooking .btn-ghost { background: transparent; color: var(--gray); margin-top: 8px; }
+
+  #panelBooking .done-wrap { text-align: center; padding: 30px 10px; }
+  #panelBooking .done-icon {
+    width: 64px; height: 64px; border-radius: 50%; background: var(--brand-light); color: var(--brand);
+    display: flex; align-items: center; justify-content: center; font-size: 30px; margin: 0 auto 16px;
+  }
+  #panelBooking .done-title { font-weight: 800; font-size: 1.1rem; margin-bottom: 4px; }
+  #panelBooking .done-sub { font-size: 0.84rem; color: var(--gray); margin-bottom: 20px; }
+  #panelBooking .code-box {
+    background: var(--brand-light); border-radius: 10px; padding: 12px; margin-bottom: 8px;
+    font-family: 'SFMono-Regular', Menlo, monospace; font-weight: 700; letter-spacing: 2px; color: var(--brand-dark);
+  }
+
+  /* ══════════════ 模块②：会员（scope: #panelMembership） ══════════════ */
+  #panelMembership .member-card {
+    background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%);
+    color: #fff; border-radius: var(--radius); padding: 20px; margin-bottom: 14px;
+  }
+  #panelMembership .member-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+  #panelMembership .member-level { font-weight: 800; font-size: 1.1rem; }
+  #panelMembership .member-no { font-size: 0.72rem; opacity: .85; font-family: 'SFMono-Regular', Menlo, monospace; }
+  #panelMembership .member-growth { font-size: 0.8rem; opacity: .9; margin: 10px 0 8px; }
+  #panelMembership .progress-track { height: 7px; border-radius: 99px; background: rgba(255,255,255,.28); overflow: hidden; }
+  #panelMembership .progress-fill { height: 100%; background: #fff; border-radius: 99px; transition: width .25s; }
+  #panelMembership .progress-label { font-size: 0.72rem; opacity: .9; margin-top: 8px; }
+
+  #panelMembership .benefit-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-bottom: 1px dashed var(--line); }
+  #panelMembership .benefit-item:last-child { border-bottom: none; }
+  #panelMembership .benefit-icon {
+    flex: 0 0 22px; width: 22px; height: 22px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; font-size: 0.72rem; margin-top: 1px;
+  }
+  #panelMembership .benefit-icon.on { background: var(--brand); color: #fff; }
+  #panelMembership .benefit-icon.off { background: var(--line); color: var(--gray); }
+  #panelMembership .benefit-text { font-size: 0.86rem; font-weight: 600; }
+  #panelMembership .benefit-text.off { color: var(--gray); font-weight: 500; }
+  #panelMembership .benefit-hint { font-size: 0.72rem; color: var(--gray); margin-top: 2px; }
+
+  #panelMembership .tier-tabs { display: flex; gap: 8px; margin-bottom: 14px; }
+  #panelMembership .tier-tab {
+    flex: 1; text-align: center; padding: 9px 0; border-radius: 10px; font-size: 0.82rem; font-weight: 700;
+    border: 1.5px solid var(--line); cursor: pointer; color: var(--gray);
+  }
+  #panelMembership .tier-tab.active { border-color: var(--brand); background: var(--brand-light); color: var(--brand-dark); }
+
+  #panelMembership .record-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px dashed var(--line); }
+  #panelMembership .record-row:last-child { border-bottom: none; }
+  #panelMembership .record-name { font-size: 0.86rem; font-weight: 600; }
+  #panelMembership .record-date { font-size: 0.72rem; color: var(--gray); margin-top: 2px; }
+  #panelMembership .record-amount { font-weight: 700; color: var(--brand-dark); font-size: 0.9rem; text-align: right; }
+  #panelMembership .record-growth { font-size: 0.72rem; color: var(--brand); text-align: right; margin-top: 2px; }
+
+  /* ══════════════ 模块③：积分（scope: #panelPoints） ══════════════ */
+  #panelPoints .balance-card {
+    background: linear-gradient(135deg, var(--brand-dark), var(--brand));
+    color: #fff; border-radius: var(--radius); padding: 22px 20px; margin-bottom: 14px;
+  }
+  #panelPoints .balance-label { font-size: 0.8rem; opacity: .85; margin-bottom: 6px; }
+  #panelPoints .balance-num { font-size: 2.4rem; font-weight: 800; letter-spacing: .5px; }
+  #panelPoints .balance-sub { font-size: 0.76rem; opacity: .85; margin-top: 10px; }
+
+  #panelPoints .tabs { display: flex; gap: 8px; margin-bottom: 14px; }
+  #panelPoints .tab-btn {
+    flex: 1; text-align: center; padding: 10px; border-radius: 10px; font-weight: 700; font-size: 0.86rem;
+    border: 1.5px solid var(--line); background: var(--card); color: var(--gray); cursor: pointer;
+  }
+  #panelPoints .tab-btn.active { border-color: var(--brand); background: var(--brand-light); color: var(--brand-dark); }
+
+  #panelPoints .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  #panelPoints .product-card { border: 1.5px solid var(--line); border-radius: 12px; padding: 14px 12px; text-align: center; }
+  #panelPoints .product-icon { font-size: 1.8rem; margin-bottom: 6px; }
+  #panelPoints .product-name { font-weight: 700; font-size: 0.84rem; margin-bottom: 4px; min-height: 2.2em; }
+  #panelPoints .product-cost { font-weight: 800; color: var(--brand-dark); font-size: 0.92rem; margin-bottom: 2px; }
+  #panelPoints .product-stock { font-size: 0.72rem; color: var(--gray); margin-bottom: 10px; }
+  #panelPoints .redeem-btn {
+    width: 100%; padding: 8px; border-radius: 8px; font-size: 0.8rem; font-weight: 700;
+    border: none; cursor: pointer; background: var(--brand); color: #fff;
+  }
+  #panelPoints .redeem-btn:disabled { background: var(--line); color: var(--gray); cursor: not-allowed; }
+
+  #panelPoints .history-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--line); }
+  #panelPoints .history-row:last-child { border-bottom: none; }
+  #panelPoints .history-desc { font-weight: 600; font-size: 0.86rem; }
+  #panelPoints .history-date { font-size: 0.74rem; color: var(--gray); margin-top: 2px; }
+  #panelPoints .history-right { text-align: right; }
+  #panelPoints .history-delta { font-weight: 800; font-size: 0.92rem; }
+  #panelPoints .history-delta.pos { color: var(--good); }
+  #panelPoints .history-delta.neg { color: var(--danger); }
+  #panelPoints .history-balance { font-size: 0.72rem; color: var(--gray); margin-top: 2px; }
+
+  #modalOverlay {
+    position: fixed; inset: 0; background: rgba(28,25,23,.45);
+    display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 50;
+  }
+  #modalOverlay .modal-card { background: var(--card); border-radius: var(--radius); padding: 22px; max-width: 340px; width: 100%; text-align: center; }
+  #modalOverlay .modal-icon { font-size: 2.2rem; margin-bottom: 10px; }
+  #modalOverlay .modal-title { font-weight: 800; font-size: 1rem; margin-bottom: 6px; }
+  #modalOverlay .modal-sub { font-size: 0.82rem; color: var(--gray); margin-bottom: 18px; }
+  #modalOverlay .modal-btns { display: flex; gap: 10px; }
+  #modalOverlay .btn { flex: 1; text-align: center; padding: 11px; border-radius: 10px; font-weight: 700; font-size: 0.88rem; border: none; cursor: pointer; }
+  #modalOverlay .btn-primary { background: var(--brand); color: #fff; }
+  #modalOverlay .btn-ghost { background: var(--brand-light); color: var(--brand-dark); }
+
+  /* ══════════════ 模块④：优惠券（scope: #panelCoupons） ══════════════ */
+  #panelCoupons .tab-bar { display: flex; gap: 8px; margin-bottom: 18px; }
+  #panelCoupons .tab-btn {
+    flex: 1; text-align: center; padding: 10px; border-radius: 10px;
+    font-weight: 700; font-size: 0.86rem; border: 1.5px solid var(--line);
+    background: var(--card); cursor: pointer; color: var(--gray);
+  }
+  #panelCoupons .tab-btn.active { background: var(--brand); color: #fff; border-color: var(--brand); }
+
+  #panelCoupons .group-title { font-size: 0.78rem; font-weight: 700; color: var(--gray); margin: 16px 0 8px; }
+  #panelCoupons .group-title:first-child { margin-top: 0; }
+  #panelCoupons .empty-tip { font-size: 0.82rem; color: var(--gray); text-align: center; padding: 20px 0; }
+
+  #panelCoupons .coupon-card {
+    display: flex; border: 1.5px solid var(--line); border-radius: 12px;
+    overflow: hidden; margin-bottom: 10px; background: var(--card); position: relative;
+  }
+  #panelCoupons .coupon-left {
+    flex: 0 0 96px; background: var(--brand); color: #fff;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 10px 6px; border-right: 1.5px dashed rgba(255,255,255,.5);
+  }
+  #panelCoupons .coupon-left .amt-num { font-size: 1.5rem; font-weight: 800; line-height: 1.1; }
+  #panelCoupons .coupon-left .amt-unit { font-size: 0.68rem; opacity: .85; margin-top: 2px; }
+  #panelCoupons .coupon-right { flex: 1; padding: 12px 14px; display: flex; flex-direction: column; justify-content: center; gap: 3px; }
+  #panelCoupons .coupon-title { font-weight: 700; font-size: 0.9rem; }
+  #panelCoupons .coupon-meta { font-size: 0.72rem; color: var(--gray); }
+  #panelCoupons .coupon-bottom { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; }
+  #panelCoupons .coupon-expiry { font-size: 0.7rem; color: var(--gray); }
+  #panelCoupons .coupon-btn {
+    padding: 6px 16px; border-radius: 99px; font-size: 0.78rem; font-weight: 700;
+    border: none; cursor: pointer; background: var(--brand); color: #fff; white-space: nowrap;
+  }
+  #panelCoupons .coupon-btn:disabled { background: var(--line); color: var(--gray); cursor: not-allowed; }
+
+  #panelCoupons .coupon-card.disabled .coupon-left { background: var(--gray); }
+  #panelCoupons .coupon-card.disabled { opacity: .6; }
+  #panelCoupons .stamp {
+    position: absolute; top: 10px; right: 12px; border: 2px solid var(--gray); color: var(--gray);
+    font-weight: 800; font-size: 0.68rem; padding: 2px 8px; border-radius: 6px;
+    transform: rotate(14deg); letter-spacing: 1px;
+  }
+
+  #redeemModal {
+    position: fixed; inset: 0; background: rgba(0,0,0,.45);
+    display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 50;
+  }
+  #redeemModal .modal-box { background: var(--card); border-radius: 16px; padding: 26px 22px; max-width: 340px; width: 100%; text-align: center; }
+  #redeemModal .modal-title { font-weight: 800; font-size: 1rem; margin-bottom: 4px; }
+  #redeemModal .modal-sub { font-size: 0.8rem; color: var(--gray); margin-bottom: 16px; }
+  #redeemModal .modal-code {
+    font-family: 'SFMono-Regular', Menlo, monospace; font-size: 1.8rem; font-weight: 800;
+    letter-spacing: 6px; color: var(--brand-dark); background: var(--brand-light);
+    border-radius: 12px; padding: 16px; margin-bottom: 18px;
+  }
+  #redeemModal .btn {
+    display: block; width: 100%; text-align: center; padding: 12px; border-radius: 10px;
+    font-weight: 700; font-size: 0.88rem; border: none; cursor: pointer;
+  }
+  #redeemModal .btn-primary { background: var(--brand); color: #fff; }
+  #redeemModal .btn-ghost { background: transparent; color: var(--gray); margin-top: 8px; }
+</style>
+</head>
+<body>
+
+<div class="head-bar">
+  <div class="head-inner">
+    <div class="shop-name" id="shopName"></div>
+    <div class="lang-btn" onclick="toggleLang()">ZH / EN</div>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <!-- ══════════════ 模块①：预约 ══════════════ -->
+  <div id="panelBooking">
+    <div class="steps">
+      <div class="step-dot" data-step="1"></div>
+      <div class="step-dot" data-step="2"></div>
+      <div class="step-dot" data-step="3"></div>
+      <div class="step-dot" data-step="4"></div>
+    </div>
+
+    <section id="step-1">
+      <div class="card">
+        <div class="card-title"><span class="num">1</span><span data-zh="选择服务项目" data-en="Choose a Service">选择服务项目</span></div>
+        <div id="svcList"></div>
+      </div>
+    </section>
+
+    <section id="step-2" class="hidden">
+      <div class="card">
+        <div class="card-title"><span class="num">2</span><span data-zh="选择日期" data-en="Choose a Date">选择日期</span></div>
+        <div class="date-row" id="dateRow"></div>
+      </div>
+      <div class="card">
+        <div class="card-title"><span data-zh="选择时段" data-en="Choose a Time">选择时段</span></div>
+        <div class="slot-grid" id="slotGrid"></div>
+      </div>
+      <div class="card" id="staffCard">
+        <div class="card-title"><span data-zh="选择技师（可选）" data-en="Choose Staff (optional)">选择技师（可选）</span></div>
+        <div class="staff-row" id="staffRow"></div>
+      </div>
+      <button class="btn btn-primary" id="toStep3Btn" onclick="Booking.goStep(3)" disabled data-zh="下一步" data-en="Next">下一步</button>
+      <button class="btn btn-ghost" onclick="Booking.goStep(1)" data-zh="上一步" data-en="Back">上一步</button>
+    </section>
+
+    <section id="step-3" class="hidden">
+      <div class="card">
+        <div class="card-title"><span class="num">3</span><span data-zh="填写联系方式" data-en="Your Details">填写联系方式</span></div>
+        <div class="field">
+          <label data-zh="姓名" data-en="Name">姓名</label>
+          <input type="text" id="custName" data-zh-ph="怎么称呼您" data-en-ph="Your name">
+          <div class="field-error" id="errName" data-zh="请填写姓名" data-en="Please enter your name">请填写姓名</div>
+        </div>
+        <div class="field">
+          <label data-zh="手机号" data-en="Phone">手机号</label>
+          <input type="tel" id="custPhone" data-zh-ph="用于发送预约提醒" data-en-ph="For booking reminders">
+          <div class="field-error" id="errPhone" data-zh="请填写有效手机号" data-en="Please enter a valid phone number">请填写有效手机号</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title"><span data-zh="预约摘要" data-en="Booking Summary">预约摘要</span></div>
+        <div id="summaryBox"></div>
+      </div>
+      <button class="btn btn-primary" onclick="Booking.submitBooking()" data-zh="确认预约" data-en="Confirm Booking">确认预约</button>
+      <button class="btn btn-ghost" onclick="Booking.goStep(2)" data-zh="上一步" data-en="Back">上一步</button>
+    </section>
+
+    <section id="step-4" class="hidden">
+      <div class="card done-wrap">
+        <div class="done-icon">✓</div>
+        <div class="done-title" data-zh="预约成功" data-en="Booking Confirmed">预约成功</div>
+        <div class="done-sub" data-zh="已发送短信提醒到您的手机" data-en="A reminder SMS has been sent to your phone">已发送短信提醒到您的手机</div>
+        <div class="code-box" id="bookingCode"></div>
+        <div id="finalSummary" style="text-align:left; margin-top:16px;"></div>
+      </div>
+      <button class="btn btn-primary" onclick="Booking.resetBooking()" data-zh="再预约一次" data-en="Book Another">再预约一次</button>
+    </section>
+  </div>
+
+  <!-- ══════════════ 模块②：会员 ══════════════ -->
+  <div id="panelMembership" class="hidden">
+    <div class="member-card">
+      <div class="member-top">
+        <div class="member-level" id="memberLevelName"></div>
+        <div class="member-no" id="memberNo"></div>
+      </div>
+      <div class="member-growth" id="memberGrowth"></div>
+      <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+      <div class="progress-label" id="progressLabel"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title" data-zh="我的专属权益" data-en="My Benefits">我的专属权益</div>
+      <div id="myBenefits"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title" data-zh="等级权益对比" data-en="Compare Tier Benefits">等级权益对比</div>
+      <div class="tier-tabs" id="tierTabs"></div>
+      <div id="tierBenefits"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title" data-zh="消费记录" data-en="Purchase History">消费记录</div>
+      <div id="recordList"></div>
+    </div>
+  </div>
+
+  <!-- ══════════════ 模块③：积分 ══════════════ -->
+  <div id="panelPoints" class="hidden">
+    <div class="balance-card">
+      <div class="balance-label" data-zh="我的积分" data-en="My Points">我的积分</div>
+      <div class="balance-num" id="balanceNum"></div>
+      <div class="balance-sub" id="balanceSub"></div>
+    </div>
+
+    <div class="tabs">
+      <div class="tab-btn" id="tabMallBtn" onclick="Points.switchTab('mall')" data-zh="积分商城" data-en="Points Mall">积分商城</div>
+      <div class="tab-btn" id="tabHistoryBtn" onclick="Points.switchTab('history')" data-zh="积分明细" data-en="History">积分明细</div>
+    </div>
+
+    <section id="panel-mall">
+      <div class="card">
+        <div class="product-grid" id="productGrid"></div>
+      </div>
+    </section>
+
+    <section id="panel-history" class="hidden">
+      <div class="card">
+        <div id="historyList"></div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ══════════════ 模块④：优惠券 ══════════════ -->
+  <div id="panelCoupons" class="hidden">
+    <div class="tab-bar">
+      <div class="tab-btn active" id="tabBtn-center" onclick="Coupons.switchTab('center')" data-zh="领券中心" data-en="Get Coupons">领券中心</div>
+      <div class="tab-btn" id="tabBtn-mine" onclick="Coupons.switchTab('mine')" data-zh="我的优惠券" data-en="My Coupons">我的优惠券</div>
+    </div>
+
+    <section id="tab-center">
+      <div id="centerList"></div>
+    </section>
+
+    <section id="tab-mine" class="hidden">
+      <div id="mineList"></div>
+    </section>
+  </div>
+
+</main>
+
+<div class="bottom-nav">
+  <div class="nav-inner">
+    <button class="nav-item active" id="nav-booking" onclick="showPanel('booking')">
+      <span class="nav-icon">📅</span><span data-zh="预约" data-en="Book">预约</span>
+    </button>
+    <button class="nav-item" id="nav-membership" onclick="showPanel('membership')">
+      <span class="nav-icon">👑</span><span data-zh="会员" data-en="Member">会员</span>
+    </button>
+    <button class="nav-item" id="nav-points" onclick="showPanel('points')">
+      <span class="nav-icon">⭐</span><span data-zh="积分" data-en="Points">积分</span>
+    </button>
+    <button class="nav-item" id="nav-coupons" onclick="showPanel('coupons')">
+      <span class="nav-icon">🎟️</span><span data-zh="优惠券" data-en="Coupons">优惠券</span>
+    </button>
+  </div>
+</div>
+
+<!-- 积分兑换弹窗 -->
+<div class="hidden" id="modalOverlay">
+  <div class="modal-card" id="modalCard"></div>
+</div>
+
+<!-- 优惠券核销弹窗 -->
+<div class="hidden" id="redeemModal">
+  <div class="modal-box">
+    <div class="modal-title" data-zh="出示给店员扫码核销" data-en="Show this to staff to redeem">出示给店员扫码核销</div>
+    <div class="modal-sub" id="modalCouponTitle"></div>
+    <div class="modal-code" id="modalCode"></div>
+    <button class="btn btn-primary" onclick="Coupons.confirmRedeem()" data-zh="确认核销" data-en="Confirm Redemption">确认核销</button>
+    <button class="btn btn-ghost" onclick="Coupons.closeModal()" data-zh="取消" data-en="Cancel">取消</button>
+  </div>
+</div>
+
+<script>
+  /* ── 全局共享：店铺信息、语言状态 ── */
+  const SHOP = { nameZh: '示例美甲工作室', nameEn: 'Sample Nail Studio', currency: '€' };
+  let currentLang = 'zh';
+  function t(zh, en) { return currentLang === 'zh' ? zh : en; }
+
+  function toggleLang() {
+    currentLang = currentLang === 'zh' ? 'en' : 'zh';
+    document.documentElement.lang = currentLang;
+    document.getElementById('shopName').textContent = t(SHOP.nameZh, SHOP.nameEn);
+    document.querySelectorAll('[data-zh][data-en]').forEach(el => {
+      el.textContent = currentLang === 'zh' ? el.dataset.zh : el.dataset.en;
+    });
+    document.querySelectorAll('[data-zh-ph]').forEach(el => {
+      el.placeholder = currentLang === 'zh' ? el.dataset.zhPh : el.dataset.enPh;
+    });
+    Booking.onLangChange(currentLang);
+    Membership.onLangChange(currentLang);
+    Points.onLangChange(currentLang);
+    Coupons.onLangChange(currentLang);
+  }
+
+  function showPanel(name) {
+    const ids = { booking: 'panelBooking', membership: 'panelMembership', points: 'panelPoints', coupons: 'panelCoupons' };
+    Object.keys(ids).forEach(key => {
+      document.getElementById(ids[key]).classList.toggle('hidden', key !== name);
+      document.getElementById('nav-' + key).classList.toggle('active', key === name);
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  /* ══════════════ 模块①：预约 ══════════════ */
+  const Booking = (function () {
+    const SERVICES = [
+      { id: 's1', zh: '基础美甲', en: 'Classic Manicure', mins: 45, price: 35 },
+      { id: 's2', zh: '光疗甲', en: 'Gel Polish', mins: 60, price: 45 },
+      { id: 's3', zh: '延长甲 + 手绘', en: 'Extensions + Nail Art', mins: 90, price: 68 },
+    ];
+    const STAFF = [
+      { id: 'p1', zh: '不指定', en: 'No preference' },
+      { id: 'p2', zh: '阿May', en: 'May' },
+      { id: 'p3', zh: 'Tina', en: 'Tina' },
+    ];
+    const SLOTS = ['10:00','11:00','12:00','13:30','14:30','15:30','16:30','17:30','18:30'];
+    const FULL_SLOTS = ['12:00','16:30'];
+
+    let currentLang = 'zh';
+    const state = { service: null, dateIdx: 0, slot: null, staff: STAFF[0].id, name: '', phone: '', code: null };
+    function t(zh, en) { return currentLang === 'zh' ? zh : en; }
+
+    function renderServices() {
+      const box = document.getElementById('svcList');
+      box.innerHTML = SERVICES.map(s => `
+        <div class="svc-item ${state.service === s.id ? 'selected' : ''}" onclick="Booking.selectService('${s.id}')">
+          <div>
+            <div class="svc-name">${t(s.zh, s.en)}</div>
+            <div class="svc-meta">${s.mins} ${t('分钟', 'min')}</div>
+          </div>
+          <div class="svc-price">${SHOP.currency}${s.price}</div>
+        </div>
+      `).join('');
+    }
+    function selectService(id) { state.service = id; renderServices(); goStep(2); }
+
+    const DOW_ZH = ['日','一','二','三','四','五','六'];
+    const DOW_EN = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    function buildDates() {
+      const base = { dow: 2, dom: 25 };
+      const dates = [];
+      for (let i = 0; i < 7; i++) dates.push({ dow: (base.dow + i) % 7, dom: base.dom + i });
+      return dates;
+    }
+    const DATES = buildDates();
+    function renderDates() {
+      const row = document.getElementById('dateRow');
+      row.innerHTML = DATES.map((d, i) => `
+        <div class="date-cell ${state.dateIdx === i ? 'selected' : ''}" onclick="Booking.selectDate(${i})">
+          <div class="dow">${t(DOW_ZH[d.dow], DOW_EN[d.dow])}</div>
+          <div class="dom">${d.dom}</div>
+        </div>
+      `).join('');
+    }
+    function selectDate(i) { state.dateIdx = i; state.slot = null; renderDates(); renderSlots(); updateStep2Btn(); }
+
+    function renderSlots() {
+      const grid = document.getElementById('slotGrid');
+      grid.innerHTML = SLOTS.map(s => {
+        const full = FULL_SLOTS.includes(s);
+        return `<div class="slot-cell ${state.slot === s ? 'selected' : ''} ${full ? 'full' : ''}"
+                  onclick="${full ? '' : `Booking.selectSlot('${s}')`}">${s}</div>`;
+      }).join('');
+    }
+    function selectSlot(s) { state.slot = s; renderSlots(); updateStep2Btn(); }
+
+    function renderStaff() {
+      if (!STAFF.length) { document.getElementById('staffCard').classList.add('hidden'); return; }
+      const row = document.getElementById('staffRow');
+      row.innerHTML = STAFF.map(p => `
+        <div class="staff-item ${state.staff === p.id ? 'selected' : ''}" onclick="Booking.selectStaff('${p.id}')">
+          <div class="staff-avatar">${t(p.zh, p.en).slice(0,1)}</div>
+          <div class="staff-name">${t(p.zh, p.en)}</div>
+        </div>
+      `).join('');
+    }
+    function selectStaff(id) { state.staff = id; renderStaff(); }
+
+    function updateStep2Btn() { document.getElementById('toStep3Btn').disabled = !(state.slot); }
+
+    function svcById(id) { return SERVICES.find(s => s.id === id); }
+    function staffById(id) { return STAFF.find(p => p.id === id); }
+    function summaryHTML() {
+      const s = svcById(state.service);
+      const d = DATES[state.dateIdx];
+      const p = staffById(state.staff);
+      return `
+        <div class="summary-row"><span>${t('服务','Service')}</span><span>${t(s.zh, s.en)}</span></div>
+        <div class="summary-row"><span>${t('时间','Time')}</span><span>${d.dom} ${t('日','')} ${state.slot}</span></div>
+        ${p ? `<div class="summary-row"><span>${t('技师','Staff')}</span><span>${t(p.zh, p.en)}</span></div>` : ''}
+        <div class="summary-row total"><span>${t('预计费用','Estimated Total')}</span><span>${SHOP.currency}${s.price}</span></div>
+      `;
+    }
+
+    function goStep(n) {
+      [1,2,3,4].forEach(i => document.getElementById('step-' + i).classList.toggle('hidden', i !== n));
+      document.querySelectorAll('#panelBooking .step-dot').forEach(dot => {
+        const i = Number(dot.dataset.step);
+        dot.classList.toggle('active', i === n);
+        dot.classList.toggle('done', i < n);
+      });
+      if (n === 2) { renderDates(); renderSlots(); renderStaff(); updateStep2Btn(); }
+      if (n === 3) { document.getElementById('summaryBox').innerHTML = summaryHTML(); }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function submitBooking() {
+      const name = document.getElementById('custName').value.trim();
+      const phone = document.getElementById('custPhone').value.trim();
+      const nameOk = name.length > 0;
+      const phoneOk = /^[\d+\-\s]{6,}$/.test(phone);
+      document.getElementById('errName').style.display = nameOk ? 'none' : 'block';
+      document.getElementById('errPhone').style.display = phoneOk ? 'none' : 'block';
+      if (!nameOk || !phoneOk) return;
+
+      state.name = name; state.phone = phone;
+      state.code = 'BK' + Math.abs(hashCode(name + phone + state.slot)).toString().slice(0, 6);
+      document.getElementById('bookingCode').textContent = t('预约码 ', 'Booking Code ') + state.code;
+      document.getElementById('finalSummary').innerHTML = summaryHTML();
+      goStep(4);
+    }
+    function hashCode(str) {
+      let h = 0;
+      for (let i = 0; i < str.length; i++) { h = (h << 5) - h + str.charCodeAt(i); h |= 0; }
+      return h;
+    }
+    function resetBooking() {
+      state.service = null; state.dateIdx = 0; state.slot = null; state.staff = STAFF[0]?.id || null; state.code = null;
+      document.getElementById('custName').value = '';
+      document.getElementById('custPhone').value = '';
+      renderServices();
+      goStep(1);
+    }
+
+    function onLangChange(lang) {
+      currentLang = lang;
+      renderServices();
+      if (!document.getElementById('step-2').classList.contains('hidden')) { renderDates(); renderSlots(); renderStaff(); }
+      if (!document.getElementById('step-3').classList.contains('hidden')) { document.getElementById('summaryBox').innerHTML = summaryHTML(); }
+      if (!document.getElementById('step-4').classList.contains('hidden')) {
+        document.getElementById('bookingCode').textContent = t('预约码 ', 'Booking Code ') + state.code;
+        document.getElementById('finalSummary').innerHTML = summaryHTML();
+      }
+    }
+
+    function init() { renderServices(); goStep(1); }
+
+    return { selectService, selectDate, selectSlot, selectStaff, goStep, submitBooking, resetBooking, onLangChange, init };
+  })();
+
+  /* ══════════════ 模块②：会员 ══════════════ */
+  const Membership = (function () {
+    const TIERS = [
+      { id: 't1', zh: '普通会员', en: 'Basic Member', threshold: 0 },
+      { id: 't2', zh: '银卡会员', en: 'Silver Member', threshold: 1000 },
+      { id: 't3', zh: '金卡会员', en: 'Gold Member', threshold: 5000 },
+    ];
+    const BENEFITS = [
+      { zh: '生日专属折扣', en: 'Birthday discount', minTierIdx: 0 },
+      { zh: '积分兑换商品', en: 'Redeem points for gifts', minTierIdx: 0 },
+      { zh: '专属客服通道', en: 'Priority support line', minTierIdx: 1 },
+      { zh: '免费加钟升级服务', en: 'Free service upgrade', minTierIdx: 1 },
+      { zh: '年度专属礼盒', en: 'Annual gift box', minTierIdx: 2 },
+      { zh: '优先预约特权', en: 'Priority booking', minTierIdx: 2 },
+    ];
+    const MEMBER = { levelId: 't2', number: 'M-88291045', growth: 2380 };
+    const RECORDS = [
+      { date: '08-20', zh: '光疗甲', en: 'Gel Polish', amount: 45, growth: 45 },
+      { date: '08-05', zh: '延长甲 + 手绘', en: 'Extensions + Nail Art', amount: 68, growth: 68 },
+      { date: '07-22', zh: '基础美甲', en: 'Classic Manicure', amount: 35, growth: 35 },
+    ];
+
+    let currentLang = 'zh';
+    const state = { viewTierId: MEMBER.levelId };
+    function t(zh, en) { return currentLang === 'zh' ? zh : en; }
+    function tierIndex(id) { return TIERS.findIndex(tier => tier.id === id); }
+
+    function progressData() {
+      const idx = tierIndex(MEMBER.levelId);
+      const cur = TIERS[idx];
+      const next = TIERS[idx + 1];
+      if (!next) return { pct: 100, label: t('已是最高等级', 'You’ve reached the top tier') };
+      const span = next.threshold - cur.threshold;
+      const done = MEMBER.growth - cur.threshold;
+      const pct = Math.max(0, Math.min(100, Math.round(done / span * 100)));
+      const remain = next.threshold - MEMBER.growth;
+      const label = t(`还差 ${remain} 成长值升级${next.zh}`, `${remain} more points to reach ${next.en}`);
+      return { pct, label };
+    }
+    function renderMemberCard() {
+      const tier = TIERS[tierIndex(MEMBER.levelId)];
+      document.getElementById('memberLevelName').textContent = t(tier.zh, tier.en);
+      document.getElementById('memberNo').textContent = t('会员编号 ', 'Member No. ') + MEMBER.number;
+      document.getElementById('memberGrowth').textContent = t('成长值 ', 'Growth Points ') + MEMBER.growth;
+      const p = progressData();
+      document.getElementById('progressFill').style.width = p.pct + '%';
+      document.getElementById('progressLabel').textContent = p.label;
+    }
+
+    function benefitListHTML(tierIdx) {
+      return BENEFITS.map(b => {
+        const unlocked = b.minTierIdx <= tierIdx;
+        const reqTier = TIERS[b.minTierIdx];
+        return `
+          <div class="benefit-item">
+            <div class="benefit-icon ${unlocked ? 'on' : 'off'}">${unlocked ? '✓' : '🔒'}</div>
+            <div>
+              <div class="benefit-text ${unlocked ? '' : 'off'}">${t(b.zh, b.en)}</div>
+              ${unlocked ? '' : `<div class="benefit-hint">${t(reqTier.zh + '解锁', 'Unlocks at ' + reqTier.en)}</div>`}
+            </div>
+          </div>`;
+      }).join('');
+    }
+    function renderMyBenefits() { document.getElementById('myBenefits').innerHTML = benefitListHTML(tierIndex(MEMBER.levelId)); }
+
+    function renderTierTabs() {
+      document.getElementById('tierTabs').innerHTML = TIERS.map(tier => `
+        <div class="tier-tab ${state.viewTierId === tier.id ? 'active' : ''}" onclick="Membership.selectTier('${tier.id}')">${t(tier.zh, tier.en)}</div>
+      `).join('');
+    }
+    function selectTier(id) { state.viewTierId = id; renderTierTabs(); renderTierBenefits(); }
+    function renderTierBenefits() { document.getElementById('tierBenefits').innerHTML = benefitListHTML(tierIndex(state.viewTierId)); }
+
+    function renderRecords() {
+      document.getElementById('recordList').innerHTML = RECORDS.map(r => `
+        <div class="record-row">
+          <div>
+            <div class="record-name">${t(r.zh, r.en)}</div>
+            <div class="record-date">${r.date}</div>
+          </div>
+          <div>
+            <div class="record-amount">${SHOP.currency}${r.amount}</div>
+            <div class="record-growth">+${r.growth} ${t('成长值', 'pts')}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function onLangChange(lang) {
+      currentLang = lang;
+      renderMemberCard();
+      renderMyBenefits();
+      renderTierTabs();
+      renderTierBenefits();
+      renderRecords();
+    }
+
+    function init() {
+      renderMemberCard();
+      renderMyBenefits();
+      renderTierTabs();
+      renderTierBenefits();
+      renderRecords();
+    }
+
+    return { selectTier, onLangChange, init };
+  })();
+
+  /* ══════════════ 模块③：积分 ══════════════ */
+  const Points = (function () {
+    const PRODUCTS = [
+      { id: 'p1', zh: '9 折优惠券', en: '10% Off Coupon', icon: '🎫', cost: 200, stock: 12 },
+      { id: 'p2', zh: '免费手部护理', en: 'Free Hand Care Treatment', icon: '🤲', cost: 500, stock: 5 },
+      { id: 'p3', zh: '精油护理体验', en: 'Oil Treatment Trial', icon: '🧴', cost: 800, stock: 0 },
+      { id: 'p4', zh: '环保帆布袋', en: 'Eco Tote Bag', icon: '👜', cost: 150, stock: 20 },
+      { id: 'p5', zh: '€50 代金券', en: '€50 Gift Voucher', icon: '💶', cost: 2000, stock: 3 },
+      { id: 'p6', zh: '双倍积分卡', en: 'Double Points Card', icon: '⭐', cost: 350, stock: 8 },
+    ];
+    const INIT_BALANCE = 680;
+    const EXPIRING = { amount: 120, dateZh: '2026-09-30', dateEn: '2026-09-30' };
+    const TRANSACTIONS = [
+      { dateZh: '08-20', dateEn: '2026-08-20', descZh: '消费满 €50 获赠积分', descEn: 'Earned from €50+ purchase', delta: 50, balance: 680 },
+      { dateZh: '08-12', dateEn: '2026-08-12', descZh: '兑换 9 折优惠券', descEn: 'Redeemed 10% Off Coupon', delta: -200, balance: 630 },
+      { dateZh: '08-05', dateEn: '2026-08-05', descZh: '生日专属积分', descEn: 'Birthday bonus points', delta: 300, balance: 830 },
+      { dateZh: '07-28', dateEn: '2026-07-28', descZh: '会员日双倍积分', descEn: 'Member Day double points', delta: 120, balance: 530 },
+      { dateZh: '07-15', dateEn: '2026-07-15', descZh: '兑换环保帆布袋', descEn: 'Redeemed Eco Tote Bag', delta: -150, balance: 410 },
+      { dateZh: '07-02', dateEn: '2026-07-02', descZh: '消费满 €80 获赠积分', descEn: 'Earned from €80+ purchase', delta: 80, balance: 560 },
+      { dateZh: '06-20', dateEn: '2026-06-20', descZh: '好友推荐奖励', descEn: 'Referral bonus', delta: 200, balance: 480 },
+    ];
+
+    let currentLang = 'zh';
+    let currentTab = 'mall';
+    const state = { balance: INIT_BALANCE, products: PRODUCTS.map(p => ({ ...p })), history: [...TRANSACTIONS], pendingRedeem: null, modalMode: null };
+    function t(zh, en) { return currentLang === 'zh' ? zh : en; }
+
+    function renderBalance() {
+      document.getElementById('balanceNum').textContent = state.balance.toLocaleString();
+      document.getElementById('balanceSub').textContent =
+        t(`${EXPIRING.amount} 积分将于 ${EXPIRING.dateZh} 过期`, `${EXPIRING.amount} points expiring on ${EXPIRING.dateEn}`);
+    }
+
+    function renderProducts() {
+      const grid = document.getElementById('productGrid');
+      grid.innerHTML = state.products.map(p => {
+        const soldOut = p.stock <= 0;
+        const short = state.balance < p.cost;
+        const disabled = soldOut || short;
+        let btnLabel = t('兑换', 'Redeem');
+        if (soldOut) btnLabel = t('已兑完', 'Sold Out');
+        else if (short) btnLabel = t(`还差 ${p.cost - state.balance} 分`, `${p.cost - state.balance} pts short`);
+        return `
+          <div class="product-card">
+            <div class="product-icon">${p.icon}</div>
+            <div class="product-name">${t(p.zh, p.en)}</div>
+            <div class="product-cost">${p.cost.toLocaleString()} ${t('积分', 'pts')}</div>
+            <div class="product-stock">${soldOut ? t('库存不足', 'Out of stock') : t(`库存 ${p.stock}`, `Stock ${p.stock}`)}</div>
+            <button class="redeem-btn" ${disabled ? 'disabled' : ''} onclick="Points.openRedeemConfirm('${p.id}')">${btnLabel}</button>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderHistory() {
+      const box = document.getElementById('historyList');
+      box.innerHTML = state.history.map(h => {
+        const pos = h.delta > 0;
+        return `
+          <div class="history-row">
+            <div>
+              <div class="history-desc">${t(h.descZh, h.descEn)}</div>
+              <div class="history-date">${t(h.dateZh, h.dateEn)}</div>
+            </div>
+            <div class="history-right">
+              <div class="history-delta ${pos ? 'pos' : 'neg'}">${pos ? '+' : ''}${h.delta}</div>
+              <div class="history-balance">${t('余额', 'Bal.')} ${h.balance.toLocaleString()}</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function switchTab(tab) {
+      currentTab = tab;
+      document.getElementById('tabMallBtn').classList.toggle('active', tab === 'mall');
+      document.getElementById('tabHistoryBtn').classList.toggle('active', tab === 'history');
+      document.getElementById('panel-mall').classList.toggle('hidden', tab !== 'mall');
+      document.getElementById('panel-history').classList.toggle('hidden', tab !== 'history');
+    }
+
+    function productById(id) { return state.products.find(p => p.id === id); }
+
+    function openRedeemConfirm(id) {
+      state.pendingRedeem = id;
+      state.modalMode = 'confirm';
+      renderConfirmModal();
+      document.getElementById('modalOverlay').classList.remove('hidden');
+    }
+
+    function renderConfirmModal() {
+      const p = productById(state.pendingRedeem);
+      document.getElementById('modalCard').innerHTML = `
+        <div class="modal-icon">${p.icon}</div>
+        <div class="modal-title">${t('确认兑换', 'Confirm Redemption')}</div>
+        <div class="modal-sub">${t(
+          `将花费 ${p.cost.toLocaleString()} 积分兑换「${p.zh}」，兑换后余额 ${(state.balance - p.cost).toLocaleString()}`,
+          `Spend ${p.cost.toLocaleString()} pts for "${p.en}" — balance after: ${(state.balance - p.cost).toLocaleString()}`
+        )}</div>
+        <div class="modal-btns">
+          <button class="btn btn-ghost" onclick="Points.closeModal()">${t('取消', 'Cancel')}</button>
+          <button class="btn btn-primary" onclick="Points.confirmRedeem()">${t('确认兑换', 'Confirm')}</button>
+        </div>
+      `;
+    }
+
+    function confirmRedeem() {
+      const p = productById(state.pendingRedeem);
+      if (!p || p.stock <= 0 || state.balance < p.cost) { closeModal(); return; }
+
+      state.balance -= p.cost;
+      p.stock -= 1;
+      state.history.unshift({
+        dateZh: t('今日', '今日'), dateEn: 'Today',
+        descZh: `兑换${p.zh}`, descEn: `Redeemed ${p.en}`,
+        delta: -p.cost, balance: state.balance
+      });
+
+      renderBalance();
+      renderProducts();
+      renderHistory();
+
+      state.modalMode = 'success';
+      renderSuccessModal();
+    }
+
+    function renderSuccessModal() {
+      const p = productById(state.pendingRedeem);
+      document.getElementById('modalCard').innerHTML = `
+        <div class="modal-icon">✓</div>
+        <div class="modal-title">${t('兑换成功', 'Redemption Successful')}</div>
+        <div class="modal-sub">${t(`「${p.zh}」已兑换，当前余额 ${state.balance.toLocaleString()} 积分`, `"${p.en}" redeemed. Balance: ${state.balance.toLocaleString()} pts`)}</div>
+        <div class="modal-btns">
+          <button class="btn btn-primary" style="flex:1" onclick="Points.closeModal()">${t('完成', 'Done')}</button>
+        </div>
+      `;
+    }
+
+    function closeModal() {
+      document.getElementById('modalOverlay').classList.add('hidden');
+      state.pendingRedeem = null;
+      state.modalMode = null;
+    }
+
+    function onLangChange(lang) {
+      currentLang = lang;
+      renderBalance();
+      renderProducts();
+      renderHistory();
+      if (state.modalMode === 'confirm') renderConfirmModal();
+      if (state.modalMode === 'success') renderSuccessModal();
+    }
+
+    function init() {
+      renderBalance();
+      renderProducts();
+      renderHistory();
+      switchTab('mall');
+    }
+
+    return { switchTab, openRedeemConfirm, confirmRedeem, closeModal, onLangChange, init };
+  })();
+
+  /* ══════════════ 模块④：优惠券 ══════════════ */
+  const Coupons = (function () {
+    const COUPONS = [
+      { id: 'o1', kind: 'amount', amount: 10, threshold: 50, expiryZh: '2026-09-30 前有效', expiryEn: 'Valid until 2026-09-30' },
+      { id: 'o2', kind: 'percent', percent: 9, expiryZh: '2026-09-15 前有效', expiryEn: 'Valid until 2026-09-15' },
+      { id: 'o3', kind: 'freebie', labelZh: '免费体验一次', labelEn: 'One Free Trial', expiryZh: '2026-10-31 前有效', expiryEn: 'Valid until 2026-10-31' },
+      { id: 'o4', kind: 'amount', amount: 25, threshold: 100, expiryZh: '2026-09-30 前有效', expiryEn: 'Valid until 2026-09-30' },
+      { id: 'o5', kind: 'percent', percent: 8, noteZh: '指定项目可用', noteEn: 'Selected items only', expiryZh: '2026-09-20 前有效', expiryEn: 'Valid until 2026-09-20' },
+    ];
+    const MY_SEED = [
+      { id: 'm1', kind: 'amount', amount: 15, threshold: 80, status: 'used', historyZh: '已于 2026-08-10 使用', historyEn: 'Used on 2026-08-10' },
+      { id: 'm2', kind: 'percent', percent: 9, status: 'expired', historyZh: '已于 2026-07-31 过期', historyEn: 'Expired on 2026-07-31' },
+    ];
+
+    let currentLang = 'zh';
+    let activeTab = 'center';
+    const claimedIds = new Set();
+    const myCoupons = [...MY_SEED];
+    let redeemTargetId = null;
+    function t(zh, en) { return currentLang === 'zh' ? zh : en; }
+
+    function couponTitle(c) {
+      if (c.kind === 'amount') return t(`满${SHOP.currency}${c.threshold}减${SHOP.currency}${c.amount}`, `${SHOP.currency}${c.amount} off orders over ${SHOP.currency}${c.threshold}`);
+      if (c.kind === 'percent') return t(`全场${c.percent}折`, `${percentOff(c.percent)}% off storewide`);
+      return t(c.labelZh, c.labelEn);
+    }
+    function percentOff(percent) { return (10 - percent) * 10; }
+    function couponAmountBlock(c) {
+      if (c.kind === 'amount') return `<div class="amt-num">${SHOP.currency}${c.amount}</div><div class="amt-unit">${t('立减','OFF')}</div>`;
+      if (c.kind === 'percent') return currentLang === 'zh'
+        ? `<div class="amt-num">${c.percent}<span style="font-size:.9rem">折</span></div><div class="amt-unit">折扣</div>`
+        : `<div class="amt-num">${percentOff(c.percent)}%</div><div class="amt-unit">OFF</div>`;
+      return `<div class="amt-num" style="font-size:1.1rem">${t('免费','FREE')}</div><div class="amt-unit">${t('体验','TRIAL')}</div>`;
+    }
+    function couponKindLabel(c) {
+      if (c.kind === 'amount') return t('满减券', 'Cash Voucher');
+      if (c.kind === 'percent') return t('折扣券', 'Discount Voucher');
+      return t('兑换券', 'Redemption Voucher');
+    }
+
+    function renderCenter() {
+      const box = document.getElementById('centerList');
+      box.innerHTML = COUPONS.map(c => {
+        const claimed = claimedIds.has(c.id);
+        return `
+          <div class="coupon-card">
+            <div class="coupon-left">${couponAmountBlock(c)}</div>
+            <div class="coupon-right">
+              <div class="coupon-title">${couponTitle(c)}</div>
+              <div class="coupon-meta">${couponKindLabel(c)}${c.noteZh ? ' · ' + t(c.noteZh, c.noteEn) : ''}</div>
+              <div class="coupon-bottom">
+                <div class="coupon-expiry">${t(c.expiryZh, c.expiryEn)}</div>
+                <button class="coupon-btn" ${claimed ? 'disabled' : ''} onclick="Coupons.claimCoupon('${c.id}')">
+                  ${claimed ? t('已领取', 'Claimed') : t('立即领取', 'Claim Now')}
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+    function claimCoupon(id) {
+      if (claimedIds.has(id)) return;
+      claimedIds.add(id);
+      const source = COUPONS.find(c => c.id === id);
+      myCoupons.push({ ...source, id: 'claim-' + id, status: 'unused' });
+      renderCenter();
+    }
+
+    const STATUS_ORDER = ['unused', 'used', 'expired'];
+    const STATUS_LABEL = { unused: ['未使用', 'Unused'], used: ['已使用', 'Used'], expired: ['已过期', 'Expired'] };
+    function renderMine() {
+      const box = document.getElementById('mineList');
+      if (!myCoupons.length) {
+        box.innerHTML = `<div class="empty-tip" data-zh="还没有优惠券，去领券中心看看" data-en="No coupons yet — check Get Coupons">还没有优惠券，去领券中心看看</div>`;
+        return;
+      }
+      let html = '';
+      STATUS_ORDER.forEach(status => {
+        const items = myCoupons.filter(c => c.status === status);
+        if (!items.length) return;
+        html += `<div class="group-title">${t(STATUS_LABEL[status][0], STATUS_LABEL[status][1])}（${items.length}）</div>`;
+        html += items.map(c => renderMyCard(c)).join('');
+      });
+      box.innerHTML = html;
+    }
+    function renderMyCard(c) {
+      const disabled = c.status !== 'unused';
+      return `
+        <div class="coupon-card ${disabled ? 'disabled' : ''}">
+          ${disabled ? `<div class="stamp">${t(STATUS_LABEL[c.status][0], STATUS_LABEL[c.status][1])}</div>` : ''}
+          <div class="coupon-left">${couponAmountBlock(c)}</div>
+          <div class="coupon-right">
+            <div class="coupon-title">${couponTitle(c)}</div>
+            <div class="coupon-meta">${couponKindLabel(c)}${c.noteZh ? ' · ' + t(c.noteZh, c.noteEn) : ''}</div>
+            <div class="coupon-bottom">
+              <div class="coupon-expiry">${c.status === 'unused' ? t(c.expiryZh, c.expiryEn) : t(c.historyZh, c.historyEn)}</div>
+              ${c.status === 'unused' ? `<button class="coupon-btn" onclick="Coupons.openRedeemModal('${c.id}')">${t('去使用', 'Use Now')}</button>` : ''}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function switchTab(tab) {
+      activeTab = tab;
+      document.getElementById('tabBtn-center').classList.toggle('active', tab === 'center');
+      document.getElementById('tabBtn-mine').classList.toggle('active', tab === 'mine');
+      document.getElementById('tab-center').classList.toggle('hidden', tab !== 'center');
+      document.getElementById('tab-mine').classList.toggle('hidden', tab !== 'mine');
+      if (tab === 'center') renderCenter(); else renderMine();
+    }
+
+    function hashCode(str) {
+      let h = 0;
+      for (let i = 0; i < str.length; i++) { h = (h << 5) - h + str.charCodeAt(i); h |= 0; }
+      return h;
+    }
+    function openRedeemModal(id) {
+      redeemTargetId = id;
+      const c = myCoupons.find(x => x.id === id);
+      document.getElementById('modalCouponTitle').textContent = couponTitle(c);
+      document.getElementById('modalCode').textContent = String(Math.abs(hashCode(id))).slice(0, 6).padStart(6, '0');
+      document.getElementById('redeemModal').classList.remove('hidden');
+    }
+    function closeModal() {
+      redeemTargetId = null;
+      document.getElementById('redeemModal').classList.add('hidden');
+    }
+    function confirmRedeem() {
+      const c = myCoupons.find(x => x.id === redeemTargetId);
+      if (c) {
+        c.status = 'used';
+        c.historyZh = '已于 2026-08-25 使用';
+        c.historyEn = 'Used on 2026-08-25';
+      }
+      closeModal();
+      renderMine();
+    }
+
+    function onLangChange(lang) {
+      currentLang = lang;
+      renderCenter();
+      renderMine();
+      if (!document.getElementById('redeemModal').classList.contains('hidden') && redeemTargetId) {
+        const c = myCoupons.find(x => x.id === redeemTargetId);
+        if (c) document.getElementById('modalCouponTitle').textContent = couponTitle(c);
+      }
+    }
+
+    function init() { renderCenter(); renderMine(); }
+
+    return { claimCoupon, openRedeemModal, confirmRedeem, closeModal, switchTab, onLangChange, init };
+  })();
+
+  /* ── 初始化 ── */
+  document.getElementById('shopName').textContent = SHOP.nameZh;
+  Booking.init();
+  Membership.init();
+  Points.init();
+  Coupons.init();
+  showPanel('booking');
+</script>
+</body>
+</html>

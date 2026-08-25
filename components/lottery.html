@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<!--
+  组件：抽奖（Lottery）
+  用途：可复用组件库 · 六块之一，供拼装行业 demo 用（餐馆、美容院等需要促活/裂变的业态）
+
+  怎么改成新行业：
+  1. 顶部 :root 里的 --brand / --brand-light / --brand-dark 三个变量换成客户品牌色
+  2. SHOP 对象（脚本区最上面）改店名
+  3. PRIZES 数组改成客户的实际奖品（顺序即为九宫格顺时针跑马灯顺序，共 8 项，中心格固定是抽奖按钮）
+  4. state.remaining 初始值改成客户想给的每人次数
+  5. 文案统一走 data-zh / data-en 双属性，改中文改 data-zh，改英文改 data-en，两个都要改
+-->
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>抽奖组件 · 1688.ie</title>
+<style>
+  :root {
+    --brand: #0d4f3c;
+    --brand-light: #e8f3ef;
+    --brand-dark: #093a2c;
+    --ink: #1c1917;
+    --gray: #78716c;
+    --line: #e7e5e4;
+    --bg: #fafaf9;
+    --card: #ffffff;
+    --radius: 14px;
+    --danger: #dc2626;
+    --gold: #ea580c;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+    padding: 24px 16px 64px;
+  }
+  .wrap { max-width: 480px; margin: 0 auto; }
+
+  /* ── 头部 ── */
+  .head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+  .shop-name { font-weight: 800; font-size: 1.05rem; color: var(--brand-dark); }
+  .lang-btn {
+    font-size: 0.78rem; font-weight: 700; color: var(--brand);
+    border: 1px solid var(--brand); border-radius: 99px;
+    padding: 4px 12px; cursor: pointer; background: var(--card);
+  }
+
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 18px; margin-bottom: 14px;
+  }
+  .card-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 12px; color: var(--ink); }
+
+  /* ── 剩余次数 ── */
+  .remain-bar {
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--brand-light); border-radius: 10px; padding: 10px 14px; margin-bottom: 14px;
+  }
+  .remain-label { font-size: 0.82rem; color: var(--brand-dark); font-weight: 600; }
+  .remain-count { font-size: 1.1rem; font-weight: 800; color: var(--brand-dark); }
+
+  /* ── 九宫格 ── */
+  .grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+    background: var(--brand-dark); padding: 10px; border-radius: 16px;
+  }
+  .cell {
+    aspect-ratio: 1; border-radius: 10px; background: var(--card);
+    display: flex; align-items: center; justify-content: center; text-align: center;
+    font-size: 0.76rem; font-weight: 700; color: var(--ink); padding: 6px;
+    transition: background .12s, color .12s, transform .12s;
+  }
+  .cell.lit { background: var(--gold); color: #fff; transform: scale(1.05); }
+  .cell-btn {
+    background: var(--brand); color: #fff; border: none; border-radius: 10px;
+    font-size: 0.92rem; font-weight: 800; cursor: pointer; aspect-ratio: 1;
+  }
+  .cell-btn:disabled { background: #57534e; cursor: not-allowed; opacity: .6; }
+
+  .hint { text-align: center; font-size: 0.78rem; color: var(--gray); margin-top: 12px; }
+
+  /* ── 中奖记录 ── */
+  .history-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 0.84rem;
+  }
+  .history-row:last-child { border-bottom: none; }
+  .history-time { color: var(--gray); font-size: 0.76rem; }
+  .history-prize { font-weight: 700; }
+  .history-prize.lose { color: var(--gray); font-weight: 600; }
+
+  /* ── 弹窗 ── */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(28,25,23,.55);
+    display: flex; align-items: center; justify-content: center; padding: 24px; z-index: 50;
+  }
+  .modal-card {
+    background: var(--card); border-radius: var(--radius); padding: 28px 22px; max-width: 340px; width: 100%;
+    text-align: center;
+  }
+  .modal-icon {
+    width: 64px; height: 64px; border-radius: 50%; background: var(--brand-light);
+    display: flex; align-items: center; justify-content: center; font-size: 30px; margin: 0 auto 14px;
+  }
+  .modal-title { font-weight: 800; font-size: 1.1rem; margin-bottom: 6px; }
+  .modal-sub { font-size: 0.84rem; color: var(--gray); margin-bottom: 20px; }
+  .btn {
+    display: block; width: 100%; text-align: center; padding: 13px; border-radius: 10px;
+    font-weight: 700; font-size: 0.92rem; border: none; cursor: pointer;
+  }
+  .btn-primary { background: var(--brand); color: #fff; }
+
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="head">
+    <div class="shop-name" id="shopName"></div>
+    <div class="lang-btn" onclick="toggleLang()">ZH / EN</div>
+  </div>
+
+  <div class="remain-bar">
+    <div class="remain-label" data-zh="剩余抽奖次数" data-en="Spins Left">剩余抽奖次数</div>
+    <div class="remain-count" id="remainCount"></div>
+  </div>
+
+  <div class="card">
+    <div class="grid" id="grid"></div>
+    <div class="hint" id="hint"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title" data-zh="中奖记录" data-en="Prize History">中奖记录</div>
+    <div id="historyList"></div>
+  </div>
+
+</div>
+
+<!-- ============ 中奖结果弹窗 ============ -->
+<div class="modal-overlay hidden" id="modalOverlay">
+  <div class="modal-card">
+    <div class="modal-icon" id="modalIcon"></div>
+    <div class="modal-title" id="modalTitle"></div>
+    <div class="modal-sub" id="modalSub"></div>
+    <button class="btn btn-primary" onclick="closeModal()" data-zh="好的" data-en="OK">好的</button>
+  </div>
+</div>
+
+<script>
+  /* ── 可替换配置区：换行业只改这里 ── */
+  const SHOP = { nameZh: '示例餐馆', nameEn: 'Sample Restaurant' };
+
+  // 顺序即九宫格顺时针跑马灯顺序（8 项，不含中心按钮格）
+  const PRIZES = [
+    { zh: '€10 现金券', en: '€10 Cash Voucher', win: true },
+    { zh: '免费体验', en: 'Free Trial', win: true },
+    { zh: '8 折券', en: '20% Off Voucher', win: true },
+    { zh: '谢谢参与', en: 'Thanks for Playing', win: false },
+    { zh: '小礼品', en: 'Small Gift', win: true },
+    { zh: '5 折券', en: '50% Off Voucher', win: true },
+    { zh: '再来一次', en: 'Spin Again', win: true },
+    { zh: '谢谢参与', en: 'Thanks for Playing', win: false },
+  ];
+  // PRIZES[i] 对应的九宫格位置（3x3，行优先，中心 4 是按钮）
+  const MARQUEE_ORDER = [0, 1, 2, 5, 8, 7, 6, 3];
+
+  /* ── 状态 ── */
+  let currentLang = 'zh';
+  const state = {
+    remaining: 3,
+    spinning: false,
+    history: [
+      { time: '08-23 19:42', prizeIdx: 2 },
+      { time: '08-22 12:05', prizeIdx: 3 },
+    ],
+  };
+
+  function t(zh, en) { return currentLang === 'zh' ? zh : en; }
+
+  /* ── 渲染：九宫格 ── */
+  function renderGrid() {
+    const slots = new Array(9).fill(null);
+    PRIZES.forEach((p, i) => {
+      slots[MARQUEE_ORDER[i]] = `<div class="cell" id="cell-${MARQUEE_ORDER[i]}">${t(p.zh, p.en)}</div>`;
+    });
+    slots[4] = `<button class="cell-btn" id="spinBtn" onclick="spin()">${t('抽奖', 'SPIN')}</button>`;
+    document.getElementById('grid').innerHTML = slots.join('');
+    updateSpinBtn();
+  }
+
+  function updateSpinBtn() {
+    const btn = document.getElementById('spinBtn');
+    if (!btn) return;
+    btn.disabled = state.spinning || state.remaining <= 0;
+    document.getElementById('hint').textContent =
+      state.remaining <= 0 ? t('次数已用完，下次再来', 'No spins left — come back next time') : '';
+  }
+
+  function renderRemain() {
+    document.getElementById('remainCount').textContent = state.remaining;
+  }
+
+  /* ── 渲染：中奖记录 ── */
+  function renderHistory() {
+    const box = document.getElementById('historyList');
+    if (!state.history.length) {
+      box.innerHTML = `<div class="history-row" style="color:var(--gray)">${t('暂无记录', 'No records yet')}</div>`;
+      return;
+    }
+    box.innerHTML = state.history.map(h => {
+      const p = PRIZES[h.prizeIdx];
+      return `
+        <div class="history-row">
+          <span class="history-time">${h.time}</span>
+          <span class="history-prize ${p.win ? '' : 'lose'}">${t(p.zh, p.en)}</span>
+        </div>
+      `;
+    }).join('');
+  }
+
+  /* ── 抽奖动画 ── */
+  function clearHighlight() {
+    document.querySelectorAll('.cell.lit').forEach(el => el.classList.remove('lit'));
+  }
+  function highlightMarqueePos(i) {
+    clearHighlight();
+    const cell = document.getElementById('cell-' + MARQUEE_ORDER[i]);
+    if (cell) cell.classList.add('lit');
+  }
+
+  function spin() {
+    if (state.spinning || state.remaining <= 0) return;
+    state.spinning = true;
+    updateSpinBtn();
+
+    const targetIdx = Math.floor(Math.random() * 8);
+    const path = [];
+    for (let loop = 0; loop < 3; loop++) { for (let i = 0; i < 8; i++) path.push(i); }
+    for (let i = 0; i <= targetIdx; i++) path.push(i);
+
+    let step = 0;
+    function tick() {
+      highlightMarqueePos(path[step]);
+      step++;
+      if (step < path.length) {
+        const remaining = path.length - step;
+        const delay = remaining > 6 ? 80 : 80 + (7 - remaining) * 35;
+        setTimeout(tick, delay);
+      } else {
+        setTimeout(() => finishSpin(targetIdx), 450);
+      }
+    }
+    tick();
+  }
+
+  function finishSpin(prizeIdx) {
+    const prize = PRIZES[prizeIdx];
+    const now = new Date();
+    const timeStr = String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0')
+      + ' ' + String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+    state.history.unshift({ time: timeStr, prizeIdx });
+    state.remaining -= 1;
+    state.spinning = false;
+    renderRemain();
+    renderHistory();
+    updateSpinBtn();
+    openModal(prize);
+  }
+
+  /* ── 弹窗 ── */
+  let lastPrize = null;
+  function openModal(prize) {
+    lastPrize = prize;
+    document.getElementById('modalIcon').textContent = prize.win ? '🎉' : '😊';
+    document.getElementById('modalTitle').textContent = prize.win
+      ? t('恭喜获得', 'You Won') + (currentLang === 'zh' ? '：' : ': ') + t(prize.zh, prize.en)
+      : t('谢谢参与', 'Thanks for Playing');
+    document.getElementById('modalSub').textContent = prize.win
+      ? t('可在核销时向店员出示此页面', 'Show this screen to staff to redeem')
+      : t('再接再厉，下次再来', 'Better luck next time');
+    document.getElementById('modalOverlay').classList.remove('hidden');
+  }
+  function closeModal() {
+    document.getElementById('modalOverlay').classList.add('hidden');
+  }
+
+  /* ── 语言切换 ── */
+  function toggleLang() {
+    currentLang = currentLang === 'zh' ? 'en' : 'zh';
+    document.documentElement.lang = currentLang;
+    document.getElementById('shopName').textContent = t(SHOP.nameZh, SHOP.nameEn);
+    document.querySelectorAll('[data-zh][data-en]').forEach(el => {
+      el.textContent = currentLang === 'zh' ? el.dataset.zh : el.dataset.en;
+    });
+    renderGrid();
+    renderHistory();
+    if (!document.getElementById('modalOverlay').classList.contains('hidden') && lastPrize) {
+      openModal(lastPrize);
+    }
+  }
+
+  /* ── 初始化 ── */
+  document.getElementById('shopName').textContent = SHOP.nameZh;
+  renderGrid();
+  renderRemain();
+  renderHistory();
+</script>
+</body>
+</html>

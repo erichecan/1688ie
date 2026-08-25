@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<!--
+  组件：积分（Points）
+  用途：可复用组件库 · 六块之一，供拼装行业 demo 用（美容院、餐馆、私教等会员积分类业态）
+
+  怎么改成新行业：
+  1. 顶部 :root 里的 --brand / --brand-light / --brand-dark 三个变量换成客户品牌色
+  2. SHOP 对象（脚本区最上面）改店名、货币符号
+  3. PRODUCTS 数组改成客户的实际兑换商品（名称/所需积分/库存，图标用 emoji 占位）
+  4. INIT_BALANCE / EXPIRING 改成客户想展示的初始积分与过期提醒
+  5. TRANSACTIONS 数组改成客户的历史流水样例
+  6. 文案统一走 data-zh / data-en 双属性，改中文改 data-zh，改英文改 data-en，两个都要改
+-->
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>积分组件 · 1688.ie</title>
+<style>
+  :root {
+    --brand: #0d4f3c;
+    --brand-light: #e8f3ef;
+    --brand-dark: #093a2c;
+    --ink: #1c1917;
+    --gray: #78716c;
+    --line: #e7e5e4;
+    --bg: #fafaf9;
+    --card: #ffffff;
+    --radius: 14px;
+    --danger: #dc2626;
+    --good: #15803d;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+    padding: 24px 16px 64px;
+  }
+  .wrap { max-width: 480px; margin: 0 auto; }
+
+  /* ── 头部 ── */
+  .head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+  .shop-name { font-weight: 800; font-size: 1.05rem; color: var(--brand-dark); }
+  .lang-btn {
+    font-size: 0.78rem; font-weight: 700; color: var(--brand);
+    border: 1px solid var(--brand); border-radius: 99px;
+    padding: 4px 12px; cursor: pointer; background: var(--card);
+  }
+
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 18px; margin-bottom: 14px;
+  }
+  .card-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 12px; color: var(--ink); }
+
+  /* ── 积分余额卡 ── */
+  .balance-card {
+    background: linear-gradient(135deg, var(--brand-dark), var(--brand));
+    color: #fff; border-radius: var(--radius); padding: 22px 20px; margin-bottom: 14px;
+  }
+  .balance-label { font-size: 0.8rem; opacity: .85; margin-bottom: 6px; }
+  .balance-num { font-size: 2.4rem; font-weight: 800; letter-spacing: .5px; }
+  .balance-sub { font-size: 0.76rem; opacity: .85; margin-top: 10px; }
+
+  /* ── Tabs ── */
+  .tabs { display: flex; gap: 8px; margin-bottom: 14px; }
+  .tab-btn {
+    flex: 1; text-align: center; padding: 10px; border-radius: 10px; font-weight: 700; font-size: 0.86rem;
+    border: 1.5px solid var(--line); background: var(--card); color: var(--gray); cursor: pointer;
+  }
+  .tab-btn.active { border-color: var(--brand); background: var(--brand-light); color: var(--brand-dark); }
+
+  /* ── 商城网格 ── */
+  .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .product-card {
+    border: 1.5px solid var(--line); border-radius: 12px; padding: 14px 12px; text-align: center;
+  }
+  .product-icon { font-size: 1.8rem; margin-bottom: 6px; }
+  .product-name { font-weight: 700; font-size: 0.84rem; margin-bottom: 4px; min-height: 2.2em; }
+  .product-cost { font-weight: 800; color: var(--brand-dark); font-size: 0.92rem; margin-bottom: 2px; }
+  .product-stock { font-size: 0.72rem; color: var(--gray); margin-bottom: 10px; }
+  .redeem-btn {
+    width: 100%; padding: 8px; border-radius: 8px; font-size: 0.8rem; font-weight: 700;
+    border: none; cursor: pointer; background: var(--brand); color: #fff;
+  }
+  .redeem-btn:disabled { background: var(--line); color: var(--gray); cursor: not-allowed; }
+
+  /* ── 积分明细 ── */
+  .history-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 0; border-bottom: 1px solid var(--line);
+  }
+  .history-row:last-child { border-bottom: none; }
+  .history-desc { font-weight: 600; font-size: 0.86rem; }
+  .history-date { font-size: 0.74rem; color: var(--gray); margin-top: 2px; }
+  .history-right { text-align: right; }
+  .history-delta { font-weight: 800; font-size: 0.92rem; }
+  .history-delta.pos { color: var(--good); }
+  .history-delta.neg { color: var(--danger); }
+  .history-balance { font-size: 0.72rem; color: var(--gray); margin-top: 2px; }
+
+  /* ── 兑换弹窗 ── */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(28,25,23,.45);
+    display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 50;
+  }
+  .modal-card {
+    background: var(--card); border-radius: var(--radius); padding: 22px; max-width: 340px; width: 100%; text-align: center;
+  }
+  .modal-icon { font-size: 2.2rem; margin-bottom: 10px; }
+  .modal-title { font-weight: 800; font-size: 1rem; margin-bottom: 6px; }
+  .modal-sub { font-size: 0.82rem; color: var(--gray); margin-bottom: 18px; }
+  .modal-btns { display: flex; gap: 10px; }
+  .btn {
+    flex: 1; text-align: center; padding: 11px; border-radius: 10px;
+    font-weight: 700; font-size: 0.88rem; border: none; cursor: pointer;
+  }
+  .btn-primary { background: var(--brand); color: #fff; }
+  .btn-ghost { background: var(--brand-light); color: var(--brand-dark); }
+
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="head">
+    <div class="shop-name" id="shopName"></div>
+    <div class="lang-btn" onclick="toggleLang()">ZH / EN</div>
+  </div>
+
+  <div class="balance-card">
+    <div class="balance-label" data-zh="我的积分" data-en="My Points">我的积分</div>
+    <div class="balance-num" id="balanceNum"></div>
+    <div class="balance-sub" id="balanceSub"></div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab-btn" id="tabMallBtn" onclick="switchTab('mall')" data-zh="积分商城" data-en="Points Mall">积分商城</div>
+    <div class="tab-btn" id="tabHistoryBtn" onclick="switchTab('history')" data-zh="积分明细" data-en="History">积分明细</div>
+  </div>
+
+  <section id="panel-mall">
+    <div class="card">
+      <div class="product-grid" id="productGrid"></div>
+    </div>
+  </section>
+
+  <section id="panel-history" class="hidden">
+    <div class="card">
+      <div id="historyList"></div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ============ 兑换确认 / 成功弹窗 ============ -->
+<div class="modal-overlay hidden" id="modalOverlay">
+  <div class="modal-card" id="modalCard"></div>
+</div>
+
+<script>
+  /* ── 可替换配置区：换行业只改这里 ── */
+  const SHOP = { nameZh: '示例美容院', nameEn: 'Sample Beauty Salon' };
+
+  const PRODUCTS = [
+    { id: 'p1', zh: '9 折优惠券', en: '10% Off Coupon', icon: '🎫', cost: 200, stock: 12 },
+    { id: 'p2', zh: '免费洗剪吹', en: 'Free Wash & Blow-dry', icon: '💇', cost: 500, stock: 5 },
+    { id: 'p3', zh: '精油护理体验', en: 'Oil Treatment Trial', icon: '🧴', cost: 800, stock: 0 },
+    { id: 'p4', zh: '环保帆布袋', en: 'Eco Tote Bag', icon: '👜', cost: 150, stock: 20 },
+    { id: 'p5', zh: '€50 代金券', en: '€50 Gift Voucher', icon: '💶', cost: 2000, stock: 3 },
+    { id: 'p6', zh: '双倍积分卡', en: 'Double Points Card', icon: '⭐', cost: 350, stock: 8 },
+  ];
+
+  const INIT_BALANCE = 680;
+  const EXPIRING = { amount: 120, dateZh: '2026-09-30', dateEn: '2026-09-30' };
+
+  const TRANSACTIONS = [
+    { dateZh: '08-20', dateEn: '2026-08-20', descZh: '消费满 €50 获赠积分', descEn: 'Earned from €50+ purchase', delta: 50, balance: 680 },
+    { dateZh: '08-12', dateEn: '2026-08-12', descZh: '兑换 9 折优惠券', descEn: 'Redeemed 10% Off Coupon', delta: -200, balance: 630 },
+    { dateZh: '08-05', dateEn: '2026-08-05', descZh: '生日专属积分', descEn: 'Birthday bonus points', delta: 300, balance: 830 },
+    { dateZh: '07-28', dateEn: '2026-07-28', descZh: '会员日双倍积分', descEn: 'Member Day double points', delta: 120, balance: 530 },
+    { dateZh: '07-15', dateEn: '2026-07-15', descZh: '兑换环保帆布袋', descEn: 'Redeemed Eco Tote Bag', delta: -150, balance: 410 },
+    { dateZh: '07-02', dateEn: '2026-07-02', descZh: '消费满 €80 获赠积分', descEn: 'Earned from €80+ purchase', delta: 80, balance: 560 },
+    { dateZh: '06-20', dateEn: '2026-06-20', descZh: '好友推荐奖励', descEn: 'Referral bonus', delta: 200, balance: 480 },
+  ];
+
+  /* ── 状态 ── */
+  let currentLang = 'zh';
+  let currentTab = 'mall';
+  const state = { balance: INIT_BALANCE, products: PRODUCTS.map(p => ({ ...p })), history: [...TRANSACTIONS], pendingRedeem: null, modalMode: null };
+
+  function t(zh, en) { return currentLang === 'zh' ? zh : en; }
+
+  /* ── 渲染：余额卡 ── */
+  function renderBalance() {
+    document.getElementById('balanceNum').textContent = state.balance.toLocaleString();
+    document.getElementById('balanceSub').textContent =
+      t(`${EXPIRING.amount} 积分将于 ${EXPIRING.dateZh} 过期`, `${EXPIRING.amount} points expiring on ${EXPIRING.dateEn}`);
+  }
+
+  /* ── 渲染：商城 ── */
+  function renderProducts() {
+    const grid = document.getElementById('productGrid');
+    grid.innerHTML = state.products.map(p => {
+      const soldOut = p.stock <= 0;
+      const short = state.balance < p.cost;
+      const disabled = soldOut || short;
+      let btnLabel = t('兑换', 'Redeem');
+      if (soldOut) btnLabel = t('已兑完', 'Sold Out');
+      else if (short) btnLabel = t(`还差 ${p.cost - state.balance} 分`, `${p.cost - state.balance} pts short`);
+      return `
+        <div class="product-card">
+          <div class="product-icon">${p.icon}</div>
+          <div class="product-name">${t(p.zh, p.en)}</div>
+          <div class="product-cost">${p.cost.toLocaleString()} ${t('积分', 'pts')}</div>
+          <div class="product-stock">${soldOut ? t('库存不足', 'Out of stock') : t(`库存 ${p.stock}`, `Stock ${p.stock}`)}</div>
+          <button class="redeem-btn" ${disabled ? 'disabled' : ''} onclick="openRedeemConfirm('${p.id}')">${btnLabel}</button>
+        </div>
+      `;
+    }).join('');
+  }
+
+  /* ── 渲染：明细 ── */
+  function renderHistory() {
+    const box = document.getElementById('historyList');
+    box.innerHTML = state.history.map(h => {
+      const pos = h.delta > 0;
+      return `
+        <div class="history-row">
+          <div>
+            <div class="history-desc">${t(h.descZh, h.descEn)}</div>
+            <div class="history-date">${t(h.dateZh, h.dateEn)}</div>
+          </div>
+          <div class="history-right">
+            <div class="history-delta ${pos ? 'pos' : 'neg'}">${pos ? '+' : ''}${h.delta}</div>
+            <div class="history-balance">${t('余额', 'Bal.')} ${h.balance.toLocaleString()}</div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  /* ── Tab 切换 ── */
+  function switchTab(tab) {
+    currentTab = tab;
+    document.getElementById('tabMallBtn').classList.toggle('active', tab === 'mall');
+    document.getElementById('tabHistoryBtn').classList.toggle('active', tab === 'history');
+    document.getElementById('panel-mall').classList.toggle('hidden', tab !== 'mall');
+    document.getElementById('panel-history').classList.toggle('hidden', tab !== 'history');
+  }
+
+  /* ── 兑换确认弹窗 ── */
+  function productById(id) { return state.products.find(p => p.id === id); }
+
+  function openRedeemConfirm(id) {
+    state.pendingRedeem = id;
+    state.modalMode = 'confirm';
+    renderConfirmModal();
+    document.getElementById('modalOverlay').classList.remove('hidden');
+  }
+
+  function renderConfirmModal() {
+    const p = productById(state.pendingRedeem);
+    document.getElementById('modalCard').innerHTML = `
+      <div class="modal-icon">${p.icon}</div>
+      <div class="modal-title">${t('确认兑换', 'Confirm Redemption')}</div>
+      <div class="modal-sub">${t(
+        `将花费 ${p.cost.toLocaleString()} 积分兑换「${p.zh}」，兑换后余额 ${(state.balance - p.cost).toLocaleString()}`,
+        `Spend ${p.cost.toLocaleString()} pts for "${p.en}" — balance after: ${(state.balance - p.cost).toLocaleString()}`
+      )}</div>
+      <div class="modal-btns">
+        <button class="btn btn-ghost" onclick="closeModal()">${t('取消', 'Cancel')}</button>
+        <button class="btn btn-primary" onclick="confirmRedeem()">${t('确认兑换', 'Confirm')}</button>
+      </div>
+    `;
+  }
+
+  function confirmRedeem() {
+    const p = productById(state.pendingRedeem);
+    if (!p || p.stock <= 0 || state.balance < p.cost) { closeModal(); return; }
+
+    state.balance -= p.cost;
+    p.stock -= 1;
+    state.history.unshift({
+      dateZh: t('今日', '今日'), dateEn: 'Today',
+      descZh: `兑换${p.zh}`, descEn: `Redeemed ${p.en}`,
+      delta: -p.cost, balance: state.balance
+    });
+
+    renderBalance();
+    renderProducts();
+    renderHistory();
+
+    state.modalMode = 'success';
+    renderSuccessModal();
+  }
+
+  function renderSuccessModal() {
+    const p = productById(state.pendingRedeem);
+    document.getElementById('modalCard').innerHTML = `
+      <div class="modal-icon">✓</div>
+      <div class="modal-title">${t('兑换成功', 'Redemption Successful')}</div>
+      <div class="modal-sub">${t(`「${p.zh}」已兑换，当前余额 ${state.balance.toLocaleString()} 积分`, `"${p.en}" redeemed. Balance: ${state.balance.toLocaleString()} pts`)}</div>
+      <div class="modal-btns">
+        <button class="btn btn-primary" style="flex:1" onclick="closeModal()">${t('完成', 'Done')}</button>
+      </div>
+    `;
+  }
+
+  function closeModal() {
+    document.getElementById('modalOverlay').classList.add('hidden');
+    state.pendingRedeem = null;
+    state.modalMode = null;
+  }
+
+  /* ── 语言切换 ── */
+  function toggleLang() {
+    currentLang = currentLang === 'zh' ? 'en' : 'zh';
+    document.documentElement.lang = currentLang;
+    document.getElementById('shopName').textContent = t(SHOP.nameZh, SHOP.nameEn);
+    document.querySelectorAll('[data-zh][data-en]').forEach(el => {
+      el.textContent = currentLang === 'zh' ? el.dataset.zh : el.dataset.en;
+    });
+    renderBalance();
+    renderProducts();
+    renderHistory();
+    // 弹窗打开中语言切换：按当前所处阶段（确认 or 成功）重新渲染对应内容，不能重新触发确认流程
+    if (state.modalMode === 'confirm') renderConfirmModal();
+    if (state.modalMode === 'success') renderSuccessModal();
+  }
+
+  /* ── 初始化 ── */
+  document.getElementById('shopName').textContent = SHOP.nameZh;
+  renderBalance();
+  renderProducts();
+  renderHistory();
+  switchTab('mall');
+</script>
+</body>
+</html>
