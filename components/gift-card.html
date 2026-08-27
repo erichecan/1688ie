@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<!--
+  组件：礼品卡（Gift Card）
+  用途：可复用组件库 · 批量新增之一，供拼装行业 demo 用（任何想让客人「买卡送人」的业态：
+  美甲美睫、餐馆、美容院都适用）。跟「储值」「优惠券」的区别：储值是客人给自己充值，
+  优惠券是店家发放引流；礼品卡的核心动作是「买给别人」——填收礼人姓名 + 留言，对方拿到卡
+  在店里当余额花，本组件把「购买赠送」和「持卡消费」两个方向都做了。
+
+  怎么改成新行业：
+  1. 顶部 :root 里的 --brand / --brand-light / --brand-dark 三个变量换成客户品牌色
+  2. SHOP 对象（脚本区最上面）改店名、货币符号
+  3. DENOMINATIONS 数组改客户实际卖的面额档位
+  4. MY_CARDS 是为了演示「余额充足/已用完/已过期」三种视觉状态预置的三条记录，实际接入时替换成真实持卡记录
+  5. 文案统一走 data-zh / data-en 双属性，改中文改 data-zh，改英文改 data-en，两个都要改
+-->
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>礼品卡组件 · 1688.ie</title>
+<style>
+  :root {
+    --brand: #0d4f3c;
+    --brand-light: #e8f3ef;
+    --brand-dark: #093a2c;
+    --ink: #1c1917;
+    --gray: #78716c;
+    --line: #e7e5e4;
+    --bg: #fafaf9;
+    --card: #ffffff;
+    --radius: 14px;
+    --danger: #dc2626;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+    padding: 24px 16px 64px;
+  }
+  .wrap { max-width: 480px; margin: 0 auto; }
+
+  /* ── 头部 ── */
+  .head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+  .shop-name { font-weight: 800; font-size: 1.05rem; color: var(--brand-dark); }
+  .lang-btn {
+    font-size: 0.78rem; font-weight: 700; color: var(--brand);
+    border: 1px solid var(--brand); border-radius: 99px;
+    padding: 4px 12px; cursor: pointer; background: var(--card);
+  }
+
+  /* ── Tab 切换 ── */
+  .tab-bar { display: flex; gap: 8px; margin-bottom: 18px; }
+  .tab-btn {
+    flex: 1; text-align: center; padding: 10px; border-radius: 10px;
+    font-weight: 700; font-size: 0.86rem; border: 1.5px solid var(--line);
+    background: var(--card); cursor: pointer; color: var(--gray);
+  }
+  .tab-btn.active { background: var(--brand); color: #fff; border-color: var(--brand); }
+
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 18px; margin-bottom: 14px;
+  }
+  .card-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 12px; color: var(--ink); }
+  .empty-tip { font-size: 0.82rem; color: var(--gray); text-align: center; padding: 20px 0; }
+
+  /* ── 购买：面额选择 ── */
+  .denom-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 16px; }
+  .denom-btn {
+    padding: 12px 4px; text-align: center; border-radius: 10px; border: 1.5px solid var(--line);
+    background: var(--card); cursor: pointer; font-weight: 700; font-size: 0.9rem; color: var(--ink);
+  }
+  .denom-btn.active { border-color: var(--brand); background: var(--brand-light); color: var(--brand-dark); }
+
+  .field-label { font-size: 0.8rem; font-weight: 700; color: var(--gray); margin: 14px 0 6px; }
+  .field-input, .field-textarea {
+    width: 100%; border: 1.5px solid var(--line); border-radius: 10px; padding: 10px 12px;
+    font-size: 0.88rem; font-family: inherit; color: var(--ink); background: var(--card);
+  }
+  .field-textarea { resize: none; min-height: 64px; }
+
+  .btn {
+    display: block; width: 100%; text-align: center; padding: 12px; border-radius: 10px;
+    font-weight: 700; font-size: 0.88rem; border: none; cursor: pointer;
+  }
+  .btn-primary { background: var(--brand); color: #fff; margin-top: 16px; }
+  .btn-ghost { background: transparent; color: var(--gray); margin-top: 8px; }
+
+  /* ── 预览卡面 ── */
+  .preview-card {
+    background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%);
+    color: #fff; border-radius: var(--radius); padding: 20px; margin-bottom: 4px;
+  }
+  .preview-top { font-size: 0.78rem; opacity: .85; margin-bottom: 6px; }
+  .preview-amount { font-size: 1.8rem; font-weight: 800; margin-bottom: 10px; }
+  .preview-to { font-size: 0.84rem; opacity: .92; }
+  .preview-msg { font-size: 0.78rem; opacity: .8; margin-top: 4px; font-style: italic; }
+
+  /* ── 我的礼品卡 ── */
+  .gift-card-item { position: relative; }
+  .gift-card-item.dim { opacity: .6; }
+  .gc-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+  .gc-from { font-weight: 700; font-size: 0.9rem; }
+  .gc-status { font-size: 0.7rem; font-weight: 700; padding: 2px 9px; border-radius: 99px; }
+  .gc-status.active { background: var(--brand-light); color: var(--brand-dark); }
+  .gc-status.depleted { background: var(--line); color: var(--gray); }
+  .gc-status.expired { background: #fee2e2; color: var(--danger); }
+  .gc-balance { font-size: 1.5rem; font-weight: 800; color: var(--brand-dark); margin-bottom: 4px; }
+  .gc-card-item.dim .gc-balance { color: var(--gray); }
+  .gc-meta { font-size: 0.76rem; color: var(--gray); margin-bottom: 12px; }
+  .gc-btn {
+    width: 100%; padding: 9px; border-radius: 10px; font-weight: 700; font-size: 0.85rem;
+    border: none; cursor: pointer; background: var(--brand); color: #fff;
+  }
+  .gc-btn:disabled { background: var(--line); color: var(--gray); cursor: not-allowed; }
+
+  /* ── 弹窗 ── */
+  .modal-mask {
+    position: fixed; inset: 0; background: rgba(0,0,0,.45);
+    display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 50;
+  }
+  .modal-box { background: var(--card); border-radius: 16px; padding: 26px 22px; max-width: 340px; width: 100%; text-align: center; }
+  .modal-title { font-weight: 800; font-size: 1rem; margin-bottom: 4px; }
+  .modal-sub { font-size: 0.8rem; color: var(--gray); margin-bottom: 16px; }
+  .modal-balance { font-size: 1.3rem; font-weight: 800; color: var(--brand-dark); margin-bottom: 14px; }
+  .spend-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 8px; }
+  .spend-btn {
+    padding: 12px 4px; border-radius: 10px; border: 1.5px solid var(--line); background: var(--card);
+    cursor: pointer; font-weight: 700; font-size: 0.9rem; color: var(--ink);
+  }
+  .spend-btn:disabled { color: var(--gray); background: var(--bg); cursor: not-allowed; }
+
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="head">
+    <div class="shop-name" id="shopName"></div>
+    <div class="lang-btn" onclick="toggleLang()">ZH / EN</div>
+  </div>
+
+  <div class="tab-bar">
+    <div class="tab-btn active" id="tabBtn-buy" onclick="switchTab('buy')" data-zh="购买礼品卡" data-en="Buy a Gift Card">购买礼品卡</div>
+    <div class="tab-btn" id="tabBtn-mine" onclick="switchTab('mine')" data-zh="我的礼品卡" data-en="My Gift Cards">我的礼品卡</div>
+  </div>
+
+  <!-- ============ 购买礼品卡 ============ -->
+  <section id="tab-buy">
+    <div class="card">
+      <div class="card-title" data-zh="选择面额" data-en="Choose an Amount">选择面额</div>
+      <div class="denom-grid" id="denomGrid"></div>
+
+      <div class="field-label" data-zh="收礼人姓名" data-en="Recipient Name">收礼人姓名</div>
+      <input class="field-input" id="recipientInput" placeholder="" />
+
+      <div class="field-label" data-zh="留言（可选）" data-en="Message (optional)">留言（可选）</div>
+      <textarea class="field-textarea" id="messageInput" placeholder=""></textarea>
+
+      <button class="btn btn-primary" onclick="purchaseGiftCard()" data-zh="购买并赠送" data-en="Buy & Send">购买并赠送</button>
+    </div>
+
+    <div class="preview-card">
+      <div class="preview-top" data-zh="礼品卡预览" data-en="Gift Card Preview">礼品卡预览</div>
+      <div class="preview-amount" id="previewAmount"></div>
+      <div class="preview-to" id="previewTo"></div>
+      <div class="preview-msg" id="previewMsg"></div>
+    </div>
+  </section>
+
+  <!-- ============ 我的礼品卡 ============ -->
+  <section id="tab-mine" class="hidden">
+    <div id="mineList"></div>
+  </section>
+
+</div>
+
+<!-- ============ 使用余额弹窗 ============ -->
+<div class="modal-mask hidden" id="spendModal">
+  <div class="modal-box">
+    <div class="modal-title" data-zh="选择本次消费金额" data-en="Choose amount to redeem">选择本次消费金额</div>
+    <div class="modal-sub" id="modalCardTitle"></div>
+    <div class="modal-balance" id="modalBalance"></div>
+    <div class="spend-grid" id="spendGrid"></div>
+    <button class="btn btn-ghost" onclick="closeModal()" data-zh="取消" data-en="Cancel">取消</button>
+  </div>
+</div>
+
+<script>
+  /* ── 可替换配置区：换行业只改这里 ── */
+  const SHOP = { nameZh: '示例美甲工作室', nameEn: 'Sample Nail Studio', currency: '€' };
+
+  const DENOMINATIONS = [25, 50, 100, 200];
+  const SPEND_STEPS = [10, 20, 50, 100];
+
+  // 预置三条记录，演示「余额充足/已用完/已过期」三种视觉状态，实际接入时替换成真实持卡记录
+  const MY_CARDS = [
+    { id: 'g1', fromZh: '来自 张先生 的礼品卡', fromEn: 'Gift from Mr. Zhang', total: 100, balance: 65,
+      expiryZh: '2027-02-20 前有效', expiryEn: 'Valid until 2027-02-20', status: 'active' },
+    { id: 'g2', fromZh: '来自 李女士 的礼品卡', fromEn: 'Gift from Ms. Li', total: 50, balance: 0,
+      expiryZh: '2027-01-10 前有效', expiryEn: 'Valid until 2027-01-10', status: 'depleted' },
+    { id: 'g3', fromZh: '来自 王女士 的礼品卡', fromEn: 'Gift from Ms. Wang', total: 200, balance: 80,
+      expiryZh: '已于 2026-07-01 过期', expiryEn: 'Expired on 2026-07-01', status: 'expired' },
+  ];
+
+  /* ── 状态 ── */
+  let currentLang = 'zh';
+  let selectedDenom = DENOMINATIONS[1];
+  const myCards = [...MY_CARDS];
+  let spendTargetId = null;
+
+  function t(zh, en) { return currentLang === 'zh' ? zh : en; }
+
+  /* ── 渲染：面额选择 + 预览 ── */
+  function renderDenoms() {
+    document.getElementById('denomGrid').innerHTML = DENOMINATIONS.map(d => `
+      <div class="denom-btn ${d === selectedDenom ? 'active' : ''}" onclick="selectDenom(${d})">${SHOP.currency}${d}</div>
+    `).join('');
+  }
+  function selectDenom(d) { selectedDenom = d; renderDenoms(); renderPreview(); }
+  function renderPreview() {
+    const recipient = document.getElementById('recipientInput').value.trim();
+    const message = document.getElementById('messageInput').value.trim();
+    document.getElementById('previewAmount').textContent = SHOP.currency + selectedDenom;
+    document.getElementById('previewTo').textContent = recipient
+      ? t('赠予 ', 'To ') + recipient
+      : t('赠予 ___', 'To ___');
+    document.getElementById('previewMsg').textContent = message ? '“' + message + '”' : '';
+  }
+  let purchaseSeq = 0;
+  function purchaseGiftCard() {
+    const recipient = document.getElementById('recipientInput').value.trim() || t('一位朋友', 'a friend');
+    purchaseSeq += 1;
+    myCards.unshift({
+      id: 'buy-' + purchaseSeq,
+      fromZh: '赠予 ' + recipient + ' 的礼品卡', fromEn: 'Gift Card to ' + recipient,
+      total: selectedDenom, balance: selectedDenom,
+      expiryZh: '2027-08-27 前有效', expiryEn: 'Valid until 2027-08-27', status: 'active',
+    });
+    document.getElementById('recipientInput').value = '';
+    document.getElementById('messageInput').value = '';
+    renderPreview();
+    switchTab('mine');
+  }
+
+  /* ── 渲染：我的礼品卡 ── */
+  const STATUS_LABEL = {
+    active: ['余额可用', 'Active'],
+    depleted: ['已用完', 'Used Up'],
+    expired: ['已过期', 'Expired'],
+  };
+  function renderMine() {
+    const box = document.getElementById('mineList');
+    if (!myCards.length) {
+      box.innerHTML = `<div class="empty-tip" data-zh="还没有礼品卡" data-en="No gift cards yet">还没有礼品卡</div>`;
+      return;
+    }
+    box.innerHTML = myCards.map(renderCardItem).join('');
+  }
+  function renderCardItem(g) {
+    const dim = g.status !== 'active';
+    const canSpend = g.status === 'active' && g.balance > 0;
+    return `
+      <div class="card gift-card-item ${dim ? 'dim' : ''}">
+        <div class="gc-top">
+          <div class="gc-from">${t(g.fromZh, g.fromEn)}</div>
+          <div class="gc-status ${g.status}">${t(STATUS_LABEL[g.status][0], STATUS_LABEL[g.status][1])}</div>
+        </div>
+        <div class="gc-balance">${SHOP.currency}${g.balance} <span style="font-size:.7rem;color:var(--gray);font-weight:600">/ ${SHOP.currency}${g.total}</span></div>
+        <div class="gc-meta">${t(g.expiryZh, g.expiryEn)}</div>
+        <button class="gc-btn" ${canSpend ? '' : 'disabled'} onclick="openSpendModal('${g.id}')">
+          ${t('使用余额', 'Use Balance')}
+        </button>
+      </div>
+    `;
+  }
+
+  /* ── Tab 切换 ── */
+  function switchTab(tab) {
+    document.getElementById('tabBtn-buy').classList.toggle('active', tab === 'buy');
+    document.getElementById('tabBtn-mine').classList.toggle('active', tab === 'mine');
+    document.getElementById('tab-buy').classList.toggle('hidden', tab !== 'buy');
+    document.getElementById('tab-mine').classList.toggle('hidden', tab !== 'mine');
+    if (tab === 'mine') renderMine();
+  }
+
+  /* ── 使用余额弹窗 ── */
+  function openSpendModal(id) {
+    spendTargetId = id;
+    const g = myCards.find(x => x.id === id);
+    document.getElementById('modalCardTitle').textContent = t(g.fromZh, g.fromEn);
+    document.getElementById('modalBalance').textContent = t('可用余额 ', 'Available ') + SHOP.currency + g.balance;
+    document.getElementById('spendGrid').innerHTML = SPEND_STEPS.map(s => `
+      <button class="spend-btn" ${s > g.balance ? 'disabled' : ''} onclick="confirmSpend(${s})">${SHOP.currency}${s}</button>
+    `).join('') + `<button class="spend-btn" onclick="confirmSpend(${g.balance})">${t('全部余额', 'Full Balance')} (${SHOP.currency}${g.balance})</button>`;
+    document.getElementById('spendModal').classList.remove('hidden');
+  }
+  function closeModal() {
+    spendTargetId = null;
+    document.getElementById('spendModal').classList.add('hidden');
+  }
+  function confirmSpend(amount) {
+    const g = myCards.find(x => x.id === spendTargetId);
+    if (g) {
+      g.balance = Math.max(0, g.balance - amount);
+      if (g.balance === 0) g.status = 'depleted';
+    }
+    closeModal();
+    renderMine();
+  }
+
+  /* ── 语言切换 ── */
+  function toggleLang() {
+    currentLang = currentLang === 'zh' ? 'en' : 'zh';
+    document.documentElement.lang = currentLang;
+    document.getElementById('shopName').textContent = t(SHOP.nameZh, SHOP.nameEn);
+    document.querySelectorAll('[data-zh][data-en]').forEach(el => {
+      el.textContent = currentLang === 'zh' ? el.dataset.zh : el.dataset.en;
+    });
+    renderDenoms();
+    renderPreview();
+    renderMine();
+    if (!document.getElementById('spendModal').classList.contains('hidden') && spendTargetId) {
+      openSpendModal(spendTargetId);
+    }
+  }
+
+  /* ── 初始化 ── */
+  document.getElementById('shopName').textContent = SHOP.nameZh;
+  document.getElementById('recipientInput').addEventListener('input', renderPreview);
+  document.getElementById('messageInput').addEventListener('input', renderPreview);
+  renderDenoms();
+  renderPreview();
+  renderMine();
+</script>
+</body>
+</html>

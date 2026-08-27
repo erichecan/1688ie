@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<!--
+  组件：排班调度（Staff Scheduling / Route Dispatch）
+  用途：可复用组件库 · 内部工具类（跟同目录上一级 components/ 里那六个「客人端」组件性质不同——
+  这个是给老板/员工看的管理界面，不是客人手机上会打开的东西）。
+  适用业态：除草/清洁等按路线派工的服务，或美甲/美发按技师排班的到店服务，两种场景通用，
+  区别只在字段怎么填（除草填「客户地址」，到店服务填「客户+项目」）。
+
+  怎么改成新行业：
+  1. 顶部 :root 里的 --brand / --brand-light / --brand-dark 三个变量换成客户品牌色
+  2. SHOP 对象（脚本区最上面）改店名
+  3. STAFF 数组改客户实际的员工/技师名单
+  4. DAYS 数组是这一周的日期标签，today 标记哪一天高亮
+  5. SCHEDULE 是按 dayIdx 分组的当日工作项，实际接入时替换成真实排班数据
+     （addressZh/En 用于除草类路线派工，serviceZh/En 用于到店服务类排班，两个字段任选其一即可）
+  6. 文案统一走 data-zh / data-en 双属性，改中文改 data-zh，改英文改 data-en，两个都要改
+-->
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>排班调度组件 · 1688.ie</title>
+<style>
+  :root {
+    --brand: #0d4f3c;
+    --brand-light: #e8f3ef;
+    --brand-dark: #093a2c;
+    --ink: #1c1917;
+    --gray: #78716c;
+    --line: #e7e5e4;
+    --bg: #fafaf9;
+    --card: #ffffff;
+    --radius: 14px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+    padding: 24px 16px 64px;
+  }
+  .wrap { max-width: 520px; margin: 0 auto; }
+
+  /* ── 头部 ── */
+  .head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+  .shop-name { font-weight: 800; font-size: 1.05rem; color: var(--brand-dark); }
+  .lang-btn {
+    font-size: 0.78rem; font-weight: 700; color: var(--brand);
+    border: 1px solid var(--brand); border-radius: 99px;
+    padding: 4px 12px; cursor: pointer; background: var(--card);
+  }
+
+  /* ── 日期切换 ── */
+  .day-scroll { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 14px; }
+  .day-btn {
+    flex: 0 0 auto; min-width: 52px; text-align: center; padding: 8px 4px; border-radius: 10px;
+    border: 1.5px solid var(--line); background: var(--card); cursor: pointer;
+  }
+  .day-btn .dow { font-size: 0.68rem; color: var(--gray); font-weight: 700; }
+  .day-btn .dom { font-size: 0.92rem; font-weight: 800; margin-top: 2px; }
+  .day-btn.active { border-color: var(--brand); background: var(--brand); }
+  .day-btn.active .dow, .day-btn.active .dom { color: #fff; }
+  .day-btn.today:not(.active) { border-color: var(--brand); }
+  .day-btn.today:not(.active) .dom { color: var(--brand-dark); }
+
+  /* ── 员工筛选 chips ── */
+  .staff-scroll { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 16px; }
+  .staff-chip {
+    flex: 0 0 auto; display: flex; align-items: center; gap: 6px; padding: 6px 12px 6px 6px;
+    border-radius: 99px; border: 1.5px solid var(--line); background: var(--card); cursor: pointer;
+    font-size: 0.8rem; font-weight: 700; color: var(--gray);
+  }
+  .staff-chip.active { border-color: var(--brand); background: var(--brand-light); color: var(--brand-dark); }
+  .staff-avatar {
+    width: 22px; height: 22px; border-radius: 50%; color: #fff; font-size: 0.68rem; font-weight: 800;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+
+  /* ── 当日概览 ── */
+  .summary-bar {
+    display: flex; justify-content: space-between; background: var(--card); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 12px 16px; margin-bottom: 14px; font-size: 0.8rem;
+  }
+  .summary-item { text-align: center; flex: 1; }
+  .summary-num { font-weight: 800; font-size: 1.1rem; color: var(--brand-dark); }
+  .summary-label { color: var(--gray); font-size: 0.72rem; margin-top: 2px; }
+
+  .empty-tip { font-size: 0.82rem; color: var(--gray); text-align: center; padding: 30px 0; }
+
+  /* ── 工作项卡片 ── */
+  .job-card {
+    display: flex; gap: 12px; background: var(--card); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 14px; margin-bottom: 10px;
+  }
+  .job-card.done { opacity: .6; }
+  .job-time { flex: 0 0 52px; text-align: center; }
+  .job-time-num { font-weight: 800; font-size: 0.92rem; }
+  .job-body { flex: 1; min-width: 0; }
+  .job-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .job-title { font-weight: 700; font-size: 0.9rem; }
+  .job-staff { display: flex; align-items: center; gap: 5px; font-size: 0.74rem; color: var(--gray); margin-top: 3px; }
+  .job-detail { font-size: 0.78rem; color: var(--gray); margin-top: 3px; }
+  .job-status {
+    flex-shrink: 0; font-size: 0.68rem; font-weight: 700; padding: 2px 9px; border-radius: 99px; white-space: nowrap;
+  }
+  .job-status.pending { background: var(--line); color: var(--gray); }
+  .job-status.in_progress { background: #fef3c7; color: #b45309; }
+  .job-status.done { background: var(--brand-light); color: var(--brand-dark); }
+  .job-action {
+    margin-top: 8px; border: none; border-radius: 8px; padding: 6px 14px; font-size: 0.76rem;
+    font-weight: 700; cursor: pointer; background: var(--brand); color: #fff;
+  }
+
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="head">
+    <div class="shop-name" id="shopName"></div>
+    <div class="lang-btn" onclick="toggleLang()">ZH / EN</div>
+  </div>
+
+  <div class="day-scroll" id="dayScroll"></div>
+  <div class="staff-scroll" id="staffScroll"></div>
+
+  <div class="summary-bar" id="summaryBar"></div>
+
+  <div id="jobList"></div>
+
+</div>
+
+<script>
+  /* ── 可替换配置区：换行业只改这里 ── */
+  const SHOP = { nameZh: '示例草坪养护社 · 后台', nameEn: 'Sample Lawn Care Co. · Ops' };
+
+  const STAFF = [
+    { id: 'st1', zh: '阿强', en: 'Ah Qiang', color: '#0d4f3c' },
+    { id: 'st2', zh: '大伟', en: 'Da Wei', color: '#a05070' },
+    { id: 'st3', zh: '小林', en: 'Xiao Lin', color: '#1e3a5f' },
+  ];
+
+  // 这一周的日期标签，today 标记高亮为「今天」
+  const DAYS = [
+    { idx: 0, dowZh: '周一', dowEn: 'Mon', dom: '24' },
+    { idx: 1, dowZh: '周二', dowEn: 'Tue', dom: '25' },
+    { idx: 2, dowZh: '周三', dowEn: 'Wed', dom: '26' },
+    { idx: 3, dowZh: '周四', dowEn: 'Thu', dom: '27', today: true },
+    { idx: 4, dowZh: '周五', dowEn: 'Fri', dom: '28' },
+    { idx: 5, dowZh: '周六', dowEn: 'Sat', dom: '29' },
+    { idx: 6, dowZh: '周日', dowEn: 'Sun', dom: '30' },
+  ];
+
+  // 按 dayIdx 分组的当日工作项；addressZh/En 用于路线派工类，serviceZh/En 用于到店排班类
+  const SCHEDULE = {
+    3: [
+      { id: 'j1', staffId: 'st1', time: '08:30', customerZh: '陈先生', customerEn: 'Mr. Chen', addressZh: '都柏林 4 区 Ranelagh', addressEn: 'Ranelagh, Dublin 4', status: 'done' },
+      { id: 'j2', staffId: 'st1', time: '10:00', customerZh: '林女士', customerEn: 'Ms. Lin', addressZh: '都柏林 6 区 Rathmines', addressEn: 'Rathmines, Dublin 6', status: 'in_progress' },
+      { id: 'j3', staffId: 'st2', time: '09:00', customerZh: '王先生', customerEn: 'Mr. Wang', addressZh: 'Lucan 镇', addressEn: 'Lucan', status: 'pending' },
+      { id: 'j4', staffId: 'st2', time: '13:30', customerZh: '黄女士', customerEn: 'Ms. Huang', addressZh: 'Blanchardstown 区', addressEn: 'Blanchardstown', status: 'pending' },
+      { id: 'j5', staffId: 'st3', time: '11:00', customerZh: '李先生', customerEn: 'Mr. Li', addressZh: 'Tallaght 区', addressEn: 'Tallaght', status: 'pending' },
+    ],
+    4: [
+      { id: 'j6', staffId: 'st1', time: '09:00', customerZh: '周女士', customerEn: 'Ms. Zhou', addressZh: 'Swords 镇', addressEn: 'Swords', status: 'pending' },
+      { id: 'j7', staffId: 'st3', time: '14:00', customerZh: '赵先生', customerEn: 'Mr. Zhao', addressZh: 'Malahide 镇', addressEn: 'Malahide', status: 'pending' },
+    ],
+  };
+
+  /* ── 状态 ── */
+  let currentLang = 'zh';
+  const state = { dayIdx: DAYS.find(d => d.today).idx, staffFilter: 'all' };
+
+  function t(zh, en) { return currentLang === 'zh' ? zh : en; }
+  function staffOf(id) { return STAFF.find(s => s.id === id); }
+  function initial(name) { return name.slice(0, 1); }
+
+  /* ── 渲染：日期切换 ── */
+  function renderDays() {
+    document.getElementById('dayScroll').innerHTML = DAYS.map(d => `
+      <div class="day-btn ${d.idx === state.dayIdx ? 'active' : ''} ${d.today ? 'today' : ''}" onclick="selectDay(${d.idx})">
+        <div class="dow">${t(d.dowZh, d.dowEn)}</div>
+        <div class="dom">${d.dom}</div>
+      </div>
+    `).join('');
+  }
+  function selectDay(idx) { state.dayIdx = idx; renderDays(); renderAll(); }
+
+  /* ── 渲染：员工筛选 ── */
+  function renderStaffChips() {
+    const all = `<div class="staff-chip ${state.staffFilter === 'all' ? 'active' : ''}" onclick="selectStaff('all')">${t('全部员工', 'All Staff')}</div>`;
+    const chips = STAFF.map(s => `
+      <div class="staff-chip ${state.staffFilter === s.id ? 'active' : ''}" onclick="selectStaff('${s.id}')">
+        <span class="staff-avatar" style="background:${s.color}">${initial(t(s.zh, s.en))}</span>
+        ${t(s.zh, s.en)}
+      </div>
+    `).join('');
+    document.getElementById('staffScroll').innerHTML = all + chips;
+  }
+  function selectStaff(id) { state.staffFilter = id; renderStaffChips(); renderAll(); }
+
+  /* ── 取当日 + 筛选后的工作项 ── */
+  function currentJobs() {
+    const jobs = SCHEDULE[state.dayIdx] || [];
+    const filtered = state.staffFilter === 'all' ? jobs : jobs.filter(j => j.staffId === state.staffFilter);
+    return [...filtered].sort((a, b) => a.time.localeCompare(b.time));
+  }
+
+  /* ── 渲染：当日概览 ── */
+  function renderSummary() {
+    const jobs = currentJobs();
+    const done = jobs.filter(j => j.status === 'done').length;
+    const inProgress = jobs.filter(j => j.status === 'in_progress').length;
+    document.getElementById('summaryBar').innerHTML = `
+      <div class="summary-item"><div class="summary-num">${jobs.length}</div><div class="summary-label">${t('今日任务', "Today's Jobs")}</div></div>
+      <div class="summary-item"><div class="summary-num">${inProgress}</div><div class="summary-label">${t('进行中', 'In Progress')}</div></div>
+      <div class="summary-item"><div class="summary-num">${done}</div><div class="summary-label">${t('已完成', 'Done')}</div></div>
+    `;
+  }
+
+  /* ── 渲染：工作项列表 ── */
+  const STATUS_LABEL = {
+    pending: ['待出发', 'Not Started'],
+    in_progress: ['进行中', 'In Progress'],
+    done: ['已完成', 'Done'],
+  };
+  const NEXT_STATUS = { pending: 'in_progress', in_progress: 'done' };
+  const NEXT_ACTION_LABEL = { pending: ['开始', 'Start'], in_progress: ['完成', 'Complete'] };
+  function renderJobs() {
+    const jobs = currentJobs();
+    const box = document.getElementById('jobList');
+    if (!jobs.length) {
+      box.innerHTML = `<div class="empty-tip" data-zh="这一天没有排班任务" data-en="No jobs scheduled this day">这一天没有排班任务</div>`;
+      return;
+    }
+    box.innerHTML = jobs.map(j => {
+      const staff = staffOf(j.staffId);
+      const detail = j.addressZh ? t(j.addressZh, j.addressEn) : t(j.serviceZh, j.serviceEn);
+      return `
+        <div class="job-card ${j.status === 'done' ? 'done' : ''}">
+          <div class="job-time"><div class="job-time-num">${j.time}</div></div>
+          <div class="job-body">
+            <div class="job-top">
+              <div class="job-title">${t(j.customerZh, j.customerEn)}</div>
+              <div class="job-status ${j.status}">${t(STATUS_LABEL[j.status][0], STATUS_LABEL[j.status][1])}</div>
+            </div>
+            <div class="job-detail">${detail}</div>
+            <div class="job-staff">
+              <span class="staff-avatar" style="width:16px;height:16px;font-size:.58rem;background:${staff.color}">${initial(t(staff.zh, staff.en))}</span>
+              ${t(staff.zh, staff.en)}
+            </div>
+            ${NEXT_STATUS[j.status] ? `<button class="job-action" onclick="advanceStatus('${j.id}')">${t(NEXT_ACTION_LABEL[j.status][0], NEXT_ACTION_LABEL[j.status][1])}</button>` : ''}
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+  function advanceStatus(id) {
+    const jobs = SCHEDULE[state.dayIdx] || [];
+    const j = jobs.find(x => x.id === id);
+    if (j && NEXT_STATUS[j.status]) j.status = NEXT_STATUS[j.status];
+    renderAll();
+  }
+
+  function renderAll() { renderSummary(); renderJobs(); }
+
+  /* ── 语言切换 ── */
+  function toggleLang() {
+    currentLang = currentLang === 'zh' ? 'en' : 'zh';
+    document.documentElement.lang = currentLang;
+    document.getElementById('shopName').textContent = t(SHOP.nameZh, SHOP.nameEn);
+    document.querySelectorAll('[data-zh][data-en]').forEach(el => {
+      el.textContent = currentLang === 'zh' ? el.dataset.zh : el.dataset.en;
+    });
+    renderDays();
+    renderStaffChips();
+    renderAll();
+  }
+
+  /* ── 初始化 ── */
+  document.getElementById('shopName').textContent = SHOP.nameZh;
+  renderDays();
+  renderStaffChips();
+  renderAll();
+</script>
+</body>
+</html>

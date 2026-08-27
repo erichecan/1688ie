@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<!--
+  组件：报价流程（Quote & Project Progress）
+  用途：可复用组件库 · 批量新增之一，供拼装行业 demo 用（园艺景观改造、装修、除草开荒等
+  「一次性报价 + 项目周期」的业态）。跟前面五个组件性质不同：不是「客人自选时段/自己下单」的
+  即时消费场景，而是「客人先描述需求 → 店家人工报价 → 客人确认 → 施工按节点推进」的 B2B/项目型
+  流程，更接近询价单 + 进度通知，不是快消品逻辑。
+
+  怎么改成新行业：
+  1. 顶部 :root 里的 --brand / --brand-light / --brand-dark 三个变量换成客户品牌色
+  2. SHOP 对象（脚本区最上面）改店名、货币符号
+  3. SERVICE_TYPES 数组改客户实际提供的服务分类（用在提交询价单的下拉选项）
+  4. PROGRESS_STEPS 数组是项目进度节点，改成客户实际的施工/服务阶段划分
+  5. MY_QUOTES 是为了演示「待报价/已报价/进行中/已完成」四种状态预置的记录，实际接入时替换成真实询价单
+  6. 文案统一走 data-zh / data-en 双属性，改中文改 data-zh，改英文改 data-en，两个都要改
+-->
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>报价流程组件 · 1688.ie</title>
+<style>
+  :root {
+    --brand: #0d4f3c;
+    --brand-light: #e8f3ef;
+    --brand-dark: #093a2c;
+    --ink: #1c1917;
+    --gray: #78716c;
+    --line: #e7e5e4;
+    --bg: #fafaf9;
+    --card: #ffffff;
+    --radius: 14px;
+    --danger: #dc2626;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+    padding: 24px 16px 64px;
+  }
+  .wrap { max-width: 480px; margin: 0 auto; }
+
+  /* ── 头部 ── */
+  .head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+  .shop-name { font-weight: 800; font-size: 1.05rem; color: var(--brand-dark); }
+  .lang-btn {
+    font-size: 0.78rem; font-weight: 700; color: var(--brand);
+    border: 1px solid var(--brand); border-radius: 99px;
+    padding: 4px 12px; cursor: pointer; background: var(--card);
+  }
+
+  /* ── Tab 切换 ── */
+  .tab-bar { display: flex; gap: 8px; margin-bottom: 18px; }
+  .tab-btn {
+    flex: 1; text-align: center; padding: 10px; border-radius: 10px;
+    font-weight: 700; font-size: 0.86rem; border: 1.5px solid var(--line);
+    background: var(--card); cursor: pointer; color: var(--gray);
+  }
+  .tab-btn.active { background: var(--brand); color: #fff; border-color: var(--brand); }
+
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 18px; margin-bottom: 14px;
+  }
+  .card-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 12px; color: var(--ink); }
+  .empty-tip { font-size: 0.82rem; color: var(--gray); text-align: center; padding: 20px 0; }
+
+  /* ── 提交询价表单 ── */
+  .field-label { font-size: 0.8rem; font-weight: 700; color: var(--gray); margin: 0 0 6px; }
+  .field-label:not(:first-child) { margin-top: 14px; }
+  .field-input, .field-select, .field-textarea {
+    width: 100%; border: 1.5px solid var(--line); border-radius: 10px; padding: 10px 12px;
+    font-size: 0.88rem; font-family: inherit; color: var(--ink); background: var(--card);
+  }
+  .field-textarea { resize: none; min-height: 72px; }
+
+  .btn {
+    display: block; width: 100%; text-align: center; padding: 12px; border-radius: 10px;
+    font-weight: 700; font-size: 0.88rem; border: none; cursor: pointer;
+  }
+  .btn-primary { background: var(--brand); color: #fff; margin-top: 16px; }
+  .btn-outline { background: var(--card); color: var(--brand-dark); border: 1.5px solid var(--brand); }
+  .btn-ghost { background: transparent; color: var(--gray); }
+
+  /* ── 询价单卡片 ── */
+  .quote-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+  .quote-service { font-weight: 700; font-size: 0.95rem; }
+  .quote-status {
+    font-size: 0.7rem; font-weight: 700; padding: 2px 9px; border-radius: 99px; white-space: nowrap;
+  }
+  .quote-status.pending { background: #fef3c7; color: #b45309; }
+  .quote-status.quoted { background: #dbeafe; color: #1d4ed8; }
+  .quote-status.in_progress { background: var(--brand-light); color: var(--brand-dark); }
+  .quote-status.completed { background: var(--line); color: var(--gray); }
+
+  .quote-desc { font-size: 0.8rem; color: var(--gray); margin: 6px 0 4px; }
+  .quote-meta { font-size: 0.74rem; color: var(--gray); }
+
+  /* ── 报价展示 + 确认按钮 ── */
+  .quote-amount-box {
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--brand-light); border-radius: 10px; padding: 12px 14px; margin: 12px 0;
+  }
+  .quote-amount-label { font-size: 0.78rem; color: var(--brand-dark); font-weight: 600; }
+  .quote-amount-num { font-size: 1.3rem; font-weight: 800; color: var(--brand-dark); }
+  .quote-actions { display: flex; gap: 8px; margin-top: 4px; }
+  .quote-actions .btn { margin-top: 0; flex: 1; }
+
+  /* ── 进度时间轴 ── */
+  .timeline { margin-top: 14px; }
+  .tl-item { display: flex; gap: 10px; position: relative; padding-bottom: 18px; }
+  .tl-item:last-child { padding-bottom: 0; }
+  .tl-dot-col { display: flex; flex-direction: column; align-items: center; }
+  .tl-dot {
+    width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-weight: 800;
+  }
+  .tl-dot.done { background: var(--brand); color: #fff; }
+  .tl-dot.current { background: var(--card); border: 2.5px solid var(--brand); color: var(--brand); }
+  .tl-dot.pending { background: var(--line); color: var(--gray); }
+  .tl-line { flex: 1; width: 2px; background: var(--line); margin-top: 2px; }
+  .tl-line.done { background: var(--brand); }
+  .tl-item:last-child .tl-line { display: none; }
+  .tl-body { padding-top: 1px; }
+  .tl-label { font-size: 0.86rem; font-weight: 700; }
+  .tl-label.pending-text { color: var(--gray); font-weight: 600; }
+  .tl-date { font-size: 0.72rem; color: var(--gray); margin-top: 2px; }
+
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="head">
+    <div class="shop-name" id="shopName"></div>
+    <div class="lang-btn" onclick="toggleLang()">ZH / EN</div>
+  </div>
+
+  <div class="tab-bar">
+    <div class="tab-btn" id="tabBtn-new" onclick="switchTab('new')" data-zh="提交询价" data-en="Request a Quote">提交询价</div>
+    <div class="tab-btn active" id="tabBtn-mine" onclick="switchTab('mine')" data-zh="我的询价单" data-en="My Requests">我的询价单</div>
+  </div>
+
+  <!-- ============ 提交询价 ============ -->
+  <section id="tab-new" class="hidden">
+    <div class="card">
+      <div class="field-label" data-zh="服务类型" data-en="Service Type">服务类型</div>
+      <select class="field-select" id="serviceSelect"></select>
+
+      <div class="field-label" data-zh="项目地址" data-en="Project Address">项目地址</div>
+      <input class="field-input" id="addressInput" placeholder="" />
+
+      <div class="field-label" data-zh="需求描述" data-en="Describe Your Project">需求描述</div>
+      <textarea class="field-textarea" id="descInput" placeholder=""></textarea>
+
+      <div class="field-label" data-zh="期望开始日期" data-en="Preferred Start Date">期望开始日期</div>
+      <input class="field-input" type="date" id="dateInput" />
+
+      <button class="btn btn-primary" onclick="submitQuote()" data-zh="提交询价单" data-en="Submit Request">提交询价单</button>
+    </div>
+  </section>
+
+  <!-- ============ 我的询价单 ============ -->
+  <section id="tab-mine">
+    <div id="mineList"></div>
+  </section>
+
+</div>
+
+<script>
+  /* ── 可替换配置区：换行业只改这里 ── */
+  const SHOP = { nameZh: '示例园艺景观社', nameEn: 'Sample Landscape Co.', currency: '€' };
+
+  const SERVICE_TYPES = [
+    { id: 's1', zh: '庭院景观改造', en: 'Garden Landscaping' },
+    { id: 's2', zh: '除草开荒', en: 'Lawn Clearing' },
+    { id: 's3', zh: '树木修剪', en: 'Tree Trimming' },
+    { id: 's4', zh: '围栏搭建', en: 'Fence Installation' },
+  ];
+
+  // 项目进度节点，按顺序推进
+  const PROGRESS_STEPS = [
+    { id: 'confirmed', zh: '已确认报价', en: 'Quote Confirmed' },
+    { id: 'prep', zh: '材料备货', en: 'Materials Prep' },
+    { id: 'working', zh: '施工中', en: 'In Progress' },
+    { id: 'done', zh: '已完成', en: 'Completed' },
+  ];
+
+  // 预置四条记录，演示「待报价/已报价/进行中/已完成」四种状态，实际接入时替换成真实询价单
+  const MY_QUOTES = [
+    { id: 'q1', serviceId: 's2', status: 'pending',
+      descZh: '后院约 80 平米，杂草丛生需要开荒', descEn: '~80sqm backyard, overgrown, needs clearing',
+      submitZh: '2026-08-25 提交', submitEn: 'Submitted 2026-08-25' },
+    { id: 'q2', serviceId: 's4', status: 'quoted', quotedAmount: 890,
+      descZh: '前院 15 米木质围栏', descEn: '15m wooden fence for front yard',
+      submitZh: '2026-08-20 提交', submitEn: 'Submitted 2026-08-20' },
+    { id: 'q3', serviceId: 's1', status: 'in_progress', quotedAmount: 2400, currentStepIdx: 1,
+      descZh: '全庭院景观重新设计，含铺石与灌木', descEn: 'Full garden redesign with paving and shrubs',
+      submitZh: '2026-08-05 提交', submitEn: 'Submitted 2026-08-05',
+      stepDates: { confirmed: '08-06' } },
+    { id: 'q4', serviceId: 's3', status: 'completed', quotedAmount: 320, currentStepIdx: 4,
+      descZh: '五棵大树修剪', descEn: 'Trimming 5 large trees',
+      submitZh: '2026-07-10 提交', submitEn: 'Submitted 2026-07-10',
+      stepDates: { confirmed: '07-11', prep: '07-14', working: '07-16', done: '07-16' } },
+  ];
+
+  /* ── 状态 ── */
+  let currentLang = 'zh';
+  const myQuotes = [...MY_QUOTES];
+  let quoteSeq = 0;
+
+  function t(zh, en) { return currentLang === 'zh' ? zh : en; }
+  function serviceOf(id) { return SERVICE_TYPES.find(s => s.id === id); }
+
+  /* ── 渲染：服务类型下拉 ── */
+  function renderServiceSelect() {
+    document.getElementById('serviceSelect').innerHTML = SERVICE_TYPES.map(s => `
+      <option value="${s.id}">${t(s.zh, s.en)}</option>
+    `).join('');
+  }
+
+  /* ── 提交询价 ── */
+  function submitQuote() {
+    const serviceId = document.getElementById('serviceSelect').value;
+    const address = document.getElementById('addressInput').value.trim();
+    const desc = document.getElementById('descInput').value.trim() || t('（未填写详细描述）', '(no description provided)');
+    quoteSeq += 1;
+    myQuotes.unshift({
+      id: 'new-' + quoteSeq, serviceId, status: 'pending',
+      descZh: desc, descEn: desc,
+      addressZh: address, addressEn: address,
+      submitZh: t('刚刚提交', ''), submitEn: 'Just submitted',
+    });
+    document.getElementById('addressInput').value = '';
+    document.getElementById('descInput').value = '';
+    document.getElementById('dateInput').value = '';
+    switchTab('mine');
+  }
+
+  /* ── 渲染：我的询价单列表 ── */
+  const STATUS_LABEL = {
+    pending: ['待报价', 'Awaiting Quote'],
+    quoted: ['已报价', 'Quote Ready'],
+    in_progress: ['进行中', 'In Progress'],
+    completed: ['已完成', 'Completed'],
+  };
+  function renderMine() {
+    const box = document.getElementById('mineList');
+    if (!myQuotes.length) {
+      box.innerHTML = `<div class="empty-tip" data-zh="还没有询价单，去提交一个吧" data-en="No requests yet — submit one">还没有询价单，去提交一个吧</div>`;
+      return;
+    }
+    box.innerHTML = myQuotes.map(renderQuoteCard).join('');
+  }
+  function renderQuoteCard(q) {
+    const service = serviceOf(q.serviceId);
+    let extra = '';
+    if (q.status === 'quoted') {
+      extra = `
+        <div class="quote-amount-box">
+          <span class="quote-amount-label" data-zh="报价" data-en="Quoted Price">报价</span>
+          <span class="quote-amount-num">${SHOP.currency}${q.quotedAmount}</span>
+        </div>
+        <div class="quote-actions">
+          <button class="btn btn-primary" onclick="acceptQuote('${q.id}')">${t('确认接受', 'Accept')}</button>
+          <button class="btn btn-outline" onclick="declineQuote('${q.id}')">${t('婉拒', 'Decline')}</button>
+        </div>
+      `;
+    } else if (q.status === 'in_progress' || q.status === 'completed') {
+      extra = `
+        <div class="quote-amount-box">
+          <span class="quote-amount-label" data-zh="项目金额" data-en="Project Total">项目金额</span>
+          <span class="quote-amount-num">${SHOP.currency}${q.quotedAmount}</span>
+        </div>
+        <div class="timeline">${renderTimeline(q)}</div>
+      `;
+    }
+    return `
+      <div class="card">
+        <div class="quote-top">
+          <div class="quote-service">${t(service.zh, service.en)}</div>
+          <div class="quote-status ${q.status}">${t(STATUS_LABEL[q.status][0], STATUS_LABEL[q.status][1])}</div>
+        </div>
+        <div class="quote-desc">${t(q.descZh, q.descEn)}</div>
+        <div class="quote-meta">${t(q.submitZh, q.submitEn)}</div>
+        ${extra}
+      </div>
+    `;
+  }
+  function renderTimeline(q) {
+    return PROGRESS_STEPS.map((step, idx) => {
+      const state = idx < q.currentStepIdx ? 'done' : idx === q.currentStepIdx ? 'current' : 'pending';
+      const dateStr = (q.stepDates && q.stepDates[step.id]) ? q.stepDates[step.id] : '';
+      return `
+        <div class="tl-item">
+          <div class="tl-dot-col">
+            <div class="tl-dot ${state}">${state === 'done' ? '✓' : idx + 1}</div>
+            <div class="tl-line ${state === 'done' ? 'done' : ''}"></div>
+          </div>
+          <div class="tl-body">
+            <div class="tl-label ${state === 'pending' ? 'pending-text' : ''}">${t(step.zh, step.en)}</div>
+            ${dateStr ? `<div class="tl-date">${dateStr}</div>` : ''}
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+  function acceptQuote(id) {
+    const q = myQuotes.find(x => x.id === id);
+    if (q) { q.status = 'in_progress'; q.currentStepIdx = 1; q.stepDates = { confirmed: '08-27' }; }
+    renderMine();
+  }
+  function declineQuote(id) {
+    const idx = myQuotes.findIndex(x => x.id === id);
+    if (idx >= 0) myQuotes.splice(idx, 1);
+    renderMine();
+  }
+
+  /* ── Tab 切换 ── */
+  function switchTab(tab) {
+    document.getElementById('tabBtn-new').classList.toggle('active', tab === 'new');
+    document.getElementById('tabBtn-mine').classList.toggle('active', tab === 'mine');
+    document.getElementById('tab-new').classList.toggle('hidden', tab !== 'new');
+    document.getElementById('tab-mine').classList.toggle('hidden', tab !== 'mine');
+    if (tab === 'mine') renderMine();
+  }
+
+  /* ── 语言切换 ── */
+  function toggleLang() {
+    currentLang = currentLang === 'zh' ? 'en' : 'zh';
+    document.documentElement.lang = currentLang;
+    document.getElementById('shopName').textContent = t(SHOP.nameZh, SHOP.nameEn);
+    document.querySelectorAll('[data-zh][data-en]').forEach(el => {
+      el.textContent = currentLang === 'zh' ? el.dataset.zh : el.dataset.en;
+    });
+    renderServiceSelect();
+    renderMine();
+  }
+
+  /* ── 初始化 ── */
+  document.getElementById('shopName').textContent = SHOP.nameZh;
+  renderServiceSelect();
+  renderMine();
+</script>
+</body>
+</html>

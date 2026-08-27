@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<!--
+  组件：次卡包（Session Pass）
+  用途：可复用组件库 · 批量新增之一，供拼装行业 demo 用（美容院/SPA 疗程包、美甲多次卡、私教课时包等
+  「先付费买 N 次，到店一次扣一次」业态）。跟「会员」模块的区别：会员是等级/长期身份，次卡包是
+  一笔一笔独立的预付次数额度，可以同时持有多张不同项目的卡。
+
+  怎么改成新行业：
+  1. 顶部 :root 里的 --brand / --brand-light / --brand-dark 三个变量换成客户品牌色
+  2. SHOP 对象（脚本区最上面）改店名、货币符号
+  3. PACKAGES 数组改客户实际在卖的次卡包（几次、多少钱、多少天有效期）
+  4. MY_PASSES 是为了演示「使用中/已用完/已过期」三种视觉状态预置的三条记录，实际接入时替换成真实持卡记录
+  5. 文案统一走 data-zh / data-en 双属性，改中文改 data-zh，改英文改 data-en，两个都要改
+-->
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>次卡包组件 · 1688.ie</title>
+<style>
+  :root {
+    --brand: #0d4f3c;
+    --brand-light: #e8f3ef;
+    --brand-dark: #093a2c;
+    --ink: #1c1917;
+    --gray: #78716c;
+    --line: #e7e5e4;
+    --bg: #fafaf9;
+    --card: #ffffff;
+    --radius: 14px;
+    --danger: #dc2626;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+    padding: 24px 16px 64px;
+  }
+  .wrap { max-width: 480px; margin: 0 auto; }
+
+  /* ── 头部 ── */
+  .head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+  .shop-name { font-weight: 800; font-size: 1.05rem; color: var(--brand-dark); }
+  .lang-btn {
+    font-size: 0.78rem; font-weight: 700; color: var(--brand);
+    border: 1px solid var(--brand); border-radius: 99px;
+    padding: 4px 12px; cursor: pointer; background: var(--card);
+  }
+
+  /* ── Tab 切换 ── */
+  .tab-bar { display: flex; gap: 8px; margin-bottom: 18px; }
+  .tab-btn {
+    flex: 1; text-align: center; padding: 10px; border-radius: 10px;
+    font-weight: 700; font-size: 0.86rem; border: 1.5px solid var(--line);
+    background: var(--card); cursor: pointer; color: var(--gray);
+  }
+  .tab-btn.active { background: var(--brand); color: #fff; border-color: var(--brand); }
+
+  .group-title { font-size: 0.78rem; font-weight: 700; color: var(--gray); margin: 16px 0 8px; }
+  .group-title:first-child { margin-top: 0; }
+  .empty-tip { font-size: 0.82rem; color: var(--gray); text-align: center; padding: 20px 0; }
+
+  /* ── 商城卡片 ── */
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 16px; margin-bottom: 12px;
+  }
+  .pkg-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+  .pkg-name { font-weight: 700; font-size: 0.95rem; }
+  .pkg-price { font-weight: 800; color: var(--brand-dark); font-size: 1.05rem; }
+  .pkg-desc { font-size: 0.78rem; color: var(--gray); margin-bottom: 12px; }
+  .pkg-btn {
+    width: 100%; padding: 9px; border-radius: 10px; font-weight: 700; font-size: 0.85rem;
+    border: none; cursor: pointer; background: var(--brand); color: #fff;
+  }
+  .pkg-btn:disabled { background: var(--line); color: var(--gray); cursor: not-allowed; }
+
+  /* ── 我的次卡包卡片 ── */
+  .pass-card { position: relative; }
+  .pass-card.dim { opacity: .6; }
+  .pass-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .pass-name { font-weight: 700; font-size: 0.95rem; }
+  .pass-status {
+    font-size: 0.7rem; font-weight: 700; padding: 2px 9px; border-radius: 99px;
+  }
+  .pass-status.active { background: var(--brand-light); color: var(--brand-dark); }
+  .pass-status.depleted { background: var(--line); color: var(--gray); }
+  .pass-status.expired { background: #fee2e2; color: var(--danger); }
+
+  .progress-track { height: 8px; border-radius: 99px; background: var(--line); overflow: hidden; margin-bottom: 8px; }
+  .progress-fill { height: 100%; background: var(--brand); border-radius: 99px; transition: width .25s; }
+  .pass-card.dim .progress-fill { background: var(--gray); }
+
+  .pass-meta { display: flex; align-items: center; justify-content: space-between; font-size: 0.76rem; color: var(--gray); margin-bottom: 12px; }
+  .pass-meta b { color: var(--ink); font-weight: 700; }
+
+  .pass-btn {
+    width: 100%; padding: 9px; border-radius: 10px; font-weight: 700; font-size: 0.85rem;
+    border: none; cursor: pointer; background: var(--brand); color: #fff;
+  }
+  .pass-btn:disabled { background: var(--line); color: var(--gray); cursor: not-allowed; }
+
+  .history-toggle { font-size: 0.74rem; color: var(--brand); text-align: center; margin-top: 10px; cursor: pointer; font-weight: 600; }
+  .history-list { margin-top: 8px; }
+  .history-row { display: flex; align-items: center; justify-content: space-between; padding: 6px 0; border-top: 1px dashed var(--line); font-size: 0.76rem; color: var(--gray); }
+
+  /* ── 弹窗 ── */
+  .modal-mask {
+    position: fixed; inset: 0; background: rgba(0,0,0,.45);
+    display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 50;
+  }
+  .modal-box { background: var(--card); border-radius: 16px; padding: 26px 22px; max-width: 340px; width: 100%; text-align: center; }
+  .modal-title { font-weight: 800; font-size: 1rem; margin-bottom: 4px; }
+  .modal-sub { font-size: 0.8rem; color: var(--gray); margin-bottom: 16px; }
+  .modal-code {
+    font-family: 'SFMono-Regular', Menlo, monospace; font-size: 1.8rem; font-weight: 800;
+    letter-spacing: 6px; color: var(--brand-dark); background: var(--brand-light);
+    border-radius: 12px; padding: 16px; margin-bottom: 18px;
+  }
+  .btn {
+    display: block; width: 100%; text-align: center; padding: 12px; border-radius: 10px;
+    font-weight: 700; font-size: 0.88rem; border: none; cursor: pointer;
+  }
+  .btn-primary { background: var(--brand); color: #fff; }
+  .btn-ghost { background: transparent; color: var(--gray); margin-top: 8px; }
+
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="head">
+    <div class="shop-name" id="shopName"></div>
+    <div class="lang-btn" onclick="toggleLang()">ZH / EN</div>
+  </div>
+
+  <div class="tab-bar">
+    <div class="tab-btn" id="tabBtn-mall" onclick="switchTab('mall')" data-zh="购买次卡包" data-en="Buy Packages">购买次卡包</div>
+    <div class="tab-btn active" id="tabBtn-mine" onclick="switchTab('mine')" data-zh="我的次卡包" data-en="My Packages">我的次卡包</div>
+  </div>
+
+  <!-- ============ 购买次卡包 ============ -->
+  <section id="tab-mall" class="hidden">
+    <div id="mallList"></div>
+  </section>
+
+  <!-- ============ 我的次卡包 ============ -->
+  <section id="tab-mine">
+    <div id="mineList"></div>
+  </section>
+
+</div>
+
+<!-- ============ 核销弹窗 ============ -->
+<div class="modal-mask hidden" id="redeemModal">
+  <div class="modal-box">
+    <div class="modal-title" data-zh="出示给店员扫码核销一次" data-en="Show this to staff to use one session">出示给店员扫码核销一次</div>
+    <div class="modal-sub" id="modalPassTitle"></div>
+    <div class="modal-code" id="modalCode"></div>
+    <button class="btn btn-primary" onclick="confirmRedeem()" data-zh="确认核销" data-en="Confirm">确认核销</button>
+    <button class="btn btn-ghost" onclick="closeModal()" data-zh="取消" data-en="Cancel">取消</button>
+  </div>
+</div>
+
+<script>
+  /* ── 可替换配置区：换行业只改这里 ── */
+  const SHOP = { nameZh: '示例美容美体中心', nameEn: 'Sample Beauty Studio', currency: '€' };
+
+  // 购买商城：客户实际在卖的次卡包
+  const PACKAGES = [
+    { id: 'p1', nameZh: '面部护理 10 次卡', nameEn: 'Facial Care 10-Session Pass', count: 10, price: 399, validDays: 180,
+      descZh: '180 天内有效，可指定任意技师', descEn: 'Valid 180 days, any therapist' },
+    { id: 'p2', nameZh: '身体按摩 5 次卡', nameEn: 'Body Massage 5-Session Pass', count: 5, price: 249, validDays: 120,
+      descZh: '120 天内有效', descEn: 'Valid 120 days' },
+    { id: 'p3', nameZh: '美睫补睫 8 次卡', nameEn: 'Lash Refill 8-Session Pass', count: 8, price: 199, validDays: 150,
+      descZh: '150 天内有效，含基础款补睫', descEn: 'Valid 150 days, basic refill included' },
+  ];
+
+  // 预置三条记录，演示「使用中/已用完/已过期」三种视觉状态，实际接入时替换成真实持卡记录
+  const MY_PASSES = [
+    { id: 'm1', packageId: 'p1', total: 10, used: 6, expiryZh: '2026-11-20 前有效', expiryEn: 'Valid until 2026-11-20', status: 'active',
+      history: [
+        { dateZh: '2026-08-18', dateEn: '2026-08-18' },
+        { dateZh: '2026-08-02', dateEn: '2026-08-02' },
+      ] },
+    { id: 'm2', packageId: 'p3', total: 8, used: 8, expiryZh: '2026-10-05 前有效', expiryEn: 'Valid until 2026-10-05', status: 'depleted',
+      history: [] },
+    { id: 'm3', packageId: 'p2', total: 5, used: 2, expiryZh: '已于 2026-08-01 过期', expiryEn: 'Expired on 2026-08-01', status: 'expired',
+      history: [] },
+  ];
+
+  /* ── 状态 ── */
+  let currentLang = 'zh';
+  let activeTab = 'mine';
+  const purchasedIds = new Set();
+  const myPasses = [...MY_PASSES];
+  let redeemTargetId = null;
+
+  function t(zh, en) { return currentLang === 'zh' ? zh : en; }
+  function pkgOf(id) { return PACKAGES.find(p => p.id === id); }
+
+  /* ── 渲染：购买商城 ── */
+  function renderMall() {
+    const box = document.getElementById('mallList');
+    box.innerHTML = PACKAGES.map(p => {
+      const bought = purchasedIds.has(p.id);
+      return `
+        <div class="card">
+          <div class="pkg-top">
+            <div class="pkg-name">${t(p.nameZh, p.nameEn)} · ${p.count}${t('次', 'x')}</div>
+            <div class="pkg-price">${SHOP.currency}${p.price}</div>
+          </div>
+          <div class="pkg-desc">${t(p.descZh, p.descEn)}</div>
+          <button class="pkg-btn" ${bought ? 'disabled' : ''} onclick="buyPackage('${p.id}')">
+            ${bought ? t('已购买', 'Purchased') : t('立即购买', 'Buy Now')}
+          </button>
+        </div>
+      `;
+    }).join('');
+  }
+  function buyPackage(id) {
+    if (purchasedIds.has(id)) return;
+    purchasedIds.add(id);
+    const p = pkgOf(id);
+    myPasses.unshift({
+      id: 'buy-' + id, packageId: id, total: p.count, used: 0,
+      expiryZh: t('购买后 ' + p.validDays + ' 天内有效', ''), expiryEn: 'Valid for ' + p.validDays + ' days from purchase',
+      status: 'active', history: [],
+    });
+    renderMall();
+    switchTab('mine');
+  }
+
+  /* ── 渲染：我的次卡包 ── */
+  const STATUS_LABEL = {
+    active: ['使用中', 'Active'],
+    depleted: ['已用完', 'Used Up'],
+    expired: ['已过期', 'Expired'],
+  };
+  function renderMine() {
+    const box = document.getElementById('mineList');
+    if (!myPasses.length) {
+      box.innerHTML = `<div class="empty-tip" data-zh="还没有次卡包，去购买看看" data-en="No packages yet — check Buy Packages">还没有次卡包，去购买看看</div>`;
+      return;
+    }
+    box.innerHTML = myPasses.map(renderPassCard).join('');
+  }
+  function renderPassCard(m) {
+    const p = pkgOf(m.packageId);
+    const remain = m.total - m.used;
+    const pct = Math.round((m.used / m.total) * 100);
+    const dim = m.status !== 'active';
+    const canRedeem = m.status === 'active' && remain > 0;
+    return `
+      <div class="card pass-card ${dim ? 'dim' : ''}">
+        <div class="pass-top">
+          <div class="pass-name">${t(p.nameZh, p.nameEn)}</div>
+          <div class="pass-status ${m.status}">${t(STATUS_LABEL[m.status][0], STATUS_LABEL[m.status][1])}</div>
+        </div>
+        <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
+        <div class="pass-meta">
+          <span>${t('剩余 ', 'Remaining ')}<b>${remain}</b> / ${m.total} ${t('次', 'sessions')}</span>
+          <span>${t(m.expiryZh, m.expiryEn)}</span>
+        </div>
+        <button class="pass-btn" ${canRedeem ? '' : 'disabled'} onclick="openRedeemModal('${m.id}')">
+          ${t('核销一次', 'Use One Session')}
+        </button>
+        ${m.history.length ? `
+          <div class="history-toggle" onclick="toggleHistory('${m.id}')" id="historyToggle-${m.id}">${t('查看核销记录', 'View usage history')}</div>
+          <div class="history-list hidden" id="historyList-${m.id}">
+            ${m.history.map(h => `<div class="history-row"><span>${t('已核销一次', 'Used one session')}</span><span>${t(h.dateZh, h.dateEn)}</span></div>`).join('')}
+          </div>
+        ` : ''}
+      </div>
+    `;
+  }
+  function toggleHistory(id) {
+    document.getElementById('historyList-' + id).classList.toggle('hidden');
+  }
+
+  /* ── Tab 切换 ── */
+  function switchTab(tab) {
+    activeTab = tab;
+    document.getElementById('tabBtn-mall').classList.toggle('active', tab === 'mall');
+    document.getElementById('tabBtn-mine').classList.toggle('active', tab === 'mine');
+    document.getElementById('tab-mall').classList.toggle('hidden', tab !== 'mall');
+    document.getElementById('tab-mine').classList.toggle('hidden', tab !== 'mine');
+    if (tab === 'mall') renderMall(); else renderMine();
+  }
+
+  /* ── 核销弹窗 ── */
+  function hashCode(str) {
+    let h = 0;
+    for (let i = 0; i < str.length; i++) { h = (h << 5) - h + str.charCodeAt(i); h |= 0; }
+    return h;
+  }
+  function openRedeemModal(id) {
+    redeemTargetId = id;
+    const m = myPasses.find(x => x.id === id);
+    const p = pkgOf(m.packageId);
+    document.getElementById('modalPassTitle').textContent = t(p.nameZh, p.nameEn);
+    document.getElementById('modalCode').textContent = String(Math.abs(hashCode(id + m.used))).slice(0, 6).padStart(6, '0');
+    document.getElementById('redeemModal').classList.remove('hidden');
+  }
+  function closeModal() {
+    redeemTargetId = null;
+    document.getElementById('redeemModal').classList.add('hidden');
+  }
+  function confirmRedeem() {
+    const m = myPasses.find(x => x.id === redeemTargetId);
+    if (m) {
+      m.used += 1;
+      m.history.unshift({ dateZh: '2026-08-27', dateEn: '2026-08-27' });
+      if (m.used >= m.total) m.status = 'depleted';
+    }
+    closeModal();
+    renderMine();
+  }
+
+  /* ── 语言切换 ── */
+  function toggleLang() {
+    currentLang = currentLang === 'zh' ? 'en' : 'zh';
+    document.documentElement.lang = currentLang;
+    document.getElementById('shopName').textContent = t(SHOP.nameZh, SHOP.nameEn);
+    document.querySelectorAll('[data-zh][data-en]').forEach(el => {
+      el.textContent = currentLang === 'zh' ? el.dataset.zh : el.dataset.en;
+    });
+    // 商城 / 我的次卡包都是 JS 动态生成的 innerHTML，必须重新渲染才能跟着切语言
+    renderMall();
+    renderMine();
+    // 核销弹窗若正打开，标题文案也要跟着重渲染
+    if (!document.getElementById('redeemModal').classList.contains('hidden') && redeemTargetId) {
+      const m = myPasses.find(x => x.id === redeemTargetId);
+      if (m) document.getElementById('modalPassTitle').textContent = t(pkgOf(m.packageId).nameZh, pkgOf(m.packageId).nameEn);
+    }
+  }
+
+  /* ── 初始化 ── */
+  document.getElementById('shopName').textContent = SHOP.nameZh;
+  renderMall();
+  renderMine();
+</script>
+</body>
+</html>

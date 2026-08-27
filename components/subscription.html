@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<!--
+  组件：订阅套餐（Subscription）
+  用途：可复用组件库 · 批量新增之一，供拼装行业 demo 用（草坪维护/除草按季续费、健身房月卡年卡、
+  洗车按月包洗等「按时间周期而非按次数」的业态）。跟「次卡包」模块的区别：次卡包是按次数扣，
+  用完为止；订阅套餐是按时间周期（月/季/年）无限次或限定频次使用，到期需要续费。
+
+  怎么改成新行业：
+  1. 顶部 :root 里的 --brand / --brand-light / --brand-dark 三个变量换成客户品牌色
+  2. SHOP 对象（脚本区最上面）改店名、货币符号
+  3. PLANS 数组改客户实际在卖的套餐周期与价格
+  4. CURRENT_SUB 改当前登录客户的订阅状态（demo 用 mock 值），daysLeft 改小于等于 SOON_THRESHOLD 会触发续费提醒条
+  5. HISTORY 改客户的历史订阅记录 mock 数据
+  6. 文案统一走 data-zh / data-en 双属性，改中文改 data-zh，改英文改 data-en，两个都要改
+-->
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>订阅套餐组件 · 1688.ie</title>
+<style>
+  :root {
+    --brand: #0d4f3c;
+    --brand-light: #e8f3ef;
+    --brand-dark: #093a2c;
+    --ink: #1c1917;
+    --gray: #78716c;
+    --line: #e7e5e4;
+    --bg: #fafaf9;
+    --card: #ffffff;
+    --radius: 14px;
+    --warn: #b45309;
+    --warn-bg: #fef3c7;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+    padding: 24px 16px 64px;
+  }
+  .wrap { max-width: 480px; margin: 0 auto; }
+
+  /* ── 头部 ── */
+  .head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+  .shop-name { font-weight: 800; font-size: 1.05rem; color: var(--brand-dark); }
+  .lang-btn {
+    font-size: 0.78rem; font-weight: 700; color: var(--brand);
+    border: 1px solid var(--brand); border-radius: 99px;
+    padding: 4px 12px; cursor: pointer; background: var(--card);
+  }
+
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 18px; margin-bottom: 14px;
+  }
+  .card-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 12px; color: var(--ink); }
+
+  /* ── 续费提醒条 ── */
+  .renew-banner {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    background: var(--warn-bg); color: var(--warn); border-radius: 12px; padding: 12px 14px; margin-bottom: 14px;
+    font-size: 0.82rem; font-weight: 600;
+  }
+  .renew-banner button {
+    flex-shrink: 0; border: none; background: var(--warn); color: #fff; font-weight: 700;
+    font-size: 0.78rem; padding: 7px 14px; border-radius: 99px; cursor: pointer;
+  }
+
+  /* ── 当前订阅卡 ── */
+  .sub-card {
+    background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%);
+    color: #fff; border-radius: var(--radius); padding: 20px; margin-bottom: 14px;
+  }
+  .sub-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+  .sub-plan-name { font-weight: 800; font-size: 1.1rem; }
+  .sub-badge { font-size: 0.7rem; font-weight: 700; background: rgba(255,255,255,.22); padding: 2px 10px; border-radius: 99px; }
+  .sub-dates { font-size: 0.8rem; opacity: .9; margin: 10px 0 4px; }
+  .sub-countdown { font-size: 0.78rem; opacity: .85; }
+
+  /* ── 自动续费开关 ── */
+  .auto-row { display: flex; align-items: center; justify-content: space-between; margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,.2); }
+  .auto-label { font-size: 0.82rem; font-weight: 600; }
+  .switch { position: relative; width: 42px; height: 24px; }
+  .switch input { opacity: 0; width: 0; height: 0; }
+  .switch-track { position: absolute; inset: 0; background: rgba(255,255,255,.3); border-radius: 99px; cursor: pointer; transition: .2s; }
+  .switch-track::before { content: ''; position: absolute; width: 18px; height: 18px; left: 3px; top: 3px; background: #fff; border-radius: 50%; transition: .2s; }
+  .switch input:checked + .switch-track { background: #fff; }
+  .switch input:checked + .switch-track::before { transform: translateX(18px); background: var(--brand); }
+
+  /* ── 已含权益 ── */
+  .benefit-item { display: flex; align-items: flex-start; gap: 10px; padding: 9px 0; border-bottom: 1px dashed var(--line); font-size: 0.86rem; }
+  .benefit-item:last-child { border-bottom: none; }
+  .benefit-icon { flex: 0 0 20px; color: var(--brand); font-weight: 800; }
+
+  /* ── 套餐商城 ── */
+  .plan-card { position: relative; border: 1.5px solid var(--line); }
+  .plan-card.recommend { border-color: var(--brand); }
+  .plan-ribbon {
+    position: absolute; top: -1px; right: 14px; background: var(--brand); color: #fff;
+    font-size: 0.68rem; font-weight: 700; padding: 3px 10px; border-radius: 0 0 8px 8px;
+  }
+  .plan-top { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 4px; }
+  .plan-name { font-weight: 700; font-size: 0.95rem; }
+  .plan-price { font-weight: 800; color: var(--brand-dark); font-size: 1.1rem; }
+  .plan-price small { font-weight: 600; font-size: 0.72rem; color: var(--gray); }
+  .plan-save { font-size: 0.74rem; color: var(--brand); font-weight: 700; margin-bottom: 10px; }
+  .plan-btn {
+    width: 100%; padding: 9px; border-radius: 10px; font-weight: 700; font-size: 0.85rem;
+    border: none; cursor: pointer; background: var(--brand); color: #fff;
+  }
+  .plan-btn.ghost { background: var(--brand-light); color: var(--brand-dark); }
+
+  /* ── 历史记录 ── */
+  .history-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px dashed var(--line); }
+  .history-row:last-child { border-bottom: none; }
+  .history-name { font-size: 0.86rem; font-weight: 600; }
+  .history-date { font-size: 0.72rem; color: var(--gray); margin-top: 2px; }
+  .history-amount { font-weight: 700; color: var(--brand-dark); font-size: 0.9rem; }
+
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="head">
+    <div class="shop-name" id="shopName"></div>
+    <div class="lang-btn" onclick="toggleLang()">ZH / EN</div>
+  </div>
+
+  <!-- ============ 续费提醒条（快到期才显示） ============ -->
+  <div class="renew-banner hidden" id="renewBanner">
+    <span id="renewBannerText"></span>
+    <button onclick="scrollToPlans()" data-zh="立即续费" data-en="Renew Now">立即续费</button>
+  </div>
+
+  <!-- ============ 当前订阅卡 ============ -->
+  <div class="sub-card">
+    <div class="sub-top">
+      <div class="sub-plan-name" id="subPlanName"></div>
+      <div class="sub-badge" id="subBadge"></div>
+    </div>
+    <div class="sub-dates" id="subDates"></div>
+    <div class="sub-countdown" id="subCountdown"></div>
+    <div class="auto-row">
+      <div class="auto-label" data-zh="到期自动续费" data-en="Auto-renew">到期自动续费</div>
+      <label class="switch">
+        <input type="checkbox" id="autoRenewToggle" checked onchange="toggleAutoRenew()">
+        <span class="switch-track"></span>
+      </label>
+    </div>
+  </div>
+
+  <!-- ============ 已含权益 ============ -->
+  <div class="card">
+    <div class="card-title" data-zh="本套餐已含权益" data-en="What's Included">本套餐已含权益</div>
+    <div id="benefitList"></div>
+  </div>
+
+  <!-- ============ 套餐商城 ============ -->
+  <div class="card" id="plansSection">
+    <div class="card-title" data-zh="套餐商城" data-en="Available Plans">套餐商城</div>
+    <div id="plansList"></div>
+  </div>
+
+  <!-- ============ 订阅历史 ============ -->
+  <div class="card">
+    <div class="card-title" data-zh="订阅历史" data-en="Subscription History">订阅历史</div>
+    <div id="historyList"></div>
+  </div>
+
+</div>
+
+<script>
+  /* ── 可替换配置区：换行业只改这里 ── */
+  const SHOP = { nameZh: '示例草坪养护社', nameEn: 'Sample Lawn Care Co.', currency: '€' };
+  const SOON_THRESHOLD = 14; // 剩余天数 <= 这个值时显示续费提醒条
+
+  const PLANS = [
+    { id: 'monthly', nameZh: '月卡', nameEn: 'Monthly Plan', price: 45, periodZh: '每月', periodEn: 'per month', saveZh: '', saveEn: '' },
+    { id: 'quarterly', nameZh: '季卡', nameEn: 'Quarterly Plan', price: 120, periodZh: '每季度', periodEn: 'per quarter', saveZh: '比月卡省 €15', saveEn: 'Save €15 vs monthly', recommend: true },
+    { id: 'annual', nameZh: '年卡', nameEn: 'Annual Plan', price: 420, periodZh: '每年', periodEn: 'per year', saveZh: '比月卡省 €120', saveEn: 'Save €120 vs monthly' },
+  ];
+
+  const BENEFITS = [
+    { zh: '每 2 周上门修剪一次，共 6 次', en: 'Mowing every 2 weeks, 6 visits included' },
+    { zh: '落叶/杂草清理', en: 'Leaf & weed clearing' },
+    { zh: '恶劣天气免费顺延', en: 'Free reschedule on bad weather' },
+    { zh: '专属客服微信群', en: 'Priority WhatsApp support' },
+  ];
+
+  // demo 用 mock 值：当前订阅状态
+  const CURRENT_SUB = {
+    planId: 'quarterly', startZh: '2026-06-01', startEn: 'Jun 1, 2026',
+    renewZh: '2026-09-01', renewEn: 'Sep 1, 2026', daysLeft: 5, autoRenew: true,
+  };
+
+  const HISTORY = [
+    { dateZh: '2026-06-01', dateEn: '2026-06-01', zh: '季卡续费', en: 'Quarterly Renewal', amount: 120 },
+    { dateZh: '2026-03-01', dateEn: '2026-03-01', zh: '季卡续费', en: 'Quarterly Renewal', amount: 120 },
+    { dateZh: '2025-12-01', dateEn: '2025-12-01', zh: '首次订阅 · 季卡', en: 'First Subscription · Quarterly', amount: 120 },
+  ];
+
+  /* ── 状态 ── */
+  let currentLang = 'zh';
+  const state = { autoRenew: CURRENT_SUB.autoRenew };
+
+  function t(zh, en) { return currentLang === 'zh' ? zh : en; }
+  function planOf(id) { return PLANS.find(p => p.id === id); }
+
+  /* ── 渲染：续费提醒条 ── */
+  function renderRenewBanner() {
+    const banner = document.getElementById('renewBanner');
+    if (CURRENT_SUB.daysLeft > SOON_THRESHOLD) { banner.classList.add('hidden'); return; }
+    banner.classList.remove('hidden');
+    document.getElementById('renewBannerText').textContent = t(
+      `您的套餐还剩 ${CURRENT_SUB.daysLeft} 天到期，续费不断档`,
+      `Your plan expires in ${CURRENT_SUB.daysLeft} days — renew to avoid a gap`
+    );
+  }
+
+  /* ── 渲染：当前订阅卡 ── */
+  function renderSubCard() {
+    const plan = planOf(CURRENT_SUB.planId);
+    document.getElementById('subPlanName').textContent = t(plan.nameZh, plan.nameEn);
+    document.getElementById('subBadge').textContent = t('订阅中', 'Active');
+    document.getElementById('subDates').textContent = t(
+      `${CURRENT_SUB.startZh} 起 · 下次续费 ${CURRENT_SUB.renewZh}`,
+      `Since ${CURRENT_SUB.startEn} · Renews ${CURRENT_SUB.renewEn}`
+    );
+    document.getElementById('subCountdown').textContent = t(
+      `还剩 ${CURRENT_SUB.daysLeft} 天到期`,
+      `${CURRENT_SUB.daysLeft} days remaining`
+    );
+  }
+  function toggleAutoRenew() {
+    state.autoRenew = document.getElementById('autoRenewToggle').checked;
+  }
+
+  /* ── 渲染：已含权益 ── */
+  function renderBenefits() {
+    document.getElementById('benefitList').innerHTML = BENEFITS.map(b => `
+      <div class="benefit-item"><span class="benefit-icon">✓</span><span>${t(b.zh, b.en)}</span></div>
+    `).join('');
+  }
+
+  /* ── 渲染：套餐商城 ── */
+  function renderPlans() {
+    document.getElementById('plansList').innerHTML = PLANS.map(p => {
+      const isCurrent = p.id === CURRENT_SUB.planId;
+      return `
+        <div class="card plan-card ${p.recommend ? 'recommend' : ''}">
+          ${p.recommend ? `<div class="plan-ribbon">${t('推荐', 'Best Value')}</div>` : ''}
+          <div class="plan-top">
+            <div class="plan-name">${t(p.nameZh, p.nameEn)}</div>
+            <div class="plan-price">${SHOP.currency}${p.price} <small>${t(p.periodZh, p.periodEn)}</small></div>
+          </div>
+          <div class="plan-save">${p.saveZh ? t(p.saveZh, p.saveEn) : '&nbsp;'}</div>
+          <button class="plan-btn ${isCurrent ? 'ghost' : ''}" onclick="switchPlan('${p.id}')">
+            ${isCurrent ? t('续费当前套餐', 'Renew This Plan') : t('切换到此套餐', 'Switch to This Plan')}
+          </button>
+        </div>
+      `;
+    }).join('');
+  }
+  function switchPlan(id) {
+    CURRENT_SUB.planId = id;
+    CURRENT_SUB.daysLeft = 90;
+    renderSubCard();
+    renderBenefits();
+    renderPlans();
+    renderRenewBanner();
+  }
+  function scrollToPlans() {
+    document.getElementById('plansSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  /* ── 渲染：订阅历史 ── */
+  function renderHistory() {
+    document.getElementById('historyList').innerHTML = HISTORY.map(h => `
+      <div class="history-row">
+        <div>
+          <div class="history-name">${t(h.zh, h.en)}</div>
+          <div class="history-date">${t(h.dateZh, h.dateEn)}</div>
+        </div>
+        <div class="history-amount">${SHOP.currency}${h.amount}</div>
+      </div>
+    `).join('');
+  }
+
+  /* ── 语言切换 ── */
+  function toggleLang() {
+    currentLang = currentLang === 'zh' ? 'en' : 'zh';
+    document.documentElement.lang = currentLang;
+    document.getElementById('shopName').textContent = t(SHOP.nameZh, SHOP.nameEn);
+    document.querySelectorAll('[data-zh][data-en]').forEach(el => {
+      el.textContent = currentLang === 'zh' ? el.dataset.zh : el.dataset.en;
+    });
+    renderRenewBanner();
+    renderSubCard();
+    renderBenefits();
+    renderPlans();
+    renderHistory();
+  }
+
+  /* ── 初始化 ── */
+  document.getElementById('shopName').textContent = SHOP.nameZh;
+  renderRenewBanner();
+  renderSubCard();
+  renderBenefits();
+  renderPlans();
+  renderHistory();
+</script>
+</body>
+</html>
