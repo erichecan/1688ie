@@ -1,32 +1,32 @@
 <!DOCTYPE html>
 <!--
-  场景化销售演示页(Sales Demo Page)
-  给中小店主看的销售演示：左边场景选择(店主自己的话说经营问题)，右边分步流程演示(手机外框渲染界面)。
+  场景化销售演示页(Sales Demo Page) · 草坪养护/除草 · 订阅套餐版
+  跟根目录 sales-demo.html 引擎完全一致，只换了 BRAND 配色 + SCENARIOS 数据，
+  渲染代码（renderScreen / render）原封不动照抄，没有新增 screen.kind。
 
   怎么改成具体客户：
   1. 顶部 :root 里的 --brand / --brand-dark / --brand-light 三个变量换成客户品牌色
   2. 顶部 BRAND 对象改店名、logo
-  3. SCENARIOS 数组是唯一数据源，新增/替换行业场景只改这个数组，不改任何渲染代码
+  3. SCENARIOS 数组是唯一数据源，新增/替换场景只改这个数组，不改任何渲染代码
      (screen.kind 目前支持: qr / offer / notify / deduct / balance / auto-list / action / push / sms / booking / confirm)
 
   角色配色是固定的、独立于品牌色的系统：客人手机=暖橙色，您的手机=深墨蓝色。
-  换品牌只换 --brand，这两个角色色永远不变，保证"客人手机/您的手机"一眼可辨这件事不会被品牌换肤破坏。
 -->
 <html lang="zh">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>示例美甲工作室 · 销售演示</title>
+<title>示例草坪养护社 · 销售演示</title>
 <style>
   :root {
-    --brand: #C07090;
-    --brand-dark: #A05070;
-    --brand-light: #FEF0F4;
-    --ink: #201417;
-    --ink-soft: #6b5860;
-    --bg: #FAF7F8;
+    --brand: #3F7D3F;
+    --brand-dark: #2C5A2C;
+    --brand-light: #EAF3EA;
+    --ink: #1B201B;
+    --ink-soft: #667066;
+    --bg: #F8FAF7;
     --surface: #ffffff;
-    --line: #EFE0E6;
+    --line: #E2EAE2;
     --radius: 16px;
 
     --customer: #EA580C;
@@ -216,7 +216,7 @@
   <div class="head-inner">
     <div class="shop-mark" id="shopMark">示</div>
     <div>
-      <div class="shop-name" id="shopName">示例美甲工作室</div>
+      <div class="shop-name" id="shopName">示例草坪养护社</div>
       <div class="shop-tag">给店主看的现场演示 · 不是给客人看的</div>
     </div>
   </div>
@@ -281,84 +281,49 @@
 
   // ══════════════ 唯一数据源：改这里就是改整个页面 ══════════════
 
-  var BRAND = { shopName: '示例美甲工作室', primary: '#C07090', logo: null };
+  var BRAND = { shopName: '示例草坪养护社', primary: '#3F7D3F', logo: null };
 
   var SCENARIOS = [
     {
-      id: 'frequency',
-      label: '让客人来得更勤',
-      subtitle: '来一次就没影了，也不知道怎么找她回来',
+      id: 'subscribe',
+      label: '让客人签订阅，不是单次叫工',
+      subtitle: '每次都要客户重新联系约时间，一单一单谈太耗精力',
       steps: [
-        { title: '客人做完美甲，您递手机让她扫码', viewer: 'owner', auto: false,
-          screen: { kind: 'qr', caption: '请客人拿出手机扫这个码' } },
-        { title: '她的手机上出现次卡方案', viewer: 'customer', auto: false,
-          screen: { kind: 'offer', options: [ { name: '10次卡', price: '$450' }, { name: '单次', price: '$50' } ] } },
-        { title: '她付款，您的手机收到到账提醒', viewer: 'owner', auto: false,
-          screen: { kind: 'notify', title: '到账提醒', line: '客人 购买 10次卡', amount: '+$450' } },
-        { title: '下次她来，您点一下核销', viewer: 'owner', auto: false,
-          screen: { kind: 'deduct', label: '10次卡 · 剩余次数', before: '9', after: '8' } }
+        { title: '客人扫码，看到订阅套餐方案', viewer: 'customer', auto: false,
+          screen: { kind: 'offer', options: [ { name: '季卡 · 每2周上门1次', price: '€120/季' }, { name: '单次上门', price: '€50' } ] } },
+        { title: '她订阅成功，您收到到账提醒', viewer: 'owner', auto: false,
+          screen: { kind: 'notify', title: '订阅提醒', line: '客人 订阅 季卡套餐', amount: '+€120' } },
+        { title: '下次上门自动排进您的日程', viewer: 'owner', auto: true,
+          screen: { kind: 'booking', service: '草坪修剪', date: '09-10 · 周四', time: '14:00' } }
       ]
     },
     {
-      id: 'prepaid',
-      label: '让客人先把钱交了',
-      subtitle: '做完就走，下次不知道什么时候再来',
-      punchline: '这 $500 今天就在您账上了，而且她不会再去隔壁试新店。',
+      id: 'renew',
+      label: '到期前自动提醒续费',
+      subtitle: '季度一到客户就没续费，也没人有空一个个去催',
+      punchline: '到期自动提醒，续费率不再靠运气。',
       steps: [
-        { title: '客人扫码，看到储值方案', viewer: 'customer', auto: false,
-          screen: { kind: 'offer', options: [ { name: '充值 $500', price: '送 $50' } ] } },
-        { title: '她付款成功，余额自动记账', viewer: 'customer', auto: false,
-          screen: { kind: 'balance', name: '张女士', amount: '$550' } },
-        { title: '您的手机收到：张女士 充值 $500', viewer: 'owner', auto: false,
-          screen: { kind: 'notify', title: '充值提醒', line: '张女士 充值', amount: '+$500' } },
-        { title: '她下次消费，直接从余额扣', viewer: 'owner', auto: false,
-          screen: { kind: 'deduct', label: '张女士 · 账户余额', before: '$550', after: '$500' } }
+        { title: '系统自动标出快到期的订阅', viewer: 'owner', auto: true,
+          screen: { kind: 'auto-list', title: '7天内到期 · 未续费', count: '5', unit: '位客户' } },
+        { title: '您点一下"发续费提醒"', viewer: 'owner', auto: false,
+          screen: { kind: 'action', label: '发续费提醒', target: '5 位客户' } },
+        { title: '客户的手机收到提醒', viewer: 'customer', auto: false,
+          screen: { kind: 'push', title: '套餐快到期了', body: '您的草坪养护套餐 7 天后到期，续费享9折' } },
+        { title: '她确认续费，您收到通知', viewer: 'owner', auto: false,
+          screen: { kind: 'confirm', options: [ '确认续费', '暂不续费' ] } }
       ]
     },
     {
-      id: 'winback',
-      label: '让不来的老客人回头',
-      subtitle: '好多客人悄悄流失了，自己根本没空一个个去查',
+      id: 'reschedule',
+      label: '改期不用打电话来回沟通',
+      subtitle: '天气不好或客户临时有事，全靠打电话一个个改',
       steps: [
-        { title: '系统自动标出超60天没来的客人', viewer: 'owner', auto: true,
-          screen: { kind: 'auto-list', title: '60天未到店', count: '12', unit: '位客人' } },
-        { title: '您点一下"发优惠券"', viewer: 'owner', auto: false,
-          screen: { kind: 'action', label: '发优惠券', target: '12 位客人' } },
-        { title: '她们的手机上收到问候券', viewer: 'customer', auto: false,
-          screen: { kind: 'push', title: '好久不见', body: '回来做一次，送您手部护理' } },
-        { title: '有人点了预约，您收到通知', viewer: 'owner', auto: false,
-          screen: { kind: 'notify', title: '新预约', line: '王女士 预约了 明天 14:00', amount: '' } }
-      ]
-    },
-    {
-      id: 'noshow',
-      label: '别再有人放我鸽子',
-      subtitle: '排了位置，人没来，那个时段就白白空掉了',
-      steps: [
-        { title: '客人在手机上选时间下单', viewer: 'customer', auto: false,
-          screen: { kind: 'booking', service: '美甲 · 单色', date: '明天 · 周四', time: '14:00' } },
-        { title: '您的手机收到新预约提醒', viewer: 'owner', auto: false,
-          screen: { kind: 'notify', title: '新预约提醒', line: '林小姐 · 美甲 · 明天14:00', amount: '' } },
-        { title: '到店前一天，系统自动发提醒', viewer: 'customer', auto: true,
-          screen: { kind: 'sms', body: '提醒您：明天14:00 到店做美甲，回复可改时间' } },
-        { title: '她确认或改时间，您那边自动更新', viewer: 'customer', auto: false,
-          screen: { kind: 'confirm', options: [ '确认到店', '改时间' ] } }
-      ]
-    },
-    {
-      id: 'giftcard',
-      label: '让客人买单送礼，还带来新客',
-      subtitle: '老客户想送朋友体验，但没有现成的载体',
-      punchline: '一张礼品卡，等于免费带来一个新客人。',
-      steps: [
-        { title: '客人想送朋友，选礼品卡面额', viewer: 'customer', auto: false,
-          screen: { kind: 'offer', options: [ { name: '礼品卡 $50', price: '送 $5' }, { name: '礼品卡 $100', price: '送 $15' } ] } },
-        { title: '她付款，您收到购买提醒', viewer: 'owner', auto: false,
-          screen: { kind: 'notify', title: '礼品卡购买', line: '张女士 购买 $50 礼品卡', amount: '+$50' } },
-        { title: '朋友第一次上门，出示礼品卡余额', viewer: 'customer', auto: false,
-          screen: { kind: 'balance', name: '新客人 · 收到的礼品卡', amount: '$50' } },
-        { title: '消费后余额自动扣减，新客人成了熟客候选人', viewer: 'owner', auto: false,
-          screen: { kind: 'deduct', label: '礼品卡余额', before: '$50', after: '$15' } }
+        { title: '客户在手机上自己改约下次上门时间', viewer: 'customer', auto: false,
+          screen: { kind: 'booking', service: '草坪修剪 · 改期', date: '09-12 · 周六', time: '10:00' } },
+        { title: '您的手机收到改期通知', viewer: 'owner', auto: false,
+          screen: { kind: 'notify', title: '改期通知', line: '客户 改期至 09-12 10:00', amount: '' } },
+        { title: '系统自动给客户发确认短信', viewer: 'customer', auto: true,
+          screen: { kind: 'sms', body: '已为您确认新时间：09-12 周六 10:00 上门修剪' } }
       ]
     }
   ];
@@ -383,7 +348,7 @@
               '<div class="scr-row"><span style="font-weight:700;">' + o.name + '</span>' +
               '<span class="scr-amount">' + o.price + '</span></div></div>';
           }).join('') +
-          '<div class="scr-btn">立即购买</div>';
+          '<div class="scr-btn">立即订阅</div>';
       case 'notify':
         return '' +
           '<div class="scr-pill-tag">通知</div>' +
@@ -406,9 +371,9 @@
           '<div class="scr-btn ghost" style="text-align:center;">已核销 ✓</div>';
       case 'balance':
         return '' +
-          '<div class="scr-title">充值成功</div>' +
+          '<div class="scr-title">账户余额</div>' +
           '<div class="scr-card" style="background:var(--brand);color:#fff;border:none;">' +
-            '<div class="scr-muted" style="color:rgba(255,255,255,.85);">' + screen.name + ' · 账户余额</div>' +
+            '<div class="scr-muted" style="color:rgba(255,255,255,.85);">' + screen.name + '</div>' +
             '<div style="font-size:1.8rem;font-weight:900;margin-top:6px;">' + screen.amount + '</div>' +
           '</div>';
       case 'auto-list':
@@ -422,7 +387,7 @@
       case 'action':
         return '' +
           '<div class="scr-title">' + screen.target + '</div>' +
-          '<div class="scr-card scr-muted">已筛选出所有符合条件的客人</div>' +
+          '<div class="scr-card scr-muted">已筛选出所有符合条件的客户</div>' +
           '<div class="scr-btn" style="margin-top:14px;">' + screen.label + '</div>';
       case 'push':
         return '' +
@@ -439,17 +404,17 @@
           '</div>';
       case 'booking':
         return '' +
-          '<div class="scr-title">确认预约</div>' +
+          '<div class="scr-title">' + (screen.date && screen.time ? '确认排期' : '确认预约') + '</div>' +
           '<div class="scr-card">' +
             '<div class="scr-row"><span class="scr-muted">项目</span><span style="font-weight:700;">' + screen.service + '</span></div>' +
             '<div class="scr-row" style="margin-top:8px;"><span class="scr-muted">日期</span><span style="font-weight:700;">' + screen.date + '</span></div>' +
             '<div class="scr-row" style="margin-top:8px;"><span class="scr-muted">时间</span><span style="font-weight:700;">' + screen.time + '</span></div>' +
           '</div>' +
-          '<div class="scr-btn">确认预约</div>';
+          '<div class="scr-btn">确认</div>';
       case 'confirm':
         return '' +
-          '<div class="scr-title">明天的预约</div>' +
-          '<div class="scr-card scr-muted">14:00 · 美甲</div>' +
+          '<div class="scr-title">套餐续费</div>' +
+          '<div class="scr-card scr-muted">季卡 · 09-01 到期</div>' +
           screen.options.map(function (t, i) {
             return '<div class="scr-btn' + (i === 0 ? '' : ' ghost') + '" style="margin-top:10px;">' + t + '</div>';
           }).join('');
@@ -460,7 +425,7 @@
 
   // ══════════════ 状态与渲染 ══════════════
 
-  var state = { scenarioIndex: 1, stepIndex: 0 }; // 默认选中第2个场景(prepaid)
+  var state = { scenarioIndex: 1, stepIndex: 0 }; // 默认选中第2个场景(renew)
 
   var $scenarioList = document.getElementById('scenarioList');
   var $stageHeadline = document.getElementById('stageHeadline');
