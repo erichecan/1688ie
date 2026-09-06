@@ -21,14 +21,18 @@
     --brand-light: #e8f3ef;
     --brand-dark: #093a2c;
     --ink: #1c1917;
-    --gray: #78716c;
+    --gray: #5f5956;
     --line: #e7e5e4;
     --bg: #fafaf9;
     --card: #ffffff;
     --radius: 14px;
     --danger: #dc2626;
+    --shadow-sm: 0 1px 2px rgba(28,25,23,.04), 0 8px 20px -16px rgba(28,25,23,.35);
+    --shadow-md: 0 2px 4px rgba(28,25,23,.05), 0 20px 40px -24px rgba(28,25,23,.4);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  ::selection { background: var(--brand-light); color: var(--brand-dark); }
+  :focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; border-radius: 4px; }
   body {
     font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
     background: var(--bg);
@@ -45,7 +49,9 @@
     font-size: 0.78rem; font-weight: 700; color: var(--brand);
     border: 1px solid var(--brand); border-radius: 99px;
     padding: 4px 12px; cursor: pointer; background: var(--card);
+    transition: background .15s, color .15s;
   }
+  .lang-btn:hover { background: var(--brand); color: #fff; }
 
   /* ── 步骤条 ── */
   .steps { display: flex; gap: 6px; margin-bottom: 20px; }
@@ -55,6 +61,7 @@
   .card {
     background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
     padding: 18px; margin-bottom: 14px;
+    box-shadow: var(--shadow-sm);
   }
   .card-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 12px; color: var(--ink); }
   .card-title .num {
@@ -67,20 +74,29 @@
   .svc-item {
     display: flex; align-items: center; justify-content: space-between;
     padding: 12px; border: 1.5px solid var(--line); border-radius: 10px;
-    margin-bottom: 8px; cursor: pointer; transition: border-color .15s, background .15s;
+    margin-bottom: 8px; cursor: pointer; box-shadow: var(--shadow-sm);
+    transition: border-color .15s, background .15s, box-shadow .15s, transform .15s;
   }
   .svc-item:last-child { margin-bottom: 0; }
-  .svc-item.selected { border-color: var(--brand); background: var(--brand-light); }
+  .svc-item:hover { border-color: var(--brand); transform: translateY(-2px); box-shadow: var(--shadow-md); }
+  .svc-item.selected { border-color: var(--brand); background: var(--brand-light); box-shadow: var(--shadow-md); }
   .svc-name { font-weight: 600; font-size: 0.88rem; }
   .svc-meta { font-size: 0.76rem; color: var(--gray); margin-top: 2px; }
   .svc-price { font-weight: 700; color: var(--brand-dark); font-size: 0.9rem; white-space: nowrap; }
 
   /* ── 日期选择 ── */
-  .date-row { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 2px; }
+  .date-row {
+    display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px;
+    scrollbar-width: thin; scrollbar-color: var(--line) transparent;
+  }
+  .date-row::-webkit-scrollbar { height: 6px; }
+  .date-row::-webkit-scrollbar-thumb { background: var(--line); border-radius: 99px; }
   .date-cell {
     flex: 0 0 56px; text-align: center; padding: 10px 0; border-radius: 10px;
     border: 1.5px solid var(--line); cursor: pointer; user-select: none;
+    transition: border-color .15s, background .15s, color .15s;
   }
+  .date-cell:not(.selected):not(.disabled):hover { border-color: var(--brand); }
   .date-cell.selected { border-color: var(--brand); background: var(--brand); color: #fff; }
   .date-cell .dow { font-size: 0.68rem; color: inherit; opacity: .75; }
   .date-cell .dom { font-size: 1.05rem; font-weight: 700; margin-top: 2px; }
@@ -90,15 +106,17 @@
   .slot-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
   .slot-cell {
     text-align: center; padding: 9px 0; border-radius: 8px; font-size: 0.82rem; font-weight: 600;
-    border: 1.5px solid var(--line); cursor: pointer;
+    border: 1.5px solid var(--line); cursor: pointer; transition: border-color .15s, background .15s, color .15s;
   }
+  .slot-cell:not(.selected):not(.full):hover { border-color: var(--brand); }
   .slot-cell.selected { border-color: var(--brand); background: var(--brand); color: #fff; }
-  .slot-cell.full { opacity: .3; pointer-events: none; text-decoration: line-through; }
+  .slot-cell.full { opacity: .4; pointer-events: none; text-decoration: line-through; color: var(--gray); }
 
   /* ── 技师选择 ── */
   .staff-row { display: flex; gap: 10px; flex-wrap: wrap; }
-  .staff-item { text-align: center; cursor: pointer; padding: 8px 6px; border-radius: 10px; border: 1.5px solid transparent; width: 76px; }
-  .staff-item.selected { border-color: var(--brand); background: var(--brand-light); }
+  .staff-item { text-align: center; cursor: pointer; padding: 8px 6px; border-radius: 10px; border: 1.5px solid transparent; width: 76px; box-shadow: var(--shadow-sm); transition: border-color .15s, background .15s, box-shadow .15s, transform .15s; }
+  .staff-item:hover { border-color: var(--line); transform: translateY(-2px); box-shadow: var(--shadow-md); }
+  .staff-item.selected { border-color: var(--brand); background: var(--brand-light); box-shadow: var(--shadow-md); }
   .staff-avatar {
     width: 44px; height: 44px; border-radius: 50%; margin: 0 auto 6px;
     background: var(--brand-light); color: var(--brand-dark); font-weight: 800;
@@ -111,9 +129,9 @@
   .field label { display: block; font-size: 0.78rem; color: var(--gray); margin-bottom: 5px; font-weight: 600; }
   .field input {
     width: 100%; padding: 10px 12px; border: 1.5px solid var(--line); border-radius: 8px;
-    font-size: 0.88rem; font-family: inherit;
+    font-size: 0.88rem; font-family: inherit; transition: border-color .15s, box-shadow .15s;
   }
-  .field input:focus { outline: none; border-color: var(--brand); }
+  .field input:focus { outline: none; border-color: var(--brand); box-shadow: 0 0 0 3px var(--brand-light); }
   .field-error { font-size: 0.74rem; color: var(--danger); margin-top: 4px; display: none; }
 
   /* ── 汇总 & 按钮 ── */
@@ -122,10 +140,14 @@
   .btn {
     display: block; width: 100%; text-align: center; padding: 13px; border-radius: 10px;
     font-weight: 700; font-size: 0.92rem; border: none; cursor: pointer;
+    transition: filter .15s, transform .1s;
   }
   .btn-primary { background: var(--brand); color: #fff; }
+  .btn-primary:hover:not(:disabled) { filter: brightness(1.08); }
+  .btn-primary:active:not(:disabled) { filter: brightness(.96); transform: scale(.98); }
   .btn-primary:disabled { background: var(--line); color: var(--gray); cursor: not-allowed; }
   .btn-ghost { background: transparent; color: var(--gray); margin-top: 8px; }
+  .btn-ghost:hover { color: var(--brand-dark); }
 
   /* ── 完成页 ── */
   .done-wrap { text-align: center; padding: 30px 10px; }
@@ -133,7 +155,12 @@
     width: 64px; height: 64px; border-radius: 50%; background: var(--brand-light); color: var(--brand);
     display: flex; align-items: center; justify-content: center; font-size: 30px; margin: 0 auto 16px;
   }
-  .done-title { font-weight: 800; font-size: 1.1rem; margin-bottom: 4px; }
+  .pow-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 18px; font-weight: 800; font-size: 0.9rem; letter-spacing: .01em;
+    color: #fff; background: var(--brand-dark); border-radius: 999px; box-shadow: var(--shadow-sm);
+    margin-bottom: 10px;
+  }
   .done-sub { font-size: 0.84rem; color: var(--gray); margin-bottom: 20px; }
   .code-box {
     background: var(--brand-light); border-radius: 10px; padding: 12px; margin-bottom: 8px;
@@ -148,7 +175,7 @@
 
   <div class="head">
     <div class="shop-name" id="shopName"></div>
-    <div class="lang-btn" onclick="toggleLang()">ZH / EN</div>
+    <div class="lang-btn" tabindex="0" role="button" onclick="toggleLang()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}">ZH / EN</div>
   </div>
 
   <div class="steps">
@@ -210,8 +237,8 @@
   <!-- ============ 第四步：完成 ============ -->
   <section id="step-4" class="hidden">
     <div class="card done-wrap">
-      <div class="done-icon">✓</div>
-      <div class="done-title" data-zh="预约成功" data-en="Booking Confirmed">预约成功</div>
+      <div class="done-icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+      <div class="pow-badge" data-zh="预约成功" data-en="Booking Confirmed">预约成功</div>
       <div class="done-sub" data-zh="已发送短信提醒到您的手机" data-en="A reminder SMS has been sent to your phone">已发送短信提醒到您的手机</div>
       <div class="code-box" id="bookingCode"></div>
       <div id="finalSummary" style="text-align:left; margin-top:16px;"></div>

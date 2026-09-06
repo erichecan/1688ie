@@ -19,14 +19,17 @@
     --brand: #C07090;
     --brand-light: #FEF0F4;
     --brand-dark: #A05070;
+    --brand-deep: #7C3A52;
     --ink: #332328;
-    --gray: #8a7680;
+    --gray: #7a6672;
     --line: #f3dce4;
     --bg: #FEF8FA;
     --card: #ffffff;
     --radius: 14px;
     --danger: #dc2626;
     --good: #15803d;
+    --shadow-sm: 0 1px 2px rgba(51,35,40,.04), 0 8px 20px -16px rgba(51,35,40,.35);
+    --shadow-md: 0 2px 4px rgba(51,35,40,.05), 0 20px 40px -24px rgba(51,35,40,.4);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -36,13 +39,24 @@
     line-height: 1.6;
     padding-bottom: 84px;
   }
+  ::selection { background: var(--brand-light); color: var(--brand-dark); }
+  button:focus-visible, [tabindex]:focus-visible, input:focus-visible {
+    outline: 2px solid var(--brand-dark); outline-offset: 2px;
+  }
+
+  /* ── 共享：确认/核销态胶囊徽标 ── */
+  .pow-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 14px; font-weight: 800; font-size: 0.72rem; letter-spacing: .01em;
+    color: #fff; background: var(--gray); border-radius: 999px; box-shadow: var(--shadow-sm);
+  }
 
   /* ── 共享：顶部头部（sticky） ── */
   .head-bar { position: sticky; top: 0; z-index: 10; background: var(--bg); border-bottom: 1px solid var(--line); }
   .head-inner { max-width: 480px; margin: 0 auto; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; }
   .shop-name { font-weight: 800; font-size: 1.05rem; color: var(--brand-dark); }
   .lang-btn {
-    font-size: 0.78rem; font-weight: 700; color: var(--brand);
+    font-size: 0.78rem; font-weight: 700; color: var(--brand-dark);
     border: 1px solid var(--brand); border-radius: 99px;
     padding: 4px 12px; cursor: pointer; background: var(--card);
   }
@@ -52,13 +66,13 @@
 
   /* ── 共享：卡片（四模块通用，样式完全一致） ── */
   .card {
-    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
-    padding: 18px; margin-bottom: 14px;
+    background: var(--card); border: 1.5px solid var(--line); border-radius: var(--radius);
+    padding: 18px; margin-bottom: 14px; box-shadow: var(--shadow-sm);
   }
   .card-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 12px; color: var(--ink); }
   .card-title .num {
     display: inline-flex; align-items: center; justify-content: center;
-    width: 20px; height: 20px; border-radius: 50%; background: var(--brand);
+    width: 20px; height: 20px; border-radius: 50%; background: var(--brand-dark);
     color: #fff; font-size: 0.72rem; margin-right: 8px;
   }
 
@@ -69,10 +83,10 @@
   .nav-inner { max-width: 480px; margin: 0 auto; display: flex; }
   .nav-item {
     flex: 1; text-align: center; padding: 9px 0 8px; cursor: pointer; color: var(--gray);
-    font-size: 0.68rem; font-weight: 700; background: none; border: none; font-family: inherit;
+    font-size: 11px; font-weight: 700; background: none; border: none; font-family: inherit;
   }
   .nav-item .nav-icon { font-size: 1.3rem; display: block; margin-bottom: 2px; }
-  .nav-item.active { color: var(--brand); }
+  .nav-item.active { color: var(--brand-dark); }
 
   /* ══════════════ 模块①：预约（scope: #panelBooking） ══════════════ */
   #panelBooking .steps { display: flex; gap: 6px; margin-bottom: 20px; }
@@ -82,7 +96,8 @@
   #panelBooking .svc-item {
     display: flex; align-items: center; justify-content: space-between;
     padding: 12px; border: 1.5px solid var(--line); border-radius: 10px;
-    margin-bottom: 8px; cursor: pointer; transition: border-color .15s, background .15s;
+    margin-bottom: 8px; cursor: pointer; box-shadow: var(--shadow-sm);
+    transition: border-color .15s, background .15s, box-shadow .15s, transform .15s;
   }
   #panelBooking .svc-item:last-child { margin-bottom: 0; }
   #panelBooking .svc-item.selected { border-color: var(--brand); background: var(--brand-light); }
@@ -95,7 +110,7 @@
     flex: 0 0 56px; text-align: center; padding: 10px 0; border-radius: 10px;
     border: 1.5px solid var(--line); cursor: pointer; user-select: none;
   }
-  #panelBooking .date-cell.selected { border-color: var(--brand); background: var(--brand); color: #fff; }
+  #panelBooking .date-cell.selected { border-color: var(--brand-dark); background: var(--brand-dark); color: #fff; }
   #panelBooking .date-cell .dow { font-size: 0.68rem; color: inherit; opacity: .75; }
   #panelBooking .date-cell .dom { font-size: 1.05rem; font-weight: 700; margin-top: 2px; }
 
@@ -104,7 +119,7 @@
     text-align: center; padding: 9px 0; border-radius: 8px; font-size: 0.82rem; font-weight: 600;
     border: 1.5px solid var(--line); cursor: pointer;
   }
-  #panelBooking .slot-cell.selected { border-color: var(--brand); background: var(--brand); color: #fff; }
+  #panelBooking .slot-cell.selected { border-color: var(--brand-dark); background: var(--brand-dark); color: #fff; }
   #panelBooking .slot-cell.full { opacity: .3; pointer-events: none; text-decoration: line-through; }
 
   #panelBooking .staff-row { display: flex; gap: 10px; flex-wrap: wrap; }
@@ -132,13 +147,13 @@
     display: block; width: 100%; text-align: center; padding: 13px; border-radius: 10px;
     font-weight: 700; font-size: 0.92rem; border: none; cursor: pointer;
   }
-  #panelBooking .btn-primary { background: var(--brand); color: #fff; }
+  #panelBooking .btn-primary { background: var(--brand-dark); color: #fff; transition: filter .15s; }
   #panelBooking .btn-primary:disabled { background: var(--line); color: var(--gray); cursor: not-allowed; }
   #panelBooking .btn-ghost { background: transparent; color: var(--gray); margin-top: 8px; }
 
   #panelBooking .done-wrap { text-align: center; padding: 30px 10px; }
   #panelBooking .done-icon {
-    width: 64px; height: 64px; border-radius: 50%; background: var(--brand-light); color: var(--brand);
+    width: 64px; height: 64px; border-radius: 50%; background: var(--brand-light); color: var(--brand-dark);
     display: flex; align-items: center; justify-content: center; font-size: 30px; margin: 0 auto 16px;
   }
   #panelBooking .done-title { font-weight: 800; font-size: 1.1rem; margin-bottom: 4px; }
@@ -150,16 +165,17 @@
 
   /* ══════════════ 模块②：会员（scope: #panelMembership） ══════════════ */
   #panelMembership .member-card {
-    background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%);
+    background: linear-gradient(135deg, var(--brand-dark) 0%, var(--brand-deep) 100%);
     color: #fff; border-radius: var(--radius); padding: 20px; margin-bottom: 14px;
+    box-shadow: var(--shadow-md);
   }
   #panelMembership .member-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
   #panelMembership .member-level { font-weight: 800; font-size: 1.1rem; }
-  #panelMembership .member-no { font-size: 0.72rem; opacity: .85; font-family: 'SFMono-Regular', Menlo, monospace; }
-  #panelMembership .member-growth { font-size: 0.8rem; opacity: .9; margin: 10px 0 8px; }
+  #panelMembership .member-no { font-size: 0.72rem; color: rgba(255,255,255,.98); font-family: 'SFMono-Regular', Menlo, monospace; }
+  #panelMembership .member-growth { font-size: 0.8rem; color: rgba(255,255,255,.98); margin: 10px 0 8px; }
   #panelMembership .progress-track { height: 7px; border-radius: 99px; background: rgba(255,255,255,.28); overflow: hidden; }
-  #panelMembership .progress-fill { height: 100%; background: #fff; border-radius: 99px; transition: width .25s; }
-  #panelMembership .progress-label { font-size: 0.72rem; opacity: .9; margin-top: 8px; }
+  #panelMembership .progress-fill { width: 100%; height: 100%; background: #fff; border-radius: 99px; transform-origin: left; transform: scaleX(0); transition: transform .25s; }
+  #panelMembership .progress-label { font-size: 0.72rem; color: rgba(255,255,255,.98); margin-top: 8px; }
 
   #panelMembership .benefit-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-bottom: 1px dashed var(--line); }
   #panelMembership .benefit-item:last-child { border-bottom: none; }
@@ -167,34 +183,43 @@
     flex: 0 0 22px; width: 22px; height: 22px; border-radius: 50%;
     display: flex; align-items: center; justify-content: center; font-size: 0.72rem; margin-top: 1px;
   }
-  #panelMembership .benefit-icon.on { background: var(--brand); color: #fff; }
-  #panelMembership .benefit-icon.off { background: var(--line); color: var(--gray); }
+  #panelMembership .benefit-icon.on { background: var(--brand-dark); color: #fff; }
+  #panelMembership .benefit-icon.off { background: var(--line); color: #6b5761; }
   #panelMembership .benefit-text { font-size: 0.86rem; font-weight: 600; }
   #panelMembership .benefit-text.off { color: var(--gray); font-weight: 500; }
   #panelMembership .benefit-hint { font-size: 0.72rem; color: var(--gray); margin-top: 2px; }
 
-  #panelMembership .tier-tabs { display: flex; gap: 8px; margin-bottom: 14px; }
-  #panelMembership .tier-tab {
-    flex: 1; text-align: center; padding: 9px 0; border-radius: 10px; font-size: 0.82rem; font-weight: 700;
-    border: 1.5px solid var(--line); cursor: pointer; color: var(--gray);
+  #panelMembership .tier-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px; }
+  #panelMembership .tier-card {
+    position: relative; text-align: center; padding: 10px 4px; border-radius: 12px; font-size: 0.82rem; font-weight: 700;
+    border: 2px solid var(--line); background: #fff; cursor: pointer; color: var(--gray); box-shadow: var(--shadow-sm);
+    transition: border-color .15s, background .15s, box-shadow .15s, transform .15s, color .15s;
   }
-  #panelMembership .tier-tab.active { border-color: var(--brand); background: var(--brand-light); color: var(--brand-dark); }
+  #panelMembership .tier-card:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); }
+  #panelMembership .tier-card.active { border-color: var(--brand); background: var(--brand-light); color: var(--brand-dark); }
+  #panelMembership .tier-name { padding: 0 10px; }
+  #panelMembership .tier-radio {
+    position: absolute; top: 6px; right: 6px; width: 12px; height: 12px; border-radius: 50%;
+    border: 2px solid var(--line); background: #fff; transition: border-color .15s, background .15s, box-shadow .15s;
+  }
+  #panelMembership .tier-card.active .tier-radio { border-color: var(--brand-dark); background: var(--brand-dark); box-shadow: inset 0 0 0 2px #fff; }
 
   #panelMembership .record-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px dashed var(--line); }
   #panelMembership .record-row:last-child { border-bottom: none; }
   #panelMembership .record-name { font-size: 0.86rem; font-weight: 600; }
   #panelMembership .record-date { font-size: 0.72rem; color: var(--gray); margin-top: 2px; }
   #panelMembership .record-amount { font-weight: 700; color: var(--brand-dark); font-size: 0.9rem; text-align: right; }
-  #panelMembership .record-growth { font-size: 0.72rem; color: var(--brand); text-align: right; margin-top: 2px; }
+  #panelMembership .record-growth { font-size: 0.72rem; color: var(--brand-dark); text-align: right; margin-top: 2px; }
 
   /* ══════════════ 模块③：积分（scope: #panelPoints） ══════════════ */
   #panelPoints .balance-card {
-    background: linear-gradient(135deg, var(--brand-dark), var(--brand));
+    background: linear-gradient(135deg, var(--brand-deep), var(--brand-dark));
     color: #fff; border-radius: var(--radius); padding: 22px 20px; margin-bottom: 14px;
+    box-shadow: var(--shadow-md);
   }
-  #panelPoints .balance-label { font-size: 0.8rem; opacity: .85; margin-bottom: 6px; }
+  #panelPoints .balance-label { font-size: 0.8rem; color: rgba(255,255,255,.98); margin-bottom: 6px; }
   #panelPoints .balance-num { font-size: 2.4rem; font-weight: 800; letter-spacing: .5px; }
-  #panelPoints .balance-sub { font-size: 0.76rem; opacity: .85; margin-top: 10px; }
+  #panelPoints .balance-sub { font-size: 0.76rem; color: rgba(255,255,255,.98); margin-top: 10px; }
 
   #panelPoints .tabs { display: flex; gap: 8px; margin-bottom: 14px; }
   #panelPoints .tab-btn {
@@ -204,14 +229,19 @@
   #panelPoints .tab-btn.active { border-color: var(--brand); background: var(--brand-light); color: var(--brand-dark); }
 
   #panelPoints .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  #panelPoints .product-card { border: 1.5px solid var(--line); border-radius: 12px; padding: 14px 12px; text-align: center; }
-  #panelPoints .product-icon { font-size: 1.8rem; margin-bottom: 6px; }
+  #panelPoints .product-card {
+    border: 1.5px solid var(--line); border-radius: 12px; padding: 14px 12px; text-align: center;
+    background: var(--card); box-shadow: var(--shadow-sm);
+    transition: border-color .15s, box-shadow .15s, transform .15s;
+  }
+  #panelPoints .product-card:hover { border-color: var(--brand); transform: translateY(-2px); box-shadow: var(--shadow-md); }
+  #panelPoints .product-icon { color: var(--brand-dark); margin-bottom: 6px; }
   #panelPoints .product-name { font-weight: 700; font-size: 0.84rem; margin-bottom: 4px; min-height: 2.2em; }
   #panelPoints .product-cost { font-weight: 800; color: var(--brand-dark); font-size: 0.92rem; margin-bottom: 2px; }
   #panelPoints .product-stock { font-size: 0.72rem; color: var(--gray); margin-bottom: 10px; }
   #panelPoints .redeem-btn {
     width: 100%; padding: 8px; border-radius: 8px; font-size: 0.8rem; font-weight: 700;
-    border: none; cursor: pointer; background: var(--brand); color: #fff;
+    border: none; cursor: pointer; background: var(--brand-dark); color: #fff; transition: filter .15s;
   }
   #panelPoints .redeem-btn:disabled { background: var(--line); color: var(--gray); cursor: not-allowed; }
 
@@ -229,13 +259,13 @@
     position: fixed; inset: 0; background: rgba(28,25,23,.45);
     display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 50;
   }
-  #modalOverlay .modal-card { background: var(--card); border-radius: var(--radius); padding: 22px; max-width: 340px; width: 100%; text-align: center; }
-  #modalOverlay .modal-icon { font-size: 2.2rem; margin-bottom: 10px; }
+  #modalOverlay .modal-card { background: var(--card); border-radius: var(--radius); padding: 22px; max-width: 340px; width: 100%; text-align: center; box-shadow: var(--shadow-md); }
+  #modalOverlay .modal-icon { color: var(--brand-dark); margin-bottom: 10px; }
   #modalOverlay .modal-title { font-weight: 800; font-size: 1rem; margin-bottom: 6px; }
   #modalOverlay .modal-sub { font-size: 0.82rem; color: var(--gray); margin-bottom: 18px; }
   #modalOverlay .modal-btns { display: flex; gap: 10px; }
-  #modalOverlay .btn { flex: 1; text-align: center; padding: 11px; border-radius: 10px; font-weight: 700; font-size: 0.88rem; border: none; cursor: pointer; }
-  #modalOverlay .btn-primary { background: var(--brand); color: #fff; }
+  #modalOverlay .btn { flex: 1; text-align: center; padding: 11px; border-radius: 10px; font-weight: 700; font-size: 0.88rem; border: none; cursor: pointer; transition: filter .15s; }
+  #modalOverlay .btn-primary { background: var(--brand-dark); color: #fff; }
   #modalOverlay .btn-ghost { background: var(--brand-light); color: var(--brand-dark); }
 
   /* ══════════════ 模块④：优惠券（scope: #panelCoupons） ══════════════ */
@@ -245,7 +275,7 @@
     font-weight: 700; font-size: 0.86rem; border: 1.5px solid var(--line);
     background: var(--card); cursor: pointer; color: var(--gray);
   }
-  #panelCoupons .tab-btn.active { background: var(--brand); color: #fff; border-color: var(--brand); }
+  #panelCoupons .tab-btn.active { background: var(--brand-dark); color: #fff; border-color: var(--brand-dark); }
 
   #panelCoupons .group-title { font-size: 0.78rem; font-weight: 700; color: var(--gray); margin: 16px 0 8px; }
   #panelCoupons .group-title:first-child { margin-top: 0; }
@@ -254,14 +284,16 @@
   #panelCoupons .coupon-card {
     display: flex; border: 1.5px solid var(--line); border-radius: 12px;
     overflow: hidden; margin-bottom: 10px; background: var(--card); position: relative;
+    box-shadow: var(--shadow-sm); transition: box-shadow .15s, transform .15s;
   }
+  #panelCoupons .coupon-card:not(.disabled):hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
   #panelCoupons .coupon-left {
-    flex: 0 0 96px; background: var(--brand); color: #fff;
+    flex: 0 0 96px; background: var(--brand-dark); color: #fff;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     text-align: center; padding: 10px 6px; border-right: 1.5px dashed rgba(255,255,255,.5);
   }
   #panelCoupons .coupon-left .amt-num { font-size: 1.5rem; font-weight: 800; line-height: 1.1; }
-  #panelCoupons .coupon-left .amt-unit { font-size: 0.68rem; opacity: .85; margin-top: 2px; }
+  #panelCoupons .coupon-left .amt-unit { font-size: 0.68rem; color: rgba(255,255,255,.96); margin-top: 2px; }
   #panelCoupons .coupon-right { flex: 1; padding: 12px 14px; display: flex; flex-direction: column; justify-content: center; gap: 3px; }
   #panelCoupons .coupon-title { font-weight: 700; font-size: 0.9rem; }
   #panelCoupons .coupon-meta { font-size: 0.72rem; color: var(--gray); }
@@ -269,23 +301,20 @@
   #panelCoupons .coupon-expiry { font-size: 0.7rem; color: var(--gray); }
   #panelCoupons .coupon-btn {
     padding: 6px 16px; border-radius: 99px; font-size: 0.78rem; font-weight: 700;
-    border: none; cursor: pointer; background: var(--brand); color: #fff; white-space: nowrap;
+    border: none; cursor: pointer; background: var(--brand-dark); color: #fff; white-space: nowrap;
+    transition: filter .15s;
   }
   #panelCoupons .coupon-btn:disabled { background: var(--line); color: var(--gray); cursor: not-allowed; }
 
   #panelCoupons .coupon-card.disabled .coupon-left { background: var(--gray); }
   #panelCoupons .coupon-card.disabled { opacity: .6; }
-  #panelCoupons .stamp {
-    position: absolute; top: 10px; right: 12px; border: 2px solid var(--gray); color: var(--gray);
-    font-weight: 800; font-size: 0.68rem; padding: 2px 8px; border-radius: 6px;
-    transform: rotate(14deg); letter-spacing: 1px;
-  }
+  #panelCoupons .stamp { position: absolute; top: 10px; right: 12px; background: var(--gray); }
 
   #redeemModal {
     position: fixed; inset: 0; background: rgba(0,0,0,.45);
     display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 50;
   }
-  #redeemModal .modal-box { background: var(--card); border-radius: 16px; padding: 26px 22px; max-width: 340px; width: 100%; text-align: center; }
+  #redeemModal .modal-box { background: var(--card); border-radius: 16px; padding: 26px 22px; max-width: 340px; width: 100%; text-align: center; box-shadow: var(--shadow-md); }
   #redeemModal .modal-title { font-weight: 800; font-size: 1rem; margin-bottom: 4px; }
   #redeemModal .modal-sub { font-size: 0.8rem; color: var(--gray); margin-bottom: 16px; }
   #redeemModal .modal-code {
@@ -295,10 +324,33 @@
   }
   #redeemModal .btn {
     display: block; width: 100%; text-align: center; padding: 12px; border-radius: 10px;
-    font-weight: 700; font-size: 0.88rem; border: none; cursor: pointer;
+    font-weight: 700; font-size: 0.88rem; border: none; cursor: pointer; transition: filter .15s;
   }
-  #redeemModal .btn-primary { background: var(--brand); color: #fff; }
+  #redeemModal .btn-primary { background: var(--brand-dark); color: #fff; }
   #redeemModal .btn-ghost { background: transparent; color: var(--gray); margin-top: 8px; }
+
+  /* ── 共享：hover 反馈（原来只有 selected 态没有 hover 提示） ── */
+  .lang-btn:hover { background: var(--brand-light); }
+  .nav-item:not(.active):hover { color: var(--brand-dark); }
+  #panelBooking .svc-item:hover { border-color: var(--brand); transform: translateY(-2px); box-shadow: var(--shadow-md); }
+  #panelBooking .date-cell:not(.selected):hover { border-color: var(--brand); }
+  #panelBooking .slot-cell:not(.selected):not(.full):hover { border-color: var(--brand); }
+  #panelBooking .staff-item:hover { background: var(--brand-light); }
+  #panelBooking .btn-primary:hover:not(:disabled) { filter: brightness(1.06); }
+  #panelBooking .btn-primary:active:not(:disabled) { filter: brightness(.96); }
+  #panelBooking .btn-ghost:hover { color: var(--brand-dark); }
+  #panelPoints .tab-btn:not(.active):hover { border-color: var(--brand); color: var(--brand-dark); }
+  #panelPoints .redeem-btn:hover:not(:disabled) { filter: brightness(1.06); }
+  #panelPoints .redeem-btn:active:not(:disabled) { filter: brightness(.96); }
+  #panelCoupons .tab-btn:not(.active):hover { border-color: var(--brand); color: var(--brand-dark); }
+  #panelCoupons .coupon-btn:hover:not(:disabled) { filter: brightness(1.06); }
+  #panelCoupons .coupon-btn:active:not(:disabled) { filter: brightness(.96); }
+  #modalOverlay .btn-primary:hover { filter: brightness(1.06); }
+  #modalOverlay .btn-primary:active { filter: brightness(.96); }
+  #modalOverlay .btn-ghost:hover { background: var(--brand); color: #fff; }
+  #redeemModal .btn-primary:hover { filter: brightness(1.06); }
+  #redeemModal .btn-primary:active { filter: brightness(.96); }
+  #redeemModal .btn-ghost:hover { color: var(--brand-dark); }
 </style>
 </head>
 <body>
@@ -306,7 +358,7 @@
 <div class="head-bar">
   <div class="head-inner">
     <div class="shop-name" id="shopName"></div>
-    <div class="lang-btn" onclick="toggleLang()">ZH / EN</div>
+    <div class="lang-btn" role="button" tabindex="0" onclick="toggleLang()">ZH / EN</div>
   </div>
 </div>
 
@@ -369,7 +421,7 @@
 
     <section id="step-4" class="hidden">
       <div class="card done-wrap">
-        <div class="done-icon">✓</div>
+        <div class="done-icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         <div class="done-title" data-zh="预约成功" data-en="Booking Confirmed">预约成功</div>
         <div class="done-sub" data-zh="已发送短信提醒到您的手机" data-en="A reminder SMS has been sent to your phone">已发送短信提醒到您的手机</div>
         <div class="code-box" id="bookingCode"></div>
@@ -387,7 +439,7 @@
         <div class="member-no" id="memberNo"></div>
       </div>
       <div class="member-growth" id="memberGrowth"></div>
-      <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+      <div class="progress-track"><div class="progress-fill" id="progressFill" style="transform:scaleX(0)"></div></div>
       <div class="progress-label" id="progressLabel"></div>
     </div>
 
@@ -398,7 +450,7 @@
 
     <div class="card">
       <div class="card-title" data-zh="等级权益对比" data-en="Compare Tier Benefits">等级权益对比</div>
-      <div class="tier-tabs" id="tierTabs"></div>
+      <div class="tier-grid" id="tierTabs"></div>
       <div id="tierBenefits"></div>
     </div>
 
@@ -417,8 +469,8 @@
     </div>
 
     <div class="tabs">
-      <div class="tab-btn" id="tabMallBtn" onclick="Points.switchTab('mall')" data-zh="积分商城" data-en="Points Mall">积分商城</div>
-      <div class="tab-btn" id="tabHistoryBtn" onclick="Points.switchTab('history')" data-zh="积分明细" data-en="History">积分明细</div>
+      <div class="tab-btn" id="tabMallBtn" role="button" tabindex="0" onclick="Points.switchTab('mall')" data-zh="积分商城" data-en="Points Mall">积分商城</div>
+      <div class="tab-btn" id="tabHistoryBtn" role="button" tabindex="0" onclick="Points.switchTab('history')" data-zh="积分明细" data-en="History">积分明细</div>
     </div>
 
     <section id="panel-mall">
@@ -437,8 +489,8 @@
   <!-- ══════════════ 模块④：优惠券 ══════════════ -->
   <div id="panelCoupons" class="hidden">
     <div class="tab-bar">
-      <div class="tab-btn active" id="tabBtn-center" onclick="Coupons.switchTab('center')" data-zh="领券中心" data-en="Get Coupons">领券中心</div>
-      <div class="tab-btn" id="tabBtn-mine" onclick="Coupons.switchTab('mine')" data-zh="我的优惠券" data-en="My Coupons">我的优惠券</div>
+      <div class="tab-btn active" id="tabBtn-center" role="button" tabindex="0" onclick="Coupons.switchTab('center')" data-zh="领券中心" data-en="Get Coupons">领券中心</div>
+      <div class="tab-btn" id="tabBtn-mine" role="button" tabindex="0" onclick="Coupons.switchTab('mine')" data-zh="我的优惠券" data-en="My Coupons">我的优惠券</div>
     </div>
 
     <section id="tab-center">
@@ -455,16 +507,16 @@
 <div class="bottom-nav">
   <div class="nav-inner">
     <button class="nav-item active" id="nav-booking" onclick="showPanel('booking')">
-      <span class="nav-icon">📅</span><span data-zh="预约" data-en="Book">预约</span>
+      <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="3.5" y="5" width="17" height="16" rx="3" stroke="currentColor" stroke-width="1.8"/><path d="M3.5 9.5h17M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span><span data-zh="预约" data-en="Book">预约</span>
     </button>
     <button class="nav-item" id="nav-membership" onclick="showPanel('membership')">
-      <span class="nav-icon">👑</span><span data-zh="会员" data-en="Member">会员</span>
+      <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3.5 8.5l3.6 3 4.9-6 4.9 6 3.6-3-1.6 9.5h-13.8L3.5 8.5z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span><span data-zh="会员" data-en="Member">会员</span>
     </button>
     <button class="nav-item" id="nav-points" onclick="showPanel('points')">
-      <span class="nav-icon">⭐</span><span data-zh="积分" data-en="Points">积分</span>
+      <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 3.5l2.6 5.5 6 .7-4.4 4.1 1.2 5.9L12 16.8l-5.4 2.9 1.2-5.9L3.4 9.7l6-.7L12 3.5z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span><span data-zh="积分" data-en="Points">积分</span>
     </button>
     <button class="nav-item" id="nav-coupons" onclick="showPanel('coupons')">
-      <span class="nav-icon">🎟️</span><span data-zh="优惠券" data-en="Coupons">优惠券</span>
+      <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3 9a2 2 0 012-2h14a2 2 0 012 2v1.2a1.6 1.6 0 000 3.2V16a2 2 0 01-2 2H5a2 2 0 01-2-2v-2.6a1.6 1.6 0 000-3.2V9z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9.5 7v10" stroke="currentColor" stroke-width="1.6" stroke-dasharray="2.4 2.4" stroke-linecap="round"/></svg></span><span data-zh="优惠券" data-en="Coupons">优惠券</span>
     </button>
   </div>
 </div>
@@ -516,6 +568,13 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
+  document.addEventListener('keydown', e => {
+    if ((e.key === 'Enter' || e.key === ' ') && e.target.getAttribute && e.target.getAttribute('role') === 'button') {
+      e.preventDefault();
+      e.target.click();
+    }
+  });
+
   /* ══════════════ 模块①：预约 ══════════════ */
   const Booking = (function () {
     const SERVICES = [
@@ -538,7 +597,7 @@
     function renderServices() {
       const box = document.getElementById('svcList');
       box.innerHTML = SERVICES.map(s => `
-        <div class="svc-item ${state.service === s.id ? 'selected' : ''}" onclick="Booking.selectService('${s.id}')">
+        <div class="svc-item ${state.service === s.id ? 'selected' : ''}" role="button" tabindex="0" onclick="Booking.selectService('${s.id}')">
           <div>
             <div class="svc-name">${t(s.zh, s.en)}</div>
             <div class="svc-meta">${s.mins} ${t('分钟', 'min')}</div>
@@ -561,7 +620,7 @@
     function renderDates() {
       const row = document.getElementById('dateRow');
       row.innerHTML = DATES.map((d, i) => `
-        <div class="date-cell ${state.dateIdx === i ? 'selected' : ''}" onclick="Booking.selectDate(${i})">
+        <div class="date-cell ${state.dateIdx === i ? 'selected' : ''}" role="button" tabindex="0" onclick="Booking.selectDate(${i})">
           <div class="dow">${t(DOW_ZH[d.dow], DOW_EN[d.dow])}</div>
           <div class="dom">${d.dom}</div>
         </div>
@@ -574,7 +633,7 @@
       grid.innerHTML = SLOTS.map(s => {
         const full = FULL_SLOTS.includes(s);
         return `<div class="slot-cell ${state.slot === s ? 'selected' : ''} ${full ? 'full' : ''}"
-                  onclick="${full ? '' : `Booking.selectSlot('${s}')`}">${s}</div>`;
+                  ${full ? '' : 'role="button" tabindex="0"'} onclick="${full ? '' : `Booking.selectSlot('${s}')`}">${s}</div>`;
       }).join('');
     }
     function selectSlot(s) { state.slot = s; renderSlots(); updateStep2Btn(); }
@@ -583,7 +642,7 @@
       if (!STAFF.length) { document.getElementById('staffCard').classList.add('hidden'); return; }
       const row = document.getElementById('staffRow');
       row.innerHTML = STAFF.map(p => `
-        <div class="staff-item ${state.staff === p.id ? 'selected' : ''}" onclick="Booking.selectStaff('${p.id}')">
+        <div class="staff-item ${state.staff === p.id ? 'selected' : ''}" role="button" tabindex="0" onclick="Booking.selectStaff('${p.id}')">
           <div class="staff-avatar">${t(p.zh, p.en).slice(0,1)}</div>
           <div class="staff-name">${t(p.zh, p.en)}</div>
         </div>
@@ -708,7 +767,7 @@
       document.getElementById('memberNo').textContent = t('会员编号 ', 'Member No. ') + MEMBER.number;
       document.getElementById('memberGrowth').textContent = t('成长值 ', 'Growth Points ') + MEMBER.growth;
       const p = progressData();
-      document.getElementById('progressFill').style.width = p.pct + '%';
+      document.getElementById('progressFill').style.transform = 'scaleX(' + (p.pct / 100) + ')';
       document.getElementById('progressLabel').textContent = p.label;
     }
 
@@ -718,7 +777,9 @@
         const reqTier = TIERS[b.minTierIdx];
         return `
           <div class="benefit-item">
-            <div class="benefit-icon ${unlocked ? 'on' : 'off'}">${unlocked ? '✓' : '🔒'}</div>
+            <div class="benefit-icon ${unlocked ? 'on' : 'off'}">${unlocked
+              ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.5 4.5L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+              : '<svg width="11" height="11" viewBox="0 0 24 24" fill="none"><rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" stroke-width="2"/><path d="M8 10V7a4 4 0 018 0v3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>'}</div>
             <div>
               <div class="benefit-text ${unlocked ? '' : 'off'}">${t(b.zh, b.en)}</div>
               ${unlocked ? '' : `<div class="benefit-hint">${t(reqTier.zh + '解锁', 'Unlocks at ' + reqTier.en)}</div>`}
@@ -730,7 +791,10 @@
 
     function renderTierTabs() {
       document.getElementById('tierTabs').innerHTML = TIERS.map(tier => `
-        <div class="tier-tab ${state.viewTierId === tier.id ? 'active' : ''}" onclick="Membership.selectTier('${tier.id}')">${t(tier.zh, tier.en)}</div>
+        <div class="tier-card ${state.viewTierId === tier.id ? 'active' : ''}" role="button" tabindex="0" onclick="Membership.selectTier('${tier.id}')">
+          <span class="tier-radio"></span>
+          <span class="tier-name">${t(tier.zh, tier.en)}</span>
+        </div>
       `).join('');
     }
     function selectTier(id) { state.viewTierId = id; renderTierTabs(); renderTierBenefits(); }
@@ -774,13 +838,21 @@
   /* ══════════════ 模块③：积分 ══════════════ */
   const Points = (function () {
     const PRODUCTS = [
-      { id: 'p1', zh: '9 折优惠券', en: '10% Off Coupon', icon: '🎫', cost: 200, stock: 12 },
-      { id: 'p2', zh: '免费手部护理', en: 'Free Hand Care Treatment', icon: '🤲', cost: 500, stock: 5 },
-      { id: 'p3', zh: '精油护理体验', en: 'Oil Treatment Trial', icon: '🧴', cost: 800, stock: 0 },
-      { id: 'p4', zh: '环保帆布袋', en: 'Eco Tote Bag', icon: '👜', cost: 150, stock: 20 },
-      { id: 'p5', zh: '€50 代金券', en: '€50 Gift Voucher', icon: '💶', cost: 2000, stock: 3 },
-      { id: 'p6', zh: '双倍积分卡', en: 'Double Points Card', icon: '⭐', cost: 350, stock: 8 },
+      { id: 'p1', zh: '9 折优惠券', en: '10% Off Coupon', icon: 'ticket', cost: 200, stock: 12 },
+      { id: 'p2', zh: '免费手部护理', en: 'Free Hand Care Treatment', icon: 'droplet', cost: 500, stock: 5 },
+      { id: 'p3', zh: '精油护理体验', en: 'Oil Treatment Trial', icon: 'droplet', cost: 800, stock: 0 },
+      { id: 'p4', zh: '环保帆布袋', en: 'Eco Tote Bag', icon: 'bag', cost: 150, stock: 20 },
+      { id: 'p5', zh: '€50 代金券', en: '€50 Gift Voucher', icon: 'voucher', cost: 2000, stock: 3 },
+      { id: 'p6', zh: '双倍积分卡', en: 'Double Points Card', icon: 'star', cost: 350, stock: 8 },
     ];
+    const ICONS = {
+      ticket: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M3 9a2 2 0 012-2h14a2 2 0 012 2v1.2a1.6 1.6 0 000 3.2V16a2 2 0 01-2 2H5a2 2 0 01-2-2v-2.6a1.6 1.6 0 000-3.2V9z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9.5 7v10" stroke="currentColor" stroke-width="1.4" stroke-dasharray="2.2 2.2" stroke-linecap="round"/></svg>',
+      droplet: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M12 3.5c3 4 6 7.7 6 11a6 6 0 11-12 0c0-3.3 3-7 6-11z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>',
+      bag: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M6 8h12l1 12H5L6 8z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 8V6.5a3 3 0 016 0V8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>',
+      voucher: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none"><rect x="3" y="6.5" width="18" height="11" rx="2" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="2.4" stroke="currentColor" stroke-width="1.5"/></svg>',
+      star: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M12 3.5l2.6 5.5 6 .7-4.4 4.1 1.2 5.9L12 16.8l-5.4 2.9 1.2-5.9L3.4 9.7l6-.7L12 3.5z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>',
+      check: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    };
     const INIT_BALANCE = 680;
     const EXPIRING = { amount: 120, dateZh: '2026-09-30', dateEn: '2026-09-30' };
     const TRANSACTIONS = [
@@ -815,7 +887,7 @@
         else if (short) btnLabel = t(`还差 ${p.cost - state.balance} 分`, `${p.cost - state.balance} pts short`);
         return `
           <div class="product-card">
-            <div class="product-icon">${p.icon}</div>
+            <div class="product-icon">${ICONS[p.icon]}</div>
             <div class="product-name">${t(p.zh, p.en)}</div>
             <div class="product-cost">${p.cost.toLocaleString()} ${t('积分', 'pts')}</div>
             <div class="product-stock">${soldOut ? t('库存不足', 'Out of stock') : t(`库存 ${p.stock}`, `Stock ${p.stock}`)}</div>
@@ -864,7 +936,7 @@
     function renderConfirmModal() {
       const p = productById(state.pendingRedeem);
       document.getElementById('modalCard').innerHTML = `
-        <div class="modal-icon">${p.icon}</div>
+        <div class="modal-icon">${ICONS[p.icon]}</div>
         <div class="modal-title">${t('确认兑换', 'Confirm Redemption')}</div>
         <div class="modal-sub">${t(
           `将花费 ${p.cost.toLocaleString()} 积分兑换「${p.zh}」，兑换后余额 ${(state.balance - p.cost).toLocaleString()}`,
@@ -900,7 +972,7 @@
     function renderSuccessModal() {
       const p = productById(state.pendingRedeem);
       document.getElementById('modalCard').innerHTML = `
-        <div class="modal-icon">✓</div>
+        <div class="modal-icon">${ICONS.check}</div>
         <div class="modal-title">${t('兑换成功', 'Redemption Successful')}</div>
         <div class="modal-sub">${t(`「${p.zh}」已兑换，当前余额 ${state.balance.toLocaleString()} 积分`, `"${p.en}" redeemed. Balance: ${state.balance.toLocaleString()} pts`)}</div>
         <div class="modal-btns">
@@ -1015,7 +1087,7 @@
       STATUS_ORDER.forEach(status => {
         const items = myCoupons.filter(c => c.status === status);
         if (!items.length) return;
-        html += `<div class="group-title">${t(STATUS_LABEL[status][0], STATUS_LABEL[status][1])}（${items.length}）</div>`;
+        html += `<div class="group-title">${t(STATUS_LABEL[status][0], STATUS_LABEL[status][1])}${t(`（${items.length}）`, ` (${items.length})`)}</div>`;
         html += items.map(c => renderMyCard(c)).join('');
       });
       box.innerHTML = html;
@@ -1024,7 +1096,7 @@
       const disabled = c.status !== 'unused';
       return `
         <div class="coupon-card ${disabled ? 'disabled' : ''}">
-          ${disabled ? `<div class="stamp">${t(STATUS_LABEL[c.status][0], STATUS_LABEL[c.status][1])}</div>` : ''}
+          ${disabled ? `<div class="stamp pow-badge">${t(STATUS_LABEL[c.status][0], STATUS_LABEL[c.status][1])}</div>` : ''}
           <div class="coupon-left">${couponAmountBlock(c)}</div>
           <div class="coupon-right">
             <div class="coupon-title">${couponTitle(c)}</div>

@@ -28,6 +28,9 @@
     --card: #ffffff;
     --radius: 14px;
     --danger: #dc2626;
+    --shadow-sm: 0 1px 2px rgba(28,25,23,.04), 0 8px 20px -16px rgba(28,25,23,.35);
+    --shadow-md: 0 2px 4px rgba(28,25,23,.05), 0 20px 40px -24px rgba(28,25,23,.4);
+    --focus-ring: 0 0 0 3px rgba(13,79,60,.22);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -38,6 +41,8 @@
     padding: 24px 16px 96px;
   }
   .wrap { max-width: 480px; margin: 0 auto; }
+  ::selection { background: var(--brand); color: #fff; }
+  :focus-visible { outline: none; box-shadow: var(--focus-ring); }
 
   /* ── 头部 ── */
   .head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
@@ -46,7 +51,10 @@
     font-size: 0.78rem; font-weight: 700; color: var(--brand);
     border: 1px solid var(--brand); border-radius: 99px;
     padding: 4px 12px; cursor: pointer; background: var(--card);
+    transition: background .12s, transform .08s;
   }
+  .lang-btn:hover { background: var(--brand-light); }
+  .lang-btn:active { transform: scale(.96); }
 
   /* ── 步骤条 ── */
   .steps { display: flex; gap: 6px; margin-bottom: 20px; }
@@ -55,7 +63,7 @@
 
   .card {
     background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
-    padding: 18px; margin-bottom: 14px;
+    padding: 18px; margin-bottom: 14px; box-shadow: var(--shadow-sm);
   }
   .card-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 12px; color: var(--ink); }
   .card-title .num {
@@ -65,19 +73,28 @@
   }
 
   /* ── 分类 tab ── */
-  .cat-tabs { display: flex; gap: 8px; overflow-x: auto; margin-bottom: 14px; padding-bottom: 2px; }
+  .cat-tabs {
+    display: flex; gap: 8px; overflow-x: auto; margin-bottom: 14px; padding-bottom: 8px;
+    scrollbar-width: thin; scrollbar-color: var(--brand-light) transparent;
+  }
+  .cat-tabs::-webkit-scrollbar { height: 5px; }
+  .cat-tabs::-webkit-scrollbar-thumb { background: var(--brand-light); border-radius: 99px; }
   .cat-tab {
     flex: 0 0 auto; padding: 8px 16px; border-radius: 99px; border: 1.5px solid var(--line);
     font-size: 0.82rem; font-weight: 700; white-space: nowrap; cursor: pointer; background: var(--card); color: var(--ink);
+    transition: background .12s, border-color .12s, color .12s;
   }
+  .cat-tab:hover:not(.active) { border-color: var(--brand); color: var(--brand-dark); }
   .cat-tab.active { background: var(--brand); border-color: var(--brand); color: #fff; }
 
   /* ── 商品网格 ── */
   .prod-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
   .prod-card {
     background: var(--card); border: 1px solid var(--line); border-radius: 12px;
-    padding: 12px; display: flex; flex-direction: column;
+    padding: 12px; display: flex; flex-direction: column; box-shadow: var(--shadow-sm);
+    transition: box-shadow .15s, transform .15s;
   }
+  .prod-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
   .prod-icon { font-size: 28px; margin-bottom: 6px; }
   .prod-name { font-weight: 700; font-size: 0.84rem; margin-bottom: 2px; }
   .prod-price { font-weight: 700; color: var(--brand-dark); font-size: 0.86rem; margin-bottom: 8px; }
@@ -86,12 +103,18 @@
     width: 28px; height: 28px; border-radius: 50%; background: var(--brand); color: #fff;
     border: none; font-size: 16px; font-weight: 700; cursor: pointer;
     display: flex; align-items: center; justify-content: center;
+    transition: filter .12s, transform .08s;
   }
+  .add-btn:hover { filter: brightness(1.08); }
+  .add-btn:active { filter: brightness(.96); transform: scale(.9); }
   .qty-stepper { display: flex; align-items: center; gap: 8px; }
   .qty-stepper button {
     width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid var(--brand);
     background: #fff; color: var(--brand); font-weight: 700; cursor: pointer; font-size: 14px;
+    transition: background .12s, color .12s, transform .08s;
   }
+  .qty-stepper button:hover { background: var(--brand); color: #fff; }
+  .qty-stepper button:active { transform: scale(.9); }
   .qty-stepper .qty-num { font-weight: 700; font-size: 0.86rem; min-width: 14px; text-align: center; }
 
   /* ── 悬浮购物车条 ── */
@@ -100,7 +123,10 @@
     max-width: 480px; width: calc(100% - 32px); background: var(--brand-dark); color: #fff;
     border-radius: 14px; padding: 12px 18px; display: flex; align-items: center; justify-content: space-between;
     cursor: pointer; box-shadow: 0 8px 24px rgba(0,0,0,.25); z-index: 50;
+    transition: transform .1s, box-shadow .1s;
   }
+  .cart-bar:hover { box-shadow: 0 10px 28px rgba(0,0,0,.3); }
+  .cart-bar:active { transform: translateX(-50%) scale(.98); }
   .cart-bar-info { display: flex; align-items: center; gap: 10px; }
   .cart-bar-count {
     background: rgba(255,255,255,.2); border-radius: 50%; width: 24px; height: 24px;
@@ -117,26 +143,42 @@
   .drawer {
     background: var(--card); width: 100%; max-width: 480px; border-radius: 20px 20px 0 0;
     padding: 18px; max-height: 78vh; display: flex; flex-direction: column;
+    box-shadow: 0 -8px 32px rgba(28,25,23,.16);
   }
   .drawer-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
   .drawer-title { font-weight: 800; font-size: 1rem; }
-  .drawer-close { cursor: pointer; font-size: 1.3rem; color: var(--gray); line-height: 1; }
-  .drawer-body { overflow-y: auto; flex: 1; margin-bottom: 10px; }
+  .drawer-close {
+    cursor: pointer; font-size: 1.3rem; color: var(--gray); line-height: 1;
+    padding: 4px 8px; border-radius: 8px; transition: background .12s, color .12s;
+  }
+  .drawer-close:hover { background: var(--brand-light); color: var(--brand-dark); }
+  .drawer-body {
+    overflow-y: auto; flex: 1; margin-bottom: 10px;
+    scrollbar-width: thin; scrollbar-color: var(--line) transparent;
+  }
+  .drawer-body::-webkit-scrollbar { width: 5px; }
+  .drawer-body::-webkit-scrollbar-thumb { background: var(--line); border-radius: 99px; }
   .cart-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--line); gap: 10px; }
   .cart-item:last-child { border-bottom: none; }
   .cart-item-name { font-weight: 600; font-size: 0.86rem; }
   .cart-item-price { font-size: 0.78rem; color: var(--gray); margin-top: 2px; }
-  .cart-item-remove { color: var(--danger); font-size: 0.74rem; cursor: pointer; white-space: nowrap; }
+  .cart-item-remove {
+    color: var(--danger); font-size: 0.74rem; cursor: pointer; white-space: nowrap;
+    padding: 4px 6px; border-radius: 6px; transition: background .12s;
+  }
+  .cart-item-remove:hover { background: #fee2e2; }
   .cart-empty { text-align: center; color: var(--gray); font-size: 0.84rem; padding: 30px 0; }
 
   /* ── 配送方式 ── */
   .method-item {
     display: flex; align-items: center; gap: 10px;
     padding: 12px; border: 1.5px solid var(--line); border-radius: 10px;
-    margin-bottom: 8px; cursor: pointer; transition: border-color .15s, background .15s;
+    margin-bottom: 8px; cursor: pointer; box-shadow: var(--shadow-sm);
+    transition: border-color .15s, background .15s, box-shadow .15s, transform .15s;
   }
   .method-item:last-child { margin-bottom: 0; }
-  .method-item.selected { border-color: var(--brand); background: var(--brand-light); }
+  .method-item:hover:not(.selected) { border-color: var(--brand); transform: translateY(-2px); box-shadow: var(--shadow-md); }
+  .method-item.selected { border-color: var(--brand); background: var(--brand-light); box-shadow: var(--shadow-md); }
   .method-icon { font-size: 20px; }
   .method-name { font-weight: 700; font-size: 0.88rem; }
   .method-desc { font-size: 0.76rem; color: var(--gray); margin-top: 2px; }
@@ -146,9 +188,10 @@
   .field label { display: block; font-size: 0.78rem; color: var(--gray); margin-bottom: 5px; font-weight: 600; }
   .field input {
     width: 100%; padding: 10px 12px; border: 1.5px solid var(--line); border-radius: 8px;
-    font-size: 0.88rem; font-family: inherit;
+    font-size: 0.88rem; font-family: inherit; transition: border-color .12s, box-shadow .12s;
   }
-  .field input:focus { outline: none; border-color: var(--brand); }
+  .field input::placeholder { color: var(--gray); }
+  .field input:focus { outline: none; border-color: var(--brand); box-shadow: var(--focus-ring); }
   .field-error { font-size: 0.74rem; color: var(--danger); margin-top: 4px; display: none; }
 
   /* ── 汇总 & 按钮 ── */
@@ -157,10 +200,14 @@
   .btn {
     display: block; width: 100%; text-align: center; padding: 13px; border-radius: 10px;
     font-weight: 700; font-size: 0.92rem; border: none; cursor: pointer;
+    transition: filter .12s, transform .08s, color .12s, background .12s;
   }
   .btn-primary { background: var(--brand); color: #fff; }
+  .btn-primary:hover:not(:disabled) { filter: brightness(1.08); }
+  .btn-primary:active:not(:disabled) { filter: brightness(.96); transform: scale(.98); }
   .btn-primary:disabled { background: var(--line); color: var(--gray); cursor: not-allowed; }
   .btn-ghost { background: transparent; color: var(--gray); margin-top: 8px; }
+  .btn-ghost:hover { background: var(--brand-light); color: var(--brand-dark); }
 
   /* ── 完成页 ── */
   .done-wrap { text-align: center; padding: 30px 10px; }
@@ -168,7 +215,12 @@
     width: 64px; height: 64px; border-radius: 50%; background: var(--brand-light); color: var(--brand);
     display: flex; align-items: center; justify-content: center; font-size: 30px; margin: 0 auto 16px;
   }
-  .done-title { font-weight: 800; font-size: 1.1rem; margin-bottom: 4px; }
+  .pow-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 18px; font-weight: 800; font-size: 0.9rem; letter-spacing: .01em;
+    color: #fff; background: var(--brand-dark); border-radius: 999px; box-shadow: var(--shadow-sm);
+    margin-bottom: 10px;
+  }
   .done-sub { font-size: 0.84rem; color: var(--gray); margin-bottom: 20px; }
   .code-box {
     background: var(--brand-light); border-radius: 10px; padding: 12px; margin-bottom: 8px;
@@ -183,7 +235,7 @@
 
   <div class="head">
     <div class="shop-name" id="shopName"></div>
-    <div class="lang-btn" onclick="toggleLang()">ZH / EN</div>
+    <div class="lang-btn" role="button" tabindex="0" onclick="toggleLang()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleLang();}">ZH / EN</div>
   </div>
 
   <div class="steps">
@@ -221,7 +273,7 @@
   <section id="step-3" class="hidden">
     <div class="card done-wrap">
       <div class="done-icon">✓</div>
-      <div class="done-title" data-zh="下单成功" data-en="Order Placed">下单成功</div>
+      <div class="pow-badge" data-zh="下单成功" data-en="Order Placed">下单成功</div>
       <div class="done-sub" id="etaLine"></div>
       <div class="code-box" id="orderCode"></div>
       <div id="finalSummary" style="text-align:left; margin-top:16px;"></div>
@@ -230,7 +282,7 @@
   </section>
 
   <!-- ============ 悬浮购物车条 ============ -->
-  <div class="cart-bar hidden" id="cartBar" onclick="openCart()">
+  <div class="cart-bar hidden" id="cartBar" role="button" tabindex="0" onclick="openCart()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openCart();}">
     <div class="cart-bar-info">
       <div class="cart-bar-count" id="cartBarCount">0</div>
       <div class="cart-bar-total" id="cartBarTotal"></div>
@@ -243,7 +295,7 @@
     <div class="drawer">
       <div class="drawer-head">
         <div class="drawer-title" data-zh="我的购物车" data-en="My Cart">我的购物车</div>
-        <div class="drawer-close" onclick="closeCart()">&times;</div>
+        <div class="drawer-close" role="button" tabindex="0" onclick="closeCart()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();closeCart();}">&times;</div>
       </div>
       <div class="drawer-body" id="drawerBody"></div>
       <button class="btn btn-primary" id="toCheckoutBtn" onclick="goCheckout()" data-zh="去结算" data-en="Checkout">去结算</button>
@@ -293,7 +345,8 @@
   function renderTabs() {
     const box = document.getElementById('catTabs');
     box.innerHTML = CATEGORIES.map(c => `
-      <div class="cat-tab ${state.activeCat === c.id ? 'active' : ''}" onclick="selectCat('${c.id}')">${t(c.zh, c.en)}</div>
+      <div class="cat-tab ${state.activeCat === c.id ? 'active' : ''}" role="button" tabindex="0"
+        onclick="selectCat('${c.id}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectCat('${c.id}');}">${t(c.zh, c.en)}</div>
     `).join('');
   }
   function selectCat(id) { state.activeCat = id; renderTabs(); renderProducts(); }
@@ -385,7 +438,7 @@
             <span class="qty-num">${qty}</span>
             <button onclick="addToCart('${id}')">+</button>
           </div>
-          <div class="cart-item-remove" onclick="removeFromCart('${id}')">${t('删除', 'Remove')}</div>
+          <div class="cart-item-remove" role="button" tabindex="0" onclick="removeFromCart('${id}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();removeFromCart('${id}');}">${t('删除', 'Remove')}</div>
         </div>
       `;
     }).join('');
@@ -405,7 +458,8 @@
   function renderMethods() {
     const box = document.getElementById('methodList');
     box.innerHTML = DELIVERY_METHODS.map(m => `
-      <div class="method-item ${state.method === m.id ? 'selected' : ''}" onclick="selectMethod('${m.id}')">
+      <div class="method-item ${state.method === m.id ? 'selected' : ''}" role="radio" aria-checked="${state.method === m.id}" tabindex="0"
+        onclick="selectMethod('${m.id}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectMethod('${m.id}');}">
         <div class="method-icon">${m.icon}</div>
         <div>
           <div class="method-name">${t(m.zh, m.en)}</div>

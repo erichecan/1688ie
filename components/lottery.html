@@ -28,6 +28,9 @@
     --radius: 14px;
     --danger: #dc2626;
     --gold: #ea580c;
+    --shadow-sm: 0 1px 2px rgba(28,25,23,.04), 0 8px 20px -16px rgba(28,25,23,.35);
+    --shadow-md: 0 2px 4px rgba(28,25,23,.05), 0 20px 40px -24px rgba(28,25,23,.4);
+    --focus-ring: 0 0 0 3px rgba(13,79,60,.22);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -38,6 +41,7 @@
     padding: 24px 16px 64px;
   }
   .wrap { max-width: 480px; margin: 0 auto; }
+  ::selection { background: var(--brand); color: #fff; }
 
   /* ── 头部 ── */
   .head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
@@ -46,11 +50,17 @@
     font-size: 0.78rem; font-weight: 700; color: var(--brand);
     border: 1px solid var(--brand); border-radius: 99px;
     padding: 4px 12px; cursor: pointer; background: var(--card);
+    transition: background .12s, color .12s, transform .08s;
+  }
+  .lang-btn:hover { background: var(--brand-light); }
+  .lang-btn:active { transform: scale(.96); }
+  .lang-btn:focus-visible, .cell-btn:focus-visible, .btn:focus-visible {
+    outline: none; box-shadow: var(--focus-ring);
   }
 
   .card {
     background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
-    padding: 18px; margin-bottom: 14px;
+    padding: 18px; margin-bottom: 14px; box-shadow: var(--shadow-sm);
   }
   .card-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 12px; color: var(--ink); }
 
@@ -77,7 +87,10 @@
   .cell-btn {
     background: var(--brand); color: #fff; border: none; border-radius: 10px;
     font-size: 0.92rem; font-weight: 800; cursor: pointer; aspect-ratio: 1;
+    transition: filter .12s, transform .08s;
   }
+  .cell-btn:hover:not(:disabled) { filter: brightness(1.08); }
+  .cell-btn:active:not(:disabled) { filter: brightness(.96); transform: scale(.94); }
   .cell-btn:disabled { background: #57534e; cursor: not-allowed; opacity: .6; }
 
   .hint { text-align: center; font-size: 0.78rem; color: var(--gray); margin-top: 12px; }
@@ -99,19 +112,27 @@
   }
   .modal-card {
     background: var(--card); border-radius: var(--radius); padding: 28px 22px; max-width: 340px; width: 100%;
-    text-align: center;
+    text-align: center; box-shadow: var(--shadow-md);
   }
   .modal-icon {
     width: 64px; height: 64px; border-radius: 50%; background: var(--brand-light);
     display: flex; align-items: center; justify-content: center; font-size: 30px; margin: 0 auto 14px;
   }
   .modal-title { font-weight: 800; font-size: 1.1rem; margin-bottom: 6px; }
+  .modal-title.pow-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 18px; font-size: 0.9rem; letter-spacing: .01em;
+    color: #fff; background: var(--brand-dark); border-radius: 999px; box-shadow: var(--shadow-sm);
+  }
   .modal-sub { font-size: 0.84rem; color: var(--gray); margin-bottom: 20px; }
   .btn {
     display: block; width: 100%; text-align: center; padding: 13px; border-radius: 10px;
     font-weight: 700; font-size: 0.92rem; border: none; cursor: pointer;
+    transition: filter .12s, transform .08s;
   }
   .btn-primary { background: var(--brand); color: #fff; }
+  .btn-primary:hover { filter: brightness(1.08); }
+  .btn-primary:active { filter: brightness(.96); transform: scale(.98); }
 
   .hidden { display: none !important; }
 </style>
@@ -121,7 +142,7 @@
 
   <div class="head">
     <div class="shop-name" id="shopName"></div>
-    <div class="lang-btn" onclick="toggleLang()">ZH / EN</div>
+    <div class="lang-btn" role="button" tabindex="0" onclick="toggleLang()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleLang();}">ZH / EN</div>
   </div>
 
   <div class="remain-bar">
@@ -280,6 +301,7 @@
     document.getElementById('modalTitle').textContent = prize.win
       ? t('恭喜获得', 'You Won') + (currentLang === 'zh' ? '：' : ': ') + t(prize.zh, prize.en)
       : t('谢谢参与', 'Thanks for Playing');
+    document.getElementById('modalTitle').classList.toggle('pow-badge', prize.win);
     document.getElementById('modalSub').textContent = prize.win
       ? t('可在核销时向店员出示此页面', 'Show this screen to staff to redeem')
       : t('再接再厉，下次再来', 'Better luck next time');

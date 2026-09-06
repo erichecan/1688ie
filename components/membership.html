@@ -23,13 +23,17 @@
     --brand-light: #e8f3ef;
     --brand-dark: #093a2c;
     --ink: #1c1917;
-    --gray: #78716c;
+    --gray: #5f5956;
     --line: #e7e5e4;
     --bg: #fafaf9;
     --card: #ffffff;
     --radius: 14px;
+    --shadow-sm: 0 1px 2px rgba(28,25,23,.04), 0 8px 20px -16px rgba(28,25,23,.35);
+    --shadow-md: 0 2px 4px rgba(28,25,23,.05), 0 20px 40px -24px rgba(28,25,23,.4);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  ::selection { background: var(--brand-light); color: var(--brand-dark); }
+  :focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; border-radius: 4px; }
   body {
     font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
     background: var(--bg);
@@ -46,25 +50,29 @@
     font-size: 0.78rem; font-weight: 700; color: var(--brand);
     border: 1px solid var(--brand); border-radius: 99px;
     padding: 4px 12px; cursor: pointer; background: var(--card);
+    transition: background .15s, color .15s;
   }
+  .lang-btn:hover { background: var(--brand); color: #fff; }
 
   .card {
     background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
     padding: 18px; margin-bottom: 14px;
+    box-shadow: var(--shadow-sm);
   }
   .card-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 12px; color: var(--ink); }
 
-  /* ── 会员卡 ── */
+  /* ── 会员卡（渐变钱包卡语言） ── */
   .member-card {
     background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%);
     color: #fff; border-radius: var(--radius); padding: 20px; margin-bottom: 14px;
+    box-shadow: var(--shadow-md);
   }
   .member-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
   .member-level { font-weight: 800; font-size: 1.1rem; }
   .member-no { font-size: 0.72rem; opacity: .85; font-family: 'SFMono-Regular', Menlo, monospace; }
   .member-growth { font-size: 0.8rem; opacity: .9; margin: 10px 0 8px; }
   .progress-track { height: 7px; border-radius: 99px; background: rgba(255,255,255,.28); overflow: hidden; }
-  .progress-fill { height: 100%; background: #fff; border-radius: 99px; transition: width .25s; }
+  .progress-fill { width: 100%; height: 100%; background: #fff; border-radius: 99px; transform-origin: left; transform: scaleX(0); transition: transform .25s; }
   .progress-label { font-size: 0.72rem; opacity: .9; margin-top: 8px; }
 
   /* ── 权益列表 ── */
@@ -85,7 +93,9 @@
   .tier-tab {
     flex: 1; text-align: center; padding: 9px 0; border-radius: 10px; font-size: 0.82rem; font-weight: 700;
     border: 1.5px solid var(--line); cursor: pointer; color: var(--gray);
+    transition: border-color .15s, background .15s, color .15s;
   }
+  .tier-tab:not(.active):hover { border-color: var(--brand); color: var(--brand-dark); }
   .tier-tab.active { border-color: var(--brand); background: var(--brand-light); color: var(--brand-dark); }
 
   /* ── 消费记录 ── */
@@ -102,7 +112,7 @@
 
   <div class="head">
     <div class="shop-name" id="shopName"></div>
-    <div class="lang-btn" onclick="toggleLang()">ZH / EN</div>
+    <div class="lang-btn" tabindex="0" role="button" onclick="toggleLang()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}">ZH / EN</div>
   </div>
 
   <!-- ============ 当前会员卡 ============ -->
@@ -112,7 +122,7 @@
       <div class="member-no" id="memberNo"></div>
     </div>
     <div class="member-growth" id="memberGrowth"></div>
-    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="transform:scaleX(0)"></div></div>
     <div class="progress-label" id="progressLabel"></div>
   </div>
 
@@ -190,7 +200,7 @@
     document.getElementById('memberNo').textContent = t('会员编号 ', 'Member No. ') + MEMBER.number;
     document.getElementById('memberGrowth').textContent = t('成长值 ', 'Growth Points ') + MEMBER.growth;
     const p = progressData();
-    document.getElementById('progressFill').style.width = p.pct + '%';
+    document.getElementById('progressFill').style.transform = 'scaleX(' + (p.pct / 100) + ')';
     document.getElementById('progressLabel').textContent = p.label;
   }
 
@@ -199,9 +209,12 @@
     return BENEFITS.map(b => {
       const unlocked = b.minTierIdx <= tierIdx;
       const reqTier = TIERS[b.minTierIdx];
+      const iconSvg = unlocked
+        ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>'
+        : '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>';
       return `
         <div class="benefit-item">
-          <div class="benefit-icon ${unlocked ? 'on' : 'off'}">${unlocked ? '✓' : '🔒'}</div>
+          <div class="benefit-icon ${unlocked ? 'on' : 'off'}">${iconSvg}</div>
           <div>
             <div class="benefit-text ${unlocked ? '' : 'off'}">${t(b.zh, b.en)}</div>
             ${unlocked ? '' : `<div class="benefit-hint">${t(reqTier.zh + '解锁', 'Unlocks at ' + reqTier.en)}</div>`}

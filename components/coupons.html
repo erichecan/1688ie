@@ -21,14 +21,18 @@
     --brand-light: #e8f3ef;
     --brand-dark: #093a2c;
     --ink: #1c1917;
-    --gray: #78716c;
+    --gray: #5f5956;
     --line: #e7e5e4;
     --bg: #fafaf9;
     --card: #ffffff;
     --radius: 14px;
     --danger: #dc2626;
+    --shadow-sm: 0 1px 2px rgba(9,58,44,.04), 0 8px 20px -16px rgba(9,58,44,.35);
+    --shadow-md: 0 2px 4px rgba(9,58,44,.05), 0 20px 40px -24px rgba(9,58,44,.4);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  ::selection { background: var(--brand-light); color: var(--brand-dark); }
+  :focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; border-radius: 4px; }
   body {
     font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
     background: var(--bg);
@@ -45,7 +49,9 @@
     font-size: 0.78rem; font-weight: 700; color: var(--brand);
     border: 1px solid var(--brand); border-radius: 99px;
     padding: 4px 12px; cursor: pointer; background: var(--card);
+    transition: background .15s, color .15s;
   }
+  .lang-btn:hover { background: var(--brand); color: #fff; }
 
   /* ── Tab 切换 ── */
   .tab-bar { display: flex; gap: 8px; margin-bottom: 18px; }
@@ -53,7 +59,9 @@
     flex: 1; text-align: center; padding: 10px; border-radius: 10px;
     font-weight: 700; font-size: 0.86rem; border: 1.5px solid var(--line);
     background: var(--card); cursor: pointer; color: var(--gray);
+    transition: background .15s, color .15s, border-color .15s;
   }
+  .tab-btn:not(.active):hover { border-color: var(--brand); color: var(--brand-dark); }
   .tab-btn.active { background: var(--brand); color: #fff; border-color: var(--brand); }
 
   .group-title { font-size: 0.78rem; font-weight: 700; color: var(--gray); margin: 16px 0 8px; }
@@ -64,7 +72,10 @@
   .coupon-card {
     display: flex; border: 1.5px solid var(--line); border-radius: 12px;
     overflow: hidden; margin-bottom: 10px; background: var(--card); position: relative;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow .15s, transform .15s;
   }
+  .coupon-card:hover:not(.disabled) { transform: translateY(-2px); box-shadow: var(--shadow-md); }
   .coupon-left {
     flex: 0 0 96px; background: var(--brand); color: #fff;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -80,23 +91,31 @@
   .coupon-btn {
     padding: 6px 16px; border-radius: 99px; font-size: 0.78rem; font-weight: 700;
     border: none; cursor: pointer; background: var(--brand); color: #fff; white-space: nowrap;
+    transition: filter .15s, transform .1s;
   }
+  .coupon-btn:hover:not(:disabled) { filter: brightness(1.08); }
+  .coupon-btn:active:not(:disabled) { filter: brightness(.96); transform: scale(.96); }
   .coupon-btn:disabled { background: var(--line); color: var(--gray); cursor: not-allowed; }
 
   .coupon-card.disabled .coupon-left { background: var(--gray); }
   .coupon-card.disabled { opacity: .6; }
   .stamp {
-    position: absolute; top: 10px; right: 12px; border: 2px solid var(--gray); color: var(--gray);
-    font-weight: 800; font-size: 0.68rem; padding: 2px 8px; border-radius: 6px;
-    transform: rotate(14deg); letter-spacing: 1px;
+    position: absolute; top: 10px; right: 12px;
+    font-weight: 800; font-size: 0.68rem; padding: 4px 10px; border-radius: 999px;
+    letter-spacing: .02em;
   }
+  .stamp.expired { border: 2px solid var(--gray); color: var(--gray); transform: rotate(14deg); }
+  .stamp.used { color: #fff; background: var(--brand-dark); box-shadow: var(--shadow-sm); }
 
   /* ── 弹窗 ── */
   .modal-mask {
     position: fixed; inset: 0; background: rgba(0,0,0,.45);
     display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 50;
   }
-  .modal-box { background: var(--card); border-radius: 16px; padding: 26px 22px; max-width: 340px; width: 100%; text-align: center; }
+  .modal-box {
+    background: var(--card); border-radius: 16px; padding: 26px 22px; max-width: 340px; width: 100%; text-align: center;
+    box-shadow: 0 24px 48px -16px rgba(9,58,44,.4);
+  }
   .modal-title { font-weight: 800; font-size: 1rem; margin-bottom: 4px; }
   .modal-sub { font-size: 0.8rem; color: var(--gray); margin-bottom: 16px; }
   .modal-code {
@@ -107,9 +126,13 @@
   .btn {
     display: block; width: 100%; text-align: center; padding: 12px; border-radius: 10px;
     font-weight: 700; font-size: 0.88rem; border: none; cursor: pointer;
+    transition: filter .15s, transform .1s, color .15s;
   }
   .btn-primary { background: var(--brand); color: #fff; }
+  .btn-primary:hover { filter: brightness(1.08); }
+  .btn-primary:active { filter: brightness(.96); transform: scale(.98); }
   .btn-ghost { background: transparent; color: var(--gray); margin-top: 8px; }
+  .btn-ghost:hover { color: var(--brand-dark); }
 
   .hidden { display: none !important; }
 </style>
@@ -119,12 +142,12 @@
 
   <div class="head">
     <div class="shop-name" id="shopName"></div>
-    <div class="lang-btn" onclick="toggleLang()">ZH / EN</div>
+    <div class="lang-btn" tabindex="0" role="button" onclick="toggleLang()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}">ZH / EN</div>
   </div>
 
   <div class="tab-bar">
-    <div class="tab-btn active" id="tabBtn-center" onclick="switchTab('center')" data-zh="领券中心" data-en="Get Coupons">领券中心</div>
-    <div class="tab-btn" id="tabBtn-mine" onclick="switchTab('mine')" data-zh="我的优惠券" data-en="My Coupons">我的优惠券</div>
+    <div class="tab-btn active" id="tabBtn-center" tabindex="0" role="button" onclick="switchTab('center')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}" data-zh="领券中心" data-en="Get Coupons">领券中心</div>
+    <div class="tab-btn" id="tabBtn-mine" tabindex="0" role="button" onclick="switchTab('mine')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}" data-zh="我的优惠券" data-en="My Coupons">我的优惠券</div>
   </div>
 
   <!-- ============ 领券中心 ============ -->
@@ -251,7 +274,7 @@
     const disabled = c.status !== 'unused';
     return `
       <div class="coupon-card ${disabled ? 'disabled' : ''}">
-        ${disabled ? `<div class="stamp">${t(STATUS_LABEL[c.status][0], STATUS_LABEL[c.status][1])}</div>` : ''}
+        ${disabled ? `<div class="stamp ${c.status}">${t(STATUS_LABEL[c.status][0], STATUS_LABEL[c.status][1])}</div>` : ''}
         <div class="coupon-left">${couponAmountBlock(c)}</div>
         <div class="coupon-right">
           <div class="coupon-title">${couponTitle(c)}</div>

@@ -22,15 +22,19 @@
     --brand-light: #e8f3ef;
     --brand-dark: #093a2c;
     --ink: #1c1917;
-    --gray: #78716c;
+    --gray: #5f5956;
     --line: #e7e5e4;
     --bg: #fafaf9;
     --card: #ffffff;
     --radius: 14px;
     --danger: #dc2626;
     --good: #15803d;
+    --shadow-sm: 0 1px 2px rgba(9,58,44,.04), 0 8px 20px -16px rgba(9,58,44,.35);
+    --shadow-md: 0 2px 4px rgba(9,58,44,.05), 0 20px 40px -24px rgba(9,58,44,.4);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  ::selection { background: var(--brand-light); color: var(--brand-dark); }
+  :focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; border-radius: 4px; }
   body {
     font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
     background: var(--bg);
@@ -47,11 +51,14 @@
     font-size: 0.78rem; font-weight: 700; color: var(--brand);
     border: 1px solid var(--brand); border-radius: 99px;
     padding: 4px 12px; cursor: pointer; background: var(--card);
+    transition: background .15s, color .15s;
   }
+  .lang-btn:hover { background: var(--brand); color: #fff; }
 
   .card {
     background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
     padding: 18px; margin-bottom: 14px;
+    box-shadow: var(--shadow-sm);
   }
   .card-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 12px; color: var(--ink); }
 
@@ -59,6 +66,7 @@
   .balance-card {
     background: linear-gradient(135deg, var(--brand-dark), var(--brand));
     color: #fff; border-radius: var(--radius); padding: 22px 20px; margin-bottom: 14px;
+    box-shadow: var(--shadow-md);
   }
   .balance-label { font-size: 0.8rem; opacity: .85; margin-bottom: 6px; }
   .balance-num { font-size: 2.4rem; font-weight: 800; letter-spacing: .5px; }
@@ -69,22 +77,37 @@
   .tab-btn {
     flex: 1; text-align: center; padding: 10px; border-radius: 10px; font-weight: 700; font-size: 0.86rem;
     border: 1.5px solid var(--line); background: var(--card); color: var(--gray); cursor: pointer;
+    transition: border-color .15s, background .15s, color .15s;
   }
+  .tab-btn:not(.active):hover { border-color: var(--brand); color: var(--brand-dark); }
   .tab-btn.active { border-color: var(--brand); background: var(--brand-light); color: var(--brand-dark); }
 
   /* ── 商城网格 ── */
-  .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
   .product-card {
-    border: 1.5px solid var(--line); border-radius: 12px; padding: 14px 12px; text-align: center;
+    background: #fff; border: 1.5px solid var(--line); border-radius: 14px; padding: 16px 12px; text-align: center;
+    box-shadow: var(--shadow-sm);
+    transition: border-color .15s, box-shadow .15s, transform .15s, opacity .15s;
   }
-  .product-icon { font-size: 1.8rem; margin-bottom: 6px; }
+  .product-card:hover { border-color: var(--brand); transform: translateY(-2px); box-shadow: var(--shadow-md); }
+  .product-card.disabled { opacity: .55; }
+  .product-card.disabled:hover { transform: none; box-shadow: var(--shadow-sm); border-color: var(--line); }
+  .product-icon {
+    width: 34px; height: 34px; margin: 0 auto 8px; color: var(--brand);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .product-icon svg { width: 20px; height: 20px; }
+  .modal-icon svg { width: 28px; height: 28px; }
   .product-name { font-weight: 700; font-size: 0.84rem; margin-bottom: 4px; min-height: 2.2em; }
   .product-cost { font-weight: 800; color: var(--brand-dark); font-size: 0.92rem; margin-bottom: 2px; }
   .product-stock { font-size: 0.72rem; color: var(--gray); margin-bottom: 10px; }
   .redeem-btn {
     width: 100%; padding: 8px; border-radius: 8px; font-size: 0.8rem; font-weight: 700;
     border: none; cursor: pointer; background: var(--brand); color: #fff;
+    transition: filter .15s, transform .1s;
   }
+  .redeem-btn:hover:not(:disabled) { filter: brightness(1.08); }
+  .redeem-btn:active:not(:disabled) { filter: brightness(.96); transform: scale(.97); }
   .redeem-btn:disabled { background: var(--line); color: var(--gray); cursor: not-allowed; }
 
   /* ── 积分明细 ── */
@@ -108,17 +131,31 @@
   }
   .modal-card {
     background: var(--card); border-radius: var(--radius); padding: 22px; max-width: 340px; width: 100%; text-align: center;
+    box-shadow: 0 24px 48px -16px rgba(9,58,44,.4);
   }
-  .modal-icon { font-size: 2.2rem; margin-bottom: 10px; }
+  .pow-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 18px; font-weight: 800; font-size: 0.9rem; letter-spacing: .01em;
+    color: #fff; background: var(--brand-dark); border-radius: 999px; box-shadow: var(--shadow-sm);
+    margin-bottom: 14px;
+  }
+  .modal-icon {
+    width: 56px; height: 56px; margin: 0 auto 10px; border-radius: 50%;
+    background: var(--brand-light); color: var(--brand); font-size: 1.8rem;
+    display: flex; align-items: center; justify-content: center;
+  }
   .modal-title { font-weight: 800; font-size: 1rem; margin-bottom: 6px; }
   .modal-sub { font-size: 0.82rem; color: var(--gray); margin-bottom: 18px; }
   .modal-btns { display: flex; gap: 10px; }
   .btn {
     flex: 1; text-align: center; padding: 11px; border-radius: 10px;
     font-weight: 700; font-size: 0.88rem; border: none; cursor: pointer;
+    transition: filter .15s;
   }
   .btn-primary { background: var(--brand); color: #fff; }
+  .btn-primary:hover { filter: brightness(1.08); }
   .btn-ghost { background: var(--brand-light); color: var(--brand-dark); }
+  .btn-ghost:hover { filter: brightness(.96); }
 
   .hidden { display: none !important; }
 </style>
@@ -128,7 +165,7 @@
 
   <div class="head">
     <div class="shop-name" id="shopName"></div>
-    <div class="lang-btn" onclick="toggleLang()">ZH / EN</div>
+    <div class="lang-btn" tabindex="0" role="button" onclick="toggleLang()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}">ZH / EN</div>
   </div>
 
   <div class="balance-card">
@@ -138,8 +175,8 @@
   </div>
 
   <div class="tabs">
-    <div class="tab-btn" id="tabMallBtn" onclick="switchTab('mall')" data-zh="积分商城" data-en="Points Mall">积分商城</div>
-    <div class="tab-btn" id="tabHistoryBtn" onclick="switchTab('history')" data-zh="积分明细" data-en="History">积分明细</div>
+    <div class="tab-btn" id="tabMallBtn" tabindex="0" role="button" onclick="switchTab('mall')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}" data-zh="积分商城" data-en="Points Mall">积分商城</div>
+    <div class="tab-btn" id="tabHistoryBtn" tabindex="0" role="button" onclick="switchTab('history')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}" data-zh="积分明细" data-en="History">积分明细</div>
   </div>
 
   <section id="panel-mall">
@@ -165,13 +202,22 @@
   /* ── 可替换配置区：换行业只改这里 ── */
   const SHOP = { nameZh: '示例美容院', nameEn: 'Sample Beauty Salon' };
 
+  const ICONS = {
+    ticket: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8a2 2 0 0 1 2-2h9l7 7-9 9-9-9V8Z"/><circle cx="9.5" cy="9.5" r="1.1" fill="currentColor" stroke="none"/></svg>',
+    scissors: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.5"/><circle cx="6" cy="18" r="2.5"/><line x1="8.5" y1="7.5" x2="20" y2="19"/><line x1="8.5" y1="16.5" x2="20" y2="5"/></svg>',
+    droplet: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s7 7.5 7 12a7 7 0 0 1-14 0c0-4.5 7-12 7-12Z"/></svg>',
+    bag: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8h12l1 12H5L6 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>',
+    voucher: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="19" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/></svg>',
+    star: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 3l2.6 5.9 6.4.6-4.8 4.3 1.4 6.3L12 17l-5.6 3.1 1.4-6.3-4.8-4.3 6.4-.6L12 3Z"/></svg>',
+  };
+
   const PRODUCTS = [
-    { id: 'p1', zh: '9 折优惠券', en: '10% Off Coupon', icon: '🎫', cost: 200, stock: 12 },
-    { id: 'p2', zh: '免费洗剪吹', en: 'Free Wash & Blow-dry', icon: '💇', cost: 500, stock: 5 },
-    { id: 'p3', zh: '精油护理体验', en: 'Oil Treatment Trial', icon: '🧴', cost: 800, stock: 0 },
-    { id: 'p4', zh: '环保帆布袋', en: 'Eco Tote Bag', icon: '👜', cost: 150, stock: 20 },
-    { id: 'p5', zh: '€50 代金券', en: '€50 Gift Voucher', icon: '💶', cost: 2000, stock: 3 },
-    { id: 'p6', zh: '双倍积分卡', en: 'Double Points Card', icon: '⭐', cost: 350, stock: 8 },
+    { id: 'p1', zh: '9 折优惠券', en: '10% Off Coupon', icon: ICONS.ticket, cost: 200, stock: 12 },
+    { id: 'p2', zh: '免费洗剪吹', en: 'Free Wash & Blow-dry', icon: ICONS.scissors, cost: 500, stock: 5 },
+    { id: 'p3', zh: '精油护理体验', en: 'Oil Treatment Trial', icon: ICONS.droplet, cost: 800, stock: 0 },
+    { id: 'p4', zh: '环保帆布袋', en: 'Eco Tote Bag', icon: ICONS.bag, cost: 150, stock: 20 },
+    { id: 'p5', zh: '€50 代金券', en: '€50 Gift Voucher', icon: ICONS.voucher, cost: 2000, stock: 3 },
+    { id: 'p6', zh: '双倍积分卡', en: 'Double Points Card', icon: ICONS.star, cost: 350, stock: 8 },
   ];
 
   const INIT_BALANCE = 680;
@@ -212,7 +258,7 @@
       if (soldOut) btnLabel = t('已兑完', 'Sold Out');
       else if (short) btnLabel = t(`还差 ${p.cost - state.balance} 分`, `${p.cost - state.balance} pts short`);
       return `
-        <div class="product-card">
+        <div class="product-card${disabled ? ' disabled' : ''}">
           <div class="product-icon">${p.icon}</div>
           <div class="product-name">${t(p.zh, p.en)}</div>
           <div class="product-cost">${p.cost.toLocaleString()} ${t('积分', 'pts')}</div>
@@ -301,9 +347,10 @@
   function renderSuccessModal() {
     const p = productById(state.pendingRedeem);
     document.getElementById('modalCard').innerHTML = `
-      <div class="modal-icon">✓</div>
+      <div class="modal-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
       <div class="modal-title">${t('兑换成功', 'Redemption Successful')}</div>
       <div class="modal-sub">${t(`「${p.zh}」已兑换，当前余额 ${state.balance.toLocaleString()} 积分`, `"${p.en}" redeemed. Balance: ${state.balance.toLocaleString()} pts`)}</div>
+      <div><span class="pow-badge">${t('已兑换', 'Redeemed')}</span></div>
       <div class="modal-btns">
         <button class="btn btn-primary" style="flex:1" onclick="closeModal()">${t('完成', 'Done')}</button>
       </div>

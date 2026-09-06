@@ -29,6 +29,9 @@
     --card: #ffffff;
     --radius: 14px;
     --danger: #dc2626;
+    --shadow-sm: 0 1px 2px rgba(28,25,23,.04), 0 8px 20px -16px rgba(28,25,23,.35);
+    --shadow-md: 0 2px 4px rgba(28,25,23,.05), 0 20px 40px -24px rgba(28,25,23,.4);
+    --focus-ring: 0 0 0 3px rgba(13,79,60,.22);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -39,6 +42,8 @@
     padding: 24px 16px 64px;
   }
   .wrap { max-width: 480px; margin: 0 auto; }
+  ::selection { background: var(--brand); color: #fff; }
+  :focus-visible { outline: none; box-shadow: var(--focus-ring); }
 
   /* ── 头部 ── */
   .head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
@@ -47,7 +52,10 @@
     font-size: 0.78rem; font-weight: 700; color: var(--brand);
     border: 1px solid var(--brand); border-radius: 99px;
     padding: 4px 12px; cursor: pointer; background: var(--card);
+    transition: background .12s, transform .08s;
   }
+  .lang-btn:hover { background: var(--brand-light); }
+  .lang-btn:active { transform: scale(.96); }
 
   /* ── Tab 切换 ── */
   .tab-bar { display: flex; gap: 8px; margin-bottom: 18px; }
@@ -55,7 +63,9 @@
     flex: 1; text-align: center; padding: 10px; border-radius: 10px;
     font-weight: 700; font-size: 0.86rem; border: 1.5px solid var(--line);
     background: var(--card); cursor: pointer; color: var(--gray);
+    transition: background .12s, border-color .12s, color .12s;
   }
+  .tab-btn:hover:not(.active) { border-color: var(--brand); color: var(--brand-dark); }
   .tab-btn.active { background: var(--brand); color: #fff; border-color: var(--brand); }
 
   .group-title { font-size: 0.78rem; font-weight: 700; color: var(--gray); margin: 16px 0 8px; }
@@ -65,16 +75,34 @@
   /* ── 商城卡片 ── */
   .card {
     background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
-    padding: 16px; margin-bottom: 12px;
+    padding: 16px; margin-bottom: 12px; box-shadow: var(--shadow-sm);
   }
-  .pkg-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
-  .pkg-name { font-weight: 700; font-size: 0.95rem; }
-  .pkg-price { font-weight: 800; color: var(--brand-dark); font-size: 1.05rem; }
+
+  /* ── 购买次卡包商城：卡片网格 + 单选态（选中态为浏览高亮，不影响各卡片独立购买） ── */
+  .plan-grid { display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 12px; }
+  .plan-card {
+    position: relative; background: #fff; border: 2px solid var(--line); border-radius: 14px;
+    padding: 16px 34px 16px 16px; cursor: pointer; box-shadow: var(--shadow-sm);
+    transition: border-color .15s, box-shadow .15s, transform .15s, background .15s;
+  }
+  .plan-card:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); }
+  .plan-card.selected { border-color: var(--brand); background: var(--brand-light); }
+  .plan-radio {
+    position: absolute; top: 14px; right: 14px; width: 16px; height: 16px; border-radius: 50%;
+    border: 2px solid var(--line); background: #fff; transition: border-color .15s, background .15s, box-shadow .15s;
+  }
+  .plan-card.selected .plan-radio { border-color: var(--brand-dark); background: var(--brand-dark); box-shadow: inset 0 0 0 2.5px #fff; }
+  .pkg-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 4px; padding-right: 4px; }
+  .pkg-name { font-weight: 700; font-size: 0.95rem; flex: 1; min-width: 0; }
+  .pkg-price { font-weight: 800; color: var(--brand-dark); font-size: 1.05rem; flex-shrink: 0; }
   .pkg-desc { font-size: 0.78rem; color: var(--gray); margin-bottom: 12px; }
   .pkg-btn {
     width: 100%; padding: 9px; border-radius: 10px; font-weight: 700; font-size: 0.85rem;
     border: none; cursor: pointer; background: var(--brand); color: #fff;
+    transition: filter .15s ease, transform .1s ease;
   }
+  .pkg-btn:hover:not(:disabled) { filter: brightness(1.06); }
+  .pkg-btn:active:not(:disabled) { filter: brightness(.96); transform: scale(.98); }
   .pkg-btn:disabled { background: var(--line); color: var(--gray); cursor: not-allowed; }
 
   /* ── 我的次卡包卡片 ── */
@@ -99,10 +127,17 @@
   .pass-btn {
     width: 100%; padding: 9px; border-radius: 10px; font-weight: 700; font-size: 0.85rem;
     border: none; cursor: pointer; background: var(--brand); color: #fff;
+    transition: filter .15s ease, transform .1s ease;
   }
+  .pass-btn:hover:not(:disabled) { filter: brightness(1.06); }
+  .pass-btn:active:not(:disabled) { filter: brightness(.96); transform: scale(.98); }
   .pass-btn:disabled { background: var(--line); color: var(--gray); cursor: not-allowed; }
 
-  .history-toggle { font-size: 0.74rem; color: var(--brand); text-align: center; margin-top: 10px; cursor: pointer; font-weight: 600; }
+  .history-toggle {
+    font-size: 0.74rem; color: var(--brand); text-align: center; margin-top: 10px; cursor: pointer; font-weight: 600;
+    padding: 4px; border-radius: 6px; transition: background .12s;
+  }
+  .history-toggle:hover { background: var(--brand-light); }
   .history-list { margin-top: 8px; }
   .history-row { display: flex; align-items: center; justify-content: space-between; padding: 6px 0; border-top: 1px dashed var(--line); font-size: 0.76rem; color: var(--gray); }
 
@@ -111,7 +146,7 @@
     position: fixed; inset: 0; background: rgba(0,0,0,.45);
     display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 50;
   }
-  .modal-box { background: var(--card); border-radius: 16px; padding: 26px 22px; max-width: 340px; width: 100%; text-align: center; }
+  .modal-box { background: var(--card); border-radius: 16px; padding: 26px 22px; max-width: 340px; width: 100%; text-align: center; box-shadow: var(--shadow-md); }
   .modal-title { font-weight: 800; font-size: 1rem; margin-bottom: 4px; }
   .modal-sub { font-size: 0.8rem; color: var(--gray); margin-bottom: 16px; }
   .modal-code {
@@ -122,9 +157,21 @@
   .btn {
     display: block; width: 100%; text-align: center; padding: 12px; border-radius: 10px;
     font-weight: 700; font-size: 0.88rem; border: none; cursor: pointer;
+    transition: filter .15s ease, transform .1s ease, background .12s, color .12s;
   }
   .btn-primary { background: var(--brand); color: #fff; }
+  .btn-primary:hover { filter: brightness(1.06); }
+  .btn-primary:active { filter: brightness(.96); transform: scale(.98); }
   .btn-ghost { background: transparent; color: var(--gray); margin-top: 8px; }
+  .btn-ghost:hover { background: var(--brand-light); color: var(--brand-dark); }
+
+  /* ── 确认态胶囊徽标 ── */
+  .pow-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 18px; font-weight: 800; font-size: 0.9rem; letter-spacing: .01em;
+    color: #fff; background: var(--brand-dark); border-radius: 999px; box-shadow: var(--shadow-sm);
+  }
+  .toast-row { text-align: center; margin-bottom: 10px; }
 
   .hidden { display: none !important; }
 </style>
@@ -134,21 +181,22 @@
 
   <div class="head">
     <div class="shop-name" id="shopName"></div>
-    <div class="lang-btn" onclick="toggleLang()">ZH / EN</div>
+    <div class="lang-btn" role="button" tabindex="0" onclick="toggleLang()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleLang();}">ZH / EN</div>
   </div>
 
   <div class="tab-bar">
-    <div class="tab-btn" id="tabBtn-mall" onclick="switchTab('mall')" data-zh="购买次卡包" data-en="Buy Packages">购买次卡包</div>
-    <div class="tab-btn active" id="tabBtn-mine" onclick="switchTab('mine')" data-zh="我的次卡包" data-en="My Packages">我的次卡包</div>
+    <div class="tab-btn" id="tabBtn-mall" role="tab" tabindex="0" onclick="switchTab('mall')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();switchTab('mall');}" data-zh="购买次卡包" data-en="Buy Packages">购买次卡包</div>
+    <div class="tab-btn active" id="tabBtn-mine" role="tab" tabindex="0" onclick="switchTab('mine')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();switchTab('mine');}" data-zh="我的次卡包" data-en="My Packages">我的次卡包</div>
   </div>
 
   <!-- ============ 购买次卡包 ============ -->
   <section id="tab-mall" class="hidden">
-    <div id="mallList"></div>
+    <div class="plan-grid" id="mallList"></div>
   </section>
 
   <!-- ============ 我的次卡包 ============ -->
   <section id="tab-mine">
+    <div class="toast-row hidden" id="mineToast"><span class="pow-badge" id="mineToastBadge"></span></div>
     <div id="mineList"></div>
   </section>
 
@@ -198,32 +246,39 @@
   const purchasedIds = new Set();
   const myPasses = [...MY_PASSES];
   let redeemTargetId = null;
+  let selectedPackageId = PACKAGES[0].id;
 
   function t(zh, en) { return currentLang === 'zh' ? zh : en; }
   function pkgOf(id) { return PACKAGES.find(p => p.id === id); }
 
-  /* ── 渲染：购买商城 ── */
+  /* ── 渲染：购买商城（卡片网格 + 单选态浏览高亮） ── */
   function renderMall() {
     const box = document.getElementById('mallList');
     box.innerHTML = PACKAGES.map(p => {
       const bought = purchasedIds.has(p.id);
       return `
-        <div class="card">
+        <div class="plan-card ${p.id === selectedPackageId ? 'selected' : ''}" onclick="selectPackage('${p.id}')">
+          <span class="plan-radio"></span>
           <div class="pkg-top">
             <div class="pkg-name">${t(p.nameZh, p.nameEn)} · ${p.count}${t('次', 'x')}</div>
             <div class="pkg-price">${SHOP.currency}${p.price}</div>
           </div>
           <div class="pkg-desc">${t(p.descZh, p.descEn)}</div>
-          <button class="pkg-btn" ${bought ? 'disabled' : ''} onclick="buyPackage('${p.id}')">
+          <button class="pkg-btn" ${bought ? 'disabled' : ''} onclick="event.stopPropagation(); buyPackage('${p.id}')">
             ${bought ? t('已购买', 'Purchased') : t('立即购买', 'Buy Now')}
           </button>
         </div>
       `;
     }).join('');
   }
+  function selectPackage(id) {
+    selectedPackageId = id;
+    renderMall();
+  }
   function buyPackage(id) {
     if (purchasedIds.has(id)) return;
     purchasedIds.add(id);
+    selectedPackageId = id;
     const p = pkgOf(id);
     myPasses.unshift({
       id: 'buy-' + id, packageId: id, total: p.count, used: 0,
@@ -232,6 +287,17 @@
     });
     renderMall();
     switchTab('mine');
+    showMineToast(t('购买成功', 'Purchase Successful'));
+  }
+
+  /* ── 确认态胶囊徽标 toast ── */
+  let mineToastTimer = null;
+  function showMineToast(text) {
+    const row = document.getElementById('mineToast');
+    document.getElementById('mineToastBadge').textContent = text;
+    row.classList.remove('hidden');
+    clearTimeout(mineToastTimer);
+    mineToastTimer = setTimeout(() => row.classList.add('hidden'), 2200);
   }
 
   /* ── 渲染：我的次卡包 ── */
@@ -269,7 +335,7 @@
           ${t('核销一次', 'Use One Session')}
         </button>
         ${m.history.length ? `
-          <div class="history-toggle" onclick="toggleHistory('${m.id}')" id="historyToggle-${m.id}">${t('查看核销记录', 'View usage history')}</div>
+          <div class="history-toggle" role="button" tabindex="0" onclick="toggleHistory('${m.id}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleHistory('${m.id}');}" id="historyToggle-${m.id}">${t('查看核销记录', 'View usage history')}</div>
           <div class="history-list hidden" id="historyList-${m.id}">
             ${m.history.map(h => `<div class="history-row"><span>${t('已核销一次', 'Used one session')}</span><span>${t(h.dateZh, h.dateEn)}</span></div>`).join('')}
           </div>
@@ -318,6 +384,7 @@
     }
     closeModal();
     renderMine();
+    showMineToast(t('核销成功', 'Redeemed Successfully'));
   }
 
   /* ── 语言切换 ── */
@@ -331,6 +398,8 @@
     // 商城 / 我的次卡包都是 JS 动态生成的 innerHTML，必须重新渲染才能跟着切语言
     renderMall();
     renderMine();
+    document.getElementById('mineToast').classList.add('hidden');
+    clearTimeout(mineToastTimer);
     // 核销弹窗若正打开，标题文案也要跟着重渲染
     if (!document.getElementById('redeemModal').classList.contains('hidden') && redeemTargetId) {
       const m = myPasses.find(x => x.id === redeemTargetId);
