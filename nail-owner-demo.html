@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<!--
+  行业 demo：美甲/美睫工作室 —— 老板端（通用推销版，不绑定具体客户）
+  跟 nail-salon-demo.html（客人手机端）是同一套系统的两面：客人看到的是预约/卡包/档案，
+  老板看到的是今日经营、排班、客户档案、报表。对标 Jane 的 Scheduling / Reporting &
+  Analytics / Patient Profiles 三块（Jane 的核心价值其实在店家后台，不在客人端）。
+
+  怎么改成具体客户：
+  1. 顶部 :root 的色板见 docs/20260917-美甲视觉规范.md，换行业改那份文档再同步过来
+  2. SHOP 对象（脚本区最上面）改店名、货币符号
+  3. 四个模块各自的 mock 数据（TODAY / SCHEDULE / CLIENTS / REPORT）按需替换
+  4. 文案统一走 data-zh / data-en 双属性，改中文改 data-zh，改英文改 data-en，两个都要改
+
+  演示数据全部虚构，不得当成真实经营数据呈现（见 PRODUCT.md → Evidence on Hand）。
+-->
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Noto+Serif+SC:wght@600;700&display=swap" rel="stylesheet">
+<title>示例美甲工作室 · 老板端</title>
+<style>
+  /* ── 设计 token：源真值表见 docs/20260917-美甲视觉规范.md ── */
+  :root {
+    --brand: #A8496B;
+    --brand-dark: #7C3A52;
+    --brand-deep: #5E2B3E;
+    --brand-light: #FDF4F7;
+    --brand-tint: #F7E4EC;
+    --gold: #C9A227;
+    --gold-deep: #8A6E15;
+    --ink: #2A1B20;
+    --ink-body: #6B5560;
+    --ink-muted: #806C74;
+    --ink-faint: #9E8A92;
+    --line: #F0DCE4;
+    --bg: #FDF4F7;
+    --card: #ffffff;
+    --radius-sm: 10px;
+    --radius: 14px;
+    --radius-lg: 20px;
+    --good: #15803D;
+    --warn: #B45309;
+    --danger: #C02636;
+    --shadow-sm: 0 1px 2px rgba(42,27,32,.04), 0 8px 20px -16px rgba(42,27,32,.35);
+    --shadow-md: 0 2px 4px rgba(42,27,32,.05), 0 20px 40px -24px rgba(42,27,32,.4);
+    --font-display: 'Playfair Display', 'Noto Serif SC', Georgia, 'Songti SC', serif;
+    --font-body: -apple-system, BlinkMacSystemFont, "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-body); background: var(--bg); color: var(--ink); line-height: 1.6; }
+  ::selection { background: var(--brand-tint); color: var(--brand-dark); }
+  button:focus-visible, [tabindex]:focus-visible, input:focus-visible {
+    outline: 2px solid var(--brand-dark); outline-offset: 2px;
+  }
+  .hidden { display: none !important; }
+
+  /* ── 顶栏 ── */
+  .top-bar { background: var(--card); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 20; }
+  .top-inner { max-width: 1040px; margin: 0 auto; padding: 14px 20px; display: flex; align-items: center; gap: 14px; }
+  .brand-mark {
+    width: 34px; height: 34px; border-radius: 50%; flex: 0 0 auto; background: #fff;
+    border: 1.5px solid var(--gold); display: flex; align-items: center; justify-content: center; color: var(--brand-dark);
+  }
+  .brand-text { flex: 1; min-width: 0; }
+  .brand-name { font-family: var(--font-display); font-weight: 600; font-size: 1.12rem; color: var(--brand-dark); }
+  .brand-sub { font-size: .76rem; color: var(--ink-muted); }
+  .lang-btn {
+    font-size: .78rem; font-weight: 700; color: var(--brand-dark); border: 1.5px solid var(--brand);
+    border-radius: 99px; padding: 5px 13px; cursor: pointer; background: var(--card); font-family: inherit;
+    transition: background .15s;
+  }
+  .lang-btn:hover { background: var(--brand-light); }
+
+  .nav-bar { background: var(--card); border-bottom: 1px solid var(--line); position: sticky; top: 63px; z-index: 19; }
+  .nav-inner { max-width: 1040px; margin: 0 auto; padding: 0 20px; display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; }
+  .nav-inner::-webkit-scrollbar { display: none; }
+  .nav-tab {
+    flex: 0 0 auto; padding: 12px 16px 10px; border: none; background: none; cursor: pointer;
+    font-family: inherit; font-size: .88rem; font-weight: 700; color: var(--ink-muted);
+    border-bottom: 2.5px solid transparent; transition: color .15s, border-color .15s;
+  }
+  .nav-tab:hover { color: var(--brand-dark); }
+  .nav-tab.active { color: var(--brand-dark); border-bottom-color: var(--brand-dark); }
+
+  main { max-width: 1040px; margin: 0 auto; padding: 20px; }
+
+  /* ── 通用卡片 ── */
+  .card {
+    background: var(--card); border: 1.5px solid var(--line); border-radius: var(--radius);
+    padding: 18px; margin-bottom: 16px; box-shadow: var(--shadow-sm);
+  }
+  .card-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+  .card-title { font-family: var(--font-display); font-weight: 600; font-size: 1.1rem; }
+  .card-hint { font-size: .78rem; color: var(--ink-muted); }
+  .cols { display: grid; grid-template-columns: 1.55fr 1fr; gap: 16px; align-items: start; }
+  @media (max-width: 860px) { .cols { grid-template-columns: 1fr; } }
+
+  .mock-note {
+    display: flex; gap: 8px; align-items: flex-start; font-size: .76rem; color: var(--ink-muted);
+    line-height: 1.5; background: var(--brand-tint); border-radius: var(--radius-sm); padding: 10px 12px; margin-top: 4px;
+  }
+  .mock-note svg { flex: 0 0 auto; margin-top: 1px; color: var(--brand-dark); }
+
+  /* ══════════════ 今日（scope: #tab-today） ══════════════ */
+  #tab-today .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px; }
+  @media (max-width: 720px) { #tab-today .stat-grid { grid-template-columns: repeat(2, 1fr); } }
+  #tab-today .stat {
+    background: var(--card); border: 1.5px solid var(--line); border-radius: var(--radius);
+    padding: 15px 16px; box-shadow: var(--shadow-sm);
+  }
+  #tab-today .stat.lead { background: linear-gradient(135deg, var(--brand-dark) 0%, var(--brand-deep) 100%); border-color: transparent; color: #fff; box-shadow: var(--shadow-md); }
+  #tab-today .stat-k { font-size: .76rem; color: var(--ink-muted); font-weight: 600; }
+  #tab-today .stat.lead .stat-k { color: rgba(255,255,255,.82); }
+  #tab-today .stat-v { font-size: 1.62rem; font-weight: 800; margin-top: 2px; font-variant-numeric: tabular-nums; line-height: 1.2; }
+  #tab-today .stat-d { font-size: .74rem; color: var(--ink-muted); margin-top: 2px; }
+  #tab-today .stat.lead .stat-d { color: rgba(255,255,255,.78); }
+  #tab-today .stat-d.up { color: var(--good); font-weight: 700; }
+
+  #tab-today .alert {
+    display: flex; gap: 11px; align-items: flex-start;
+    background: #FDF6EC; border: 1.5px solid #F0D9B5; border-radius: var(--radius);
+    padding: 14px 16px; margin-bottom: 16px; box-shadow: var(--shadow-sm);
+  }
+  #tab-today .alert svg { color: var(--warn); flex: 0 0 auto; margin-top: 2px; }
+  #tab-today .alert-t { font-weight: 800; font-size: .88rem; color: #7A3E0B; }
+  #tab-today .alert-d { font-size: .78rem; color: var(--ink-body); margin-top: 3px; line-height: 1.5; }
+  #tab-today .alert-btn {
+    margin-top: 9px; padding: 8px 16px; border-radius: 999px; border: none; cursor: pointer;
+    background: var(--brand-dark); color: #fff; font-weight: 700; font-size: .8rem; font-family: inherit;
+    transition: filter .15s;
+  }
+  #tab-today .alert-btn:hover { filter: brightness(1.06); }
+  #tab-today .alert.done { background: var(--brand-light); border-color: var(--brand-tint); }
+  #tab-today .alert.done svg { color: var(--good); }
+  #tab-today .alert.done .alert-t { color: var(--brand-dark); }
+
+  .appt-row {
+    display: flex; align-items: center; gap: 12px; padding: 12px 0; border-top: 1px solid var(--line);
+  }
+  .appt-row:first-child { border-top: none; padding-top: 2px; }
+  .appt-time { font-weight: 800; font-size: .88rem; flex: 0 0 48px; font-variant-numeric: tabular-nums; }
+  .appt-pic { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; flex: 0 0 auto; border: 1.5px solid var(--line); }
+  .appt-body { flex: 1; min-width: 0; }
+  .appt-who { font-weight: 700; font-size: .86rem; }
+  .appt-meta { font-size: .78rem; color: var(--ink-muted); margin-top: 1px; }
+  .appt-price { font-weight: 800; color: var(--brand-dark); font-size: .86rem; font-variant-numeric: tabular-nums; flex: 0 0 auto; }
+  .pill {
+    font-size: .72rem; font-weight: 800; padding: 4px 11px; border-radius: 999px; flex: 0 0 auto;
+    border: none; font-family: inherit; cursor: pointer; transition: filter .15s;
+  }
+  .pill.pending  { background: var(--brand-tint); color: var(--brand-dark); }
+  .pill.progress { background: var(--brand-dark); color: #fff; }
+  .pill.done     { background: #E4F2E8; color: var(--good); }
+  .pill.noshow   { background: #FBE3E6; color: var(--danger); }
+  .pill:hover { filter: brightness(.97); }
+  .pill.static { cursor: default; }
+
+  /* ══════════════ 排班（scope: #tab-sched） ══════════════ */
+  #tab-sched .day-row { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 12px; scrollbar-width: none; }
+  #tab-sched .day-row::-webkit-scrollbar { display: none; }
+  #tab-sched .day-cell {
+    flex: 0 0 62px; text-align: center; padding: 9px 0; border-radius: var(--radius-sm);
+    border: 1.5px solid var(--line); background: var(--card); cursor: pointer; font-family: inherit;
+    transition: border-color .15s, background .15s, color .15s;
+  }
+  #tab-sched .day-cell:hover:not(.on) { border-color: var(--brand); }
+  #tab-sched .day-cell.on { background: var(--brand-dark); border-color: var(--brand-dark); color: #fff; }
+  #tab-sched .day-dow { font-size: .72rem; opacity: .78; }
+  #tab-sched .day-dom { font-size: 1.05rem; font-weight: 800; margin-top: 1px; font-variant-numeric: tabular-nums; }
+  #tab-sched .day-cell.today .day-dom::after {
+    content: ''; display: block; width: 4px; height: 4px; border-radius: 50%; background: var(--gold); margin: 2px auto 0;
+  }
+  #tab-sched .chip-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+  #tab-sched .chip {
+    display: inline-flex; align-items: center; gap: 6px; padding: 6px 13px 6px 6px; border-radius: 999px;
+    border: 1.5px solid var(--line); background: var(--card); font-size: .8rem; font-weight: 700;
+    color: var(--ink-body); cursor: pointer; font-family: inherit; transition: border-color .15s, background .15s, color .15s;
+  }
+  #tab-sched .chip img, #tab-sched .chip i {
+    width: 22px; height: 22px; border-radius: 50%; object-fit: cover; display: block; flex: 0 0 auto;
+    background: var(--brand-tint); color: var(--brand-dark); font-style: normal; font-size: .72rem; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+  }
+  #tab-sched .chip:hover:not(.on) { border-color: var(--brand); color: var(--brand-dark); }
+  #tab-sched .chip.on { background: var(--brand-dark); border-color: var(--brand-dark); color: #fff; }
+  #tab-sched .lane { margin-bottom: 18px; }
+  #tab-sched .lane:last-child { margin-bottom: 0; }
+  #tab-sched .lane-head { display: flex; align-items: center; gap: 9px; margin-bottom: 8px; }
+  #tab-sched .lane-pic { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; border: 1.5px solid var(--line); }
+  #tab-sched .lane-name { font-weight: 800; font-size: .9rem; }
+  #tab-sched .lane-load { font-size: .76rem; color: var(--ink-muted); }
+  #tab-sched .gap-row {
+    display: flex; align-items: center; gap: 10px; padding: 10px 12px; margin-top: 8px;
+    border: 1.5px dashed var(--line); border-radius: var(--radius-sm); font-size: .78rem; color: var(--ink-muted);
+  }
+  #tab-sched .gap-row b { color: var(--ink-body); font-weight: 700; }
+  #tab-sched .gap-btn {
+    margin-left: auto; padding: 6px 13px; border-radius: 999px; border: 1.5px solid var(--brand);
+    background: #fff; color: var(--brand-dark); font-size: .78rem; font-weight: 700; cursor: pointer; font-family: inherit;
+  }
+  #tab-sched .gap-btn:hover { background: var(--brand-light); }
+  #tab-sched .empty-tip { font-size: .82rem; color: var(--ink-muted); text-align: center; padding: 22px 0; }
+
+  /* ══════════════ 客户（scope: #tab-clients） ══════════════ */
+  #tab-clients .search-wrap { position: relative; margin-bottom: 14px; }
+  #tab-clients .search-wrap svg { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); color: var(--ink-muted); }
+  #tab-clients .search {
+    width: 100%; padding: 11px 13px 11px 38px; border: 1.5px solid var(--line); border-radius: var(--radius-sm);
+    font-size: .88rem; font-family: inherit; color: var(--ink); background: var(--card);
+  }
+  #tab-clients .search::placeholder { color: var(--ink-muted); }
+  #tab-clients .cl-row {
+    display: flex; align-items: center; gap: 12px; padding: 11px 0; border-top: 1px solid var(--line);
+    cursor: pointer; border-left: none; border-right: none; border-bottom: none;
+    background: none; width: 100%; text-align: left; font-family: inherit;
+  }
+  #tab-clients .cl-row:first-child { border-top: none; }
+  #tab-clients .cl-row:hover { background: var(--brand-light); }
+  #tab-clients .cl-row.on { background: var(--brand-light); }
+  #tab-clients .cl-pic { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 1.5px solid var(--line); flex: 0 0 auto; }
+  #tab-clients .cl-body { flex: 1; min-width: 0; }
+  #tab-clients .cl-name { font-weight: 700; font-size: .88rem; }
+  #tab-clients .cl-meta { font-size: .78rem; color: var(--ink-muted); margin-top: 1px; }
+  #tab-clients .cl-tag {
+    font-size: .72rem; font-weight: 800; padding: 3px 9px; border-radius: 999px; flex: 0 0 auto;
+    background: var(--brand-tint); color: var(--brand-dark);
+  }
+  #tab-clients .cl-tag.risk { background: #FDF0E2; color: #8A3E12; }
+  #tab-clients .cl-tag.vip { background: #F6EFD8; color: var(--gold-deep); }
+  #tab-clients .det-name { font-family: var(--font-display); font-size: 1.24rem; font-weight: 600; }
+  #tab-clients .det-sub { font-size: .76rem; color: var(--ink-muted); margin-bottom: 12px; }
+  #tab-clients .det-row { display: flex; gap: 10px; padding: 9px 0; border-top: 1px dashed var(--line); }
+  #tab-clients .det-k { font-size: .76rem; color: var(--ink-muted); font-weight: 600; flex: 0 0 68px; }
+  #tab-clients .det-v { font-size: .82rem; flex: 1; min-width: 0; line-height: 1.5; }
+  #tab-clients .swatch { display: inline-flex; align-items: center; gap: 5px; font-size: .78rem; font-weight: 600;
+                         background: var(--brand-light); border-radius: 999px; padding: 3px 9px 3px 3px; margin: 0 5px 5px 0; }
+  #tab-clients .swatch i { width: 15px; height: 15px; border-radius: 50%; display: block; border: 1px solid rgba(42,27,32,.12); }
+  #tab-clients .warn-tag {
+    display: inline-block; font-size: .76rem; font-weight: 700; color: #8A3E12;
+    background: #FBEEE2; border-radius: 999px; padding: 3px 10px; margin: 0 5px 5px 0;
+  }
+  #tab-clients .mini-hist { display: flex; gap: 8px; margin-top: 4px; }
+  #tab-clients .mini-hist img { width: 46px; height: 46px; border-radius: 8px; object-fit: cover; box-shadow: var(--shadow-sm); }
+  #tab-clients .det-empty { font-size: .84rem; color: var(--ink-muted); text-align: center; padding: 40px 10px; line-height: 1.6; }
+
+  /* ══════════════ 报表（scope: #tab-reports） ══════════════ */
+  #tab-reports .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px; }
+  @media (max-width: 720px) { #tab-reports .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
+  #tab-reports .kpi { background: var(--card); border: 1.5px solid var(--line); border-radius: var(--radius); padding: 15px 16px; box-shadow: var(--shadow-sm); }
+  #tab-reports .kpi-k { font-size: .76rem; color: var(--ink-muted); font-weight: 600; }
+  #tab-reports .kpi-v { font-size: 1.5rem; font-weight: 800; margin-top: 2px; font-variant-numeric: tabular-nums; }
+  #tab-reports .kpi-d { font-size: .74rem; margin-top: 2px; color: var(--ink-muted); }
+  #tab-reports .kpi-d.up { color: var(--good); font-weight: 700; }
+  #tab-reports .kpi-d.down { color: var(--danger); font-weight: 700; }
+
+  #tab-reports .bars { display: flex; align-items: flex-end; gap: 10px; height: 168px; padding-top: 8px; }
+  #tab-reports .bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; justify-content: flex-end; }
+  #tab-reports .bar {
+    width: 100%; max-width: 44px; border-radius: 7px 7px 3px 3px; background: var(--brand-tint);
+    transition: background .15s, transform .15s; position: relative;
+  }
+  #tab-reports .bar-col.peak .bar { background: linear-gradient(180deg, var(--brand) 0%, var(--brand-dark) 100%); }
+  #tab-reports .bar-col:hover .bar { transform: translateY(-2px); }
+  #tab-reports .bar-v { font-size: .72rem; font-weight: 800; color: var(--ink-body); font-variant-numeric: tabular-nums; }
+  #tab-reports .bar-k { font-size: .72rem; color: var(--ink-muted); }
+
+  #tab-reports .insight {
+    display: flex; gap: 9px; align-items: flex-start; margin-top: 18px;
+    background: var(--brand-light); border-radius: var(--radius-sm); padding: 12px 14px;
+    font-size: .8rem; color: var(--ink-body); line-height: 1.55;
+  }
+  #tab-reports .insight svg { flex: 0 0 auto; margin-top: 2px; color: var(--brand-dark); }
+  #tab-reports .insight b { color: var(--brand-dark); font-weight: 800; }
+
+  #tab-reports .mix-row { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-top: 1px solid var(--line); }
+  #tab-reports .mix-row:first-child { border-top: none; }
+  #tab-reports .mix-name { font-size: .82rem; font-weight: 700; flex: 0 0 116px; }
+  #tab-reports .mix-track { flex: 1; height: 9px; border-radius: 99px; background: var(--line); overflow: hidden; }
+  #tab-reports .mix-fill { height: 100%; border-radius: 99px; background: var(--brand); }
+  #tab-reports .mix-v { font-size: .76rem; font-weight: 800; color: var(--brand-dark); flex: 0 0 42px; text-align: right; font-variant-numeric: tabular-nums; }
+
+  #tab-reports .staff-row { display: flex; align-items: center; gap: 11px; padding: 10px 0; border-top: 1px solid var(--line); }
+  #tab-reports .staff-row:first-child { border-top: none; }
+  #tab-reports .staff-pic { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1.5px solid var(--line); }
+  #tab-reports .staff-name { font-weight: 700; font-size: .84rem; flex: 0 0 62px; }
+  #tab-reports .staff-track { flex: 1; height: 9px; border-radius: 99px; background: var(--line); overflow: hidden; }
+  #tab-reports .staff-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--brand) 0%, var(--brand-dark) 100%); }
+  #tab-reports .staff-v { font-size: .78rem; font-weight: 800; color: var(--brand-dark); flex: 0 0 56px; text-align: right; font-variant-numeric: tabular-nums; }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div class="top-inner">
+    <span class="brand-mark" aria-hidden="true">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 3.6c2.6 0 4.4 2 4.4 4.6 0 3.4-1 8-1.5 10.1a3 3 0 01-2.9 2.3 3 3 0 01-2.9-2.3C8.6 16.2 7.6 11.6 7.6 8.2 7.6 5.6 9.4 3.6 12 3.6z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M8.6 9.4c2.2-1.1 4.6-1.1 6.8 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </span>
+    <div class="brand-text">
+      <div class="brand-name" id="shopName"></div>
+      <div class="brand-sub" id="todayLabel"></div>
+    </div>
+    <button class="lang-btn" onclick="toggleLang()">ZH / EN</button>
+  </div>
+</div>
+
+<div class="nav-bar">
+  <div class="nav-inner">
+    <button class="nav-tab active" id="nav-today"   onclick="Owner.show('today')"   data-zh="今日" data-en="Today">今日</button>
+    <button class="nav-tab"        id="nav-sched"   onclick="Owner.show('sched')"   data-zh="排班" data-en="Schedule">排班</button>
+    <button class="nav-tab"        id="nav-clients" onclick="Owner.show('clients')" data-zh="客户档案" data-en="Clients">客户档案</button>
+    <button class="nav-tab"        id="nav-reports" onclick="Owner.show('reports')" data-zh="经营报表" data-en="Reports">经营报表</button>
+  </div>
+</div>
+
+<main>
+  <!-- ══════════════ 今日 ══════════════ -->
+  <div id="tab-today">
+    <div class="stat-grid" id="statGrid"></div>
+    <div id="alertBox"></div>
+    <div class="cols">
+      <div class="card">
+        <div class="card-head">
+          <div class="card-title" data-zh="今天的预约" data-en="Today's Appointments">今天的预约</div>
+          <div class="card-hint" data-zh="点状态可以推进：待到店 → 进行中 → 已完成" data-en="Tap a status to advance: Upcoming → In progress → Done">点状态可以推进：待到店 → 进行中 → 已完成</div>
+        </div>
+        <div id="apptList"></div>
+      </div>
+      <div>
+        <div class="card">
+          <div class="card-head"><div class="card-title" data-zh="今天还空着" data-en="Open Slots Today">今天还空着</div></div>
+          <div id="openSlots"></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><div class="card-title" data-zh="自动发出的提醒" data-en="Reminders Sent Automatically">自动发出的提醒</div></div>
+          <div id="sentList"></div>
+        </div>
+      </div>
+    </div>
+    <div class="mock-note">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.8"/><path d="M12 11v5.5M12 7.8v.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      <span data-zh="演示说明：本页所有预约、客户、营收数字均为虚构示意数据，不代表任何真实门店的经营情况。" data-en="Demo notice: every appointment, client and revenue figure on this page is fictional sample data and does not represent any real salon.">演示说明：本页所有预约、客户、营收数字均为虚构示意数据，不代表任何真实门店的经营情况。</span>
+    </div>
+  </div>
+
+  <!-- ══════════════ 排班 ══════════════ -->
+  <div id="tab-sched" class="hidden">
+    <div class="card">
+      <div class="card-head">
+        <div class="card-title" data-zh="本周排班" data-en="This Week">本周排班</div>
+        <div class="card-hint" data-zh="选日期看当天，按技师筛选" data-en="Pick a day, filter by technician">选日期看当天，按技师筛选</div>
+      </div>
+      <div class="day-row" id="dayRow"></div>
+      <div class="chip-row" id="staffChips"></div>
+      <div id="laneBox"></div>
+    </div>
+  </div>
+
+  <!-- ══════════════ 客户档案 ══════════════ -->
+  <div id="tab-clients" class="hidden">
+    <div class="cols">
+      <div class="card">
+        <div class="card-head">
+          <div class="card-title" data-zh="客户列表" data-en="Clients">客户列表</div>
+          <div class="card-hint" id="clientCount"></div>
+        </div>
+        <div class="search-wrap">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.8"/><path d="M16 16l4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          <input class="search" id="clientSearch" data-zh-ph="搜名字、电话或偏好色号" data-en-ph="Search name, phone or colour">
+        </div>
+        <div id="clientList"></div>
+      </div>
+      <div class="card" id="clientDetail"></div>
+    </div>
+  </div>
+
+  <!-- ══════════════ 经营报表 ══════════════ -->
+  <div id="tab-reports" class="hidden">
+    <div class="kpi-grid" id="kpiGrid"></div>
+    <div class="cols">
+      <div class="card">
+        <div class="card-head">
+          <div class="card-title" data-zh="近 7 天营收" data-en="Revenue, last 7 days">近 7 天营收</div>
+          <div class="card-hint" id="revSum"></div>
+        </div>
+        <div class="bars" id="revBars"></div>
+        <div class="insight" id="revInsight"></div>
+      </div>
+      <div>
+        <div class="card">
+          <div class="card-head"><div class="card-title" data-zh="项目占比" data-en="Service Mix">项目占比</div></div>
+          <div id="mixList"></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><div class="card-title" data-zh="技师业绩" data-en="By Technician">技师业绩</div></div>
+          <div id="staffPerf"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+  /* ── 全局共享：店铺信息、语言状态 ── */
+  const SHOP = { nameZh: '示例美甲工作室 · 老板端', nameEn: 'Sample Nail Studio · Owner', currency: '€' };
+  const STAFF = [
+    { id: 'p2', zh: '阿May', en: 'May',  img: 'assets/nail/staff/s1.webp' },
+    { id: 'p3', zh: 'Tina',  en: 'Tina', img: 'assets/nail/staff/s2.webp' },
+    { id: 'p4', zh: 'Coco',  en: 'Coco', img: 'assets/nail/staff/s3.webp' },
+    { id: 'p5', zh: '小柔',  en: 'Jaz',  img: 'assets/nail/staff/s4.webp' },
+  ];
+  function staffOf(id) { return STAFF.find(s => s.id === id); }
+
+  let currentLang = 'zh';
+  function t(zh, en) { return currentLang === 'zh' ? zh : en; }
+  function esc(x) { return String(x).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+
+  function toggleLang() {
+    currentLang = currentLang === 'zh' ? 'en' : 'zh';
+    document.documentElement.lang = currentLang;
+    document.getElementById('shopName').textContent = t(SHOP.nameZh, SHOP.nameEn);
+    document.getElementById('todayLabel').textContent = t('2026 年 9 月 17 日 · 周四', 'Thursday, 17 September 2026');
+    document.querySelectorAll('[data-zh][data-en]').forEach(el => {
+      el.textContent = currentLang === 'zh' ? el.dataset.zh : el.dataset.en;
+    });
+    document.querySelectorAll('[data-zh-ph]').forEach(el => {
+      el.placeholder = currentLang === 'zh' ? el.dataset.zhPh : el.dataset.enPh;
+    });
+    Today.onLangChange(currentLang);
+    Sched.onLangChange(currentLang);
+    Clients.onLangChange(currentLang);
+    Reports.onLangChange(currentLang);
+  }
+
+  /* ══════════════ 顶部 tab 控制（namespace: Owner） ══════════════ */
+  const Owner = (function () {
+    const TABS = ['today', 'sched', 'clients', 'reports'];
+    const booted = { sched: false, clients: false, reports: false };
+    function show(name) {
+      TABS.forEach(k => {
+        document.getElementById('tab-' + k).classList.toggle('hidden', k !== name);
+        document.getElementById('nav-' + k).classList.toggle('active', k === name);
+      });
+      /* 除「今日」外都惰性初始化，开页不构建全部 DOM */
+      if (name === 'sched' && !booted.sched) { Sched.init(); booted.sched = true; }
+      if (name === 'clients' && !booted.clients) { Clients.init(); booted.clients = true; }
+      if (name === 'reports' && !booted.reports) { Reports.init(); booted.reports = true; }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    function isBooted(k) { return booted[k]; }
+    return { show, isBooted };
+  })();
+
+  /* ══════════════ 今日（namespace: Today） ══════════════ */
+  const Today = (function () {
+    const APPTS = [
+      { id: 'a1', time: '10:00', czh: '林小姐', cen: 'Ms. Lam',  pic: 'assets/nail/staff/s4.webp', szh: '光疗甲 · 法式珠光', sen: 'Gel · Pearl French', staff: 'p2', price: 45, status: 'done' },
+      { id: 'a2', time: '11:00', czh: '陈太',   cen: 'Mrs. Chen', pic: 'assets/nail/staff/s2.webp', szh: '基础美甲',         sen: 'Classic Manicure',   staff: 'p3', price: 35, status: 'done' },
+      { id: 'a3', time: '13:30', czh: 'Aoife',  cen: 'Aoife',     pic: 'assets/nail/staff/s1.webp', szh: '延长甲 + 手绘',     sen: 'Extensions + Art',   staff: 'p2', price: 68, status: 'progress' },
+      { id: 'a4', time: '14:30', czh: '黄小姐', cen: 'Ms. Wong',  pic: 'assets/nail/staff/s3.webp', szh: '光疗甲',           sen: 'Gel Polish',         staff: 'p4', price: 45, status: 'pending' },
+      { id: 'a5', time: '15:30', czh: 'Niamh',  cen: 'Niamh',     pic: 'assets/nail/staff/s2.webp', szh: '卸甲 + 修型',       sen: 'Removal + Shaping',  staff: 'p5', price: 20, status: 'pending' },
+      { id: 'a6', time: '17:30', czh: '周女士', cen: 'Ms. Chow',  pic: 'assets/nail/staff/s4.webp', szh: '光疗甲 · 金属裸色', sen: 'Gel · Nude Chrome',  staff: 'p3', price: 45, status: 'pending' },
+    ];
+    const OPEN_SLOTS = [
+      { time: '12:00', reasonZh: '刚有人改期空出来', reasonEn: 'Just freed up by a reschedule', waiting: 1 },
+      { time: '16:30', reasonZh: '本来就没排满',     reasonEn: 'Was never filled',              waiting: 0 },
+    ];
+    const SENT = [
+      { zh: '给今天 6 位客人发了到店提醒', en: 'Reminded all 6 of today\'s guests', time: '昨天 18:00', timeEn: 'Yesterday 18:00' },
+      { zh: '给上周做甲的 9 位发了补甲提醒', en: 'Nudged 9 guests from last week about refills', time: '今天 09:00', timeEn: 'Today 09:00' },
+      { zh: '给昨天到店的 4 位发了评价邀请', en: 'Asked yesterday\'s 4 guests for a review', time: '今天 09:00', timeEn: 'Today 09:00' },
+    ];
+    const ORDER = ['pending', 'progress', 'done'];
+    const LABEL = { pending: ['待到店', 'Upcoming'], progress: ['进行中', 'In progress'], done: ['已完成', 'Done'], noshow: ['未到店', 'No-show'] };
+
+    const appts = APPTS.map(a => ({ ...a }));
+    let waitlistNotified = false;
+
+    function stats() {
+      const doneRev = appts.filter(a => a.status === 'done').reduce((s, a) => s + a.price, 0);
+      const bookedRev = appts.reduce((s, a) => s + a.price, 0);
+      return { count: appts.length, doneRev, bookedRev };
+    }
+    function renderStats() {
+      const s = stats();
+      document.getElementById('statGrid').innerHTML = `
+        <div class="stat lead">
+          <div class="stat-k">${t('今日已入账', 'Taken today')}</div>
+          <div class="stat-v">${SHOP.currency}${s.doneRev}</div>
+          <div class="stat-d">${t(`全天预计 ${SHOP.currency}${s.bookedRev}`, `${SHOP.currency}${s.bookedRev} booked in total`)}</div>
+        </div>
+        <div class="stat">
+          <div class="stat-k">${t('今日预约', 'Appointments')}</div>
+          <div class="stat-v">${s.count}</div>
+          <div class="stat-d up">${t('+2 比上周四', '+2 vs last Thursday')}</div>
+        </div>
+        <div class="stat">
+          <div class="stat-k">${t('新客', 'New guests')}</div>
+          <div class="stat-v">2</div>
+          <div class="stat-d">${t('都是老客推荐来的', 'Both referred by regulars')}</div>
+        </div>
+        <div class="stat">
+          <div class="stat-k">${t('座位利用率', 'Chair utilisation')}</div>
+          <div class="stat-v">78%</div>
+          <div class="stat-d">${t('空 2 个时段', '2 slots still open')}</div>
+        </div>`;
+    }
+
+    /* 候补名单救单：这是客人端「加入候补」在老板端的另一半 */
+    function renderAlert() {
+      const box = document.getElementById('alertBox');
+      if (waitlistNotified) {
+        box.innerHTML = `
+          <div class="alert done">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div>
+              <div class="alert-t">${t('已通知候补的客人', 'Wait list notified')}</div>
+              <div class="alert-d">${t('短信已发给候补第 1 位（王小姐）。她点链接就能直接占掉 12:00，不用你打电话。', 'An SMS went to the first person in line (Ms. Wang). She can claim the 12:00 slot from the link — no phone call needed.')}</div>
+            </div>
+          </div>`;
+        return;
+      }
+      box.innerHTML = `
+        <div class="alert">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="M12 8.5v4.2M12 16.2v.4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M10.3 4.3L2.9 17.5a1.8 1.8 0 001.6 2.7h15a1.8 1.8 0 001.6-2.7L13.7 4.3a1.9 1.9 0 00-3.4 0z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+          <div>
+            <div class="alert-t">${t('12:00 空出来了，有 1 位客人在候补', '12:00 just opened up — 1 guest is on the wait list')}</div>
+            <div class="alert-d">${t('这个时段本来约满，刚有人改期。候补名单上有王小姐，一键发通知，谁先点谁拿到。', 'This slot was fully booked until someone rescheduled. Ms. Wang is waiting — send her the link and the first to respond takes it.')}</div>
+            <button class="alert-btn" onclick="Today.notifyWaitlist()">${t('通知候补客人', 'Notify the wait list')}</button>
+          </div>
+        </div>`;
+    }
+    function notifyWaitlist() { waitlistNotified = true; renderAlert(); renderSlots(); }
+
+    function renderAppts() {
+      document.getElementById('apptList').innerHTML = appts.map(a => {
+        const st = staffOf(a.staff);
+        return `
+          <div class="appt-row">
+            <div class="appt-time">${a.time}</div>
+            <img class="appt-pic" src="${a.pic}" alt="" loading="lazy">
+            <div class="appt-body">
+              <div class="appt-who">${esc(t(a.czh, a.cen))}</div>
+              <div class="appt-meta">${esc(t(a.szh, a.sen))} · ${esc(t(st.zh, st.en))}</div>
+            </div>
+            <div class="appt-price">${SHOP.currency}${a.price}</div>
+            <button class="pill ${a.status}" onclick="Today.advance('${a.id}')">${t(LABEL[a.status][0], LABEL[a.status][1])}</button>
+          </div>`;
+      }).join('');
+    }
+    function advance(id) {
+      const a = appts.find(x => x.id === id);
+      if (!a) return;
+      const i = ORDER.indexOf(a.status);
+      a.status = ORDER[(i + 1) % ORDER.length];
+      renderAppts(); renderStats();
+    }
+
+    function renderSlots() {
+      document.getElementById('openSlots').innerHTML = OPEN_SLOTS.map(s => `
+        <div class="appt-row">
+          <div class="appt-time">${s.time}</div>
+          <div class="appt-body">
+            <div class="appt-who">${t(s.reasonZh, s.reasonEn)}</div>
+            <div class="appt-meta">${s.waiting
+              ? (waitlistNotified ? t('候补客人已收到通知', 'Wait list already notified') : t(`${s.waiting} 位客人在候补`, `${s.waiting} guest on the wait list`))
+              : t('没人候补，可以发一条限时优惠', 'Nobody waiting — consider a last-minute offer')}</div>
+          </div>
+          <span class="pill ${s.waiting ? (waitlistNotified ? 'done' : 'pending') : 'noshow'} static">${
+            s.waiting ? (waitlistNotified ? t('已通知', 'Sent') : t('可救单', 'Fillable')) : t('待填', 'Empty')}</span>
+        </div>`).join('');
+    }
+
+    function renderSent() {
+      document.getElementById('sentList').innerHTML = SENT.map(x => `
+        <div class="appt-row">
+          <div class="appt-body">
+            <div class="appt-who" style="font-weight:600;font-size:.82rem">${t(x.zh, x.en)}</div>
+            <div class="appt-meta">${t(x.time, x.timeEn)}</div>
+          </div>
+          <span class="pill done static">${t('已发送', 'Sent')}</span>
+        </div>`).join('');
+    }
+
+    function onLangChange() { renderStats(); renderAlert(); renderAppts(); renderSlots(); renderSent(); }
+    function init() { renderStats(); renderAlert(); renderAppts(); renderSlots(); renderSent(); }
+    return { advance, notifyWaitlist, onLangChange, init };
+  })();
+
+  /* ══════════════ 排班（namespace: Sched，模式取自 components/ops/scheduling.html） ══════════════ */
+  const Sched = (function () {
+    const DAYS = [
+      { idx: 0, dzh: '周一', den: 'Mon', dom: '15' },
+      { idx: 1, dzh: '周二', den: 'Tue', dom: '16' },
+      { idx: 2, dzh: '周三', den: 'Wed', dom: '17', today: true },
+      { idx: 3, dzh: '周四', den: 'Thu', dom: '18' },
+      { idx: 4, dzh: '周五', den: 'Fri', dom: '19' },
+      { idx: 5, dzh: '周六', den: 'Sat', dom: '20' },
+      { idx: 6, dzh: '周日', den: 'Sun', dom: '21' },
+    ];
+    const SCHEDULE = {
+      2: [
+        { id: 's1', staff: 'p2', time: '10:00', czh: '林小姐', cen: 'Ms. Lam',  szh: '光疗甲 · 法式珠光', sen: 'Gel · Pearl French', mins: 60 },
+        { id: 's2', staff: 'p2', time: '13:30', czh: 'Aoife',  cen: 'Aoife',    szh: '延长甲 + 手绘',     sen: 'Extensions + Art',   mins: 90 },
+        { id: 's3', staff: 'p3', time: '11:00', czh: '陈太',   cen: 'Mrs. Chen', szh: '基础美甲',         sen: 'Classic Manicure',   mins: 45 },
+        { id: 's4', staff: 'p3', time: '17:30', czh: '周女士', cen: 'Ms. Chow',  szh: '光疗甲 · 金属裸色', sen: 'Gel · Nude Chrome',  mins: 60 },
+        { id: 's5', staff: 'p4', time: '14:30', czh: '黄小姐', cen: 'Ms. Wong',  szh: '光疗甲',           sen: 'Gel Polish',         mins: 60 },
+        { id: 's6', staff: 'p5', time: '15:30', czh: 'Niamh',  cen: 'Niamh',     szh: '卸甲 + 修型',       sen: 'Removal + Shaping',  mins: 30 },
+      ],
+      3: [
+        { id: 's7', staff: 'p2', time: '10:30', czh: '李小姐', cen: 'Ms. Lee',   szh: '光疗甲',           sen: 'Gel Polish',         mins: 60 },
+        { id: 's8', staff: 'p4', time: '16:00', czh: 'Saoirse', cen: 'Saoirse',  szh: '基础美甲',         sen: 'Classic Manicure',   mins: 45 },
+      ],
+      5: [
+        { id: 's9',  staff: 'p2', time: '10:00', czh: '王小姐', cen: 'Ms. Wang', szh: '延长甲 + 手绘',    sen: 'Extensions + Art',   mins: 90 },
+        { id: 's10', staff: 'p3', time: '11:30', czh: '刘女士', cen: 'Ms. Lau',  szh: '光疗甲',           sen: 'Gel Polish',         mins: 60 },
+        { id: 's11', staff: 'p3', time: '14:00', czh: 'Emma',   cen: 'Emma',     szh: '光疗甲 · 手绘',    sen: 'Gel · Nail Art',     mins: 75 },
+        { id: 's12', staff: 'p5', time: '13:00', czh: '何小姐', cen: 'Ms. Ho',   szh: '美睫补睫',         sen: 'Lash Refill',        mins: 60 },
+      ],
+    };
+    /* 空档：老板真正关心的不是"谁忙"，而是"谁空着还没人填" */
+    const GAPS = {
+      2: [{ staff: 'p4', time: '12:00', mins: 60 }, { staff: 'p5', time: '16:30', mins: 60 }],
+      3: [{ staff: 'p3', time: '全天', timeEn: 'All day', mins: 0 }],
+      5: [],
+    };
+
+    let currentLang = 'zh';
+    const state = { dayIdx: 2, filter: 'all' };
+    function t2(zh, en) { return currentLang === 'zh' ? zh : en; }
+
+    function renderDays() {
+      document.getElementById('dayRow').innerHTML = DAYS.map(d => `
+        <button class="day-cell ${d.idx === state.dayIdx ? 'on' : ''} ${d.today ? 'today' : ''}" onclick="Sched.pickDay(${d.idx})">
+          <div class="day-dow">${t2(d.dzh, d.den)}</div>
+          <div class="day-dom">${d.dom}</div>
+        </button>`).join('');
+    }
+    function pickDay(i) { state.dayIdx = i; renderDays(); renderLanes(); }
+
+    function renderChips() {
+      document.getElementById('staffChips').innerHTML =
+        `<button class="chip ${state.filter === 'all' ? 'on' : ''}" onclick="Sched.pickStaff('all')"><i>${t2('全', 'A')}</i>${t2('全部技师', 'Everyone')}</button>` +
+        STAFF.map(s => `
+          <button class="chip ${state.filter === s.id ? 'on' : ''}" onclick="Sched.pickStaff('${s.id}')">
+            <img src="${s.img}" alt="" loading="lazy">${esc(t2(s.zh, s.en))}
+          </button>`).join('');
+    }
+    function pickStaff(id) { state.filter = id; renderChips(); renderLanes(); }
+
+    function renderLanes() {
+      const jobs = SCHEDULE[state.dayIdx] || [];
+      const gaps = GAPS[state.dayIdx] || [];
+      const list = STAFF.filter(s => state.filter === 'all' || state.filter === s.id);
+      const box = document.getElementById('laneBox');
+      const rows = list.map(s => {
+        const mine = jobs.filter(j => j.staff === s.id).sort((a, b) => a.time.localeCompare(b.time));
+        const myGaps = gaps.filter(g => g.staff === s.id);
+        const mins = mine.reduce((sum, j) => sum + j.mins, 0);
+        if (!mine.length && !myGaps.length) return '';
+        return `
+          <div class="lane">
+            <div class="lane-head">
+              <img class="lane-pic" src="${s.img}" alt="" loading="lazy">
+              <div class="lane-name">${esc(t2(s.zh, s.en))}</div>
+              <div class="lane-load">${mine.length
+                ? t2(`${mine.length} 单 · 共 ${Math.floor(mins / 60)} 小时 ${mins % 60 ? (mins % 60) + ' 分' : ''}`,
+                     `${mine.length} bookings · ${Math.floor(mins / 60)}h ${mins % 60 ? (mins % 60) + 'm' : ''}`)
+                : t2('今天没人约', 'Nothing booked')}</div>
+            </div>
+            ${mine.map(j => `
+              <div class="appt-row">
+                <div class="appt-time">${j.time}</div>
+                <div class="appt-body">
+                  <div class="appt-who">${esc(t2(j.czh, j.cen))}</div>
+                  <div class="appt-meta">${esc(t2(j.szh, j.sen))} · ${j.mins} ${t2('分钟', 'min')}</div>
+                </div>
+              </div>`).join('')}
+            ${myGaps.map(g => `
+              <div class="gap-row">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.7"/><path d="M12 7.8V12l2.8 1.8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+                <span><b>${g.mins ? g.time : t2(g.time, g.timeEn)}</b> ${g.mins ? t2(`空着 ${g.mins} 分钟`, `${g.mins} min free`) : t2('整天没排单', 'No bookings all day')}</span>
+                <button class="gap-btn" onclick="Sched.fillGap(this)">${t2('发限时优惠填坑', 'Send a last-minute offer')}</button>
+              </div>`).join('')}
+          </div>`;
+      }).join('');
+      box.innerHTML = rows.trim() ? rows : `<div class="empty-tip">${t2('这一天没有排班记录', 'Nothing scheduled for this day')}</div>`;
+    }
+    function fillGap(btn) {
+      btn.textContent = t2('优惠已发出', 'Offer sent');
+      btn.disabled = true;
+      btn.style.opacity = '.55';
+      btn.style.cursor = 'default';
+    }
+
+    function onLangChange(lang) {
+      currentLang = lang;
+      if (!Owner.isBooted('sched')) return;
+      renderDays(); renderChips(); renderLanes();
+    }
+    function init() { renderDays(); renderChips(); renderLanes(); }
+    return { pickDay, pickStaff, fillGap, onLangChange, init };
+  })();
+
+  /* ══════════════ 客户档案（namespace: Clients） ══════════════ */
+  const Clients = (function () {
+    const LIST = [
+      { id: 'c1', zh: '林小姐', en: 'Ms. Lam', pic: 'assets/nail/staff/s4.webp', visits: 14, spent: 620, last: '2026-09-02',
+        tag: 'vip', tzh: '常客', ten: 'Regular', phone: '085 123 4567',
+        shapeZh: '杏仁形，长度到指尖外 3mm', shapeEn: 'Almond, ~3mm past the fingertip',
+        colors: [{ hex: '#D9A7B0', zh: '豆沙粉 #12', en: 'Rosewood #12' }, { hex: '#7C3A52', zh: '酒红 #31', en: 'Wine #31' }],
+        warns: [{ zh: '对 HEMA 敏感', en: 'Sensitive to HEMA' }, { zh: '左手无名指甲床偏薄', en: 'Thin nail bed, left ring finger' }],
+        nzh: '习惯边做边聊；常在周六下午来', nen: 'Likes to chat; usually Saturday afternoon',
+        photos: ['assets/nail/gallery/g5.webp', 'assets/nail/gallery/g6.webp', 'assets/nail/gallery/g1.webp'] },
+      { id: 'c2', zh: '陈太', en: 'Mrs. Chen', pic: 'assets/nail/staff/s2.webp', visits: 9, spent: 335, last: '2026-09-17',
+        tag: '', tzh: '', ten: '', phone: '086 222 8899',
+        shapeZh: '方圆形，短甲', shapeEn: 'Squoval, kept short',
+        colors: [{ hex: '#E8DCCB', zh: '裸杏 #04', en: 'Nude #04' }],
+        warns: [], nzh: '带小孩一起来，尽量安排靠里的位置', nen: 'Comes with her child — seat her at the back if possible',
+        photos: ['assets/nail/gallery/g2.webp'] },
+      { id: 'c3', zh: 'Aoife', en: 'Aoife', pic: 'assets/nail/staff/s1.webp', visits: 6, spent: 408, last: '2026-09-17',
+        tag: '', tzh: '', ten: '', phone: '087 555 1122',
+        shapeZh: '长方形，延长甲', shapeEn: 'Coffin, extensions',
+        colors: [{ hex: '#1F3B5C', zh: '深蓝 #22', en: 'Navy #22' }, { hex: '#C9A227', zh: '金箔', en: 'Gold foil' }],
+        warns: [], nzh: '每次都会自己带参考图', nen: 'Always brings her own reference photos',
+        photos: ['assets/nail/gallery/g2.webp', 'assets/nail/gallery/g4.webp'] },
+      { id: 'c4', zh: '黄小姐', en: 'Ms. Wong', pic: 'assets/nail/staff/s3.webp', visits: 3, spent: 125, last: '2026-06-28',
+        tag: 'risk', tzh: '快流失', ten: 'At risk', phone: '083 447 9021',
+        shapeZh: '圆形，自然甲', shapeEn: 'Round, natural length',
+        colors: [{ hex: '#D9A7B0', zh: '豆沙粉 #12', en: 'Rosewood #12' }],
+        warns: [{ zh: '曾放过一次鸽子', en: 'One no-show on record' }],
+        nzh: '81 天没来了，系统已发过两次补甲提醒', nen: '81 days since her last visit; two refill nudges already sent',
+        photos: ['assets/nail/gallery/g3.webp'] },
+      { id: 'c5', zh: 'Niamh', en: 'Niamh', pic: 'assets/nail/staff/s2.webp', visits: 2, spent: 55, last: '2026-09-17',
+        tag: 'new', tzh: '新客', ten: 'New', phone: '089 330 7788',
+        shapeZh: '还没定型，先做卸甲修型', shapeEn: 'Undecided — removal and shaping for now',
+        colors: [], warns: [], nzh: '老客 Aoife 推荐来的', nen: 'Referred by Aoife',
+        photos: [] },
+    ];
+
+    let currentLang = 'zh';
+    let selected = LIST[0].id;
+    let keyword = '';
+    function t3(zh, en) { return currentLang === 'zh' ? zh : en; }
+
+    function filtered() {
+      const k = keyword.trim().toLowerCase();
+      if (!k) return LIST;
+      return LIST.filter(c =>
+        (c.zh + c.en + c.phone + c.colors.map(x => x.zh + x.en).join('')).toLowerCase().includes(k));
+    }
+    function renderList() {
+      const rows = filtered();
+      document.getElementById('clientCount').textContent = t3(`${rows.length} 位`, `${rows.length} shown`);
+      const box = document.getElementById('clientList');
+      if (!rows.length) { box.innerHTML = `<div class="det-empty">${t3('没有匹配的客户', 'No matching clients')}</div>`; return; }
+      box.innerHTML = rows.map(c => `
+        <button class="cl-row ${c.id === selected ? 'on' : ''}" onclick="Clients.pick('${c.id}')">
+          <img class="cl-pic" src="${c.pic}" alt="" loading="lazy">
+          <div class="cl-body">
+            <div class="cl-name">${esc(t3(c.zh, c.en))}</div>
+            <div class="cl-meta">${t3(`到店 ${c.visits} 次 · 累计 ${SHOP.currency}${c.spent} · 最近 ${c.last}`,
+                                     `${c.visits} visits · ${SHOP.currency}${c.spent} · last ${c.last}`)}</div>
+          </div>
+          ${c.tag ? `<span class="cl-tag ${c.tag === 'risk' ? 'risk' : c.tag === 'vip' ? 'vip' : ''}">${esc(t3(c.tzh, c.ten))}</span>` : ''}
+        </button>`).join('');
+    }
+    function pick(id) { selected = id; renderList(); renderDetail(); }
+    function search(v) { keyword = v; renderList(); }
+
+    function renderDetail() {
+      const c = LIST.find(x => x.id === selected);
+      const box = document.getElementById('clientDetail');
+      if (!c) { box.innerHTML = `<div class="det-empty">${t3('左边选一位客人', 'Pick someone on the left')}</div>`; return; }
+      box.innerHTML = `
+        <div class="det-name">${esc(t3(c.zh, c.en))}</div>
+        <div class="det-sub">${c.phone} · ${t3(`到店 ${c.visits} 次 · 累计 ${SHOP.currency}${c.spent}`, `${c.visits} visits · ${SHOP.currency}${c.spent} total`)}</div>
+        <div class="det-row"><div class="det-k">${t3('甲型', 'Shape')}</div><div class="det-v">${esc(t3(c.shapeZh, c.shapeEn))}</div></div>
+        <div class="det-row"><div class="det-k">${t3('常用色', 'Colours')}</div><div class="det-v">${
+          c.colors.length ? c.colors.map(sw => `<span class="swatch"><i style="background:${sw.hex}"></i>${esc(t3(sw.zh, sw.en))}</span>`).join('') : `<span style="color:var(--ink-muted)">${t3('还没记录', 'Nothing recorded yet')}</span>`
+        }</div></div>
+        <div class="det-row"><div class="det-k">${t3('注意事项', 'Warnings')}</div><div class="det-v">${
+          c.warns.length ? c.warns.map(w => `<span class="warn-tag">${esc(t3(w.zh, w.en))}</span>`).join('') : `<span style="color:var(--ink-muted)">${t3('无', 'None')}</span>`
+        }</div></div>
+        <div class="det-row"><div class="det-k">${t3('备注', 'Note')}</div><div class="det-v">${esc(t3(c.nzh, c.nen))}</div></div>
+        <div class="det-row"><div class="det-k">${t3('做过的款', 'Past work')}</div><div class="det-v">${
+          c.photos.length ? `<div class="mini-hist">${c.photos.map(p => `<img src="${p}" alt="" loading="lazy">`).join('')}</div>` : `<span style="color:var(--ink-muted)">${t3('还没有照片', 'No photos yet')}</span>`
+        }</div></div>`;
+    }
+
+    function onLangChange(lang) {
+      currentLang = lang;
+      if (!Owner.isBooted('clients')) return;
+      renderList(); renderDetail();
+    }
+    function init() {
+      document.getElementById('clientSearch').addEventListener('input', e => search(e.target.value));
+      renderList(); renderDetail();
+    }
+    return { pick, search, onLangChange, init };
+  })();
+
+  /* ══════════════ 经营报表（namespace: Reports） ══════════════ */
+  const Reports = (function () {
+    const REV = [
+      { dzh: '周四', den: 'Thu', v: 315 }, { dzh: '周五', den: 'Fri', v: 402 },
+      { dzh: '周六', den: 'Sat', v: 586 }, { dzh: '周日', den: 'Sun', v: 268 },
+      { dzh: '周一', den: 'Mon', v: 180 }, { dzh: '周二', den: 'Tue', v: 294 },
+      { dzh: '周三', den: 'Wed', v: 258 },
+    ];
+    const MIX = [
+      { zh: '光疗甲', en: 'Gel Polish', pct: 44 },
+      { zh: '延长甲 + 手绘', en: 'Extensions + Art', pct: 26 },
+      { zh: '基础美甲', en: 'Classic Manicure', pct: 18 },
+      { zh: '卸甲 / 修型', en: 'Removal / Shaping', pct: 12 },
+    ];
+    const PERF = [
+      { staff: 'p2', v: 892 }, { staff: 'p3', v: 654 }, { staff: 'p4', v: 431 }, { staff: 'p5', v: 326 },
+    ];
+    const KPIS = [
+      { kzh: '本周营收',   ken: 'Revenue this week', v: '€2,303', dzh: '+12% 比上周', den: '+12% vs last week', dir: 'up' },
+      { kzh: '复购率',     ken: 'Repeat rate',       v: '68%',    dzh: '90 天内再次到店', den: 'returned within 90 days', dir: '' },
+      { kzh: '平均客单价', ken: 'Average ticket',    v: '€46',    dzh: '+€3 比上月', den: '+€3 vs last month', dir: 'up' },
+      { kzh: '放鸽子率',   ken: 'No-show rate',      v: '2.4%',   dzh: '收定金前是 9%', den: 'was 9% before deposits', dir: 'up' },
+    ];
+
+    let currentLang = 'zh';
+    function t4(zh, en) { return currentLang === 'zh' ? zh : en; }
+
+    function renderKpis() {
+      document.getElementById('kpiGrid').innerHTML = KPIS.map(k => `
+        <div class="kpi">
+          <div class="kpi-k">${t4(k.kzh, k.ken)}</div>
+          <div class="kpi-v">${k.v}</div>
+          <div class="kpi-d ${k.dir}">${t4(k.dzh, k.den)}</div>
+        </div>`).join('');
+    }
+    function renderBars() {
+      const max = Math.max(...REV.map(r => r.v));
+      const sum = REV.reduce((s, r) => s + r.v, 0);
+      document.getElementById('revSum').textContent = t4(`合计 ${SHOP.currency}${sum}`, `${SHOP.currency}${sum} total`);
+      document.getElementById('revBars').innerHTML = REV.map(r => `
+        <div class="bar-col ${r.v === max ? 'peak' : ''}">
+          <div class="bar-v">${SHOP.currency}${r.v}</div>
+          <div class="bar" style="height:${Math.round((r.v / max) * 100)}%"></div>
+          <div class="bar-k">${t4(r.dzh, r.den)}</div>
+        </div>`).join('');
+    }
+    /* 报表的价值不是"把数字画出来"，是替老板把结论说出来 */
+    function renderInsight() {
+      const peak = REV.reduce((a, b) => (b.v > a.v ? b : a));
+      const low = REV.reduce((a, b) => (b.v < a.v ? b : a));
+      const ratio = (peak.v / low.v).toFixed(1);
+      document.getElementById('revInsight').innerHTML = `
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 16.5l5-5.5 3.5 3L20 6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 6h5v5" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>${t4(
+          `<b>${peak.dzh}</b>是本周峰值 ${SHOP.currency}${peak.v}，是<b>${low.dzh}</b>（${SHOP.currency}${low.v}）的 ${ratio} 倍。周一这种空档最适合发限时券把人拉过来，而不是让技师干坐着。`,
+          `<b>${peak.den}</b> peaked at ${SHOP.currency}${peak.v} — ${ratio}x <b>${low.den}</b> (${SHOP.currency}${low.v}). A quiet Monday is exactly where a timed offer pays off, rather than leaving technicians idle.`
+        )}</span>`;
+    }
+
+    function renderMix() {
+      document.getElementById('mixList').innerHTML = MIX.map(m => `
+        <div class="mix-row">
+          <div class="mix-name">${esc(t4(m.zh, m.en))}</div>
+          <div class="mix-track"><div class="mix-fill" style="width:${m.pct}%"></div></div>
+          <div class="mix-v">${m.pct}%</div>
+        </div>`).join('');
+    }
+    function renderPerf() {
+      const max = Math.max(...PERF.map(p => p.v));
+      document.getElementById('staffPerf').innerHTML = PERF.map(p => {
+        const s = staffOf(p.staff);
+        return `
+          <div class="staff-row">
+            <img class="staff-pic" src="${s.img}" alt="" loading="lazy">
+            <div class="staff-name">${esc(t4(s.zh, s.en))}</div>
+            <div class="staff-track"><div class="staff-fill" style="width:${Math.round((p.v / max) * 100)}%"></div></div>
+            <div class="staff-v">${SHOP.currency}${p.v}</div>
+          </div>`;
+      }).join('');
+    }
+
+    function onLangChange(lang) {
+      currentLang = lang;
+      if (!Owner.isBooted('reports')) return;
+      renderKpis(); renderBars(); renderInsight(); renderMix(); renderPerf();
+    }
+    function init() { renderKpis(); renderBars(); renderInsight(); renderMix(); renderPerf(); }
+    return { onLangChange, init };
+  })();
+
+  /* ── 初始化 ── */
+  document.getElementById('shopName').textContent = SHOP.nameZh;
+  document.getElementById('todayLabel').textContent = '2026 年 9 月 17 日 · 周四';
+  Today.init();
+</script>
+</body>
+</html>
