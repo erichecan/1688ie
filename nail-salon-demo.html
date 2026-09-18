@@ -25,9 +25,10 @@
 <style>
   /* ── 设计 token：源真值表见 docs/20260917-美甲视觉规范.md ── */
   :root {
-    --brand: #A8496B;
-    --brand-dark: #7C3A52;
-    --brand-deep: #5E2B3E;
+    --brand: #2E1F26;        /* 深酒紫近黑：主填充/主边框 */
+    --brand-dark: #1F1419;   /* 更深：按钮底/hover */
+    --brand-deep: #120B0E;   /* 渐变暗端/深色区块 */
+    --brand-ink: #2E1F26;    /* 强调文字：层级交给衬线字体，不再靠彩色 */
     --brand-light: #FDF4F7;
     --brand-tint: #F7E4EC;
     --gold: #C9A227;
@@ -69,7 +70,7 @@
       background-attachment: fixed;
     }
   }
-  ::selection { background: var(--brand-tint); color: var(--brand-dark); }
+  ::selection { background: var(--brand-tint); color: var(--brand-ink); }
   button:focus-visible, [tabindex]:focus-visible, input:focus-visible {
     outline: 2px solid var(--brand-dark); outline-offset: 2px;
   }
@@ -88,15 +89,15 @@
   .brand-mark {
     width: 30px; height: 30px; border-radius: 50%; flex: 0 0 auto;
     border: 1.5px solid var(--gold); display: flex; align-items: center; justify-content: center;
-    color: var(--brand-dark); background: #fff;
+    color: var(--brand-ink); background: #fff;
   }
   .shop-name {
     font-family: var(--font-display); font-weight: 600; font-size: 1.12rem;
-    color: var(--brand-dark); letter-spacing: .005em; white-space: nowrap;
+    color: var(--brand-ink); letter-spacing: .005em; white-space: nowrap;
     overflow: hidden; text-overflow: ellipsis;
   }
   .lang-btn {
-    font-size: 0.78rem; font-weight: 700; color: var(--brand-dark);
+    font-size: 0.78rem; font-weight: 700; color: var(--brand-ink);
     border: 1px solid var(--brand); border-radius: 99px;
     padding: 4px 12px; cursor: pointer; background: var(--card);
   }
@@ -126,7 +127,7 @@
     font-size: 11px; font-weight: 700; background: none; border: none; font-family: inherit;
   }
   .nav-item .nav-icon { font-size: 1.3rem; display: block; margin-bottom: 2px; }
-  .nav-item.active { color: var(--brand-dark); }
+  .nav-item.active { color: var(--brand-ink); }
 
   /* ══════════════ 模块⑤：我的档案（scope: #panelProfile） ══════════════ */
   #panelProfile .me-card {
@@ -171,7 +172,7 @@
   #panelProfile .hist-svc { font-weight: 700; font-size: .86rem; }
   #panelProfile .hist-meta { font-size: .74rem; color: var(--ink-muted); margin-top: 2px; }
   #panelProfile .hist-note { font-size: .74rem; color: var(--ink-body); margin-top: 4px; font-style: italic; }
-  #panelProfile .hist-price { font-weight: 800; color: var(--brand-dark); font-size: .86rem; font-variant-numeric: tabular-nums; }
+  #panelProfile .hist-price { font-weight: 800; color: var(--brand-ink); font-size: .86rem; font-variant-numeric: tabular-nums; }
 
   #panelProfile .rate-row { display: flex; gap: 6px; justify-content: center; margin: 4px 0 12px; }
   #panelProfile .rate-star {
@@ -193,14 +194,14 @@
   #panelProfile .rate-btn:disabled { background: var(--line); color: var(--ink-muted); cursor: not-allowed; }
   #panelProfile .rate-done { text-align: center; padding: 6px 0 2px; }
   #panelProfile .rate-done-icon {
-    width: 42px; height: 42px; border-radius: 50%; background: var(--brand-tint); color: var(--brand-dark);
+    width: 42px; height: 42px; border-radius: 50%; background: var(--brand-tint); color: var(--brand-ink);
     display: flex; align-items: center; justify-content: center; margin: 0 auto 10px;
   }
   #panelProfile .rate-done-t { font-weight: 800; font-size: .92rem; margin-bottom: 4px; }
   #panelProfile .rate-done-d { font-size: .78rem; color: var(--ink-body); line-height: 1.55; margin-bottom: 12px; }
   #panelProfile .rate-ghost {
     width: 100%; padding: 10px; border-radius: var(--radius-sm); font-weight: 700; font-size: .82rem;
-    border: 1.5px solid var(--brand); background: #fff; color: var(--brand-dark); cursor: pointer; font-family: inherit;
+    border: 1.5px solid var(--brand); background: #fff; color: var(--brand-ink); cursor: pointer; font-family: inherit;
   }
   #panelProfile .rate-ghost:hover { background: var(--brand-light); }
 
@@ -212,7 +213,7 @@
   #panelBooking .slot-cell.full:hover { border-color: var(--brand); opacity: .75; }
   #panelBooking .slot-cell.full::after {
     content: attr(data-wait); position: absolute; top: -7px; right: -4px;
-    background: var(--brand-tint); color: var(--brand-dark); font-size: .58rem; font-weight: 800;
+    background: var(--brand-tint); color: var(--brand-ink); font-size: .58rem; font-weight: 800;
     padding: 1px 6px; border-radius: 999px; text-decoration: none; letter-spacing: .02em;
   }
 
@@ -221,9 +222,9 @@
     background: var(--brand-tint); border: 1.5px solid var(--brand); border-radius: var(--radius);
     padding: 14px; margin-bottom: 14px; box-shadow: var(--shadow-sm);
   }
-  #panelBooking .wait-icon { color: var(--brand-dark); flex: 0 0 auto; margin-top: 1px; }
+  #panelBooking .wait-icon { color: var(--brand-ink); flex: 0 0 auto; margin-top: 1px; }
   #panelBooking .wait-body { flex: 1; min-width: 0; }
-  #panelBooking .wait-t { font-weight: 800; font-size: .86rem; color: var(--brand-dark); }
+  #panelBooking .wait-t { font-weight: 800; font-size: .86rem; color: var(--brand-ink); }
   #panelBooking .wait-d { font-size: .76rem; color: var(--ink-body); margin-top: 3px; line-height: 1.5; }
   #panelBooking .wait-cancel {
     background: none; border: none; font-family: inherit; font-size: .74rem; font-weight: 700;
@@ -235,8 +236,8 @@
     display: flex; align-items: flex-start; gap: 8px; font-size: .76rem; color: var(--ink-body);
     background: var(--brand-light); border-radius: var(--radius-sm); padding: 10px 12px; margin-top: 12px; line-height: 1.5;
   }
-  #panelBooking .deposit-row svg { flex: 0 0 auto; margin-top: 1px; color: var(--brand-dark); }
-  #panelBooking .deposit-row b { color: var(--brand-dark); font-weight: 800; }
+  #panelBooking .deposit-row svg { flex: 0 0 auto; margin-top: 1px; color: var(--brand-ink); }
+  #panelBooking .deposit-row b { color: var(--brand-ink); font-weight: 800; }
 
   #panelBooking .tl-title { font-weight: 700; font-size: .95rem; margin-bottom: 4px; }
   #panelBooking .tl-sub { font-size: .76rem; color: var(--ink-muted); margin-bottom: 14px; }
@@ -252,8 +253,8 @@
     border: 2px solid var(--line); background: #fff;
     display: flex; align-items: center; justify-content: center; color: #fff;
   }
-  #panelBooking .tl-item.done .tl-dot { background: var(--brand-dark); border-color: var(--brand-dark); }
-  #panelBooking .tl-when { font-size: .7rem; font-weight: 800; color: var(--brand-dark); letter-spacing: .01em; }
+  #panelBooking .tl-item.done .tl-dot { background: var(--brand-dark); border-color: var(--brand-ink); }
+  #panelBooking .tl-when { font-size: .7rem; font-weight: 800; color: var(--brand-ink); letter-spacing: .01em; }
   #panelBooking .tl-text { font-size: .8rem; color: var(--ink); margin-top: 1px; line-height: 1.5; }
   #panelBooking .tl-chan { font-size: .68rem; color: var(--ink-muted); margin-top: 2px; }
 
@@ -265,8 +266,8 @@
     background: var(--card); font-size: .8rem; font-weight: 700; color: var(--ink-body);
     cursor: pointer; font-family: inherit; transition: background .15s, color .15s, border-color .15s;
   }
-  .seg-chip:hover:not(.active) { border-color: var(--brand); color: var(--brand-dark); }
-  .seg-chip.active { background: var(--brand-dark); color: #fff; border-color: var(--brand-dark); }
+  .seg-chip:hover:not(.active) { border-color: var(--brand); color: var(--brand-ink); }
+  .seg-chip.active { background: var(--brand-dark); color: #fff; border-color: var(--brand-ink); }
 
   .sub-tab-bar { display: flex; gap: 8px; margin-bottom: 14px; }
   .sub-tab {
@@ -274,8 +275,8 @@
     background: var(--card); font-size: .82rem; font-weight: 700; color: var(--ink-body);
     cursor: pointer; font-family: inherit; transition: background .15s, color .15s, border-color .15s;
   }
-  .sub-tab:hover:not(.active) { border-color: var(--brand); color: var(--brand-dark); }
-  .sub-tab.active { background: var(--brand-tint); color: var(--brand-dark); border-color: var(--brand); }
+  .sub-tab:hover:not(.active) { border-color: var(--brand); color: var(--brand-ink); }
+  .sub-tab.active { background: var(--brand-tint); color: var(--brand-ink); border-color: var(--brand); }
 
   .toast-row { text-align: center; margin-bottom: 10px; }
   .empty-tip { font-size: .82rem; color: var(--ink-muted); text-align: center; padding: 22px 0; }
@@ -293,13 +294,13 @@
     position: absolute; top: 15px; right: 15px; width: 16px; height: 16px; border-radius: 50%;
     border: 2px solid var(--line); background: #fff; transition: border-color .15s, background .15s, box-shadow .15s;
   }
-  #seg-pass .pkg-card.selected .pkg-radio { border-color: var(--brand-dark); background: var(--brand-dark); box-shadow: inset 0 0 0 2.5px #fff; }
+  #seg-pass .pkg-card.selected .pkg-radio { border-color: var(--brand-ink); background: var(--brand-dark); box-shadow: inset 0 0 0 2.5px #fff; }
   #seg-pass .pkg-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 4px; }
   #seg-pass .pkg-name { font-weight: 700; font-size: .92rem; flex: 1; min-width: 0; }
-  #seg-pass .pkg-price { font-weight: 800; color: var(--brand-dark); font-size: 1.02rem; flex-shrink: 0; font-variant-numeric: tabular-nums; }
+  #seg-pass .pkg-price { font-weight: 800; color: var(--brand-ink); font-size: 1.02rem; flex-shrink: 0; font-variant-numeric: tabular-nums; }
   #seg-pass .pkg-desc { font-size: .76rem; color: var(--ink-muted); margin-bottom: 12px; }
   #seg-pass .pkg-status { font-size: .68rem; font-weight: 800; padding: 3px 10px; border-radius: 99px; }
-  #seg-pass .pkg-status.active { background: var(--brand-tint); color: var(--brand-dark); }
+  #seg-pass .pkg-status.active { background: var(--brand-tint); color: var(--brand-ink); }
   #seg-pass .pkg-status.depleted { background: var(--line); color: var(--ink-muted); }
   #seg-pass .pkg-status.expired { background: #FBE3E6; color: var(--danger); }
   #seg-pass .pkg-card.dim { opacity: .62; }
@@ -317,7 +318,7 @@
   #seg-pass .pkg-btn:active:not(:disabled) { filter: brightness(.96); }
   #seg-pass .pkg-btn:disabled { background: var(--line); color: var(--ink-muted); cursor: not-allowed; }
   #seg-pass .hist-toggle {
-    font-size: .74rem; color: var(--brand-dark); text-align: center; margin-top: 10px; cursor: pointer;
+    font-size: .74rem; color: var(--brand-ink); text-align: center; margin-top: 10px; cursor: pointer;
     font-weight: 700; padding: 5px; border-radius: 6px; background: none; border: none; width: 100%; font-family: inherit;
   }
   #seg-pass .hist-toggle:hover { background: var(--brand-light); }
@@ -333,12 +334,12 @@
     font-variant-numeric: tabular-nums;
   }
   #seg-gift .denom-card:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); }
-  #seg-gift .denom-card.selected { border-color: var(--brand); background: var(--brand-light); color: var(--brand-dark); }
+  #seg-gift .denom-card.selected { border-color: var(--brand); background: var(--brand-light); color: var(--brand-ink); }
   #seg-gift .denom-radio {
     position: absolute; top: 10px; right: 10px; width: 15px; height: 15px; border-radius: 50%;
     border: 2px solid var(--line); background: #fff;
   }
-  #seg-gift .denom-card.selected .denom-radio { border-color: var(--brand-dark); background: var(--brand-dark); box-shadow: inset 0 0 0 2.5px #fff; }
+  #seg-gift .denom-card.selected .denom-radio { border-color: var(--brand-ink); background: var(--brand-dark); box-shadow: inset 0 0 0 2.5px #fff; }
   #seg-gift .gift-field-label { font-size: .78rem; font-weight: 700; color: var(--ink-body); margin-bottom: 5px; }
   #seg-gift .gift-input, #seg-gift .gift-textarea {
     width: 100%; padding: 10px 12px; border: 1.5px solid var(--line); border-radius: var(--radius-sm);
@@ -380,7 +381,7 @@
   #seg-gift .gc-status.active { background: rgba(255,255,255,.22); color: #fff; }
   #seg-gift .gc-status.depleted { background: var(--line); color: var(--ink-muted); }
   #seg-gift .gc-status.expired { background: #FBE3E6; color: var(--danger); }
-  #seg-gift .gc-balance { font-size: 1.5rem; font-weight: 800; color: var(--brand-dark); margin-bottom: 4px; font-variant-numeric: tabular-nums; }
+  #seg-gift .gc-balance { font-size: 1.5rem; font-weight: 800; color: var(--brand-ink); margin-bottom: 4px; font-variant-numeric: tabular-nums; }
   #seg-gift .gc-meta { font-size: .75rem; color: var(--ink-muted); margin-bottom: 12px; }
   #seg-gift .gc-item.live .gc-from, #seg-gift .gc-item.live .gc-balance { color: #fff; }
   #seg-gift .gc-item.live .gc-meta { color: rgba(255,255,255,.8); }
@@ -391,7 +392,7 @@
     width: 100%; padding: 10px; border-radius: var(--radius-sm); font-weight: 700; font-size: .85rem;
     border: none; cursor: pointer; background: var(--brand-dark); color: #fff; font-family: inherit; transition: filter .15s;
   }
-  #seg-gift .gc-item.live .gc-btn { background: #fff; color: var(--brand-dark); }
+  #seg-gift .gc-item.live .gc-btn { background: #fff; color: var(--brand-ink); }
   #seg-gift .gc-btn:hover:not(:disabled) { filter: brightness(1.06); }
   #seg-gift .gc-btn:disabled { background: var(--line); color: var(--ink-muted); cursor: not-allowed; }
   #spendModal .spend-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 14px; }
@@ -429,7 +430,7 @@
   #panelStore .hero-stars { display: inline-flex; gap: 1px; color: var(--gold); }
   #panelStore .hero-cta {
     display: inline-flex; align-items: center; gap: 6px;
-    background: #fff; color: var(--brand-dark); border: none; border-radius: 999px;
+    background: #fff; color: var(--brand-ink); border: none; border-radius: 999px;
     padding: 10px 20px; font-weight: 800; font-size: .84rem; font-family: inherit;
     cursor: pointer; transition: filter .15s; box-shadow: var(--shadow-sm);
   }
@@ -453,7 +454,7 @@
   #panelStore .sec-head { display: flex; align-items: baseline; justify-content: space-between; margin: 0 2px 10px; }
   #panelStore .sec-title { font-family: var(--font-display); font-weight: 600; font-size: 1.18rem; color: var(--ink); }
   #panelStore .sec-more {
-    font-size: .74rem; font-weight: 700; color: var(--brand-dark); cursor: pointer;
+    font-size: .74rem; font-weight: 700; color: var(--brand-ink); cursor: pointer;
     background: none; border: none; font-family: inherit; padding: 4px 2px;
   }
   #panelStore .sec-more:hover { text-decoration: underline; }
@@ -470,7 +471,7 @@
   #panelStore .svc-info { flex: 1; min-width: 0; }
   #panelStore .svc-t { font-weight: 700; font-size: .9rem; }
   #panelStore .svc-d { font-size: .74rem; color: var(--ink-muted); margin-top: 2px; }
-  #panelStore .svc-p { font-weight: 800; color: var(--brand-dark); font-size: .92rem; white-space: nowrap;
+  #panelStore .svc-p { font-weight: 800; color: var(--brand-ink); font-size: .92rem; white-space: nowrap;
                        font-variant-numeric: tabular-nums; }
   #panelStore .svc-go { color: var(--brand); flex: 0 0 auto; }
 
@@ -509,7 +510,7 @@
     font-size: .7rem; color: var(--ink-muted); line-height: 1.5;
     background: var(--brand-tint); border-radius: var(--radius-sm); padding: 10px 12px; margin-bottom: 8px;
   }
-  #panelStore .mock-note svg { flex: 0 0 auto; margin-top: 1px; color: var(--brand-dark); }
+  #panelStore .mock-note svg { flex: 0 0 auto; margin-top: 1px; color: var(--brand-ink); }
 
   /* 作品集灯箱 */
   #galLightbox {
@@ -540,14 +541,14 @@
   #panelBooking .svc-item.selected { border-color: var(--brand); background: var(--brand-light); }
   #panelBooking .svc-name { font-weight: 600; font-size: 0.88rem; }
   #panelBooking .svc-meta { font-size: 0.76rem; color: var(--gray); margin-top: 2px; }
-  #panelBooking .svc-price { font-weight: 700; color: var(--brand-dark); font-size: 0.9rem; white-space: nowrap; }
+  #panelBooking .svc-price { font-weight: 700; color: var(--brand-ink); font-size: 0.9rem; white-space: nowrap; }
 
   #panelBooking .date-row { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 2px; }
   #panelBooking .date-cell {
     flex: 0 0 56px; text-align: center; padding: 10px 0; border-radius: 10px;
     border: 1.5px solid var(--line); cursor: pointer; user-select: none;
   }
-  #panelBooking .date-cell.selected { border-color: var(--brand-dark); background: var(--brand-dark); color: #fff; }
+  #panelBooking .date-cell.selected { border-color: var(--brand-ink); background: var(--brand-dark); color: #fff; }
   #panelBooking .date-cell .dow { font-size: 0.68rem; color: inherit; opacity: .75; }
   #panelBooking .date-cell .dom { font-size: 1.05rem; font-weight: 700; margin-top: 2px; }
 
@@ -556,7 +557,7 @@
     text-align: center; padding: 9px 0; border-radius: 8px; font-size: 0.82rem; font-weight: 600;
     border: 1.5px solid var(--line); cursor: pointer;
   }
-  #panelBooking .slot-cell.selected { border-color: var(--brand-dark); background: var(--brand-dark); color: #fff; }
+  #panelBooking .slot-cell.selected { border-color: var(--brand-ink); background: var(--brand-dark); color: #fff; }
   #panelBooking .slot-cell.full { opacity: .3; pointer-events: none; text-decoration: line-through; }
 
   #panelBooking .staff-row { display: flex; gap: 10px; flex-wrap: wrap; }
@@ -564,7 +565,7 @@
   #panelBooking .staff-item.selected { border-color: var(--brand); background: var(--brand-light); }
   #panelBooking .staff-avatar {
     width: 44px; height: 44px; border-radius: 50%; margin: 0 auto 6px;
-    background: var(--brand-light); color: var(--brand-dark); font-weight: 800;
+    background: var(--brand-light); color: var(--brand-ink); font-weight: 800;
     display: flex; align-items: center; justify-content: center; font-size: 1rem;
   }
   #panelBooking .staff-name { font-size: 0.74rem; font-weight: 600; line-height: 1.3; min-height: 1.9em; }
@@ -591,162 +592,164 @@
 
   #panelBooking .done-wrap { text-align: center; padding: 30px 10px; }
   #panelBooking .done-icon {
-    width: 64px; height: 64px; border-radius: 50%; background: var(--brand-light); color: var(--brand-dark);
+    width: 64px; height: 64px; border-radius: 50%; background: var(--brand-light); color: var(--brand-ink);
     display: flex; align-items: center; justify-content: center; font-size: 30px; margin: 0 auto 16px;
   }
   #panelBooking .done-title { font-weight: 800; font-size: 1.1rem; margin-bottom: 4px; }
   #panelBooking .done-sub { font-size: 0.84rem; color: var(--gray); margin-bottom: 20px; }
   #panelBooking .code-box {
     background: var(--brand-light); border-radius: 10px; padding: 12px; margin-bottom: 8px;
-    font-family: 'SFMono-Regular', Menlo, monospace; font-weight: 700; letter-spacing: 2px; color: var(--brand-dark);
+    font-family: 'SFMono-Regular', Menlo, monospace; font-weight: 700; letter-spacing: 2px; color: var(--brand-ink);
   }
 
-  /* ══════════════ 模块②：会员（scope: #panelMembership） ══════════════ */
-  #panelMembership .member-card {
+  /* ══════════════ 模块②：会员（scope: #seg-member，卡包内子页） ══════════════ */
+  #seg-member .member-card {
     background: linear-gradient(135deg, var(--brand-dark) 0%, var(--brand-deep) 100%);
+    box-shadow: var(--shadow-md), inset 0 0 0 1px rgba(201,162,39,.35);
     color: #fff; border-radius: var(--radius); padding: 20px; margin-bottom: 14px;
     box-shadow: var(--shadow-md);
   }
-  #panelMembership .member-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
-  #panelMembership .member-level { font-weight: 800; font-size: 1.1rem; }
-  #panelMembership .member-no { font-size: 0.72rem; color: rgba(255,255,255,.98); font-family: 'SFMono-Regular', Menlo, monospace; }
-  #panelMembership .member-growth { font-size: 0.8rem; color: rgba(255,255,255,.98); margin: 10px 0 8px; }
-  #panelMembership .progress-track { height: 7px; border-radius: 99px; background: rgba(255,255,255,.28); overflow: hidden; }
-  #panelMembership .progress-fill { width: 100%; height: 100%; background: #fff; border-radius: 99px; transform-origin: left; transform: scaleX(0); transition: transform .25s; }
-  #panelMembership .progress-label { font-size: 0.72rem; color: rgba(255,255,255,.98); margin-top: 8px; }
+  #seg-member .member-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+  #seg-member .member-level { font-weight: 800; font-size: 1.1rem; }
+  #seg-member .member-no { font-size: 0.72rem; color: rgba(255,255,255,.98); font-family: 'SFMono-Regular', Menlo, monospace; }
+  #seg-member .member-growth { font-size: 0.8rem; color: rgba(255,255,255,.98); margin: 10px 0 8px; }
+  #seg-member .progress-track { height: 7px; border-radius: 99px; background: rgba(255,255,255,.28); overflow: hidden; }
+  #seg-member .progress-fill { width: 100%; height: 100%; background: var(--gold); border-radius: 99px; transform-origin: left; transform: scaleX(0); transition: transform .25s; }
+  #seg-member .progress-label { font-size: 0.72rem; color: rgba(255,255,255,.98); margin-top: 8px; }
 
-  #panelMembership .benefit-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-bottom: 1px dashed var(--line); }
-  #panelMembership .benefit-item:last-child { border-bottom: none; }
-  #panelMembership .benefit-icon {
+  #seg-member .benefit-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-bottom: 1px dashed var(--line); }
+  #seg-member .benefit-item:last-child { border-bottom: none; }
+  #seg-member .benefit-icon {
     flex: 0 0 22px; width: 22px; height: 22px; border-radius: 50%;
     display: flex; align-items: center; justify-content: center; font-size: 0.72rem; margin-top: 1px;
   }
-  #panelMembership .benefit-icon.on { background: var(--brand-dark); color: #fff; }
-  #panelMembership .benefit-icon.off { background: var(--line); color: #6b5761; }
-  #panelMembership .benefit-text { font-size: 0.86rem; font-weight: 600; }
-  #panelMembership .benefit-text.off { color: var(--gray); font-weight: 500; }
-  #panelMembership .benefit-hint { font-size: 0.72rem; color: var(--gray); margin-top: 2px; }
+  #seg-member .benefit-icon.on { background: var(--brand-dark); color: #fff; }
+  #seg-member .benefit-icon.off { background: var(--line); color: #6b5761; }
+  #seg-member .benefit-text { font-size: 0.86rem; font-weight: 600; }
+  #seg-member .benefit-text.off { color: var(--gray); font-weight: 500; }
+  #seg-member .benefit-hint { font-size: 0.72rem; color: var(--gray); margin-top: 2px; }
 
-  #panelMembership .tier-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px; }
-  #panelMembership .tier-card {
+  #seg-member .tier-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px; }
+  #seg-member .tier-card {
     position: relative; text-align: center; padding: 10px 4px; border-radius: 12px; font-size: 0.82rem; font-weight: 700;
     border: 2px solid var(--line); background: #fff; cursor: pointer; color: var(--gray); box-shadow: var(--shadow-sm);
     transition: border-color .15s, background .15s, box-shadow .15s, transform .15s, color .15s;
   }
-  #panelMembership .tier-card:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); }
-  #panelMembership .tier-card.active { border-color: var(--brand); background: var(--brand-light); color: var(--brand-dark); }
-  #panelMembership .tier-name { padding: 0 10px; }
-  #panelMembership .tier-radio {
+  #seg-member .tier-card:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); }
+  #seg-member .tier-card.active { border-color: var(--brand); background: var(--brand-light); color: var(--brand-ink); }
+  #seg-member .tier-name { padding: 0 10px; }
+  #seg-member .tier-radio {
     position: absolute; top: 6px; right: 6px; width: 12px; height: 12px; border-radius: 50%;
     border: 2px solid var(--line); background: #fff; transition: border-color .15s, background .15s, box-shadow .15s;
   }
-  #panelMembership .tier-card.active .tier-radio { border-color: var(--brand-dark); background: var(--brand-dark); box-shadow: inset 0 0 0 2px #fff; }
+  #seg-member .tier-card.active .tier-radio { border-color: var(--brand-ink); background: var(--brand-dark); box-shadow: inset 0 0 0 2px #fff; }
 
-  #panelMembership .record-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px dashed var(--line); }
-  #panelMembership .record-row:last-child { border-bottom: none; }
-  #panelMembership .record-name { font-size: 0.86rem; font-weight: 600; }
-  #panelMembership .record-date { font-size: 0.72rem; color: var(--gray); margin-top: 2px; }
-  #panelMembership .record-amount { font-weight: 700; color: var(--brand-dark); font-size: 0.9rem; text-align: right; }
-  #panelMembership .record-growth { font-size: 0.72rem; color: var(--brand-dark); text-align: right; margin-top: 2px; }
+  #seg-member .record-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px dashed var(--line); }
+  #seg-member .record-row:last-child { border-bottom: none; }
+  #seg-member .record-name { font-size: 0.86rem; font-weight: 600; }
+  #seg-member .record-date { font-size: 0.72rem; color: var(--gray); margin-top: 2px; }
+  #seg-member .record-amount { font-weight: 700; color: var(--brand-ink); font-size: 0.9rem; text-align: right; }
+  #seg-member .record-growth { font-size: 0.72rem; color: var(--brand-ink); text-align: right; margin-top: 2px; }
 
-  /* ══════════════ 模块③：积分（scope: #panelPoints） ══════════════ */
-  #panelPoints .balance-card {
+  /* ══════════════ 模块③：积分（scope: #seg-points，卡包内子页） ══════════════ */
+  #seg-points .balance-card {
     background: linear-gradient(135deg, var(--brand-deep), var(--brand-dark));
+    box-shadow: var(--shadow-md), inset 0 0 0 1px rgba(201,162,39,.35);
     color: #fff; border-radius: var(--radius); padding: 22px 20px; margin-bottom: 14px;
     box-shadow: var(--shadow-md);
   }
-  #panelPoints .balance-label { font-size: 0.8rem; color: rgba(255,255,255,.98); margin-bottom: 6px; }
-  #panelPoints .balance-num { font-size: 2.4rem; font-weight: 800; letter-spacing: .5px; }
-  #panelPoints .balance-sub { font-size: 0.76rem; color: rgba(255,255,255,.98); margin-top: 10px; }
+  #seg-points .balance-label { font-size: 0.8rem; color: rgba(255,255,255,.98); margin-bottom: 6px; }
+  #seg-points .balance-num { font-size: 2.4rem; font-weight: 800; letter-spacing: .5px; }
+  #seg-points .balance-sub { font-size: 0.76rem; color: rgba(255,255,255,.98); margin-top: 10px; }
 
-  #panelPoints .tabs { display: flex; gap: 8px; margin-bottom: 14px; }
-  #panelPoints .tab-btn {
+  #seg-points .tabs { display: flex; gap: 8px; margin-bottom: 14px; }
+  #seg-points .tab-btn {
     flex: 1; text-align: center; padding: 10px; border-radius: 10px; font-weight: 700; font-size: 0.86rem;
     border: 1.5px solid var(--line); background: var(--card); color: var(--gray); cursor: pointer;
   }
-  #panelPoints .tab-btn.active { border-color: var(--brand); background: var(--brand-light); color: var(--brand-dark); }
+  #seg-points .tab-btn.active { border-color: var(--brand); background: var(--brand-light); color: var(--brand-ink); }
 
-  #panelPoints .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  #panelPoints .product-card {
+  #seg-points .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  #seg-points .product-card {
     border: 1.5px solid var(--line); border-radius: 12px; padding: 14px 12px; text-align: center;
     background: var(--card); box-shadow: var(--shadow-sm);
     transition: border-color .15s, box-shadow .15s, transform .15s;
   }
-  #panelPoints .product-card:hover { border-color: var(--brand); transform: translateY(-2px); box-shadow: var(--shadow-md); }
-  #panelPoints .product-icon { color: var(--brand-dark); margin-bottom: 6px; }
-  #panelPoints .product-name { font-weight: 700; font-size: 0.84rem; margin-bottom: 4px; min-height: 2.2em; }
-  #panelPoints .product-cost { font-weight: 800; color: var(--brand-dark); font-size: 0.92rem; margin-bottom: 2px; }
-  #panelPoints .product-stock { font-size: 0.72rem; color: var(--gray); margin-bottom: 10px; }
-  #panelPoints .redeem-btn {
+  #seg-points .product-card:hover { border-color: var(--brand); transform: translateY(-2px); box-shadow: var(--shadow-md); }
+  #seg-points .product-icon { color: var(--brand-ink); margin-bottom: 6px; }
+  #seg-points .product-name { font-weight: 700; font-size: 0.84rem; margin-bottom: 4px; min-height: 2.2em; }
+  #seg-points .product-cost { font-weight: 800; color: var(--brand-ink); font-size: 0.92rem; margin-bottom: 2px; }
+  #seg-points .product-stock { font-size: 0.72rem; color: var(--gray); margin-bottom: 10px; }
+  #seg-points .redeem-btn {
     width: 100%; padding: 8px; border-radius: 8px; font-size: 0.8rem; font-weight: 700;
     border: none; cursor: pointer; background: var(--brand-dark); color: #fff; transition: filter .15s;
   }
-  #panelPoints .redeem-btn:disabled { background: var(--line); color: var(--gray); cursor: not-allowed; }
+  #seg-points .redeem-btn:disabled { background: var(--line); color: var(--gray); cursor: not-allowed; }
 
-  #panelPoints .history-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--line); }
-  #panelPoints .history-row:last-child { border-bottom: none; }
-  #panelPoints .history-desc { font-weight: 600; font-size: 0.86rem; }
-  #panelPoints .history-date { font-size: 0.74rem; color: var(--gray); margin-top: 2px; }
-  #panelPoints .history-right { text-align: right; }
-  #panelPoints .history-delta { font-weight: 800; font-size: 0.92rem; }
-  #panelPoints .history-delta.pos { color: var(--good); }
-  #panelPoints .history-delta.neg { color: var(--danger); }
-  #panelPoints .history-balance { font-size: 0.72rem; color: var(--gray); margin-top: 2px; }
+  #seg-points .history-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--line); }
+  #seg-points .history-row:last-child { border-bottom: none; }
+  #seg-points .history-desc { font-weight: 600; font-size: 0.86rem; }
+  #seg-points .history-date { font-size: 0.74rem; color: var(--gray); margin-top: 2px; }
+  #seg-points .history-right { text-align: right; }
+  #seg-points .history-delta { font-weight: 800; font-size: 0.92rem; }
+  #seg-points .history-delta.pos { color: var(--good); }
+  #seg-points .history-delta.neg { color: var(--danger); }
+  #seg-points .history-balance { font-size: 0.72rem; color: var(--gray); margin-top: 2px; }
 
   #modalOverlay {
     position: fixed; inset: 0; background: rgba(28,25,23,.45);
     display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 50;
   }
   #modalOverlay .modal-card { background: var(--card); border-radius: var(--radius); padding: 22px; max-width: 340px; width: 100%; text-align: center; box-shadow: var(--shadow-md); }
-  #modalOverlay .modal-icon { color: var(--brand-dark); margin-bottom: 10px; }
+  #modalOverlay .modal-icon { color: var(--brand-ink); margin-bottom: 10px; }
   #modalOverlay .modal-title { font-weight: 800; font-size: 1rem; margin-bottom: 6px; }
   #modalOverlay .modal-sub { font-size: 0.82rem; color: var(--gray); margin-bottom: 18px; }
   #modalOverlay .modal-btns { display: flex; gap: 10px; }
   #modalOverlay .btn { flex: 1; text-align: center; padding: 11px; border-radius: 10px; font-weight: 700; font-size: 0.88rem; border: none; cursor: pointer; transition: filter .15s; }
   #modalOverlay .btn-primary { background: var(--brand-dark); color: #fff; }
-  #modalOverlay .btn-ghost { background: var(--brand-light); color: var(--brand-dark); }
+  #modalOverlay .btn-ghost { background: var(--brand-light); color: var(--brand-ink); }
 
-  /* ══════════════ 模块④：优惠券（scope: #panelCoupons） ══════════════ */
-  #panelCoupons .tab-bar { display: flex; gap: 8px; margin-bottom: 18px; }
-  #panelCoupons .tab-btn {
+  /* ══════════════ 模块④：优惠券（scope: #seg-coupons，卡包内子页） ══════════════ */
+  #seg-coupons .tab-bar { display: flex; gap: 8px; margin-bottom: 18px; }
+  #seg-coupons .tab-btn {
     flex: 1; text-align: center; padding: 10px; border-radius: 10px;
     font-weight: 700; font-size: 0.86rem; border: 1.5px solid var(--line);
     background: var(--card); cursor: pointer; color: var(--gray);
   }
-  #panelCoupons .tab-btn.active { background: var(--brand-dark); color: #fff; border-color: var(--brand-dark); }
+  #seg-coupons .tab-btn.active { background: var(--brand-dark); color: #fff; border-color: var(--brand-ink); }
 
-  #panelCoupons .group-title { font-size: 0.78rem; font-weight: 700; color: var(--gray); margin: 16px 0 8px; }
-  #panelCoupons .group-title:first-child { margin-top: 0; }
-  #panelCoupons .empty-tip { font-size: 0.82rem; color: var(--gray); text-align: center; padding: 20px 0; }
+  #seg-coupons .group-title { font-size: 0.78rem; font-weight: 700; color: var(--gray); margin: 16px 0 8px; }
+  #seg-coupons .group-title:first-child { margin-top: 0; }
+  #seg-coupons .empty-tip { font-size: 0.82rem; color: var(--gray); text-align: center; padding: 20px 0; }
 
-  #panelCoupons .coupon-card {
+  #seg-coupons .coupon-card {
     display: flex; border: 1.5px solid var(--line); border-radius: 12px;
     overflow: hidden; margin-bottom: 10px; background: var(--card); position: relative;
     box-shadow: var(--shadow-sm); transition: box-shadow .15s, transform .15s;
   }
-  #panelCoupons .coupon-card:not(.disabled):hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
-  #panelCoupons .coupon-left {
+  #seg-coupons .coupon-card:not(.disabled):hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+  #seg-coupons .coupon-left {
     flex: 0 0 96px; background: var(--brand-dark); color: #fff;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     text-align: center; padding: 10px 6px; border-right: 1.5px dashed rgba(255,255,255,.5);
   }
-  #panelCoupons .coupon-left .amt-num { font-size: 1.5rem; font-weight: 800; line-height: 1.1; }
-  #panelCoupons .coupon-left .amt-unit { font-size: 0.68rem; color: rgba(255,255,255,.96); margin-top: 2px; }
-  #panelCoupons .coupon-right { flex: 1; padding: 12px 14px; display: flex; flex-direction: column; justify-content: center; gap: 3px; }
-  #panelCoupons .coupon-title { font-weight: 700; font-size: 0.9rem; }
-  #panelCoupons .coupon-meta { font-size: 0.72rem; color: var(--gray); }
-  #panelCoupons .coupon-bottom { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; }
-  #panelCoupons .coupon-expiry { font-size: 0.7rem; color: var(--gray); }
-  #panelCoupons .coupon-btn {
+  #seg-coupons .coupon-left .amt-num { font-size: 1.5rem; font-weight: 800; line-height: 1.1; }
+  #seg-coupons .coupon-left .amt-unit { font-size: 0.68rem; color: rgba(255,255,255,.96); margin-top: 2px; }
+  #seg-coupons .coupon-right { flex: 1; padding: 12px 14px; display: flex; flex-direction: column; justify-content: center; gap: 3px; }
+  #seg-coupons .coupon-title { font-weight: 700; font-size: 0.9rem; }
+  #seg-coupons .coupon-meta { font-size: 0.72rem; color: var(--gray); }
+  #seg-coupons .coupon-bottom { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; }
+  #seg-coupons .coupon-expiry { font-size: 0.7rem; color: var(--gray); }
+  #seg-coupons .coupon-btn {
     padding: 6px 16px; border-radius: 99px; font-size: 0.78rem; font-weight: 700;
     border: none; cursor: pointer; background: var(--brand-dark); color: #fff; white-space: nowrap;
     transition: filter .15s;
   }
-  #panelCoupons .coupon-btn:disabled { background: var(--line); color: var(--gray); cursor: not-allowed; }
+  #seg-coupons .coupon-btn:disabled { background: var(--line); color: var(--gray); cursor: not-allowed; }
 
-  #panelCoupons .coupon-card.disabled .coupon-left { background: var(--gray); }
-  #panelCoupons .coupon-card.disabled { opacity: .6; }
-  #panelCoupons .stamp { position: absolute; top: 10px; right: 12px; background: var(--gray); }
+  #seg-coupons .coupon-card.disabled .coupon-left { background: var(--gray); }
+  #seg-coupons .coupon-card.disabled { opacity: .6; }
+  #seg-coupons .stamp { position: absolute; top: 10px; right: 12px; background: var(--gray); }
 
   /* 弹窗视觉：优惠券核销 / 次卡核销 / 礼品卡消费 三者共用同一套 */
   #redeemModal, #passRedeemModal, #spendModal {
@@ -761,7 +764,7 @@
   #redeemModal .modal-sub, #passRedeemModal .modal-sub, #spendModal .modal-sub { font-size: 0.8rem; color: var(--gray); margin-bottom: 16px; }
   #redeemModal .modal-code, #passRedeemModal .modal-code {
     font-family: 'SFMono-Regular', Menlo, monospace; font-size: 1.8rem; font-weight: 800;
-    letter-spacing: 6px; color: var(--brand-dark); background: var(--brand-light);
+    letter-spacing: 6px; color: var(--brand-ink); background: var(--brand-light);
     border-radius: 12px; padding: 16px; margin-bottom: 18px;
   }
   #redeemModal .btn, #passRedeemModal .btn, #spendModal .btn {
@@ -771,30 +774,56 @@
   #redeemModal .btn-primary, #passRedeemModal .btn-primary { background: var(--brand-dark); color: #fff; }
   #redeemModal .btn-primary:hover, #passRedeemModal .btn-primary:hover { filter: brightness(1.06); }
   #redeemModal .btn-ghost, #passRedeemModal .btn-ghost, #spendModal .btn-ghost { background: transparent; color: var(--gray); margin-top: 8px; }
-  #redeemModal .btn-ghost:hover, #passRedeemModal .btn-ghost:hover, #spendModal .btn-ghost:hover { background: var(--brand-light); color: var(--brand-dark); }
+  #redeemModal .btn-ghost:hover, #passRedeemModal .btn-ghost:hover, #spendModal .btn-ghost:hover { background: var(--brand-light); color: var(--brand-ink); }
 
   /* ── 共享：hover 反馈（原来只有 selected 态没有 hover 提示） ── */
   .lang-btn:hover { background: var(--brand-light); }
-  .nav-item:not(.active):hover { color: var(--brand-dark); }
+  .nav-item:not(.active):hover { color: var(--brand-ink); }
   #panelBooking .svc-item:hover { border-color: var(--brand); transform: translateY(-2px); box-shadow: var(--shadow-md); }
   #panelBooking .date-cell:not(.selected):hover { border-color: var(--brand); }
   #panelBooking .slot-cell:not(.selected):not(.full):hover { border-color: var(--brand); }
   #panelBooking .staff-item:hover { background: var(--brand-light); }
   #panelBooking .btn-primary:hover:not(:disabled) { filter: brightness(1.06); }
   #panelBooking .btn-primary:active:not(:disabled) { filter: brightness(.96); }
-  #panelBooking .btn-ghost:hover { color: var(--brand-dark); }
-  #panelPoints .tab-btn:not(.active):hover { border-color: var(--brand); color: var(--brand-dark); }
-  #panelPoints .redeem-btn:hover:not(:disabled) { filter: brightness(1.06); }
-  #panelPoints .redeem-btn:active:not(:disabled) { filter: brightness(.96); }
-  #panelCoupons .tab-btn:not(.active):hover { border-color: var(--brand); color: var(--brand-dark); }
-  #panelCoupons .coupon-btn:hover:not(:disabled) { filter: brightness(1.06); }
-  #panelCoupons .coupon-btn:active:not(:disabled) { filter: brightness(.96); }
+  #panelBooking .btn-ghost:hover { color: var(--brand-ink); }
+  #seg-points .tab-btn:not(.active):hover { border-color: var(--brand); color: var(--brand-ink); }
+  #seg-points .redeem-btn:hover:not(:disabled) { filter: brightness(1.06); }
+  #seg-points .redeem-btn:active:not(:disabled) { filter: brightness(.96); }
+  #seg-coupons .tab-btn:not(.active):hover { border-color: var(--brand); color: var(--brand-ink); }
+  #seg-coupons .coupon-btn:hover:not(:disabled) { filter: brightness(1.06); }
+  #seg-coupons .coupon-btn:active:not(:disabled) { filter: brightness(.96); }
   #modalOverlay .btn-primary:hover { filter: brightness(1.06); }
   #modalOverlay .btn-primary:active { filter: brightness(.96); }
   #modalOverlay .btn-ghost:hover { background: var(--brand); color: #fff; }
   #redeemModal .btn-primary:hover { filter: brightness(1.06); }
   #redeemModal .btn-primary:active { filter: brightness(.96); }
-  #redeemModal .btn-ghost:hover { color: var(--brand-dark); }
+  #redeemModal .btn-ghost:hover { color: var(--brand-ink); }
+
+  /* ══════════════ 点缀金（参考站 手法）══════════════
+     深色填充一律加一道金色内描边；进行中/当前状态由金色承担。
+     约束：金字只压在深色底上（≥6.4:1）；浅粉块 #F7E4EC 上禁用金字（仅 3.99:1）。 */
+  .btn-primary,
+  .seg-chip.active,
+  .tab-btn.active,
+  #panelBooking .btn-primary,
+  #panelBooking .date-cell.selected,
+  #panelBooking .slot-cell.selected,
+  #seg-coupons .tab-btn.active,
+  #modalOverlay .btn-primary,
+  #redeemModal .btn-primary,
+  #passRedeemModal .btn-primary {
+    box-shadow: inset 0 0 0 1px rgba(201,162,39,.5);
+  }
+  #panelBooking .step-dot.active,
+  #seg-pass .bar-fill { background: var(--gold); }
+  /* 禁用态不镀金：金边是"可以按"的信号 */
+  .btn-primary:disabled,
+  #panelBooking .btn-primary:disabled,
+  #seg-pass .pkg-btn:disabled,
+  #seg-gift .gc-btn:disabled,
+  #panelProfile .rate-btn:disabled { box-shadow: none; }
+  .card-title .num { color: var(--gold); }
+  .nav-item.active .nav-icon { filter: none; }
 </style>
 </head>
 <body>

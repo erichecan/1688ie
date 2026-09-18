@@ -24,9 +24,10 @@
 <style>
   /* ── 设计 token：源真值表见 docs/20260917-美甲视觉规范.md ── */
   :root {
-    --brand: #A8496B;
-    --brand-dark: #7C3A52;
-    --brand-deep: #5E2B3E;
+    --brand: #2E1F26;        /* 深酒紫近黑：主填充/主边框 */
+    --brand-dark: #1F1419;   /* 更深：按钮底/hover */
+    --brand-deep: #120B0E;   /* 渐变暗端/深色区块 */
+    --brand-ink: #2E1F26;    /* 强调文字：层级交给衬线字体，不再靠彩色 */
     --brand-light: #FDF4F7;
     --brand-tint: #F7E4EC;
     --gold: #C9A227;
@@ -51,7 +52,7 @@
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: var(--font-body); background: var(--bg); color: var(--ink); line-height: 1.6; }
-  ::selection { background: var(--brand-tint); color: var(--brand-dark); }
+  ::selection { background: var(--brand-tint); color: var(--brand-ink); }
   button:focus-visible, [tabindex]:focus-visible, input:focus-visible {
     outline: 2px solid var(--brand-dark); outline-offset: 2px;
   }
@@ -62,13 +63,13 @@
   .top-inner { max-width: 1040px; margin: 0 auto; padding: 14px 20px; display: flex; align-items: center; gap: 14px; }
   .brand-mark {
     width: 34px; height: 34px; border-radius: 50%; flex: 0 0 auto; background: #fff;
-    border: 1.5px solid var(--gold); display: flex; align-items: center; justify-content: center; color: var(--brand-dark);
+    border: 1.5px solid var(--gold); display: flex; align-items: center; justify-content: center; color: var(--brand-ink);
   }
   .brand-text { flex: 1; min-width: 0; }
-  .brand-name { font-family: var(--font-display); font-weight: 600; font-size: 1.12rem; color: var(--brand-dark); }
+  .brand-name { font-family: var(--font-display); font-weight: 600; font-size: 1.12rem; color: var(--brand-ink); }
   .brand-sub { font-size: .76rem; color: var(--ink-muted); }
   .lang-btn {
-    font-size: .78rem; font-weight: 700; color: var(--brand-dark); border: 1.5px solid var(--brand);
+    font-size: .78rem; font-weight: 700; color: var(--brand-ink); border: 1.5px solid var(--brand);
     border-radius: 99px; padding: 5px 13px; cursor: pointer; background: var(--card); font-family: inherit;
     transition: background .15s;
   }
@@ -82,8 +83,8 @@
     font-family: inherit; font-size: .88rem; font-weight: 700; color: var(--ink-muted);
     border-bottom: 2.5px solid transparent; transition: color .15s, border-color .15s;
   }
-  .nav-tab:hover { color: var(--brand-dark); }
-  .nav-tab.active { color: var(--brand-dark); border-bottom-color: var(--brand-dark); }
+  .nav-tab:hover { color: var(--brand-ink); }
+  .nav-tab.active { color: var(--brand-ink); border-bottom-color: var(--brand-ink); }
 
   main { max-width: 1040px; margin: 0 auto; padding: 20px; }
 
@@ -102,7 +103,7 @@
     display: flex; gap: 8px; align-items: flex-start; font-size: .76rem; color: var(--ink-muted);
     line-height: 1.5; background: var(--brand-tint); border-radius: var(--radius-sm); padding: 10px 12px; margin-top: 4px;
   }
-  .mock-note svg { flex: 0 0 auto; margin-top: 1px; color: var(--brand-dark); }
+  .mock-note svg { flex: 0 0 auto; margin-top: 1px; color: var(--brand-ink); }
 
   /* ══════════════ 今日（scope: #tab-today） ══════════════ */
   #tab-today .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px; }
@@ -135,7 +136,7 @@
   #tab-today .alert-btn:hover { filter: brightness(1.06); }
   #tab-today .alert.done { background: var(--brand-light); border-color: var(--brand-tint); }
   #tab-today .alert.done svg { color: var(--good); }
-  #tab-today .alert.done .alert-t { color: var(--brand-dark); }
+  #tab-today .alert.done .alert-t { color: var(--brand-ink); }
 
   .appt-row {
     display: flex; align-items: center; gap: 12px; padding: 12px 0; border-top: 1px solid var(--line);
@@ -146,12 +147,12 @@
   .appt-body { flex: 1; min-width: 0; }
   .appt-who { font-weight: 700; font-size: .86rem; }
   .appt-meta { font-size: .78rem; color: var(--ink-muted); margin-top: 1px; }
-  .appt-price { font-weight: 800; color: var(--brand-dark); font-size: .86rem; font-variant-numeric: tabular-nums; flex: 0 0 auto; }
+  .appt-price { font-weight: 800; color: var(--brand-ink); font-size: .86rem; font-variant-numeric: tabular-nums; flex: 0 0 auto; }
   .pill {
     font-size: .72rem; font-weight: 800; padding: 6px 12px; border-radius: 999px; flex: 0 0 auto;
     border: none; font-family: inherit; cursor: pointer; transition: filter .15s;
   }
-  .pill.pending  { background: var(--brand-tint); color: var(--brand-dark); }
+  .pill.pending  { background: var(--brand-tint); color: var(--brand-ink); }
   .pill.progress { background: var(--brand-dark); color: #fff; }
   .pill.done     { background: #E4F2E8; color: var(--good); }
   .pill.noshow   { background: #FBE3E6; color: var(--danger); }
@@ -167,7 +168,7 @@
     transition: border-color .15s, background .15s, color .15s;
   }
   #tab-sched .day-cell:hover:not(.on) { border-color: var(--brand); }
-  #tab-sched .day-cell.on { background: var(--brand-dark); border-color: var(--brand-dark); color: #fff; }
+  #tab-sched .day-cell.on { background: var(--brand-dark); border-color: var(--brand-ink); color: #fff; }
   #tab-sched .day-dow { font-size: .72rem; opacity: .78; }
   #tab-sched .day-dom { font-size: 1.05rem; font-weight: 800; margin-top: 1px; font-variant-numeric: tabular-nums; }
   #tab-sched .day-cell.today .day-dom::after {
@@ -181,11 +182,11 @@
   }
   #tab-sched .chip img, #tab-sched .chip i {
     width: 22px; height: 22px; border-radius: 50%; object-fit: cover; display: block; flex: 0 0 auto;
-    background: var(--brand-tint); color: var(--brand-dark); font-style: normal; font-size: .72rem; font-weight: 800;
+    background: var(--brand-tint); color: var(--brand-ink); font-style: normal; font-size: .72rem; font-weight: 800;
     display: flex; align-items: center; justify-content: center;
   }
-  #tab-sched .chip:hover:not(.on) { border-color: var(--brand); color: var(--brand-dark); }
-  #tab-sched .chip.on { background: var(--brand-dark); border-color: var(--brand-dark); color: #fff; }
+  #tab-sched .chip:hover:not(.on) { border-color: var(--brand); color: var(--brand-ink); }
+  #tab-sched .chip.on { background: var(--brand-dark); border-color: var(--brand-ink); color: #fff; }
   #tab-sched .lane { margin-bottom: 18px; }
   #tab-sched .lane:last-child { margin-bottom: 0; }
   #tab-sched .lane-head { display: flex; align-items: center; gap: 9px; margin-bottom: 8px; }
@@ -199,7 +200,7 @@
   #tab-sched .gap-row b { color: var(--ink-body); font-weight: 700; }
   #tab-sched .gap-btn {
     margin-left: auto; padding: 6px 13px; border-radius: 999px; border: 1.5px solid var(--brand);
-    background: #fff; color: var(--brand-dark); font-size: .78rem; font-weight: 700; cursor: pointer; font-family: inherit;
+    background: #fff; color: var(--brand-ink); font-size: .78rem; font-weight: 700; cursor: pointer; font-family: inherit;
   }
   #tab-sched .gap-btn:hover { background: var(--brand-light); }
   #tab-sched .empty-tip { font-size: .82rem; color: var(--ink-muted); text-align: center; padding: 22px 0; }
@@ -226,7 +227,7 @@
   #tab-clients .cl-meta { font-size: .78rem; color: var(--ink-muted); margin-top: 1px; }
   #tab-clients .cl-tag {
     font-size: .72rem; font-weight: 800; padding: 3px 9px; border-radius: 999px; flex: 0 0 auto;
-    background: var(--brand-tint); color: var(--brand-dark);
+    background: var(--brand-tint); color: var(--brand-ink);
   }
   #tab-clients .cl-tag.risk { background: #FDF0E2; color: #8A3E12; }
   #tab-clients .cl-tag.vip { background: #F6EFD8; color: var(--gold-deep); }
@@ -272,15 +273,15 @@
     background: var(--brand-light); border-radius: var(--radius-sm); padding: 12px 14px;
     font-size: .8rem; color: var(--ink-body); line-height: 1.55;
   }
-  #tab-reports .insight svg { flex: 0 0 auto; margin-top: 2px; color: var(--brand-dark); }
-  #tab-reports .insight b { color: var(--brand-dark); font-weight: 800; }
+  #tab-reports .insight svg { flex: 0 0 auto; margin-top: 2px; color: var(--brand-ink); }
+  #tab-reports .insight b { color: var(--brand-ink); font-weight: 800; }
 
   #tab-reports .mix-row { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-top: 1px solid var(--line); }
   #tab-reports .mix-row:first-child { border-top: none; }
   #tab-reports .mix-name { font-size: .82rem; font-weight: 700; flex: 0 0 116px; }
   #tab-reports .mix-track { flex: 1; height: 9px; border-radius: 99px; background: var(--line); overflow: hidden; }
   #tab-reports .mix-fill { height: 100%; border-radius: 99px; background: var(--brand); }
-  #tab-reports .mix-v { font-size: .76rem; font-weight: 800; color: var(--brand-dark); flex: 0 0 42px; text-align: right; font-variant-numeric: tabular-nums; }
+  #tab-reports .mix-v { font-size: .76rem; font-weight: 800; color: var(--brand-ink); flex: 0 0 42px; text-align: right; font-variant-numeric: tabular-nums; }
 
   #tab-reports .staff-row { display: flex; align-items: center; gap: 11px; padding: 10px 0; border-top: 1px solid var(--line); }
   #tab-reports .staff-row:first-child { border-top: none; }
@@ -288,7 +289,22 @@
   #tab-reports .staff-name { font-weight: 700; font-size: .84rem; flex: 0 0 62px; }
   #tab-reports .staff-track { flex: 1; height: 9px; border-radius: 99px; background: var(--line); overflow: hidden; }
   #tab-reports .staff-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--brand) 0%, var(--brand-dark) 100%); }
-  #tab-reports .staff-v { font-size: .78rem; font-weight: 800; color: var(--brand-dark); flex: 0 0 56px; text-align: right; font-variant-numeric: tabular-nums; }
+  #tab-reports .staff-v { font-size: .78rem; font-weight: 800; color: var(--brand-ink); flex: 0 0 56px; text-align: right; font-variant-numeric: tabular-nums; }
+
+  /* ══════════════ 点缀金（参考站 手法）══════════════
+     深色填充加金色内描边；当前/进行中状态由金色承担。
+     金字只压深色底（≥6.4:1）；浅粉块上禁用金字（3.99:1 不达标）。 */
+  .btn-primary,
+  .chip.on,
+  .day-cell.on {
+    box-shadow: inset 0 0 0 1px rgba(201,162,39,.5);
+  }
+  .btn-primary:disabled { box-shadow: none; }
+  /* 当前页签用金色下划线，不是金色方框 */
+  .nav-tab.active { border-bottom-color: var(--gold); }
+  #tab-today .stat.lead { box-shadow: var(--shadow-md), inset 0 0 0 1px rgba(201,162,39,.35); }
+  /* 报表里"最高的那根柱"用金，一眼看出峰值 */
+  #tab-reports .bar-col.peak .bar { background: linear-gradient(180deg, var(--gold) 0%, var(--gold-deep) 100%); }
 </style>
 </head>
 <body>

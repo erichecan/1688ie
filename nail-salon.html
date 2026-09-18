@@ -13,9 +13,10 @@
       --pl: #FDF4F7;   /* 氛围底 */
       --pm: #F7E4EC;   /* 浅粉块 */
       --pb: #EBC7D5;   /* 边框 */
-      --pc: #A8496B;   /* 主色，压白字 5.48:1 */
-      --pt: #7C3A52;   /* 主色深，按钮/标题 8.13:1 */
-      --pd: #5E2B3E;   /* 主色更深，渐变暗端 */
+      --pc: #2E1F26;   /* 主色：深酒紫近黑，压白字 15.67:1 */
+      --pt: #1F1419;   /* 主色深：按钮底/hover 17.91:1 */
+      --pd: #120B0E;   /* 主色更深：渐变暗端 19.45:1 */
+      --pc-ink: #2E1F26; /* 强调文字：层级交给衬线字体，不再靠彩色 */
       --pg: #FDF4F7;
       --gold: #C9A227;
       --gold-deep: #8A6E15;
@@ -71,7 +72,7 @@
       font-size: 1rem;
       letter-spacing: 0.01em;
     }
-    .nav-brand span { color: var(--pc); }
+    .nav-brand span { color: var(--pc-ink); }
     .nav-links {
       display: flex;
       align-items: center;
@@ -97,7 +98,7 @@
       margin-left: 0.5rem;
       transition: all 0.15s;
     }
-    .nav-lang:hover { background: var(--pm); color: var(--pt); border-color: var(--pc); }
+    .nav-lang:hover { background: var(--pm); color: var(--pt); border-color: var(--pc-ink); }
 
     /* ── LAYOUT ── */
     .page {
@@ -113,14 +114,14 @@
     }
     /* 图标与文字的对齐：图标放在 data-zh/data-en 元素之外，切语言时不会被 innerHTML 覆盖 */
     .sec-ico, .h-ico, .m-ico, .n-ico { display: inline-flex; align-items: center; margin-right: .45em; vertical-align: -.22em; }
-    .sec-ico { color: var(--pc); }
+    .sec-ico { color: var(--pc-ink); }
     .h-ico { color: var(--pt); }
-    .m-ico { color: var(--pc); }
-    .n-ico { color: var(--pc); }
+    .m-ico { color: var(--pc-ink); }
+    .n-ico { color: var(--pc-ink); }
     .pain-row { display: flex; gap: .55em; align-items: flex-start; padding: 2px 0; }
     .pain-ico { flex: 0 0 auto; margin-top: .28em; }
     .pain-bad .pain-ico { color: var(--gray2); }
-    .pain-good .pain-ico { color: var(--pc); }
+    .pain-good .pain-ico { color: var(--pc-ink); }
     .monthly-icon svg, .icon svg { display: block; }
 
     /* ── HERO ── */
@@ -156,7 +157,7 @@
       font-size: 0.72rem;
       letter-spacing: 0.14em;
       text-transform: uppercase;
-      color: var(--pc);
+      color: var(--pc-ink);
       margin-bottom: 0.75rem;
     }
     .hero-title {
@@ -170,7 +171,7 @@
     }
     .hero-sub {
       font-size: 0.95rem;
-      color: var(--pc);
+      color: var(--pc-ink);
       margin-bottom: 1.75rem;
     }
     .hero-ctas { display: flex; gap: 0.75rem; flex-wrap: wrap; }
@@ -188,7 +189,7 @@
     .btn-primary:hover { background: var(--pt); transform: translateY(-1px); }
     .btn-outline {
       border: 1.5px solid var(--pc);
-      color: var(--pc);
+      color: var(--pc-ink);
       border-radius: 28px;
       padding: 0.65rem 1.5rem;
       font-size: 0.88rem;
@@ -211,7 +212,7 @@
       font-family: var(--font-display);
       font-size: 0.82rem;
       font-weight: 700;
-      color: var(--pc);
+      color: var(--pc-ink);
       letter-spacing: 0.06em;
       white-space: nowrap;
     }
@@ -269,7 +270,7 @@
       padding: 3px 10px; border-radius: 999px; letter-spacing: .02em;
     }
     .module-card-title {
-      color: var(--pc);
+      color: var(--pc-ink);
       font-weight: 700;
       font-size: 0.92rem;
       margin-bottom: 0.6rem;
@@ -360,7 +361,7 @@
     .bundle-row h3 { font-size: 0.9rem; font-weight: 700; color: var(--pt); }
     .bundle-row p { font-size: 0.75rem; color: var(--gray3); margin-top: 0.2rem; }
     .bundle-price { text-align: right; white-space: nowrap; flex-shrink: 0; }
-    .bundle-price .big { font-size: 1.15rem; font-weight: 800; color: var(--pc); }
+    .bundle-price .big { font-size: 1.15rem; font-weight: 800; color: var(--pc-ink); }
     .bundle-price .small { font-size: 0.73rem; color: var(--gray3); margin-top: 0.1rem; }
 
     /* ── MARKETING HERO ── */
@@ -372,9 +373,9 @@
       text-align: center;
       margin-bottom: 1.25rem;
     }
-    .mkt-hero .eyebrow { font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--pc); margin-bottom: 0.4rem; }
+    .mkt-hero .eyebrow { font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--pc-ink); margin-bottom: 0.4rem; }
     .mkt-hero h2 { font-size: 1.1rem; font-weight: 800; color: var(--pt); margin-bottom: 0.25rem; }
-    .mkt-hero p { font-size: 0.82rem; color: var(--pc); }
+    .mkt-hero p { font-size: 0.82rem; color: var(--pc-ink); }
 
     /* ── SERVICE CARDS ── */
     .svc-card { background: var(--white); border: 1.5px solid var(--pb); border-radius: var(--radius-md); overflow: hidden; margin-bottom: 1rem; box-shadow: var(--shadow); }
@@ -418,7 +419,7 @@
     }
     .setup-row .label { color: var(--pt); font-weight: 600; }
     .setup-row .note { color: var(--gray3); font-size: 0.72rem; margin-left: 0.5rem; }
-    .setup-row .price { color: var(--pc); font-weight: 700; }
+    .setup-row .price { color: var(--pc-ink); font-weight: 700; }
 
     /* ── QUOTE CALCULATOR ── */
     .quote-box {
@@ -431,7 +432,7 @@
     .quote-group-label {
       font-size: 0.73rem;
       font-weight: 700;
-      color: var(--pc);
+      color: var(--pc-ink);
       letter-spacing: 0.06em;
       text-transform: uppercase;
       margin-bottom: 0.5rem;
@@ -450,14 +451,14 @@
       transition: border-color 0.15s, background 0.15s;
       font-size: 0.82rem;
     }
-    .quote-item:hover { border-color: var(--pc); background: var(--pl); }
-    .quote-item.selected { border-color: var(--pc); background: var(--pl); }
+    .quote-item:hover { border-color: var(--pc-ink); background: var(--pl); }
+    .quote-item.selected { border-color: var(--pc-ink); background: var(--pl); }
     .quote-item-left { display: flex; align-items: center; gap: 0.6rem; }
     .quote-item-left input[type="checkbox"] {
       width: 16px; height: 16px; cursor: pointer;
-      accent-color: var(--pc);
+      accent-color: var(--pc-ink);
     }
-    .quote-item-price { color: var(--pc); font-weight: 600; white-space: nowrap; text-align: right; }
+    .quote-item-price { color: var(--pc-ink); font-weight: 600; white-space: nowrap; text-align: right; }
     .quote-item-price del { font-size: 0.75rem; display: block; color: var(--gray2); font-weight: 400; }
     .quote-item-dashed { border-style: dashed; }
     .quote-item-dim { color: var(--gray3); }
@@ -485,7 +486,7 @@
       margin-bottom: 0;
     }
     .total-row.discount-row {
-      color: var(--pc);
+      color: var(--pc-ink);
       font-weight: 600;
     }
     .quote-ctas { display: flex; gap: 0.75rem; }
@@ -505,7 +506,7 @@
     .btn-pdf:hover { background: var(--pt); }
     .btn-email {
       border: 1.5px solid var(--pb);
-      color: var(--pc);
+      color: var(--pc-ink);
       background: white;
       border-radius: 28px;
       padding: 0.7rem 1.25rem;
@@ -515,7 +516,7 @@
       white-space: nowrap;
       transition: all 0.15s;
     }
-    .btn-email:hover { border-color: var(--pc); background: var(--pl); }
+    .btn-email:hover { border-color: var(--pc-ink); background: var(--pl); }
 
     /* ── FOOTER ── */
     .footer {
@@ -526,7 +527,7 @@
       border-top: 1px solid var(--pb);
       margin-top: 2rem;
     }
-    .footer a { color: var(--pc); }
+    .footer a { color: var(--pc-ink); }
 
     /* ── WHY US ── */
     .why-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.85rem; margin-top: 1.25rem; }
@@ -549,6 +550,15 @@
       body { background: white; }
       .page { padding: 1rem; }
     }
+
+    /* ══════════════ 点缀金（参考站 手法）══════════════
+       深色填充加金色内描边；金字只压深色底（≥6.4:1），
+       浅粉块 --pm 上禁用金字（3.99:1 不达标）。 */
+    .btn-primary, .btn-pdf, .module-card.lead::after, .badge {
+      box-shadow: inset 0 0 0 1px rgba(201,162,39,.5);
+    }
+    /* 主推模块的金色边，替掉原来的深色描边 */
+    .module-card.lead { border-color: var(--gold); }
   </style>
 </head>
 <body>

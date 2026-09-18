@@ -16,11 +16,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Noto+Serif+SC:wght@600;700&display=swap" rel="stylesheet">
 <title>示例美甲工作室 · 销售演示</title>
 <style>
   :root {
-    --brand: #A8496B;
-    --brand-dark: #7C3A52;
+    --brand: #2E1F26;        /* 深酒紫近黑：主填充/主边框 */
+    --brand-dark: #1F1419;
+    --brand-deep: #120B0E;
+    --brand-ink: #2E1F26;
+    --gold: #C9A227;
+    --gold-deep: #8A6E15;
     --brand-light: #FDF4F7;
     --ink: #2A1B20;
     --ink-soft: #6B5560;
@@ -30,6 +37,8 @@
     --radius: 16px;
     --shadow-sm: 0 1px 2px rgba(32,20,23,.04), 0 8px 20px -16px rgba(32,20,23,.35);
     --shadow-md: 0 2px 4px rgba(32,20,23,.05), 0 20px 40px -24px rgba(32,20,23,.4);
+
+    --font-display: 'Playfair Display', 'Noto Serif SC', Georgia, 'Songti SC', serif;
 
     --customer: #EA580C;
     --customer-tint: #FFF3EA;
@@ -44,14 +53,15 @@
     color: var(--ink);
     line-height: 1.5;
   }
-  ::selection { background: var(--brand-light); color: var(--brand-dark); }
+  ::selection { background: var(--brand-light); color: var(--brand-ink); }
   button:focus-visible { outline: 2px solid var(--brand-dark); outline-offset: 2px; }
 
   /* ── 完成态徽章 ── */
   .pow-badge {
     display: inline-flex; align-items: center; gap: 6px;
     padding: 8px 18px; font-weight: 800; font-size: 0.9rem; letter-spacing: .01em;
-    color: #fff; background: var(--brand-dark); border-radius: 999px; box-shadow: var(--shadow-sm);
+    color: #fff; background: var(--brand-dark); border-radius: 999px;
+    box-shadow: var(--shadow-sm), inset 0 0 0 1px rgba(201,162,39,.45);
   }
 
   /* ── 头部 ── */
@@ -62,10 +72,11 @@
   }
   .shop-mark {
     width: 40px; height: 40px; border-radius: 12px; background: var(--brand-dark);
-    color: #fff; font-weight: 800; font-size: 1.1rem;
+    color: var(--gold); font-family: var(--font-display); font-weight: 700; font-size: 1.15rem;
+    box-shadow: inset 0 0 0 1px rgba(201,162,39,.45);
     display: flex; align-items: center; justify-content: center; flex-shrink: 0;
   }
-  .shop-name { font-weight: 800; font-size: 1.15rem; color: var(--ink); }
+  .shop-name { font-family: var(--font-display); font-weight: 700; font-size: 1.2rem; color: var(--ink); }
   .shop-tag { font-size: 0.82rem; color: var(--ink-soft); margin-top: 1px; }
 
   /* ── 主体布局 ── */
@@ -93,8 +104,8 @@
   }
   .scenario-item .s-sub { font-size: 0.86rem; color: var(--ink-soft); margin-top: 6px; line-height: 1.5; }
   .scenario-item.active { border-color: var(--brand); background: var(--brand-light); box-shadow: var(--shadow-md); }
-  .scenario-item.active .s-title .num { background: var(--brand-dark); color: #fff; }
-  .scenario-item.active .s-title { color: var(--brand-dark); }
+  .scenario-item.active .s-title .num { background: var(--brand-dark); color: var(--gold); }
+  .scenario-item.active .s-title { color: var(--brand-ink); }
 
   /* ── 右栏：演示区 ── */
   .stage-panel {
@@ -105,7 +116,7 @@
   .stage-head { margin-bottom: 6px; }
   .stage-headline { font-size: 1.3rem; font-weight: 800; color: var(--ink); letter-spacing: -.01em; }
   .stage-punchline {
-    margin-top: 10px; font-size: 0.95rem; font-weight: 700; color: var(--brand-dark);
+    margin-top: 10px; font-size: 0.95rem; font-weight: 700; color: var(--brand-ink);
     background: var(--brand-light); border-radius: 10px; padding: 10px 14px; display: inline-block;
   }
   .hidden { display: none !important; }
@@ -117,7 +128,7 @@
     display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; color: var(--ink);
     transition: border-color .15s, color .15s, box-shadow .15s;
   }
-  .step-arrow:hover:not(:disabled) { border-color: var(--brand); color: var(--brand-dark); box-shadow: var(--shadow-sm); }
+  .step-arrow:hover:not(:disabled) { border-color: var(--brand); color: var(--brand-ink); box-shadow: var(--shadow-sm); }
   .step-arrow:disabled { opacity: .3; cursor: default; }
   .step-dots { display: flex; gap: 8px; flex: 1; }
   .step-dot {
@@ -125,7 +136,7 @@
     transition: background .15s;
   }
   .step-dot.done { background: var(--brand-dark); opacity: .5; }
-  .step-dot.active { background: var(--brand); }
+  .step-dot.active { background: var(--gold); }
   .step-dot:not(.active):hover { background: var(--brand-dark); opacity: .65; }
 
   /* 舞台：手机外框 + 周边设计区 */
@@ -199,7 +210,7 @@
   .scr-title { font-size: 0.95rem; font-weight: 800; color: var(--ink); margin-bottom: 10px; }
   .scr-card { background: #fff; border: 1.5px solid var(--line); border-radius: 12px; padding: 12px 14px; box-shadow: var(--shadow-sm); }
   .scr-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-  .scr-amount { font-size: 1.5rem; font-weight: 900; color: var(--brand-dark); }
+  .scr-amount { font-size: 1.5rem; font-weight: 900; color: var(--brand-ink); }
   .scr-amount.pos { color: #15803d; }
   .plan-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 14px; }
   .plan-grid.single { grid-template-columns: 1fr; }
@@ -215,9 +226,9 @@
     position: absolute; top: 10px; right: 10px; width: 16px; height: 16px; border-radius: 50%;
     border: 2px solid var(--line); background: #fff; transition: border-color .15s, background .15s, box-shadow .15s;
   }
-  .plan-card.selected .plan-radio { border-color: var(--brand-dark); background: var(--brand-dark); box-shadow: inset 0 0 0 2.5px #fff; }
+  .plan-card.selected .plan-radio { border-color: var(--brand-ink); background: var(--brand-dark); box-shadow: inset 0 0 0 2.5px #fff; }
   .plan-name { font-weight: 800; font-size: 0.95rem; color: var(--ink); padding: 0 14px; }
-  .plan-price { font-size: 0.85rem; font-weight: 800; color: var(--brand-dark); }
+  .plan-price { font-size: 0.85rem; font-weight: 800; color: var(--brand-ink); }
   .plan-price.bonus { background: var(--brand-light); border-radius: 999px; padding: 3px 10px; }
   .plan-card.selected .plan-price.bonus { background: #fff; }
   .wallet-card {
@@ -227,12 +238,13 @@
   .scr-muted { font-size: 0.8rem; color: var(--ink-soft); }
   .scr-btn {
     margin-top: 12px; background: var(--brand-dark); color: #fff; font-weight: 800; font-size: 0.88rem;
+    box-shadow: inset 0 0 0 1px rgba(201,162,39,.5);
     border: none; border-radius: 10px; padding: 11px; text-align: center;
     transition: filter .15s;
   }
   .scr-btn:hover { filter: brightness(1.06); }
   .scr-btn:active { filter: brightness(.96); }
-  .scr-btn.ghost { background: #fff; color: var(--brand-dark); border: 1.5px solid var(--brand); }
+  .scr-btn.ghost { background: #fff; color: var(--brand-ink); border: 1.5px solid var(--brand); }
   .scr-pill-tag {
     display: inline-block; font-size: 0.72rem; font-weight: 800; border-radius: 999px;
     padding: 3px 10px; background: var(--owner-tint); color: var(--owner);
@@ -325,7 +337,7 @@
 
   // ══════════════ 唯一数据源：改这里就是改整个页面 ══════════════
 
-  var BRAND = { shopName: '示例美甲工作室', primary: '#A8496B', logo: null };
+  var BRAND = { shopName: '示例美甲工作室', primary: '#2E1F26', logo: null };
 
   var SCENARIOS = [
     {
