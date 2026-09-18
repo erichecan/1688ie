@@ -22,21 +22,21 @@
 <title>示例美甲工作室 · 销售演示</title>
 <style>
   :root {
-    --brand: #2E1F26;        /* 深酒紫近黑：主填充/主边框 */
-    --brand-dark: #1F1419;
-    --brand-deep: #120B0E;
-    --brand-ink: #2E1F26;
-    --gold: #C9A227;
-    --gold-deep: #8A6E15;
-    --brand-light: #FDF4F7;
-    --ink: #2A1B20;
-    --ink-soft: #6B5560;
-    --bg: #FDF4F7;
+    --brand: #33095c;        /* 参考站 --color-brand，白字 15.74:1 */
+    --brand-dark: #250352;
+    --brand-deep: #1b0450;
+    --brand-ink: #33095c;
+    --gold: #8a6c3c;
+    --gold-deep: #8a6c3c;
+    --brand-light: #fcfafe;
+    --ink: #1b0450;
+    --ink-soft: #3c2775;
+    --bg: #fcfafe;
     --surface: #ffffff;
-    --line: #F0DCE4;
+    --line: #e8e0f8;
     --radius: 16px;
-    --shadow-sm: 0 1px 2px rgba(32,20,23,.04), 0 8px 20px -16px rgba(32,20,23,.35);
-    --shadow-md: 0 2px 4px rgba(32,20,23,.05), 0 20px 40px -24px rgba(32,20,23,.4);
+    --shadow-sm: 0 1px 2px rgba(27,4,80,.04), 0 8px 20px -16px rgba(27,4,80,.35);
+    --shadow-md: 0 2px 4px rgba(27,4,80,.05), 0 20px 40px -24px rgba(27,4,80,.4);
 
     --font-display: 'Playfair Display', 'Noto Serif SC', Georgia, 'Songti SC', serif;
 
@@ -61,7 +61,7 @@
     display: inline-flex; align-items: center; gap: 6px;
     padding: 8px 18px; font-weight: 800; font-size: 0.9rem; letter-spacing: .01em;
     color: #fff; background: var(--brand-dark); border-radius: 999px;
-    box-shadow: var(--shadow-sm), inset 0 0 0 1px rgba(201,162,39,.45);
+    box-shadow: var(--shadow-sm);
   }
 
   /* ── 头部 ── */
@@ -72,11 +72,12 @@
   }
   .shop-mark {
     width: 40px; height: 40px; border-radius: 12px; background: var(--brand-dark);
-    color: var(--gold); font-family: var(--font-display); font-weight: 700; font-size: 1.15rem;
-    box-shadow: inset 0 0 0 1px rgba(201,162,39,.45);
+    color: #fff; font-family: var(--font-display); font-weight: 700; font-size: 1.15rem;
     display: flex; align-items: center; justify-content: center; flex-shrink: 0;
   }
-  .shop-name { font-family: var(--font-display); font-weight: 700; font-size: 1.2rem; color: var(--ink); }
+  /* 金色字号牌：对应 参考站 白底上的 参考站 标题（金 on 白 4.89:1） */
+  .shop-name { font-family: var(--font-display); font-weight: 700; font-size: 1.2rem;
+               color: var(--gold); letter-spacing: .06em; }
   .shop-tag { font-size: 0.82rem; color: var(--ink-soft); margin-top: 1px; }
 
   /* ── 主体布局 ── */
@@ -104,7 +105,7 @@
   }
   .scenario-item .s-sub { font-size: 0.86rem; color: var(--ink-soft); margin-top: 6px; line-height: 1.5; }
   .scenario-item.active { border-color: var(--brand); background: var(--brand-light); box-shadow: var(--shadow-md); }
-  .scenario-item.active .s-title .num { background: var(--brand-dark); color: var(--gold); }
+  .scenario-item.active .s-title .num { background: var(--brand-dark); color: #fff; }
   .scenario-item.active .s-title { color: var(--brand-ink); }
 
   /* ── 右栏：演示区 ── */
@@ -136,7 +137,7 @@
     transition: background .15s;
   }
   .step-dot.done { background: var(--brand-dark); opacity: .5; }
-  .step-dot.active { background: var(--gold); }
+  .step-dot.active { background: var(--brand); }
   .step-dot:not(.active):hover { background: var(--brand-dark); opacity: .65; }
 
   /* 舞台：手机外框 + 周边设计区 */
@@ -238,7 +239,6 @@
   .scr-muted { font-size: 0.8rem; color: var(--ink-soft); }
   .scr-btn {
     margin-top: 12px; background: var(--brand-dark); color: #fff; font-weight: 800; font-size: 0.88rem;
-    box-shadow: inset 0 0 0 1px rgba(201,162,39,.5);
     border: none; border-radius: 10px; padding: 11px; text-align: center;
     transition: filter .15s;
   }
@@ -337,7 +337,7 @@
 
   // ══════════════ 唯一数据源：改这里就是改整个页面 ══════════════
 
-  var BRAND = { shopName: '示例美甲工作室', primary: '#2E1F26', logo: null };
+  var BRAND = { shopName: '示例美甲工作室', primary: '#33095c', logo: null };
 
   var SCENARIOS = [
     {

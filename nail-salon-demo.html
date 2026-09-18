@@ -25,21 +25,21 @@
 <style>
   /* ── 设计 token：源真值表见 docs/20260917-美甲视觉规范.md ── */
   :root {
-    --brand: #2E1F26;        /* 深酒紫近黑：主填充/主边框 */
-    --brand-dark: #1F1419;   /* 更深：按钮底/hover */
-    --brand-deep: #120B0E;   /* 渐变暗端/深色区块 */
-    --brand-ink: #2E1F26;    /* 强调文字：层级交给衬线字体，不再靠彩色 */
-    --brand-light: #FDF4F7;
-    --brand-tint: #F7E4EC;
-    --gold: #C9A227;
-    --gold-deep: #8A6E15;
-    --ink: #2A1B20;
-    --ink-body: #6B5560;
-    --gray: #6B5560;          /* 兼容既有选择器，等同 --ink-body */
-    --ink-muted: #806C74;
-    --ink-faint: #9E8A92;
-    --line: #F0DCE4;
-    --bg: #FDF4F7;
+    --brand: #33095c;        /* 参考站 --color-brand：主填充/主边框，白字 15.74:1 */
+    --brand-dark: #250352;   /* 参考站 --color-brand-deep：按钮底，白字 17.30:1 */
+    --brand-deep: #1b0450;   /* 参考站 --color-ink：渐变暗端/最深，白字 17.80:1 */
+    --brand-ink: #33095c;    /* 强调文字（白底 15.74:1）；填充与文字分开，见规范文档 */
+    --brand-light: #fcfafe;
+    --brand-tint: #ece8fd;
+    --gold: #8a6c3c;
+    --gold-deep: #8a6c3c;
+    --ink: #1b0450;
+    --ink-body: #3c2775;
+    --gray: #3c2775;          /* 兼容既有选择器，等同 --ink-body */
+    --ink-muted: #57478b;
+    --ink-faint: #7566a8;
+    --line: #e8e0f8;
+    --bg: #fcfafe;
     --card: #ffffff;
     --radius-sm: 10px;
     --radius: 14px;
@@ -47,8 +47,8 @@
     --danger: #C02636;
     --good: #15803D;
     --warn: #B45309;
-    --shadow-sm: 0 1px 2px rgba(42,27,32,.04), 0 8px 20px -16px rgba(42,27,32,.35);
-    --shadow-md: 0 2px 4px rgba(42,27,32,.05), 0 20px 40px -24px rgba(42,27,32,.4);
+    --shadow-sm: 0 1px 2px rgba(27,4,80,.04), 0 8px 20px -16px rgba(27,4,80,.35);
+    --shadow-md: 0 2px 4px rgba(27,4,80,.05), 0 20px 40px -24px rgba(27,4,80,.4);
     --font-display: 'Playfair Display', 'Noto Serif SC', Georgia, 'Songti SC', serif;
     --font-body: -apple-system, BlinkMacSystemFont, "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
   }
@@ -64,8 +64,8 @@
   @media (min-width: 900px) {
     body {
       background:
-        radial-gradient(60% 40% at 12% 8%, rgba(168,73,107,.07), transparent 60%),
-        radial-gradient(50% 36% at 88% 82%, rgba(201,162,39,.07), transparent 62%),
+        radial-gradient(60% 40% at 12% 8%, rgba(51,9,92,.07), transparent 60%),
+        radial-gradient(50% 36% at 88% 82%, rgba(138,108,60,.07), transparent 62%),
         var(--bg);
       background-attachment: fixed;
     }
@@ -154,7 +154,7 @@
   #panelProfile .swatches { display: flex; gap: 8px; flex-wrap: wrap; }
   #panelProfile .swatch { display: inline-flex; align-items: center; gap: 6px; font-size: .76rem; font-weight: 600;
                           background: var(--brand-light); border-radius: 999px; padding: 4px 10px 4px 4px; }
-  #panelProfile .swatch i { width: 17px; height: 17px; border-radius: 50%; display: block; border: 1px solid rgba(42,27,32,.12); }
+  #panelProfile .swatch i { width: 17px; height: 17px; border-radius: 50%; display: block; border: 1px solid rgba(27,4,80,.12); }
   #panelProfile .tag-warn {
     display: inline-block; font-size: .74rem; font-weight: 700; color: #8A3E12;
     background: #FBEEE2; border-radius: 999px; padding: 3px 11px; margin: 0 6px 6px 0;
@@ -414,12 +414,12 @@
   #panelStore .hero-img { display: block; width: 100%; height: 248px; object-fit: cover; }
   #panelStore .hero-veil {
     position: absolute; inset: 0;
-    background: linear-gradient(to top, rgba(42,27,32,.86) 0%, rgba(42,27,32,.52) 42%, rgba(42,27,32,.08) 78%);
+    background: linear-gradient(to top, rgba(27,4,80,.86) 0%, rgba(27,4,80,.52) 42%, rgba(27,4,80,.08) 78%);
   }
   #panelStore .hero-body { position: absolute; left: 0; right: 0; bottom: 0; padding: 18px; color: #fff; }
   #panelStore .hero-script {
     font-family: var(--font-display); font-style: italic; font-size: .92rem;
-    color: #F3D9A6; letter-spacing: .01em; margin-bottom: 4px;
+    color: var(--brand-tint); letter-spacing: .01em; margin-bottom: 4px;
   }
   #panelStore .hero-name {
     font-family: var(--font-display); font-weight: 600; font-size: 1.62rem;
@@ -494,7 +494,7 @@
   #panelStore .gal-cap {
     position: absolute; left: 0; right: 0; bottom: 0; padding: 14px 6px 5px; color: #fff;
     font-size: .66rem; font-weight: 700; text-align: left;
-    background: linear-gradient(to top, rgba(42,27,32,.82), transparent);
+    background: linear-gradient(to top, rgba(27,4,80,.82), transparent);
   }
 
   #panelStore .rev-card {
@@ -514,7 +514,7 @@
 
   /* 作品集灯箱 */
   #galLightbox {
-    position: fixed; inset: 0; z-index: 40; background: rgba(42,27,32,.82);
+    position: fixed; inset: 0; z-index: 40; background: rgba(27,4,80,.82);
     display: flex; align-items: center; justify-content: center; padding: 24px;
   }
   #galLightbox img { max-width: min(420px, 90vw); width: 100%; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); }
@@ -605,7 +605,7 @@
   /* ══════════════ 模块②：会员（scope: #seg-member，卡包内子页） ══════════════ */
   #seg-member .member-card {
     background: linear-gradient(135deg, var(--brand-dark) 0%, var(--brand-deep) 100%);
-    box-shadow: var(--shadow-md), inset 0 0 0 1px rgba(201,162,39,.35);
+    box-shadow: var(--shadow-md);
     color: #fff; border-radius: var(--radius); padding: 20px; margin-bottom: 14px;
     box-shadow: var(--shadow-md);
   }
@@ -614,7 +614,8 @@
   #seg-member .member-no { font-size: 0.72rem; color: rgba(255,255,255,.98); font-family: 'SFMono-Regular', Menlo, monospace; }
   #seg-member .member-growth { font-size: 0.8rem; color: rgba(255,255,255,.98); margin: 10px 0 8px; }
   #seg-member .progress-track { height: 7px; border-radius: 99px; background: rgba(255,255,255,.28); overflow: hidden; }
-  #seg-member .progress-fill { width: 100%; height: 100%; background: var(--gold); border-radius: 99px; transform-origin: left; transform: scaleX(0); transition: transform .25s; }
+  /* 深紫会员卡上用薰衣草（14.86:1）；金压深紫只有 3.22:1，规范里禁用 */
+  #seg-member .progress-fill { width: 100%; height: 100%; background: var(--brand-tint); border-radius: 99px; transform-origin: left; transform: scaleX(0); transition: transform .25s; }
   #seg-member .progress-label { font-size: 0.72rem; color: rgba(255,255,255,.98); margin-top: 8px; }
 
   #seg-member .benefit-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-bottom: 1px dashed var(--line); }
@@ -624,7 +625,7 @@
     display: flex; align-items: center; justify-content: center; font-size: 0.72rem; margin-top: 1px;
   }
   #seg-member .benefit-icon.on { background: var(--brand-dark); color: #fff; }
-  #seg-member .benefit-icon.off { background: var(--line); color: #6b5761; }
+  #seg-member .benefit-icon.off { background: var(--line); color: var(--ink-muted); }
   #seg-member .benefit-text { font-size: 0.86rem; font-weight: 600; }
   #seg-member .benefit-text.off { color: var(--gray); font-weight: 500; }
   #seg-member .benefit-hint { font-size: 0.72rem; color: var(--gray); margin-top: 2px; }
@@ -654,7 +655,7 @@
   /* ══════════════ 模块③：积分（scope: #seg-points，卡包内子页） ══════════════ */
   #seg-points .balance-card {
     background: linear-gradient(135deg, var(--brand-deep), var(--brand-dark));
-    box-shadow: var(--shadow-md), inset 0 0 0 1px rgba(201,162,39,.35);
+    box-shadow: var(--shadow-md);
     color: #fff; border-radius: var(--radius); padding: 22px 20px; margin-bottom: 14px;
     box-shadow: var(--shadow-md);
   }
@@ -753,7 +754,7 @@
 
   /* 弹窗视觉：优惠券核销 / 次卡核销 / 礼品卡消费 三者共用同一套 */
   #redeemModal, #passRedeemModal, #spendModal {
-    position: fixed; inset: 0; background: rgba(42,27,32,.5);
+    position: fixed; inset: 0; background: rgba(27,4,80,.5);
     display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 50;
   }
   #redeemModal .modal-box, #passRedeemModal .modal-box, #spendModal .modal-box {
@@ -799,31 +800,12 @@
   #redeemModal .btn-primary:active { filter: brightness(.96); }
   #redeemModal .btn-ghost:hover { color: var(--brand-ink); }
 
-  /* ══════════════ 点缀金（参考站 手法）══════════════
-     深色填充一律加一道金色内描边；进行中/当前状态由金色承担。
-     约束：金字只压在深色底上（≥6.4:1）；浅粉块 #F7E4EC 上禁用金字（仅 3.99:1）。 */
-  .btn-primary,
-  .seg-chip.active,
-  .tab-btn.active,
-  #panelBooking .btn-primary,
-  #panelBooking .date-cell.selected,
-  #panelBooking .slot-cell.selected,
-  #seg-coupons .tab-btn.active,
-  #modalOverlay .btn-primary,
-  #redeemModal .btn-primary,
-  #passRedeemModal .btn-primary {
-    box-shadow: inset 0 0 0 1px rgba(201,162,39,.5);
-  }
+  /* ══════════════ 参考站 的强调方式 ══════════════
+     它的做法：深紫实心按钮（无描边）+ 薰衣草浅块做选中态 + 紫色下划线做当前态。
+     金 #8a6c3c 只在白/surface 底上做字号牌与小字标签 —— 金压深紫只有 3.22:1，它本来就不这么用。 */
   #panelBooking .step-dot.active,
-  #seg-pass .bar-fill { background: var(--gold); }
-  /* 禁用态不镀金：金边是"可以按"的信号 */
-  .btn-primary:disabled,
-  #panelBooking .btn-primary:disabled,
-  #seg-pass .pkg-btn:disabled,
-  #seg-gift .gc-btn:disabled,
-  #panelProfile .rate-btn:disabled { box-shadow: none; }
-  .card-title .num { color: var(--gold); }
-  .nav-item.active .nav-icon { filter: none; }
+  #seg-pass .bar-fill { background: var(--brand); }
+  .card-title .num { color: #fff; }
 </style>
 </head>
 <body>

@@ -10,27 +10,27 @@
     /* ── 设计 token：源真值表见 docs/20260917-美甲视觉规范.md ──
        变量名沿用本文件原有的 --pl/--pm/--pb/--pc/--pt，只换值，避免全文重命名带来的风险 */
     :root {
-      --pl: #FDF4F7;   /* 氛围底 */
-      --pm: #F7E4EC;   /* 浅粉块 */
-      --pb: #EBC7D5;   /* 边框 */
-      --pc: #2E1F26;   /* 主色：深酒紫近黑，压白字 15.67:1 */
-      --pt: #1F1419;   /* 主色深：按钮底/hover 17.91:1 */
-      --pd: #120B0E;   /* 主色更深：渐变暗端 19.45:1 */
-      --pc-ink: #2E1F26; /* 强调文字：层级交给衬线字体，不再靠彩色 */
-      --pg: #FDF4F7;
-      --gold: #C9A227;
-      --gold-deep: #8A6E15;
+      --pl: #fcfafe;   /* 参考站 --color-surface：氛围底 */
+      --pm: #ece8fd;   /* 参考站 --color-lavender：浅紫块 */
+      --pb: #e8e0f8;   /* 参考站 --color-lavender-line：边框 */
+      --pc: #33095c;   /* 参考站 --color-brand：主色，压白字 15.74:1 */
+      --pt: #250352;   /* 参考站 --color-brand-deep：按钮底 17.30:1 */
+      --pd: #1b0450;   /* 参考站 --color-ink：渐变暗端 17.80:1 */
+      --pc-ink: #33095c; /* 强调文字，白底 15.74:1 */
+      --pg: #fcfafe;
+      --gold: #8a6c3c;
+      --gold-deep: #8a6c3c;
       --white: #FFFFFF;
-      --ink: #2A1B20;
-      --gray1: #F7F4F5;
-      --gray2: #9E8A92;  /* 仅装饰/删除线，不承载信息 */
-      --gray3: #806C74;  /* 弱化文字 4.87:1 */
-      --gray4: #6B5560;  /* 正文 6.79:1 */
+      --ink: #1b0450;
+      --gray1: #f2eafd;
+      --gray2: #7566a8;  /* 参考站 --color-ink-soft，白底 4.97:1 */
+      --gray3: #57478b;  /* 参考站 --color-ink-muted，白底 7.84:1 */
+      --gray4: #3c2775;  /* 参考站 --color-ink-body，白底 12.07:1 */
       --radius-sm: 10px;
       --radius-md: 14px;
       --radius-lg: 20px;
-      --shadow: 0 1px 2px rgba(42,27,32,.04), 0 8px 20px -16px rgba(42,27,32,.35);
-      --shadow-md: 0 2px 4px rgba(42,27,32,.05), 0 20px 40px -24px rgba(42,27,32,.4);
+      --shadow: 0 1px 2px rgba(27,4,80,.04), 0 8px 20px -16px rgba(27,4,80,.35);
+      --shadow-md: 0 2px 4px rgba(27,4,80,.05), 0 20px 40px -24px rgba(27,4,80,.4);
       --font-display: 'Playfair Display', 'Noto Serif SC', Georgia, 'Songti SC', serif;
     }
 
@@ -551,13 +551,8 @@
       .page { padding: 1rem; }
     }
 
-    /* ══════════════ 点缀金（参考站 手法）══════════════
-       深色填充加金色内描边；金字只压深色底（≥6.4:1），
-       浅粉块 --pm 上禁用金字（3.99:1 不达标）。 */
-    .btn-primary, .btn-pdf, .module-card.lead::after, .badge {
-      box-shadow: inset 0 0 0 1px rgba(201,162,39,.5);
-    }
-    /* 主推模块的金色边，替掉原来的深色描边 */
+    /* ══════════════ 参考站 的强调方式 ══════════════
+       金 #8a6c3c 只在白底用（4.89:1）：主推模块的边与角标。深紫块上一律不用金（3.22:1）。 */
     .module-card.lead { border-color: var(--gold); }
   </style>
 </head>

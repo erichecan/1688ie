@@ -24,20 +24,20 @@
 <style>
   /* ── 设计 token：源真值表见 docs/20260917-美甲视觉规范.md ── */
   :root {
-    --brand: #2E1F26;        /* 深酒紫近黑：主填充/主边框 */
-    --brand-dark: #1F1419;   /* 更深：按钮底/hover */
-    --brand-deep: #120B0E;   /* 渐变暗端/深色区块 */
-    --brand-ink: #2E1F26;    /* 强调文字：层级交给衬线字体，不再靠彩色 */
-    --brand-light: #FDF4F7;
-    --brand-tint: #F7E4EC;
-    --gold: #C9A227;
-    --gold-deep: #8A6E15;
-    --ink: #2A1B20;
-    --ink-body: #6B5560;
-    --ink-muted: #806C74;
-    --ink-faint: #9E8A92;
-    --line: #F0DCE4;
-    --bg: #FDF4F7;
+    --brand: #33095c;        /* 参考站 --color-brand：主填充/主边框，白字 15.74:1 */
+    --brand-dark: #250352;   /* 参考站 --color-brand-deep：按钮底，白字 17.30:1 */
+    --brand-deep: #1b0450;   /* 参考站 --color-ink：渐变暗端/最深，白字 17.80:1 */
+    --brand-ink: #33095c;    /* 强调文字（白底 15.74:1）；填充与文字分开，见规范文档 */
+    --brand-light: #fcfafe;
+    --brand-tint: #ece8fd;
+    --gold: #8a6c3c;
+    --gold-deep: #8a6c3c;
+    --ink: #1b0450;
+    --ink-body: #3c2775;
+    --ink-muted: #57478b;
+    --ink-faint: #7566a8;
+    --line: #e8e0f8;
+    --bg: #fcfafe;
     --card: #ffffff;
     --radius-sm: 10px;
     --radius: 14px;
@@ -45,8 +45,8 @@
     --good: #15803D;
     --warn: #B45309;
     --danger: #C02636;
-    --shadow-sm: 0 1px 2px rgba(42,27,32,.04), 0 8px 20px -16px rgba(42,27,32,.35);
-    --shadow-md: 0 2px 4px rgba(42,27,32,.05), 0 20px 40px -24px rgba(42,27,32,.4);
+    --shadow-sm: 0 1px 2px rgba(27,4,80,.04), 0 8px 20px -16px rgba(27,4,80,.35);
+    --shadow-md: 0 2px 4px rgba(27,4,80,.05), 0 20px 40px -24px rgba(27,4,80,.4);
     --font-display: 'Playfair Display', 'Noto Serif SC', Georgia, 'Songti SC', serif;
     --font-body: -apple-system, BlinkMacSystemFont, "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
   }
@@ -238,7 +238,7 @@
   #tab-clients .det-v { font-size: .82rem; flex: 1; min-width: 0; line-height: 1.5; }
   #tab-clients .swatch { display: inline-flex; align-items: center; gap: 5px; font-size: .78rem; font-weight: 600;
                          background: var(--brand-light); border-radius: 999px; padding: 3px 9px 3px 3px; margin: 0 5px 5px 0; }
-  #tab-clients .swatch i { width: 15px; height: 15px; border-radius: 50%; display: block; border: 1px solid rgba(42,27,32,.12); }
+  #tab-clients .swatch i { width: 15px; height: 15px; border-radius: 50%; display: block; border: 1px solid rgba(27,4,80,.12); }
   #tab-clients .warn-tag {
     display: inline-block; font-size: .76rem; font-weight: 700; color: #8A3E12;
     background: #FBEEE2; border-radius: 999px; padding: 3px 10px; margin: 0 5px 5px 0;
@@ -291,20 +291,10 @@
   #tab-reports .staff-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--brand) 0%, var(--brand-dark) 100%); }
   #tab-reports .staff-v { font-size: .78rem; font-weight: 800; color: var(--brand-ink); flex: 0 0 56px; text-align: right; font-variant-numeric: tabular-nums; }
 
-  /* ══════════════ 点缀金（参考站 手法）══════════════
-     深色填充加金色内描边；当前/进行中状态由金色承担。
-     金字只压深色底（≥6.4:1）；浅粉块上禁用金字（3.99:1 不达标）。 */
-  .btn-primary,
-  .chip.on,
-  .day-cell.on {
-    box-shadow: inset 0 0 0 1px rgba(201,162,39,.5);
-  }
-  .btn-primary:disabled { box-shadow: none; }
-  /* 当前页签用金色下划线，不是金色方框 */
-  .nav-tab.active { border-bottom-color: var(--gold); }
-  #tab-today .stat.lead { box-shadow: var(--shadow-md), inset 0 0 0 1px rgba(201,162,39,.35); }
-  /* 报表里"最高的那根柱"用金，一眼看出峰值 */
-  #tab-reports .bar-col.peak .bar { background: linear-gradient(180deg, var(--gold) 0%, var(--gold-deep) 100%); }
+  /* ══════════════ 参考站 的强调方式 ══════════════
+     当前页签用主紫下划线（对应它导航里的 Home 下划线）；图表峰值用主紫，其余用薰衣草。 */
+  .nav-tab.active { border-bottom-color: var(--brand); }
+  #tab-reports .bar-col.peak .bar { background: linear-gradient(180deg, var(--brand) 0%, var(--brand-deep) 100%); }
 </style>
 </head>
 <body>
