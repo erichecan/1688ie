@@ -13,33 +13,58 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Noto+Serif+SC:wght@600;700&display=swap" rel="stylesheet">
 <title>示例美甲工作室 · 预约 · 会员 · 积分 · 优惠券</title>
 <style>
+  /* ── 设计 token：源真值表见 docs/20260917-美甲视觉规范.md ── */
   :root {
-    --brand: #C07090;
-    --brand-light: #FEF0F4;
-    --brand-dark: #A05070;
-    --brand-deep: #7C3A52;
-    --ink: #332328;
-    --gray: #7a6672;
-    --line: #f3dce4;
-    --bg: #FEF8FA;
+    --brand: #A8496B;
+    --brand-dark: #7C3A52;
+    --brand-deep: #5E2B3E;
+    --brand-light: #FDF4F7;
+    --brand-tint: #F7E4EC;
+    --gold: #C9A227;
+    --gold-deep: #8A6E15;
+    --ink: #2A1B20;
+    --ink-body: #6B5560;
+    --gray: #6B5560;          /* 兼容既有选择器，等同 --ink-body */
+    --ink-muted: #806C74;
+    --ink-faint: #9E8A92;
+    --line: #F0DCE4;
+    --bg: #FDF4F7;
     --card: #ffffff;
+    --radius-sm: 10px;
     --radius: 14px;
-    --danger: #dc2626;
-    --good: #15803d;
-    --shadow-sm: 0 1px 2px rgba(51,35,40,.04), 0 8px 20px -16px rgba(51,35,40,.35);
-    --shadow-md: 0 2px 4px rgba(51,35,40,.05), 0 20px 40px -24px rgba(51,35,40,.4);
+    --radius-lg: 20px;
+    --danger: #C02636;
+    --good: #15803D;
+    --warn: #B45309;
+    --shadow-sm: 0 1px 2px rgba(42,27,32,.04), 0 8px 20px -16px rgba(42,27,32,.35);
+    --shadow-md: 0 2px 4px rgba(42,27,32,.05), 0 20px 40px -24px rgba(42,27,32,.4);
+    --font-display: 'Playfair Display', 'Noto Serif SC', Georgia, 'Songti SC', serif;
+    --font-body: -apple-system, BlinkMacSystemFont, "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    font-family: var(--font-body);
     background: var(--bg);
     color: var(--ink);
     line-height: 1.6;
     padding-bottom: 84px;
   }
-  ::selection { background: var(--brand-light); color: var(--brand-dark); }
+  /* 桌面宽屏：480 中轴两侧不再空荡，铺一层品牌氛围底 + 甲片弧线装饰 */
+  @media (min-width: 900px) {
+    body {
+      background:
+        radial-gradient(60% 40% at 12% 8%, rgba(168,73,107,.07), transparent 60%),
+        radial-gradient(50% 36% at 88% 82%, rgba(201,162,39,.07), transparent 62%),
+        var(--bg);
+      background-attachment: fixed;
+    }
+  }
+  ::selection { background: var(--brand-tint); color: var(--brand-dark); }
   button:focus-visible, [tabindex]:focus-visible, input:focus-visible {
     outline: 2px solid var(--brand-dark); outline-offset: 2px;
   }
@@ -54,7 +79,17 @@
   /* ── 共享：顶部头部（sticky） ── */
   .head-bar { position: sticky; top: 0; z-index: 10; background: var(--bg); border-bottom: 1px solid var(--line); }
   .head-inner { max-width: 480px; margin: 0 auto; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; }
-  .shop-name { font-weight: 800; font-size: 1.05rem; color: var(--brand-dark); }
+  .brand-lockup { display: flex; align-items: center; gap: 9px; min-width: 0; }
+  .brand-mark {
+    width: 30px; height: 30px; border-radius: 50%; flex: 0 0 auto;
+    border: 1.5px solid var(--gold); display: flex; align-items: center; justify-content: center;
+    color: var(--brand-dark); background: #fff;
+  }
+  .shop-name {
+    font-family: var(--font-display); font-weight: 600; font-size: 1.12rem;
+    color: var(--brand-dark); letter-spacing: .005em; white-space: nowrap;
+    overflow: hidden; text-overflow: ellipsis;
+  }
   .lang-btn {
     font-size: 0.78rem; font-weight: 700; color: var(--brand-dark);
     border: 1px solid var(--brand); border-radius: 99px;
@@ -87,6 +122,126 @@
   }
   .nav-item .nav-icon { font-size: 1.3rem; display: block; margin-bottom: 2px; }
   .nav-item.active { color: var(--brand-dark); }
+
+  /* ══════════════ 模块⓪：门店门面（scope: #panelStore） ══════════════ */
+  #panelStore .hero {
+    position: relative; border-radius: var(--radius-lg); overflow: hidden;
+    box-shadow: var(--shadow-md); margin-bottom: 16px; isolation: isolate;
+  }
+  #panelStore .hero-img { display: block; width: 100%; height: 248px; object-fit: cover; }
+  #panelStore .hero-veil {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(42,27,32,.86) 0%, rgba(42,27,32,.52) 42%, rgba(42,27,32,.08) 78%);
+  }
+  #panelStore .hero-body { position: absolute; left: 0; right: 0; bottom: 0; padding: 18px; color: #fff; }
+  #panelStore .hero-script {
+    font-family: var(--font-display); font-style: italic; font-size: .92rem;
+    color: #F3D9A6; letter-spacing: .01em; margin-bottom: 4px;
+  }
+  #panelStore .hero-name {
+    font-family: var(--font-display); font-weight: 600; font-size: 1.62rem;
+    line-height: 1.16; letter-spacing: -.01em; margin-bottom: 6px;
+  }
+  #panelStore .hero-tag { font-size: .82rem; opacity: .92; margin-bottom: 12px; }
+  #panelStore .hero-rate { display: flex; align-items: center; gap: 6px; font-size: .78rem; margin-bottom: 12px; }
+  #panelStore .hero-stars { display: inline-flex; gap: 1px; color: var(--gold); }
+  #panelStore .hero-cta {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: #fff; color: var(--brand-dark); border: none; border-radius: 999px;
+    padding: 10px 20px; font-weight: 800; font-size: .84rem; font-family: inherit;
+    cursor: pointer; transition: filter .15s; box-shadow: var(--shadow-sm);
+  }
+  #panelStore .hero-cta:hover { filter: brightness(.96); }
+  #panelStore .hero-cta:active { filter: brightness(.9); }
+  /* 金箔点装饰 */
+  #panelStore .hero-foil { position: absolute; border-radius: 50%; background: var(--gold); opacity: .55; pointer-events: none; }
+
+  #panelStore .info-strip {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
+    background: var(--line); border: 1.5px solid var(--line); border-radius: var(--radius);
+    overflow: hidden; margin-bottom: 18px; box-shadow: var(--shadow-sm);
+  }
+  #panelStore .info-cell { background: var(--card); padding: 12px 8px; text-align: center; }
+  #panelStore .info-cell svg { color: var(--brand); margin-bottom: 4px; }
+  #panelStore .info-k { font-size: .68rem; color: var(--ink-muted); font-weight: 600; }
+  #panelStore .info-v { font-size: .74rem; font-weight: 700; color: var(--ink); margin-top: 1px;
+                        white-space: nowrap; font-variant-numeric: tabular-nums; }
+  @media (max-width: 400px) { #panelStore .info-v { font-size: .68rem; } }
+
+  #panelStore .sec-head { display: flex; align-items: baseline; justify-content: space-between; margin: 0 2px 10px; }
+  #panelStore .sec-title { font-family: var(--font-display); font-weight: 600; font-size: 1.18rem; color: var(--ink); }
+  #panelStore .sec-more {
+    font-size: .74rem; font-weight: 700; color: var(--brand-dark); cursor: pointer;
+    background: none; border: none; font-family: inherit; padding: 4px 2px;
+  }
+  #panelStore .sec-more:hover { text-decoration: underline; }
+  #panelStore .sec-wrap { margin-bottom: 20px; }
+
+  #panelStore .svc-card {
+    display: flex; align-items: center; gap: 12px; background: var(--card);
+    border: 1.5px solid var(--line); border-radius: var(--radius); padding: 10px;
+    margin-bottom: 10px; cursor: pointer; box-shadow: var(--shadow-sm);
+    transition: transform .15s, box-shadow .15s, border-color .15s;
+  }
+  #panelStore .svc-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: var(--brand-tint); }
+  #panelStore .svc-thumb { width: 82px; height: 62px; border-radius: 10px; object-fit: cover; flex: 0 0 auto; }
+  #panelStore .svc-info { flex: 1; min-width: 0; }
+  #panelStore .svc-t { font-weight: 700; font-size: .9rem; }
+  #panelStore .svc-d { font-size: .74rem; color: var(--ink-muted); margin-top: 2px; }
+  #panelStore .svc-p { font-weight: 800; color: var(--brand-dark); font-size: .92rem; white-space: nowrap;
+                       font-variant-numeric: tabular-nums; }
+  #panelStore .svc-go { color: var(--brand); flex: 0 0 auto; }
+
+  #panelStore .staff-strip { display: flex; gap: 12px; overflow-x: auto; padding: 2px 2px 6px; }
+  #panelStore .staff-cell { flex: 0 0 84px; text-align: center; }
+  #panelStore .staff-pic {
+    width: 66px; height: 66px; border-radius: 50%; object-fit: cover; margin: 0 auto 6px; display: block;
+    border: 2px solid #fff; box-shadow: 0 0 0 1.5px var(--line), var(--shadow-sm);
+  }
+  #panelStore .staff-n { font-size: .8rem; font-weight: 700; }
+  #panelStore .staff-s { font-size: .68rem; color: var(--ink-muted); line-height: 1.35; margin-top: 1px; }
+
+  #panelStore .gal-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  #panelStore .gal-item {
+    position: relative; border-radius: 10px; overflow: hidden; cursor: pointer;
+    aspect-ratio: 1 / 1; box-shadow: var(--shadow-sm); border: none; padding: 0; background: none;
+  }
+  #panelStore .gal-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .25s; }
+  #panelStore .gal-item:hover img { transform: scale(1.06); }
+  #panelStore .gal-cap {
+    position: absolute; left: 0; right: 0; bottom: 0; padding: 14px 6px 5px; color: #fff;
+    font-size: .66rem; font-weight: 700; text-align: left;
+    background: linear-gradient(to top, rgba(42,27,32,.82), transparent);
+  }
+
+  #panelStore .rev-card {
+    background: var(--card); border: 1.5px solid var(--line); border-radius: var(--radius);
+    padding: 14px 16px; margin-bottom: 10px; box-shadow: var(--shadow-sm);
+  }
+  #panelStore .rev-stars { display: inline-flex; gap: 1px; color: var(--gold-deep); margin-bottom: 6px; }
+  #panelStore .rev-text { font-family: var(--font-display); font-size: .92rem; line-height: 1.55; color: var(--ink); }
+  #panelStore .rev-meta { font-size: .72rem; color: var(--ink-muted); margin-top: 8px; }
+
+  #panelStore .mock-note {
+    display: flex; gap: 8px; align-items: flex-start;
+    font-size: .7rem; color: var(--ink-muted); line-height: 1.5;
+    background: var(--brand-tint); border-radius: var(--radius-sm); padding: 10px 12px; margin-bottom: 8px;
+  }
+  #panelStore .mock-note svg { flex: 0 0 auto; margin-top: 1px; color: var(--brand-dark); }
+
+  /* 作品集灯箱 */
+  #galLightbox {
+    position: fixed; inset: 0; z-index: 40; background: rgba(42,27,32,.82);
+    display: flex; align-items: center; justify-content: center; padding: 24px;
+  }
+  #galLightbox img { max-width: min(420px, 90vw); width: 100%; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); }
+  #galLightbox .lb-cap { color: #fff; text-align: center; font-size: .82rem; margin-top: 10px; font-weight: 600; }
+  #galLightbox .lb-close {
+    position: absolute; top: 18px; right: 18px; width: 38px; height: 38px; border-radius: 50%;
+    background: rgba(255,255,255,.18); border: none; color: #fff; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+  #galLightbox .lb-close:hover { background: rgba(255,255,255,.3); }
 
   /* ══════════════ 模块①：预约（scope: #panelBooking） ══════════════ */
   #panelBooking .steps { display: flex; gap: 6px; margin-bottom: 20px; }
@@ -131,6 +286,7 @@
     display: flex; align-items: center; justify-content: center; font-size: 1rem;
   }
   #panelBooking .staff-name { font-size: 0.74rem; font-weight: 600; }
+  #panelBooking .staff-photo { object-fit: cover; border: 2px solid #fff; box-shadow: 0 0 0 1.5px var(--line); }
 
   #panelBooking .field { margin-bottom: 10px; }
   #panelBooking .field label { display: block; font-size: 0.78rem; color: var(--gray); margin-bottom: 5px; font-weight: 600; }
@@ -357,12 +513,93 @@
 
 <div class="head-bar">
   <div class="head-inner">
-    <div class="shop-name" id="shopName"></div>
+    <div class="brand-lockup">
+      <span class="brand-mark" aria-hidden="true">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 3.6c2.6 0 4.4 2 4.4 4.6 0 3.4-1 8-1.5 10.1a3 3 0 01-2.9 2.3 3 3 0 01-2.9-2.3C8.6 16.2 7.6 11.6 7.6 8.2 7.6 5.6 9.4 3.6 12 3.6z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M8.6 9.4c2.2-1.1 4.6-1.1 6.8 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </span>
+      <div class="shop-name" id="shopName"></div>
+    </div>
     <div class="lang-btn" role="button" tabindex="0" onclick="toggleLang()">ZH / EN</div>
   </div>
 </div>
 
 <main class="wrap">
+
+  <!-- ══════════════ 模块⓪：门店门面 ══════════════ -->
+  <div id="panelStore">
+    <div class="hero">
+      <img class="hero-img" src="assets/nail/hero.webp" alt="美甲师正在为客人做手部护理">
+      <div class="hero-veil" aria-hidden="true"></div>
+      <span class="hero-foil" style="top:22px; right:30px; width:5px; height:5px;" aria-hidden="true"></span>
+      <span class="hero-foil" style="top:40px; right:52px; width:3px; height:3px;" aria-hidden="true"></span>
+      <span class="hero-foil" style="top:58px; right:22px; width:4px; height:4px;" aria-hidden="true"></span>
+      <div class="hero-body">
+        <div class="hero-script" aria-hidden="true">Shine Your Way</div>
+        <div class="hero-name" id="heroName"></div>
+        <div class="hero-tag" data-zh="慢手艺 · 一对一服务 · 甲油胶通过欧盟认证" data-en="Slow craft · One-on-one service · EU-certified gel">慢手艺 · 一对一服务 · 甲油胶通过欧盟认证</div>
+        <div class="hero-rate">
+          <span class="hero-stars" id="heroStars" aria-hidden="true"></span>
+          <span id="heroRateText"></span>
+        </div>
+        <button class="hero-cta" onclick="Store.goBook()">
+          <span data-zh="立即预约" data-en="Book Now">立即预约</span>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12h13M12.5 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="info-strip">
+      <div class="info-cell">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.8"/><path d="M12 7.5V12l3 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div class="info-k" data-zh="营业时间" data-en="Hours">营业时间</div>
+        <div class="info-v" data-zh="10:00–19:00" data-en="10:00–19:00">10:00–19:00</div>
+      </div>
+      <div class="info-cell">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 21s6.5-5.7 6.5-10.2A6.5 6.5 0 005.5 10.8C5.5 15.3 12 21 12 21z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="12" cy="10.5" r="2.4" stroke="currentColor" stroke-width="1.8"/></svg>
+        <div class="info-k" data-zh="门店位置" data-en="Location">门店位置</div>
+        <div class="info-v" data-zh="都柏林 2 区" data-en="Dublin 2">都柏林 2 区</div>
+      </div>
+      <div class="info-cell">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6.2 4.5h3l1.5 3.8-2 1.4a10.5 10.5 0 005.6 5.6l1.4-2 3.8 1.5v3a1.5 1.5 0 01-1.7 1.5C10.9 18.7 5.3 13.1 4.7 6.2A1.5 1.5 0 016.2 4.5z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+        <div class="info-k" data-zh="联系电话" data-en="Phone">联系电话</div>
+        <div class="info-v">+353 1 234 5678</div>
+      </div>
+    </div>
+
+    <div class="sec-wrap">
+      <div class="sec-head">
+        <div class="sec-title" data-zh="热门项目" data-en="Popular Services">热门项目</div>
+        <button class="sec-more" onclick="Store.goBook()" data-zh="查看全部 →" data-en="See all →">查看全部 →</button>
+      </div>
+      <div id="storeSvcList"></div>
+    </div>
+
+    <div class="sec-wrap">
+      <div class="sec-head">
+        <div class="sec-title" data-zh="我们的技师" data-en="Our Technicians">我们的技师</div>
+      </div>
+      <div class="staff-strip" id="storeStaffStrip"></div>
+    </div>
+
+    <div class="sec-wrap">
+      <div class="sec-head">
+        <div class="sec-title" data-zh="作品集" data-en="Our Work">作品集</div>
+      </div>
+      <div class="gal-grid" id="storeGallery"></div>
+    </div>
+
+    <div class="sec-wrap">
+      <div class="sec-head">
+        <div class="sec-title" data-zh="客人评价" data-en="What Guests Say">客人评价</div>
+      </div>
+      <div id="storeReviews"></div>
+    </div>
+
+    <div class="mock-note">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.8"/><path d="M12 11v5.5M12 7.8v.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      <span data-zh="演示说明：本页店名、技师、作品照与评价均为示意内容，图片来自免费图库，不代表任何真实门店。" data-en="Demo notice: shop name, technicians, photos and reviews on this page are illustrative only. Images are stock photos and do not represent any real salon.">演示说明：本页店名、技师、作品照与评价均为示意内容，图片来自免费图库，不代表任何真实门店。</span>
+    </div>
+  </div>
 
   <!-- ══════════════ 模块①：预约 ══════════════ -->
   <div id="panelBooking">
@@ -506,7 +743,10 @@
 
 <div class="bottom-nav">
   <div class="nav-inner">
-    <button class="nav-item active" id="nav-booking" onclick="showPanel('booking')">
+    <button class="nav-item active" id="nav-store" onclick="showPanel('store')">
+      <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 9.5L5.6 5h12.8L20 9.5M4 9.5h16M4 9.5v9.5a1.5 1.5 0 001.5 1.5h13a1.5 1.5 0 001.5-1.5V9.5" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 20.5v-5h6v5" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span><span data-zh="门店" data-en="Salon">门店</span>
+    </button>
+    <button class="nav-item" id="nav-booking" onclick="showPanel('booking')">
       <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="3.5" y="5" width="17" height="16" rx="3" stroke="currentColor" stroke-width="1.8"/><path d="M3.5 9.5h17M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span><span data-zh="预约" data-en="Book">预约</span>
     </button>
     <button class="nav-item" id="nav-membership" onclick="showPanel('membership')">
@@ -518,6 +758,17 @@
     <button class="nav-item" id="nav-coupons" onclick="showPanel('coupons')">
       <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3 9a2 2 0 012-2h14a2 2 0 012 2v1.2a1.6 1.6 0 000 3.2V16a2 2 0 01-2 2H5a2 2 0 01-2-2v-2.6a1.6 1.6 0 000-3.2V9z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9.5 7v10" stroke="currentColor" stroke-width="1.6" stroke-dasharray="2.4 2.4" stroke-linecap="round"/></svg></span><span data-zh="优惠券" data-en="Coupons">优惠券</span>
     </button>
+  </div>
+</div>
+
+<!-- 作品集灯箱 -->
+<div class="hidden" id="galLightbox" onclick="Store.closeLightbox()">
+  <button class="lb-close" onclick="Store.closeLightbox()" aria-label="关闭">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+  </button>
+  <div>
+    <img id="lbImg" src="" alt="">
+    <div class="lb-cap" id="lbCap"></div>
   </div>
 </div>
 
@@ -553,6 +804,7 @@
     document.querySelectorAll('[data-zh-ph]').forEach(el => {
       el.placeholder = currentLang === 'zh' ? el.dataset.zhPh : el.dataset.enPh;
     });
+    Store.onLangChange(currentLang);
     Booking.onLangChange(currentLang);
     Membership.onLangChange(currentLang);
     Points.onLangChange(currentLang);
@@ -560,7 +812,7 @@
   }
 
   function showPanel(name) {
-    const ids = { booking: 'panelBooking', membership: 'panelMembership', points: 'panelPoints', coupons: 'panelCoupons' };
+    const ids = { store: 'panelStore', booking: 'panelBooking', membership: 'panelMembership', points: 'panelPoints', coupons: 'panelCoupons' };
     Object.keys(ids).forEach(key => {
       document.getElementById(ids[key]).classList.toggle('hidden', key !== name);
       document.getElementById('nav-' + key).classList.toggle('active', key === name);
@@ -575,6 +827,127 @@
     }
   });
 
+  /* ══════════════ 模块⓪：门店门面（namespace: Store） ══════════════ */
+  const Store = (function () {
+    /* 展示数据：全部为演示用示意内容，图片来自免费图库（见 assets/nail/CREDITS.md） */
+    const HIGHLIGHTS = [
+      { id: 's1', zh: '基础美甲', en: 'Classic Manicure', mins: 45, price: 35, img: 'assets/nail/svc-basic.webp',
+        dzh: '修型 + 护理 + 单色', den: 'Shaping + care + single colour' },
+      { id: 's2', zh: '光疗甲', en: 'Gel Polish', mins: 60, price: 45, img: 'assets/nail/svc-gel.webp',
+        dzh: '持久两周不掉色', den: 'Stays flawless for two weeks' },
+      { id: 's3', zh: '延长甲 + 手绘', en: 'Extensions + Nail Art', mins: 90, price: 68, img: 'assets/nail/svc-art.webp',
+        dzh: '款式可自带图参考', den: 'Bring your own design reference' },
+    ];
+    const TEAM = [
+      { img: 'assets/nail/staff/s1.webp', zh: '阿May',  en: 'May',  szh: '法式 · 手绘',   sen: 'French · Art' },
+      { img: 'assets/nail/staff/s2.webp', zh: 'Tina',   en: 'Tina', szh: '延长甲 · 修复', sen: 'Extensions · Repair' },
+      { img: 'assets/nail/staff/s3.webp', zh: 'Coco',   en: 'Coco', szh: '日式 · 晕染',   sen: 'Japanese · Ombré' },
+      { img: 'assets/nail/staff/s4.webp', zh: '小柔',   en: 'Jaz',  szh: '美睫 · 手部护理', sen: 'Lashes · Hand care' },
+    ];
+    const GALLERY = [
+      { img: 'assets/nail/gallery/g1.webp', zh: '红色手绘',   en: 'Red Lettering' },
+      { img: 'assets/nail/gallery/g2.webp', zh: '深蓝金箔',   en: 'Navy & Gold' },
+      { img: 'assets/nail/gallery/g3.webp', zh: '玳瑁深色',   en: 'Tortoiseshell' },
+      { img: 'assets/nail/gallery/g4.webp', zh: '冬日手绘',   en: 'Winter Art' },
+      { img: 'assets/nail/gallery/g5.webp', zh: '法式珠光',   en: 'Pearl French' },
+      { img: 'assets/nail/gallery/g6.webp', zh: '金属裸色',   en: 'Nude Chrome' },
+    ];
+    const REVIEWS = [
+      { rating: 5, zh: '第一次来就被细节打动，修型很仔细，做完两周一点没崩。', en: 'The shaping was meticulous — two weeks on and not a single chip.', azh: '林小姐', aen: 'Ms. Lam', date: '08-28' },
+      { rating: 5, zh: '提前一天收到短信提醒，到店不用等，小朋友也能一起带着。', en: 'Got a reminder the day before, no waiting on arrival, and kid-friendly too.', azh: 'Aoife', aen: 'Aoife', date: '08-21' },
+      { rating: 4, zh: '款式比图片上更好看，就是周末时段比较难约。', en: 'Even prettier than the photos — weekends just book out fast.', azh: '陈太', aen: 'Mrs. Chen', date: '08-14' },
+    ];
+    const RATING = 4.9, REVIEW_COUNT = 186;
+
+    let currentLang = 'zh';
+    function t(zh, en) { return currentLang === 'zh' ? zh : en; }
+    function esc(x) { return String(x).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+    function stars(n) {
+      return Array.from({ length: 5 }, (_, i) =>
+        `<svg width="12" height="12" viewBox="0 0 24 24" fill="${i < n ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 3.5l2.6 5.5 6 .7-4.4 4.1 1.2 5.9L12 16.8l-5.4 2.9 1.2-5.9L3.4 9.7l6-.7L12 3.5z"/></svg>`
+      ).join('');
+    }
+
+    function renderHero() {
+      document.getElementById('heroName').textContent = t(SHOP.nameZh, SHOP.nameEn);
+      document.getElementById('heroStars').innerHTML = stars(5);
+      document.getElementById('heroRateText').textContent =
+        t(`${RATING} 分 · ${REVIEW_COUNT} 条评价`, `${RATING} · ${REVIEW_COUNT} reviews`);
+    }
+
+    function renderServices() {
+      document.getElementById('storeSvcList').innerHTML = HIGHLIGHTS.map(s => `
+        <div class="svc-card" role="button" tabindex="0" onclick="Store.goBook('${s.id}')">
+          <img class="svc-thumb" src="${s.img}" alt="${esc(t(s.zh, s.en))}" loading="lazy">
+          <div class="svc-info">
+            <div class="svc-t">${esc(t(s.zh, s.en))}</div>
+            <div class="svc-d">${esc(t(s.dzh, s.den))} · ${s.mins} ${t('分钟', 'min')}</div>
+          </div>
+          <div class="svc-p">${SHOP.currency}${s.price}</div>
+          <span class="svc-go"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9.5 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </div>
+      `).join('');
+    }
+
+    function renderTeam() {
+      document.getElementById('storeStaffStrip').innerHTML = TEAM.map(m => `
+        <div class="staff-cell">
+          <img class="staff-pic" src="${m.img}" alt="${esc(t(m.zh, m.en))}" loading="lazy">
+          <div class="staff-n">${esc(t(m.zh, m.en))}</div>
+          <div class="staff-s">${esc(t(m.szh, m.sen))}</div>
+        </div>
+      `).join('');
+    }
+
+    function renderGallery() {
+      document.getElementById('storeGallery').innerHTML = GALLERY.map((g, i) => `
+        <button class="gal-item" onclick="Store.openLightbox(${i})">
+          <img src="${g.img}" alt="${esc(t(g.zh, g.en))}" loading="lazy">
+          <span class="gal-cap">${esc(t(g.zh, g.en))}</span>
+        </button>
+      `).join('');
+    }
+
+    function renderReviews() {
+      document.getElementById('storeReviews').innerHTML = REVIEWS.map(r => `
+        <div class="rev-card">
+          <div class="rev-stars">${stars(r.rating)}</div>
+          <div class="rev-text">“${esc(t(r.zh, r.en))}”</div>
+          <div class="rev-meta">${esc(t(r.azh, r.aen))} · ${r.date}</div>
+        </div>
+      `).join('');
+    }
+
+    let lbIdx = null;
+    function openLightbox(i) {
+      lbIdx = i;
+      document.getElementById('lbImg').src = GALLERY[i].img;
+      document.getElementById('lbImg').alt = t(GALLERY[i].zh, GALLERY[i].en);
+      document.getElementById('lbCap').textContent = t(GALLERY[i].zh, GALLERY[i].en);
+      document.getElementById('galLightbox').classList.remove('hidden');
+    }
+    function closeLightbox() {
+      lbIdx = null;
+      document.getElementById('galLightbox').classList.add('hidden');
+    }
+
+    /* 门面 → 预约的联动：带服务 id 时直接选中该项目 */
+    function goBook(svcId) {
+      showPanel('booking');
+      if (svcId) Booking.selectService(svcId);
+    }
+
+    function onLangChange(lang) {
+      currentLang = lang;
+      renderHero(); renderServices(); renderTeam(); renderGallery(); renderReviews();
+      if (lbIdx !== null) document.getElementById('lbCap').textContent = t(GALLERY[lbIdx].zh, GALLERY[lbIdx].en);
+    }
+
+    function init() { renderHero(); renderServices(); renderTeam(); renderGallery(); renderReviews(); }
+
+    return { goBook, openLightbox, closeLightbox, onLangChange, init };
+  })();
+
   /* ══════════════ 模块①：预约 ══════════════ */
   const Booking = (function () {
     const SERVICES = [
@@ -583,9 +956,11 @@
       { id: 's3', zh: '延长甲 + 手绘', en: 'Extensions + Nail Art', mins: 90, price: 68 },
     ];
     const STAFF = [
-      { id: 'p1', zh: '不指定', en: 'No preference' },
-      { id: 'p2', zh: '阿May', en: 'May' },
-      { id: 'p3', zh: 'Tina', en: 'Tina' },
+      { id: 'p1', zh: '不指定', en: 'No preference', img: null },
+      { id: 'p2', zh: '阿May', en: 'May', img: 'assets/nail/staff/s1.webp' },
+      { id: 'p3', zh: 'Tina', en: 'Tina', img: 'assets/nail/staff/s2.webp' },
+      { id: 'p4', zh: 'Coco', en: 'Coco', img: 'assets/nail/staff/s3.webp' },
+      { id: 'p5', zh: '小柔', en: 'Jaz', img: 'assets/nail/staff/s4.webp' },
     ];
     const SLOTS = ['10:00','11:00','12:00','13:30','14:30','15:30','16:30','17:30','18:30'];
     const FULL_SLOTS = ['12:00','16:30'];
@@ -643,7 +1018,9 @@
       const row = document.getElementById('staffRow');
       row.innerHTML = STAFF.map(p => `
         <div class="staff-item ${state.staff === p.id ? 'selected' : ''}" role="button" tabindex="0" onclick="Booking.selectStaff('${p.id}')">
-          <div class="staff-avatar">${t(p.zh, p.en).slice(0,1)}</div>
+          ${p.img
+            ? `<img class="staff-avatar staff-photo" src="${p.img}" alt="${t(p.zh, p.en)}" loading="lazy">`
+            : `<div class="staff-avatar">${t('任','A')}</div>`}
           <div class="staff-name">${t(p.zh, p.en)}</div>
         </div>
       `).join('');
@@ -1163,11 +1540,12 @@
 
   /* ── 初始化 ── */
   document.getElementById('shopName').textContent = SHOP.nameZh;
+  Store.init();
   Booking.init();
   Membership.init();
   Points.init();
   Coupons.init();
-  showPanel('booking');
+  showPanel('store');
 </script>
 </body>
 </html>
