@@ -7,22 +7,30 @@
   <link rel="canonical" href="https://1688.ie/salon">
   <style>
     /* ── Color Tokens (A1 · 棉花糖粉) ── */
+    /* ── 设计 token：源真值表见 docs/20260917-美甲视觉规范.md ──
+       变量名沿用本文件原有的 --pl/--pm/--pb/--pc/--pt，只换值，避免全文重命名带来的风险 */
     :root {
-      --pl: #FEF0F4;
-      --pm: #FDD8E6;
-      --pb: #EDACC4;
-      --pc: #C07090;
-      --pt: #A05070;
-      --pg: #FEF8FA;
+      --pl: #FDF4F7;   /* 氛围底 */
+      --pm: #F7E4EC;   /* 浅粉块 */
+      --pb: #EBC7D5;   /* 边框 */
+      --pc: #A8496B;   /* 主色，压白字 5.48:1 */
+      --pt: #7C3A52;   /* 主色深，按钮/标题 8.13:1 */
+      --pd: #5E2B3E;   /* 主色更深，渐变暗端 */
+      --pg: #FDF4F7;
+      --gold: #C9A227;
+      --gold-deep: #8A6E15;
       --white: #FFFFFF;
-      --gray1: #F7F7F7;
-      --gray2: #BBBBBB;
-      --gray3: #888888;
-      --gray4: #555555;
-      --radius-sm: 8px;
-      --radius-md: 12px;
-      --radius-lg: 16px;
-      --shadow: 0 2px 12px rgba(192,112,144,0.08);
+      --ink: #2A1B20;
+      --gray1: #F7F4F5;
+      --gray2: #9E8A92;  /* 仅装饰/删除线，不承载信息 */
+      --gray3: #806C74;  /* 弱化文字 4.87:1 */
+      --gray4: #6B5560;  /* 正文 6.79:1 */
+      --radius-sm: 10px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --shadow: 0 1px 2px rgba(42,27,32,.04), 0 8px 20px -16px rgba(42,27,32,.35);
+      --shadow-md: 0 2px 4px rgba(42,27,32,.05), 0 20px 40px -24px rgba(42,27,32,.4);
+      --font-display: 'Playfair Display', 'Noto Serif SC', Georgia, 'Songti SC', serif;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -98,14 +106,51 @@
       padding: 2rem 1.5rem 3rem;
     }
 
+    .tick {
+      display: inline-block; width: .4em; height: .72em; margin-right: .55em; vertical-align: -.08em;
+      border-right: 2px solid var(--pc); border-bottom: 2px solid var(--pc);
+      transform: rotate(42deg); transform-origin: center;
+    }
+    /* 图标与文字的对齐：图标放在 data-zh/data-en 元素之外，切语言时不会被 innerHTML 覆盖 */
+    .sec-ico, .h-ico, .m-ico, .n-ico { display: inline-flex; align-items: center; margin-right: .45em; vertical-align: -.22em; }
+    .sec-ico { color: var(--pc); }
+    .h-ico { color: var(--pt); }
+    .m-ico { color: var(--pc); }
+    .n-ico { color: var(--pc); }
+    .pain-row { display: flex; gap: .55em; align-items: flex-start; padding: 2px 0; }
+    .pain-ico { flex: 0 0 auto; margin-top: .28em; }
+    .pain-bad .pain-ico { color: var(--gray2); }
+    .pain-good .pain-ico { color: var(--pc); }
+    .monthly-icon svg, .icon svg { display: block; }
+
     /* ── HERO ── */
     .hero {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 1.75rem;
+      align-items: center;
       background: linear-gradient(145deg, var(--pl) 0%, var(--pm) 100%);
       border: 1.5px solid var(--pb);
       border-radius: var(--radius-lg);
-      padding: 3rem 2rem;
-      text-align: center;
+      padding: 2.25rem 2rem;
       margin-bottom: 1.5rem;
+    }
+    .hero-media { position: relative; }
+    .hero-media img {
+      width: 100%; aspect-ratio: 4 / 3; object-fit: cover;
+      border-radius: var(--radius-md); box-shadow: var(--shadow-md); display: block;
+    }
+    .hero-media figcaption {
+      font-size: .68rem; color: var(--gray3); margin-top: .5rem; text-align: center;
+    }
+    .hero-trust {
+      display: flex; flex-wrap: wrap; gap: .5rem .9rem; margin-top: 1.25rem;
+      font-size: .76rem; color: var(--pt); font-weight: 600;
+    }
+    .hero-trust span { display: inline-flex; align-items: center; gap: .35em; }
+    @media (max-width: 720px) {
+      .hero { grid-template-columns: 1fr; padding: 1.75rem 1.25rem; }
+      .hero-media { order: -1; }
     }
     .hero-eyebrow {
       font-size: 0.72rem;
@@ -115,10 +160,12 @@
       margin-bottom: 0.75rem;
     }
     .hero-title {
-      font-size: 2rem;
-      font-weight: 800;
+      font-family: var(--font-display);
+      font-size: 2.05rem;
+      font-weight: 600;
       color: var(--pt);
-      line-height: 1.3;
+      line-height: 1.22;
+      letter-spacing: -.01em;
       margin-bottom: 0.5rem;
     }
     .hero-sub {
@@ -126,7 +173,7 @@
       color: var(--pc);
       margin-bottom: 1.75rem;
     }
-    .hero-ctas { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
+    .hero-ctas { display: flex; gap: 0.75rem; flex-wrap: wrap; }
     .btn-primary {
       background: var(--pc);
       color: white;
@@ -161,6 +208,7 @@
     }
     .section-divider .line { flex: 1; height: 1px; background: var(--pb); }
     .section-divider .label {
+      font-family: var(--font-display);
       font-size: 0.82rem;
       font-weight: 700;
       color: var(--pc);
@@ -206,11 +254,19 @@
 
     /* ── MODULE CARDS ── */
     .module-card {
+      position: relative;
       background: var(--white);
       border: 1.5px solid var(--pb);
       border-radius: var(--radius-md);
       padding: 1rem 1.1rem;
       box-shadow: var(--shadow);
+    }
+    .module-card.lead { border: 2px solid var(--pc); box-shadow: var(--shadow-md); }
+    .module-card.lead::after {
+      content: attr(data-flag);
+      position: absolute; top: -10px; left: 1rem;
+      background: var(--pt); color: #fff; font-size: .66rem; font-weight: 800;
+      padding: 3px 10px; border-radius: 999px; letter-spacing: .02em;
     }
     .module-card-title {
       color: var(--pc);
@@ -230,12 +286,12 @@
       border-top: 1px solid var(--pm);
       line-height: 1.9;
     }
-    .module-card-price del { font-size: 0.88rem; color: #bbb; font-weight: 500; }
+    .module-card-price del { font-size: 0.88rem; color: var(--gray2); font-weight: 500; }
     .price-row { display: flex; align-items: center; gap: 0.25rem; flex-wrap: wrap; }
     .price-now { font-size: 1.3rem; font-weight: 800; color: var(--pt); }
     .price-now-sm { font-size: 1.05rem; font-weight: 800; color: var(--pt); }
     .price-label { font-size: 0.75rem; color: var(--pt); font-weight: 500; }
-    .price-badge { display: inline-block; background: #FDDDE6; color: #C03060; font-size: 0.62rem; font-weight: 700; padding: 0.1rem 0.42rem; border-radius: 20px; vertical-align: middle; }
+    .price-badge { display: inline-block; background: var(--pm); color: var(--pt); font-size: 0.62rem; font-weight: 700; padding: 0.1rem 0.42rem; border-radius: 20px; vertical-align: middle; }
 
     /* ── PAIN POINT BLOCK ── */
     .pain-block {
@@ -246,6 +302,7 @@
       margin-bottom: 1.25rem;
     }
     .pain-block h3 {
+      font-family: var(--font-display);
       font-size: 0.88rem;
       font-weight: 700;
       color: var(--pt);
@@ -253,7 +310,7 @@
     }
     .pain-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
     .pain-bad, .pain-good { font-size: 0.8rem; line-height: 2; }
-    .pain-bad { color: #C0C0C0; }
+    .pain-bad { color: var(--gray3); }
     .pain-good { color: var(--pt); }
 
     /* ── MONTHLY FEE BLOCK ── */
@@ -265,6 +322,7 @@
       margin-top: 1.25rem;
     }
     .monthly-block h3 {
+      font-family: var(--font-display);
       font-size: 0.88rem;
       font-weight: 700;
       color: var(--pt);
@@ -500,11 +558,11 @@
   <div class="nav-inner">
     <div class="nav-brand">1688.ie · <span data-zh="美甲服务" data-en="Nail Services">美甲服务</span></div>
     <div class="nav-links">
-      <a href="#system" data-zh="💻 管理系统" data-en="💻 System">💻 管理系统</a>
+      <a href="#system" data-zh="管理系统" data-en="System">管理系统</a>
       <span class="sep">|</span>
-      <a href="#marketing" data-zh="📱 在线营销" data-en="📱 Marketing">📱 在线营销</a>
+      <a href="#marketing" data-zh="在线营销" data-en="Marketing">在线营销</a>
       <span class="sep">|</span>
-      <a href="#quote" data-zh="📋 获取报价" data-en="📋 Quote">📋 获取报价</a>
+      <a href="#quote" data-zh="获取报价" data-en="Quote">获取报价</a>
       <span class="nav-lang" onclick="toggleLang()" title="Switch language">ZH / EN</span>
     </div>
   </div>
@@ -515,46 +573,47 @@
 
   <!-- ── HERO ── -->
   <section class="hero">
-    <p class="hero-eyebrow" data-zh="专为爱尔兰美甲沙龙打造 · 中英双语服务团队" data-en="Built for Nail Salons in Ireland · Bilingual Team">专为爱尔兰美甲沙龙打造 · 中英双语服务团队</p>
-    <h1 class="hero-title" data-zh="一站式美甲数字服务" data-en="All-in-One Digital Services for Nail Salons">一站式美甲数字服务</h1>
-    <p class="hero-sub" data-zh="预约系统 · 会员积分 · 社媒运营，全部按需定制，零捆绑套餐" data-en="Booking · Membership · Social Media — fully customised, no bundled packages">预约系统 · 会员积分 · 社媒运营，全部按需定制，零捆绑套餐</p>
-    <div class="hero-ctas">
-      <button class="btn-primary" onclick="document.getElementById('quote').scrollIntoView({behavior:'smooth'})" data-zh="查看专属报价 ↓" data-en="Get My Quote ↓">查看专属报价 ↓</button>
-      <button class="btn-outline" onclick="document.getElementById('system').scrollIntoView({behavior:'smooth'})" data-zh="了解服务详情" data-en="Learn More">了解服务详情</button>
+    <div class="hero-text">
+      <p class="hero-eyebrow" data-zh="专为爱尔兰美甲沙龙打造 · 中英双语服务团队" data-en="Built for Nail Salons in Ireland · Bilingual Team">专为爱尔兰美甲沙龙打造 · 中英双语服务团队</p>
+      <h1 class="hero-title" data-zh="一站式美甲数字服务" data-en="All-in-One Digital Services for Nail Salons">一站式美甲数字服务</h1>
+      <p class="hero-sub" data-zh="预约系统 · 会员积分 · 社媒运营，全部按需定制，零捆绑套餐" data-en="Booking · Membership · Social Media — fully customised, no bundled packages">预约系统 · 会员积分 · 社媒运营，全部按需定制，零捆绑套餐</p>
+      <div class="hero-ctas">
+        <button class="btn-primary" onclick="document.getElementById('quote').scrollIntoView({behavior:'smooth'})" data-zh="查看专属报价 ↓" data-en="Get My Quote ↓">查看专属报价 ↓</button>
+        <button class="btn-outline" onclick="window.open('nail-salon-demo.html','_blank')" data-zh="先看客人端演示" data-en="See the guest demo">先看客人端演示</button>
+      </div>
+      <div class="hero-trust">
+        <span><i class="tick"></i><span data-zh="零平台抽佣" data-en="Zero platform commission">零平台抽佣</span></span>
+        <span><i class="tick"></i><span data-zh="客户数据归你" data-en="You own the client data">客户数据归你</span></span>
+        <span><i class="tick"></i><span data-zh="中英双语界面" data-en="Bilingual interface">中英双语界面</span></span>
+      </div>
     </div>
+    <figure class="hero-media">
+      <img src="assets/nail/hero.webp" alt="美甲师正在为客人做手部护理" loading="eager">
+      <figcaption data-zh="图为示意素材，非客户门店实拍" data-en="Stock photo for illustration — not a client salon">图为示意素材，非客户门店实拍</figcaption>
+    </figure>
   </section>
 
 
   <!-- ════════════════ SYSTEM SECTION ════════════════ -->
   <div class="section-divider" id="system">
     <div class="line"></div>
-    <div class="label" data-zh="💻 美甲管理系统" data-en="💻 Salon Management System">💻 美甲管理系统</div>
+    <div class="label"><span class="sec-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4.5 6.5a1.5 1.5 0 011.5-1.5h12a1.5 1.5 0 011.5 1.5V15h-15V6.5z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M2.5 15h19l-1.2 3H3.7l-1.2-3z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span><span data-zh="美甲管理系统" data-en="Salon Management System">美甲管理系统</span></div>
     <div class="line"></div>
   </div>
 
   <!-- Pain Point -->
   <div class="pain-block">
-    <h3 data-zh="⚠️ 平台抽佣的隐形成本" data-en="⚠️ The Hidden Cost of Platform Commissions">⚠️ 平台抽佣的隐形成本</h3>
+    <h3><span class="h-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M10.3 4.3L2.9 17.5a1.8 1.8 0 001.6 2.7h15a1.8 1.8 0 001.6-2.7L13.7 4.3a1.9 1.9 0 00-3.4 0z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 9.5v4M12 16.4v.4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg></span><span data-zh="平台抽佣的隐形成本" data-en="The Hidden Cost of Platform Commissions">平台抽佣的隐形成本</span></h3>
     <div class="pain-cols">
-      <div class="pain-bad" id="pain-bad">
-        ✗ 每位新客被抽佣高达 20%<br>
-        ✗ 客户数据归平台所有<br>
-        ✗ 收费规则随时可以调整<br>
-        ✗ 功能受限，无法按你的方式定制
-      </div>
-      <div class="pain-good" id="pain-good">
-        ✓ 零抽佣，永远<br>
-        ✓ 客户数据 100% 属于你<br>
-        ✓ 固定月费，透明可控<br>
-        ✓ 完全按你的方式运营
-      </div>
+      <div class="pain-bad" id="pain-bad"></div>
+      <div class="pain-good" id="pain-good"></div>
     </div>
   </div>
 
   <!-- 3 Modules -->
   <div class="grid-3">
-    <div class="module-card">
-      <div class="module-card-title" data-zh="📅 在线预约" data-en="📅 Online Booking">📅 在线预约</div>
+    <div class="module-card lead" id="moduleLead" data-flag="最多人先上这个">
+      <div class="module-card-title"><span class="m-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3.5" y="5" width="17" height="16" rx="3" stroke="currentColor" stroke-width="1.8"/><path d="M3.5 9.5h17M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span><span data-zh="在线预约" data-en="Online Booking">在线预约</span></div>
       <ul id="ul-booking">
         <li>24 小时自助预约</li>
         <li>技师排班管理</li>
@@ -568,7 +627,7 @@
       </div>
     </div>
     <div class="module-card">
-      <div class="module-card-title" data-zh="👑 会员系统" data-en="👑 Membership">👑 会员系统</div>
+      <div class="module-card-title"><span class="m-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3.5 8.5l3.6 3 4.9-6 4.9 6 3.6-3-1.6 9.5h-13.8L3.5 8.5z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span><span data-zh="会员系统" data-en="Membership">会员系统</span></div>
       <ul id="ul-member">
         <li>等级会员体系</li>
         <li>专属折扣设置</li>
@@ -582,7 +641,7 @@
       </div>
     </div>
     <div class="module-card">
-      <div class="module-card-title" data-zh="⭐ 积分系统" data-en="⭐ Loyalty Points">⭐ 积分系统</div>
+      <div class="module-card-title"><span class="m-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3.5l2.6 5.5 6 .7-4.4 4.1 1.2 5.9L12 16.8l-5.4 2.9 1.2-5.9L3.4 9.7l6-.7L12 3.5z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span><span data-zh="积分系统" data-en="Loyalty Points">积分系统</span></div>
       <ul id="ul-points">
         <li>消费自动累积积分</li>
         <li>积分兑换优惠</li>
@@ -599,45 +658,45 @@
 
   <!-- Monthly Fee Breakdown -->
   <div class="monthly-block">
-    <h3 data-zh="📦 月费包含什么？" data-en="📦 What's Included in the Monthly Fee?">📦 月费包含什么？</h3>
+    <h3><span class="h-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3.5l8 4v9l-8 4-8-4v-9l8-4z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M4 7.5l8 4 8-4M12 11.5v9" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span><span data-zh="月费包含什么？" data-en="What&#39;s Included in the Monthly Fee?">月费包含什么？</span></h3>
     <div class="monthly-grid">
       <div class="monthly-item">
-        <span class="monthly-icon">☁️</span>
+        <span class="monthly-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 18h10.2a3.8 3.8 0 00.3-7.6 5.6 5.6 0 00-10.8 1.3A3.4 3.4 0 007 18z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span>
         <div class="monthly-text" id="monthly-1">
           <strong>Google Cloud 云端托管</strong>
           <span>高可用服务器，99.9% 在线保障</span>
         </div>
       </div>
       <div class="monthly-item">
-        <span class="monthly-icon">🗄️</span>
+        <span class="monthly-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="6" rx="2" stroke="currentColor" stroke-width="1.8"/><rect x="3.5" y="13.5" width="17" height="6" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M7 7.5h.6M7 16.5h.6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
         <div class="monthly-text" id="monthly-2">
           <strong>私有化数据库服务器</strong>
           <span>客户数据独立存储，不与他人共用</span>
         </div>
       </div>
       <div class="monthly-item">
-        <span class="monthly-icon">🔒</span>
+        <span class="monthly-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4.5" y="10" width="15" height="10" rx="2.5" stroke="currentColor" stroke-width="1.8"/><path d="M8 10V7.5a4 4 0 118 0V10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
         <div class="monthly-text" id="monthly-3">
           <strong>SSL 安全证书</strong>
           <span>全程加密，保障预约与支付安全</span>
         </div>
       </div>
       <div class="monthly-item">
-        <span class="monthly-icon">🔄</span>
+        <span class="monthly-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4.2 12a7.8 7.8 0 0113.3-5.5M19.8 12a7.8 7.8 0 01-13.3 5.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M17.5 3.2V7h-3.8M6.5 20.8V17h3.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         <div class="monthly-text" id="monthly-4">
           <strong>系统维护与功能更新</strong>
           <span>定期维护，新功能持续迭代</span>
         </div>
       </div>
       <div class="monthly-item">
-        <span class="monthly-icon">💾</span>
+        <span class="monthly-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5.5 4.5h10l3 3V19a1.5 1.5 0 01-1.5 1.5h-11A1.5 1.5 0 014.5 19V6a1.5 1.5 0 011-1.5z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 4.5v5h6v-5M8 20.5v-5h8v5" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span>
         <div class="monthly-text" id="monthly-5">
           <strong>每日数据自动备份</strong>
           <span>预约记录与客户数据永不丢失</span>
         </div>
       </div>
       <div class="monthly-item">
-        <span class="monthly-icon">🛎️</span>
+        <span class="monthly-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.5 10a5.5 5.5 0 1111 0c0 4 1.5 5.5 1.5 5.5H5S6.5 14 6.5 10z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M10.2 18.8a2 2 0 003.6 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
         <div class="monthly-text" id="monthly-6">
           <strong>48 小时技术响应</strong>
           <span>工作日报障，48 小时内处理回复</span>
@@ -649,7 +708,7 @@
   <!-- Bundle -->
   <div class="bundle-row">
     <div>
-      <h3 data-zh="🎁 三合一套餐" data-en="🎁 Bundle Package">🎁 三合一套餐</h3>
+      <h3><span class="h-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3.5" y="8.5" width="17" height="4.2" rx="1" stroke="currentColor" stroke-width="1.8"/><path d="M5 12.7V19a1.5 1.5 0 001.5 1.5h11A1.5 1.5 0 0019 19v-6.3M12 8.5v12" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 8.5S9.6 8.5 8.4 7.4A1.9 1.9 0 0111 4.6c1 1 1 3.9 1 3.9zm0 0s2.4 0 3.6-1.1A1.9 1.9 0 0013 4.6c-1 1-1 3.9-1 3.9z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span><span data-zh="三合一套餐" data-en="Bundle Package">三合一套餐</span></h3>
       <p data-zh="预约 + 会员 + 积分，数据互通，统一管理后台" data-en="Booking + Membership + Loyalty — unified dashboard, shared data">预约 + 会员 + 积分，数据互通，统一管理后台</p>
     </div>
     <div class="bundle-price">
@@ -665,7 +724,7 @@
   <!-- ════════════════ MARKETING SECTION ════════════════ -->
   <div class="section-divider" id="marketing">
     <div class="line"></div>
-    <div class="label" data-zh="📱 在线营销服务" data-en="📱 Social Media Marketing">📱 在线营销服务</div>
+    <div class="label"><span class="sec-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="7" y="2.8" width="10" height="18.4" rx="2.4" stroke="currentColor" stroke-width="1.8"/><path d="M10.6 5.6h2.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span><span data-zh="在线营销服务" data-en="Social Media Marketing">在线营销服务</span></div>
     <div class="line"></div>
   </div>
 
@@ -678,7 +737,7 @@
   <!-- FB + IG -->
   <div class="svc-card">
     <div class="svc-header">
-      <div class="svc-title" data-zh="📸 FB + IG 图文内容运营" data-en="📸 FB + IG Content Management">📸 FB + IG 图文内容运营</div>
+      <div class="svc-title"><span class="m-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3.5 8.8A1.6 1.6 0 015.1 7.2h2.3l1.3-2h6.6l1.3 2h2.3a1.6 1.6 0 011.6 1.6v8.6a1.6 1.6 0 01-1.6 1.6H5.1a1.6 1.6 0 01-1.6-1.6V8.8z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="12" cy="13" r="3.4" stroke="currentColor" stroke-width="1.8"/></svg></span><span data-zh="FB + IG 图文内容运营" data-en="FB + IG Content Management">FB + IG 图文内容运营</span></div>
       <div class="svc-price"><del>€149</del> €99 / 月起</div>
     </div>
     <div class="svc-body">
@@ -696,8 +755,8 @@
         <div class="count-note" id="fbig-count-note">双平台同步发布，每周约 3 次更新<br>内容本地化，针对爱尔兰华人 + 本地受众</div>
       </div>
       <div class="svc-grid" id="fbig-svc-grid">
-        <div>✓ 月度内容日历规划<br>✓ 中英双语文案撰写<br>✓ 图文排版与海报设计</div>
-        <div>✓ 节假日专题内容<br>✓ 发布前客户确认<br>✓ 月度互动数据报告</div>
+        <div><i class="tick"></i>月度内容日历规划<br><i class="tick"></i>中英双语文案撰写<br><i class="tick"></i>图文排版与海报设计</div>
+        <div><i class="tick"></i>节假日专题内容<br><i class="tick"></i>发布前客户确认<br><i class="tick"></i>月度互动数据报告</div>
       </div>
     </div>
   </div>
@@ -705,15 +764,15 @@
   <!-- Paid Ads -->
   <div class="svc-card">
     <div class="svc-header svc-header-alt">
-      <div class="svc-title" data-zh="🎯 付费广告投放管理" data-en="🎯 Paid Ads Management">🎯 付费广告投放管理</div>
+      <div class="svc-title"><span class="m-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="8.2" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="1.1" fill="currentColor"/></svg></span><span data-zh="付费广告投放管理" data-en="Paid Ads Management">付费广告投放管理</span></div>
       <div class="svc-price"><del>€119</del> €79 / 月起</div>
     </div>
     <div class="svc-body">
       <div class="svc-grid" id="ads-svc-grid">
-        <div>✓ FB / IG 广告账户管理<br>✓ 本地区域精准定向<br>✓ 广告素材制作适配</div>
-        <div>✓ A/B 测试与效果优化<br>✓ 每月广告效果报告<br>✓ 预算分配建议</div>
+        <div><i class="tick"></i>FB / IG 广告账户管理<br><i class="tick"></i>本地区域精准定向<br><i class="tick"></i>广告素材制作适配</div>
+        <div><i class="tick"></i>A/B 测试与效果优化<br><i class="tick"></i>每月广告效果报告<br><i class="tick"></i>预算分配建议</div>
       </div>
-      <div class="svc-note" data-zh="💡 广告投放费用由客户自行承担，管理费另计" data-en="💡 Ad spend is paid by the client separately; this fee covers management only">💡 广告投放费用由客户自行承担，管理费另计</div>
+      <div class="svc-note"><span class="n-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9.2 17.5h5.6M10 20.4h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M12 3.4a6 6 0 00-3.6 10.8c.5.4.8 1 .8 1.6h5.6c0-.6.3-1.2.8-1.6A6 6 0 0012 3.4z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span><span data-zh="广告投放费用由客户自行承担，管理费另计" data-en="Ad spend is paid by the client separately; this fee covers management only">广告投放费用由客户自行承担，管理费另计</span></div>
     </div>
   </div>
 
@@ -721,7 +780,7 @@
   <div class="svc-card svc-card-dashed">
     <div class="svc-header svc-header-dashed">
       <div class="svc-title">
-        <span data-zh="🎵 TikTok 短视频制作" data-en="🎵 TikTok Video Production">🎵 TikTok 短视频制作</span>
+        <span data-zh="TikTok 短视频制作" data-en="TikTok Video Production">TikTok 短视频制作</span>
         <span class="badge" data-zh="独立加购" data-en="Add-on">独立加购</span>
       </div>
       <div class="svc-price"><del>€224</del> €149 / 月</div>
@@ -736,17 +795,17 @@
         <div class="count-note" id="tiktok-count-note">每周约 1 条，专注美甲作品展示<br>适合想快速涨粉、扩大曝光的沙龙</div>
       </div>
       <div class="svc-grid" id="tiktok-svc-grid">
-        <div>✓ 视频脚本策划<br>✓ 拍摄脚本与指导<br>✓ 剪辑 + 字幕制作</div>
-        <div>✓ 音乐与封面配置<br>✓ 热门话题标签策略<br>✓ 发布时间优化</div>
+        <div><i class="tick"></i>视频脚本策划<br><i class="tick"></i>拍摄脚本与指导<br><i class="tick"></i>剪辑 + 字幕制作</div>
+        <div><i class="tick"></i>音乐与封面配置<br><i class="tick"></i>热门话题标签策略<br><i class="tick"></i>发布时间优化</div>
       </div>
-      <div class="svc-note" data-zh="💡 需客户自行拍摄素材提供，我们负责后期制作与发布策略" data-en="💡 Client provides raw footage; we handle post-production and publishing strategy">💡 需客户自行拍摄素材提供，我们负责后期制作与发布策略</div>
+      <div class="svc-note"><span class="n-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9.2 17.5h5.6M10 20.4h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M12 3.4a6 6 0 00-3.6 10.8c.5.4.8 1 .8 1.6h5.6c0-.6.3-1.2.8-1.6A6 6 0 0012 3.4z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span><span data-zh="需客户自行拍摄素材提供，我们负责后期制作与发布策略" data-en="Client provides raw footage; we handle post-production and publishing strategy">需客户自行拍摄素材提供，我们负责后期制作与发布策略</span></div>
     </div>
   </div>
 
   <!-- Setup Fee -->
   <div class="setup-row">
     <div>
-      <span class="label" data-zh="🚀 首月账号开设与设置" data-en="🚀 First Month Account Setup">🚀 首月账号开设与设置</span>
+      <span class="label"><span class="sec-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3.4c3 2.1 4.6 5.1 4.6 8.6l-2.2 3.6H9.6L7.4 12c0-3.5 1.6-6.5 4.6-8.6z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="12" cy="10" r="1.7" stroke="currentColor" stroke-width="1.7"/><path d="M9.7 15.6L8 19.4l2.6-1.1M14.3 15.6l1.7 3.8-2.6-1.1" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></span><span data-zh="首月账号开设与设置" data-en="First Month Account Setup">首月账号开设与设置</span></span>
       <span class="note" data-zh="（一次性）" data-en="(one-time)">（一次性）</span>
     </div>
     <span class="price"><del style="color:var(--gray2);font-weight:400">€149</del> €99</span>
@@ -755,17 +814,17 @@
   <!-- Why Us -->
   <div class="why-grid">
     <div class="why-card">
-      <div class="icon">🇨🇳🇮🇪</div>
+      <div class="icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="8.4" stroke="currentColor" stroke-width="1.8"/><path d="M3.6 12h16.8M12 3.6c2.2 2.4 3.3 5.3 3.3 8.4s-1.1 6-3.3 8.4c-2.2-2.4-3.3-5.3-3.3-8.4S9.8 6 12 3.6z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></div>
       <h4 data-zh="中英双语团队" data-en="Bilingual Team">中英双语团队</h4>
       <p id="why-p1">华人圈 + 本地受众<br>双向覆盖</p>
     </div>
     <div class="why-card">
-      <div class="icon">💅</div>
+      <div class="icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3.6c2.6 0 4.4 2 4.4 4.6 0 3.4-1 8-1.5 10.1a3 3 0 01-2.9 2.3 3 3 0 01-2.9-2.3C8.6 16.2 7.6 11.6 7.6 8.2 7.6 5.6 9.4 3.6 12 3.6z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8.6 9.4c2.2-1.1 4.6-1.1 6.8 0" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
       <h4 data-zh="懂美甲行业" data-en="Nail Industry Experts">懂美甲行业</h4>
       <p id="why-p2">不做模板内容<br>专为你的沙龙定制</p>
     </div>
     <div class="why-card">
-      <div class="icon">📋</div>
+      <div class="icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><ellipse cx="12" cy="6.8" rx="7" ry="3" stroke="currentColor" stroke-width="1.8"/><path d="M5 6.8v10.4c0 1.7 3.1 3 7 3s7-1.3 7-3V6.8" stroke="currentColor" stroke-width="1.8"/><path d="M5 12c0 1.7 3.1 3 7 3s7-1.3 7-3" stroke="currentColor" stroke-width="1.8"/></svg></div>
       <h4 data-zh="按需付费" data-en="Pay As You Go">按需付费</h4>
       <p id="why-p3">不捆绑套餐<br>用什么付什么</p>
     </div>
@@ -775,7 +834,7 @@
   <!-- ════════════════ QUOTE CALCULATOR ════════════════ -->
   <div class="section-divider" id="quote" style="margin-top:2.5rem">
     <div class="line"></div>
-    <div class="label" data-zh="📋 获取专属报价" data-en="📋 Get Your Custom Quote">📋 获取专属报价</div>
+    <div class="label"><span class="sec-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5.5" y="4.5" width="13" height="16" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M9 4.5V3.2h6v1.3M9 10h6M9 14h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span data-zh="获取专属报价" data-en="Get Your Custom Quote">获取专属报价</span></div>
     <div class="line"></div>
   </div>
 
@@ -789,7 +848,7 @@
       <label class="quote-item" id="item-booking">
         <div class="quote-item-left">
           <input type="checkbox" data-dev="399" data-monthly="29" onchange="calcTotal()" />
-          <span data-zh="📅 在线预约系统" data-en="📅 Online Booking System">📅 在线预约系统</span>
+          <span data-zh="在线预约系统" data-en="Online Booking System">在线预约系统</span>
         </div>
         <span class="quote-item-price">
           <del>€599 + €44/月</del>
@@ -800,7 +859,7 @@
       <label class="quote-item" id="item-member">
         <div class="quote-item-left">
           <input type="checkbox" data-dev="199" data-monthly="19" onchange="calcTotal()" />
-          <span data-zh="👑 会员系统" data-en="👑 Membership System">👑 会员系统</span>
+          <span data-zh="会员系统" data-en="Membership System">会员系统</span>
         </div>
         <span class="quote-item-price">
           <del>€299 + €29/月</del>
@@ -811,7 +870,7 @@
       <label class="quote-item" id="item-points">
         <div class="quote-item-left">
           <input type="checkbox" data-dev="199" data-monthly="19" onchange="calcTotal()" />
-          <span data-zh="⭐ 积分系统" data-en="⭐ Loyalty Points">⭐ 积分系统</span>
+          <span data-zh="积分系统" data-en="Loyalty Points">积分系统</span>
         </div>
         <span class="quote-item-price">
           <del>€299 + €29/月</del>
@@ -827,7 +886,7 @@
       <label class="quote-item" id="item-fbig">
         <div class="quote-item-left">
           <input type="checkbox" data-dev="0" data-monthly="99" onchange="calcTotal()" />
-          <span data-zh="📸 FB + IG 图文运营（12篇/月）" data-en="📸 FB + IG Content (12 posts/mo)">📸 FB + IG 图文运营（12篇/月）</span>
+          <span data-zh="FB + IG 图文运营（12篇/月）" data-en="FB + IG Content (12 posts/mo)">FB + IG 图文运营（12篇/月）</span>
         </div>
         <span class="quote-item-price">
           <del>€149/月</del>
@@ -838,7 +897,7 @@
       <label class="quote-item" id="item-ads">
         <div class="quote-item-left">
           <input type="checkbox" data-dev="0" data-monthly="79" onchange="calcTotal()" />
-          <span data-zh="🎯 付费广告投放管理" data-en="🎯 Paid Ads Management">🎯 付费广告投放管理</span>
+          <span data-zh="付费广告投放管理" data-en="Paid Ads Management">付费广告投放管理</span>
         </div>
         <span class="quote-item-price">
           <del>€119/月</del>
@@ -849,7 +908,7 @@
       <label class="quote-item quote-item-dashed" id="item-tiktok">
         <div class="quote-item-left">
           <input type="checkbox" data-dev="0" data-monthly="149" onchange="calcTotal()" />
-          <span data-zh="🎵 TikTok 短视频（4条/月）" data-en="🎵 TikTok Videos (4/mo)">🎵 TikTok 短视频（4条/月）</span>
+          <span data-zh="TikTok 短视频（4 条/月）" data-en="TikTok Videos (4/mo)">TikTok 短视频（4 条/月）</span>
         </div>
         <span class="quote-item-price">
           <del>€224/月</del>
@@ -860,7 +919,7 @@
       <label class="quote-item" id="item-setup" style="opacity:0.65">
         <div class="quote-item-left">
           <input type="checkbox" data-dev="99" data-monthly="0" onchange="calcTotal()" />
-          <span class="quote-item-dim" data-zh="🚀 首月账号开设（一次性）" data-en="🚀 First Month Setup (one-time)">🚀 首月账号开设（一次性）</span>
+          <span class="quote-item-dim" data-zh="首月账号开设（一次性）" data-en="First Month Setup (one-time)">首月账号开设（一次性）</span>
         </div>
         <span class="quote-item-price quote-item-dim">
           <del>€149</del>
@@ -886,7 +945,7 @@
         <span id="totalListMonthly" style="text-decoration:line-through;color:var(--gray2)">€ —</span>
       </div>
       <div class="total-row discount-row" id="row-discount" style="display:none">
-        <span data-zh="🎉 限时特惠折扣" data-en="🎉 Limited-time Discount">🎉 限时特惠折扣</span>
+        <span data-zh="限时特惠折扣" data-en="Limited-time Discount">限时特惠折扣</span>
         <span id="totalDiscount">€ —</span>
       </div>
       <div class="total-row">
@@ -904,8 +963,8 @@
     </div>
 
     <div class="quote-ctas">
-      <button class="btn-pdf" onclick="printQuote()" data-zh="📄 生成 PDF 报价单" data-en="📄 Generate PDF Quote">📄 生成 PDF 报价单</button>
-      <button class="btn-email" onclick="emailQuote()" data-zh="✉️ 发送给我" data-en="✉️ Send to Me">✉️ 发送给我</button>
+      <button class="btn-pdf" onclick="printQuote()" data-zh="生成 PDF 报价单" data-en="Generate PDF Quote">生成 PDF 报价单</button>
+      <button class="btn-email" onclick="emailQuote()" data-zh="发送给我" data-en="Send to Me">发送给我</button>
     </div>
   </div>
 
@@ -919,15 +978,23 @@
 </main>
 
 <script>
+  /* 对照清单的正负两列用描边图标画，不用文本符号 */
+  function painRows(good, items) {
+    const icon = good
+      ? '<svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+      : '<svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>';
+    return items.map(x => `<div class="pain-row"><span class="pain-ico">${icon}</span><span>${x}</span></div>`).join('');
+  }
+
   /* ── Translations for complex HTML elements ── */
   const TRANS = {
     'pain-bad': {
-      zh: '✗ 每位新客被抽佣高达 20%<br>✗ 客户数据归平台所有<br>✗ 收费规则随时可以调整<br>✗ 功能受限，无法按你的方式定制',
-      en: '✗ Up to 20% commission on every new client<br>✗ Customer data owned by the platform<br>✗ Fees can change at any time<br>✗ Limited features, no customisation'
+      zh: painRows(false, ['每位新客被抽佣高达 20%', '客户数据归平台所有', '收费规则随时可以调整', '功能受限，无法按你的方式定制']),
+      en: painRows(false, ['Up to 20% commission on every new client', 'Customer data owned by the platform', 'Fees can change at any time', 'Limited features, no customisation'])
     },
     'pain-good': {
-      zh: '✓ 零抽佣，永远<br>✓ 客户数据 100% 属于你<br>✓ 固定月费，透明可控<br>✓ 完全按你的方式运营',
-      en: '✓ Zero commission, forever<br>✓ 100% of customer data belongs to you<br>✓ Fixed monthly fee, fully transparent<br>✓ Operate entirely on your own terms'
+      zh: painRows(true, ['零抽佣，永远', '客户数据 100% 属于你', '固定月费，透明可控', '完全按你的方式运营']),
+      en: painRows(true, ['Zero commission, forever', '100% of customer data belongs to you', 'Fixed monthly fee, fully transparent', 'Operate entirely on your own terms'])
     },
     'ul-booking': {
       zh: '<li>24 小时自助预约</li><li>技师排班管理</li><li>自动短信提醒</li><li>预约历史查询</li><li>防鸽鸟预约押金</li>',
@@ -986,12 +1053,12 @@
       en: 'Published simultaneously on both platforms, ~3 times per week<br>Localised content targeting Irish-Chinese + local audience'
     },
     'fbig-svc-grid': {
-      zh: '<div>✓ 月度内容日历规划<br>✓ 中英双语文案撰写<br>✓ 图文排版与海报设计</div><div>✓ 节假日专题内容<br>✓ 发布前客户确认<br>✓ 月度互动数据报告</div>',
-      en: '<div>✓ Monthly content calendar planning<br>✓ Bilingual copywriting (ZH + EN)<br>✓ Graphic design & poster creation</div><div>✓ Holiday themed content<br>✓ Client approval before publishing<br>✓ Monthly engagement report</div>'
+      zh: '<div><i class="tick"></i>月度内容日历规划<br><i class="tick"></i>中英双语文案撰写<br><i class="tick"></i>图文排版与海报设计</div><div><i class="tick"></i>节假日专题内容<br><i class="tick"></i>发布前客户确认<br><i class="tick"></i>月度互动数据报告</div>',
+      en: '<div><i class="tick"></i>Monthly content calendar planning<br><i class="tick"></i>Bilingual copywriting (ZH + EN)<br><i class="tick"></i>Graphic design & poster creation</div><div><i class="tick"></i>Holiday themed content<br><i class="tick"></i>Client approval before publishing<br><i class="tick"></i>Monthly engagement report</div>'
     },
     'ads-svc-grid': {
-      zh: '<div>✓ FB / IG 广告账户管理<br>✓ 本地区域精准定向<br>✓ 广告素材制作适配</div><div>✓ A/B 测试与效果优化<br>✓ 每月广告效果报告<br>✓ 预算分配建议</div>',
-      en: '<div>✓ FB / IG ads account management<br>✓ Local area precise targeting<br>✓ Ad creative production & adaptation</div><div>✓ A/B testing & performance optimisation<br>✓ Monthly ads performance report<br>✓ Budget allocation advice</div>'
+      zh: '<div><i class="tick"></i>FB / IG 广告账户管理<br><i class="tick"></i>本地区域精准定向<br><i class="tick"></i>广告素材制作适配</div><div><i class="tick"></i>A/B 测试与效果优化<br><i class="tick"></i>每月广告效果报告<br><i class="tick"></i>预算分配建议</div>',
+      en: '<div><i class="tick"></i>FB / IG ads account management<br><i class="tick"></i>Local area precise targeting<br><i class="tick"></i>Ad creative production & adaptation</div><div><i class="tick"></i>A/B testing & performance optimisation<br><i class="tick"></i>Monthly ads performance report<br><i class="tick"></i>Budget allocation advice</div>'
     },
     'tiktok-count-lbl': {
       zh: '条 / 月<br>TikTok',
@@ -1002,8 +1069,8 @@
       en: '~1 video per week, focused on showcasing nail art<br>Ideal for salons looking to grow followers fast'
     },
     'tiktok-svc-grid': {
-      zh: '<div>✓ 视频脚本策划<br>✓ 拍摄脚本与指导<br>✓ 剪辑 + 字幕制作</div><div>✓ 音乐与封面配置<br>✓ 热门话题标签策略<br>✓ 发布时间优化</div>',
-      en: '<div>✓ Video script planning<br>✓ Shooting script & guidance<br>✓ Editing + subtitle production</div><div>✓ Music & thumbnail selection<br>✓ Trending hashtag strategy<br>✓ Optimal publish time scheduling</div>'
+      zh: '<div><i class="tick"></i>视频脚本策划<br><i class="tick"></i>拍摄脚本与指导<br><i class="tick"></i>剪辑 + 字幕制作</div><div><i class="tick"></i>音乐与封面配置<br><i class="tick"></i>热门话题标签策略<br><i class="tick"></i>发布时间优化</div>',
+      en: '<div><i class="tick"></i>Video script planning<br><i class="tick"></i>Shooting script & guidance<br><i class="tick"></i>Editing + subtitle production</div><div><i class="tick"></i>Music & thumbnail selection<br><i class="tick"></i>Trending hashtag strategy<br><i class="tick"></i>Optimal publish time scheduling</div>'
     },
     'why-p1': {
       zh: '华人圈 + 本地受众<br>双向覆盖',
@@ -1038,6 +1105,8 @@
       hasMonthly
         ? (currentLang === 'zh' ? '每月服务费（折后）' : 'Monthly Fee (discounted)')
         : (currentLang === 'zh' ? '每月服务费（小计）' : 'Monthly Fee (subtotal)');
+    const lead = document.getElementById('moduleLead');
+    if (lead) lead.dataset.flag = currentLang === 'zh' ? '最多人先上这个' : 'Most salons start here';
     document.documentElement.lang = currentLang;
   }
 
@@ -1106,7 +1175,7 @@
   function emailQuote() {
     const checkboxes = document.querySelectorAll('.quote-item input[type="checkbox"]:checked');
     if (checkboxes.length === 0) {
-      alert(currentLang === 'zh' ? '请先勾选你需要的服务 😊' : 'Please select at least one service 😊');
+      alert(currentLang === 'zh' ? '请先勾选你需要的服务' : 'Please select at least one service');
       return;
     }
     let items = [];
@@ -1134,6 +1203,12 @@
     );
     window.location.href = 'mailto:hello@1688.ie?subject=' + encodeURIComponent(subject) + '&body=' + body;
   }
+
+  /* ── 首屏渲染：对照清单由 painRows() 生成，初次加载也要填上（不能只等语言切换） ── */
+  ['pain-bad', 'pain-good'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = TRANS[id][currentLang];
+  });
 
   /* ── Smooth scroll for nav links ── */
   document.querySelectorAll('a[href^="#"]').forEach(link => {
