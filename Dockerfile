@@ -10,12 +10,14 @@ COPY flow.html /usr/share/nginx/html/flow.html
 COPY demos.html /usr/share/nginx/html/demos.html
 COPY nail-salon.html /usr/share/nginx/html/salon.html
 COPY nail-salon-demo.html /usr/share/nginx/html/nail-salon-demo.html
+COPY nail-owner-demo.html /usr/share/nginx/html/nail-owner-demo.html
 COPY sales-demo.html /usr/share/nginx/html/sales-demo.html
 COPY sales-demo-spa.html /usr/share/nginx/html/sales-demo-spa.html
 COPY sales-demo-lawn.html /usr/share/nginx/html/sales-demo-lawn.html
 COPY sales-demo-garden.html /usr/share/nginx/html/sales-demo-garden.html
 COPY robots.txt /usr/share/nginx/html/robots.txt
 COPY sitemap.xml /usr/share/nginx/html/sitemap.xml
+COPY assets/ /usr/share/nginx/html/assets/
 COPY warehouse-demo/ /usr/share/nginx/html/warehouse-demo/
 COPY local-warehouse-demo/ /usr/share/nginx/html/local-warehouse-demo/
 EXPOSE 8080

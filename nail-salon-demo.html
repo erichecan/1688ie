@@ -1,7 +1,12 @@
 <!DOCTYPE html>
 <!--
-  行业 demo：美甲/美睫工作室（通用推销版，不绑定具体客户）
-  由组件库四块拼装：预约 + 会员 + 积分 + 优惠券（components/booking.html / membership.html / points.html / coupons.html）
+  行业 demo：美甲/美睫工作室 —— 客人端（通用推销版，不绑定具体客户）
+  老板端在 nail-owner-demo.html，两者是同一套系统的两面。
+
+  四个 tab：门店（门面层）· 预约（含候补名单/定金/提醒时间轴）· 卡包（会员+积分+
+  优惠券+次卡+礼品卡）· 档案（偏好/服务记录/评价邀请）。
+  模块来源：components/ 下的 booking / membership / points / coupons / session-pass / gift-card。
+  视觉规范：docs/20260917-美甲视觉规范.md（色板与字体的唯一源真值表）
 
   怎么改成具体客户：
   1. 顶部 :root 里的 --brand / --brand-light / --brand-dark 三个变量换成客户品牌色（现在是粉色系）
@@ -16,7 +21,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Noto+Serif+SC:wght@600;700&display=swap" rel="stylesheet">
-<title>示例美甲工作室 · 预约 · 会员 · 积分 · 优惠券</title>
+<title>示例美甲工作室 · 门店 · 预约 · 卡包 · 档案</title>
 <style>
   /* ── 设计 token：源真值表见 docs/20260917-美甲视觉规范.md ── */
   :root {
@@ -1177,7 +1182,7 @@
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
   </button>
   <div>
-    <img id="lbImg" src="" alt="">
+    <img id="lbImg" alt="">
     <div class="lb-cap" id="lbCap"></div>
   </div>
 </div>
