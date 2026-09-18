@@ -123,6 +123,82 @@
   .nav-item .nav-icon { font-size: 1.3rem; display: block; margin-bottom: 2px; }
   .nav-item.active { color: var(--brand-dark); }
 
+  /* ══════════════ 模块⑤：我的档案（scope: #panelProfile） ══════════════ */
+  #panelProfile .me-card {
+    display: flex; align-items: center; gap: 14px;
+    background: linear-gradient(135deg, var(--brand-dark) 0%, var(--brand-deep) 100%);
+    color: #fff; border-radius: var(--radius); padding: 16px; margin-bottom: 14px;
+    box-shadow: var(--shadow-md); position: relative; overflow: hidden;
+  }
+  #panelProfile .me-card::after {
+    content: ''; position: absolute; right: -28px; bottom: -34px; width: 104px; height: 104px;
+    border-radius: 50%; border: 1.5px solid var(--gold); opacity: .4; pointer-events: none;
+  }
+  #panelProfile .me-pic { width: 58px; height: 58px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(255,255,255,.55); flex: 0 0 auto; }
+  #panelProfile .me-name { font-family: var(--font-display); font-size: 1.22rem; font-weight: 600; }
+  #panelProfile .me-tier { font-size: .74rem; opacity: .9; margin-top: 1px; }
+  #panelProfile .me-stats { display: flex; gap: 16px; margin-top: 8px; }
+  #panelProfile .me-stat b { font-size: 1rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+  #panelProfile .me-stat span { font-size: .68rem; opacity: .82; display: block; }
+
+  #panelProfile .pref-row { display: flex; align-items: flex-start; gap: 10px; padding: 11px 0; border-top: 1px dashed var(--line); }
+  #panelProfile .pref-row:first-of-type { border-top: none; padding-top: 2px; }
+  #panelProfile .pref-k { font-size: .78rem; color: var(--ink-muted); font-weight: 600; flex: 0 0 76px; padding-top: 2px; }
+  #panelProfile .pref-v { font-size: .84rem; color: var(--ink); flex: 1; min-width: 0; line-height: 1.55; }
+  #panelProfile .swatches { display: flex; gap: 8px; flex-wrap: wrap; }
+  #panelProfile .swatch { display: inline-flex; align-items: center; gap: 6px; font-size: .76rem; font-weight: 600;
+                          background: var(--brand-light); border-radius: 999px; padding: 4px 10px 4px 4px; }
+  #panelProfile .swatch i { width: 17px; height: 17px; border-radius: 50%; display: block; border: 1px solid rgba(42,27,32,.12); }
+  #panelProfile .tag-warn {
+    display: inline-block; font-size: .74rem; font-weight: 700; color: #8A3E12;
+    background: #FBEEE2; border-radius: 999px; padding: 3px 11px; margin: 0 6px 6px 0;
+  }
+
+  #panelProfile .hist-item { display: flex; gap: 12px; padding: 12px 0; border-top: 1px solid var(--line); }
+  #panelProfile .hist-item:first-of-type { border-top: none; padding-top: 0; }
+  #panelProfile .hist-pic {
+    width: 62px; height: 62px; border-radius: 10px; object-fit: cover; flex: 0 0 auto;
+    cursor: pointer; border: none; padding: 0; background: none; box-shadow: var(--shadow-sm);
+    transition: transform .15s;
+  }
+  #panelProfile .hist-pic:hover { transform: scale(1.04); }
+  #panelProfile .hist-body { flex: 1; min-width: 0; }
+  #panelProfile .hist-svc { font-weight: 700; font-size: .86rem; }
+  #panelProfile .hist-meta { font-size: .74rem; color: var(--ink-muted); margin-top: 2px; }
+  #panelProfile .hist-note { font-size: .74rem; color: var(--ink-body); margin-top: 4px; font-style: italic; }
+  #panelProfile .hist-price { font-weight: 800; color: var(--brand-dark); font-size: .86rem; font-variant-numeric: tabular-nums; }
+
+  #panelProfile .rate-row { display: flex; gap: 6px; justify-content: center; margin: 4px 0 12px; }
+  #panelProfile .rate-star {
+    background: none; border: none; padding: 2px; cursor: pointer; color: var(--ink-faint);
+    transition: transform .12s, color .12s;
+  }
+  #panelProfile .rate-star.on { color: var(--gold-deep); }
+  #panelProfile .rate-star:hover { transform: scale(1.14); }
+  #panelProfile .rate-input {
+    width: 100%; padding: 10px 12px; border: 1.5px solid var(--line); border-radius: var(--radius-sm);
+    font-size: .86rem; font-family: inherit; min-height: 62px; resize: vertical; margin-bottom: 10px; color: var(--ink);
+  }
+  #panelProfile .rate-input::placeholder { color: var(--ink-muted); }
+  #panelProfile .rate-btn {
+    width: 100%; padding: 11px; border-radius: var(--radius-sm); font-weight: 700; font-size: .86rem;
+    border: none; cursor: pointer; background: var(--brand-dark); color: #fff; font-family: inherit; transition: filter .15s;
+  }
+  #panelProfile .rate-btn:hover:not(:disabled) { filter: brightness(1.06); }
+  #panelProfile .rate-btn:disabled { background: var(--line); color: var(--ink-muted); cursor: not-allowed; }
+  #panelProfile .rate-done { text-align: center; padding: 6px 0 2px; }
+  #panelProfile .rate-done-icon {
+    width: 42px; height: 42px; border-radius: 50%; background: var(--brand-tint); color: var(--brand-dark);
+    display: flex; align-items: center; justify-content: center; margin: 0 auto 10px;
+  }
+  #panelProfile .rate-done-t { font-weight: 800; font-size: .92rem; margin-bottom: 4px; }
+  #panelProfile .rate-done-d { font-size: .78rem; color: var(--ink-body); line-height: 1.55; margin-bottom: 12px; }
+  #panelProfile .rate-ghost {
+    width: 100%; padding: 10px; border-radius: var(--radius-sm); font-weight: 700; font-size: .82rem;
+    border: 1.5px solid var(--brand); background: #fff; color: var(--brand-dark); cursor: pointer; font-family: inherit;
+  }
+  #panelProfile .rate-ghost:hover { background: var(--brand-light); }
+
   /* ══════════════ 预约增强：候补名单 / 押金 / 提醒时间轴（scope: #panelBooking） ══════════════ */
   #panelBooking .slot-cell.full {
     opacity: .55; text-decoration: line-through; position: relative;
@@ -885,6 +961,38 @@
     </section>
   </div>
 
+  <!-- ══════════════ 模块⑤：我的档案 ══════════════ -->
+  <div id="panelProfile" class="hidden">
+    <div class="me-card">
+      <img class="me-pic" id="meAvatar" src="assets/nail/staff/s4.webp" alt="" loading="lazy">
+      <div>
+        <div class="me-name" id="meName"></div>
+        <div class="me-tier" id="meTier"></div>
+        <div class="me-stats" id="meStats"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title" data-zh="我的偏好（店里记着，不用每次重说）" data-en="My Preferences (the salon remembers, so you don't repeat yourself)">我的偏好（店里记着，不用每次重说）</div>
+      <div id="prefBox"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title" data-zh="服务记录" data-en="Service History">服务记录</div>
+      <div id="historyBox"></div>
+    </div>
+
+    <div class="card" id="reviewCard">
+      <div class="card-title" data-zh="给上次的服务打个分" data-en="Rate your last visit">给上次的服务打个分</div>
+      <div id="reviewBox"></div>
+    </div>
+
+    <div class="mock-note" style="margin-top:2px;">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.8"/><path d="M12 11v5.5M12 7.8v.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      <span data-zh="演示说明：档案里的姓名、偏好、消费记录与作品照均为示意数据。" data-en="Demo notice: the name, preferences, spending history and photos in this profile are illustrative only.">演示说明：档案里的姓名、偏好、消费记录与作品照均为示意数据。</span>
+    </div>
+  </div>
+
   <!-- ══════════════ 卡包：会员 / 积分 / 优惠券 / 次卡 / 礼品卡 ══════════════ -->
   <div id="panelWallet" class="hidden">
     <div class="seg-bar" id="walletSeg" role="tablist">
@@ -1025,6 +1133,9 @@
     <button class="nav-item" id="nav-wallet" onclick="showPanel('wallet')">
       <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3.5 8.5a2 2 0 012-2h13a2 2 0 012 2v9a2 2 0 01-2 2h-13a2 2 0 01-2-2v-9z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M3.5 10.5h11a1.6 1.6 0 010 3.2h-11" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="17.3" cy="12.1" r="1" fill="currentColor"/></svg></span><span data-zh="卡包" data-en="Wallet">卡包</span>
     </button>
+    <button class="nav-item" id="nav-profile" onclick="showPanel('profile')">
+      <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8.2" r="3.7" stroke="currentColor" stroke-width="1.8"/><path d="M4.8 20c.6-3.7 3.6-6 7.2-6s6.6 2.3 7.2 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span><span data-zh="档案" data-en="Profile">档案</span>
+    </button>
   </div>
 </div>
 
@@ -1110,10 +1221,11 @@
     Coupons.onLangChange(currentLang);
     SessionPass.onLangChange(currentLang);
     GiftCard.onLangChange(currentLang);
+    Profile.onLangChange(currentLang);
   }
 
   function showPanel(name) {
-    const ids = { store: 'panelStore', booking: 'panelBooking', wallet: 'panelWallet' };
+    const ids = { store: 'panelStore', booking: 'panelBooking', wallet: 'panelWallet', profile: 'panelProfile' };
     Object.keys(ids).forEach(key => {
       document.getElementById(ids[key]).classList.toggle('hidden', key !== name);
       document.getElementById('nav-' + key).classList.toggle('active', key === name);
@@ -1219,16 +1331,25 @@
       `).join('');
     }
 
-    let lbIdx = null;
+    let lbIdx = null;      /* 作品集索引：语言切换时用它重取标题 */
+    let lbCapPair = null;  /* 外部（档案页）传进来的标题：[zh, en] */
     function openLightbox(i) {
-      lbIdx = i;
-      document.getElementById('lbImg').src = GALLERY[i].img;
-      document.getElementById('lbImg').alt = t(GALLERY[i].zh, GALLERY[i].en);
-      document.getElementById('lbCap').textContent = t(GALLERY[i].zh, GALLERY[i].en);
+      lbIdx = i; lbCapPair = null;
+      showImage(GALLERY[i].img, t(GALLERY[i].zh, GALLERY[i].en));
+    }
+    /* 供其它模块复用：直接传图片地址与双语标题 */
+    function openImage(src, zh, en) {
+      lbIdx = null; lbCapPair = [zh, en];
+      showImage(src, t(zh, en));
+    }
+    function showImage(src, cap) {
+      const img = document.getElementById('lbImg');
+      img.src = src; img.alt = cap;
+      document.getElementById('lbCap').textContent = cap;
       document.getElementById('galLightbox').classList.remove('hidden');
     }
     function closeLightbox() {
-      lbIdx = null;
+      lbIdx = null; lbCapPair = null;
       document.getElementById('galLightbox').classList.add('hidden');
     }
 
@@ -1242,11 +1363,149 @@
       currentLang = lang;
       renderHero(); renderServices(); renderTeam(); renderGallery(); renderReviews();
       if (lbIdx !== null) document.getElementById('lbCap').textContent = t(GALLERY[lbIdx].zh, GALLERY[lbIdx].en);
+      else if (lbCapPair) document.getElementById('lbCap').textContent = t(lbCapPair[0], lbCapPair[1]);
     }
 
     function init() { renderHero(); renderServices(); renderTeam(); renderGallery(); renderReviews(); }
 
-    return { goBook, openLightbox, closeLightbox, onLangChange, init };
+    return { goBook, openLightbox, openImage, closeLightbox, onLangChange, init };
+  })();
+
+  /* ══════════════ 模块⑤：我的档案（namespace: Profile） ══════════════ */
+  /* 对标 Jane 的 Patient Profiles + Clinical Documentation：美甲版记的是甲型、
+     常用色号、过敏与历史作品照——老客不用每次重新讲一遍自己喜欢什么。 */
+  const Profile = (function () {
+    const ME = {
+      nameZh: '林小姐', nameEn: 'Ms. Lam',
+      avatar: 'assets/nail/staff/s4.webp',
+      tierZh: '银卡会员 · 2026-03 加入', tierEn: 'Silver Member · joined Mar 2026',
+      visits: 14, spent: 620, points: 680,
+    };
+    const PREFS = [
+      { kzh: '甲型', ken: 'Shape', vzh: '杏仁形，长度到指尖外 3mm', ven: 'Almond, ~3mm past the fingertip' },
+      { kzh: '常用色', ken: 'Colours', swatches: [
+          { hex: '#D9A7B0', zh: '豆沙粉 #12', en: 'Rosewood #12' },
+          { hex: '#7C3A52', zh: '酒红 #31', en: 'Wine #31' },
+          { hex: '#E8DCCB', zh: '裸杏 #04', en: 'Nude #04' },
+        ] },
+      { kzh: '注意事项', ken: 'Notes', warns: [
+          { zh: '对甲油胶里的 HEMA 敏感', en: 'Sensitive to HEMA in gel' },
+          { zh: '左手无名指甲床偏薄', en: 'Thin nail bed, left ring finger' },
+        ] },
+      { kzh: '技师备注', ken: 'Tech note', vzh: '习惯边做边聊，不喜欢磨甲声太久；常在周六下午来', ven: 'Likes to chat during the service, dislikes long filing; usually comes Saturday afternoon' },
+    ];
+    const HISTORY = [
+      { date: '2026-09-02', photo: 'assets/nail/gallery/g5.webp', szh: '光疗甲 · 法式珠光', sen: 'Gel · Pearl French',
+        tzh: '阿May', ten: 'May', price: 45, nzh: '加了一颗小珠饰', nen: 'Added one pearl accent' },
+      { date: '2026-08-10', photo: 'assets/nail/gallery/g6.webp', szh: '光疗甲 · 金属裸色', sen: 'Gel · Nude Chrome',
+        tzh: 'Tina', ten: 'Tina', price: 45, nzh: '', nen: '' },
+      { date: '2026-07-18', photo: 'assets/nail/gallery/g1.webp', szh: '延长甲 + 手绘', sen: 'Extensions + Art',
+        tzh: '阿May', ten: 'May', price: 68, nzh: '婚礼款，做了两小时', nen: 'Wedding set, took two hours' },
+      { date: '2026-06-29', photo: 'assets/nail/gallery/g3.webp', szh: '光疗甲 · 玳瑁深色', sen: 'Gel · Tortoiseshell',
+        tzh: 'Coco', ten: 'Coco', price: 45, nzh: '', nen: '' },
+    ];
+
+    let currentLang = 'zh';
+    let rating = 0;
+    let submitted = false;
+    let publicPrompted = false;
+    function t(zh, en) { return currentLang === 'zh' ? zh : en; }
+    function esc(x) { return String(x).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+
+    function renderMe() {
+      document.getElementById('meAvatar').src = ME.avatar;
+      document.getElementById('meName').textContent = t(ME.nameZh, ME.nameEn);
+      document.getElementById('meTier').textContent = t(ME.tierZh, ME.tierEn);
+      document.getElementById('meStats').innerHTML = `
+        <div class="me-stat"><b>${ME.visits}</b><span>${t('到店次数', 'Visits')}</span></div>
+        <div class="me-stat"><b>${SHOP.currency}${ME.spent}</b><span>${t('累计消费', 'Spent')}</span></div>
+        <div class="me-stat"><b>${ME.points}</b><span>${t('可用积分', 'Points')}</span></div>`;
+    }
+
+    function renderPrefs() {
+      document.getElementById('prefBox').innerHTML = PREFS.map(p => {
+        let v;
+        if (p.swatches) {
+          v = `<div class="swatches">${p.swatches.map(sw =>
+            `<span class="swatch"><i style="background:${sw.hex}"></i>${esc(t(sw.zh, sw.en))}</span>`).join('')}</div>`;
+        } else if (p.warns) {
+          v = p.warns.map(w => `<span class="tag-warn">${esc(t(w.zh, w.en))}</span>`).join('');
+        } else {
+          v = esc(t(p.vzh, p.ven));
+        }
+        return `<div class="pref-row"><div class="pref-k">${t(p.kzh, p.ken)}</div><div class="pref-v">${v}</div></div>`;
+      }).join('');
+    }
+
+    function renderHistory() {
+      document.getElementById('historyBox').innerHTML = HISTORY.map((h, i) => `
+        <div class="hist-item">
+          <button class="hist-pic" onclick="Profile.viewPhoto(${i})" aria-label="${esc(t(h.szh, h.sen))}">
+            <img src="${h.photo}" alt="${esc(t(h.szh, h.sen))}" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:10px;display:block;">
+          </button>
+          <div class="hist-body">
+            <div class="hist-svc">${esc(t(h.szh, h.sen))}</div>
+            <div class="hist-meta">${h.date} · ${t('技师 ', 'with ')}${esc(t(h.tzh, h.ten))}</div>
+            ${t(h.nzh, h.nen) ? `<div class="hist-note">“${esc(t(h.nzh, h.nen))}”</div>` : ''}
+          </div>
+          <div class="hist-price">${SHOP.currency}${h.price}</div>
+        </div>`).join('');
+    }
+    function viewPhoto(i) {
+      const h = HISTORY[i];
+      Store.openImage(h.photo, `${h.szh} · ${h.date}`, `${h.sen} · ${h.date}`);
+    }
+
+    /* 评价邀请：对标 Jane 的 Ratings & Reviews —— 先在自家系统收，好评再引导去公开平台 */
+    function starSVG(on) {
+      return `<svg width="26" height="26" viewBox="0 0 24 24" fill="${on ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M12 3.5l2.6 5.5 6 .7-4.4 4.1 1.2 5.9L12 16.8l-5.4 2.9 1.2-5.9L3.4 9.7l6-.7L12 3.5z"/></svg>`;
+    }
+    function renderReview() {
+      const box = document.getElementById('reviewBox');
+      if (submitted) {
+        box.innerHTML = `
+          <div class="rate-done">
+            <div class="rate-done-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div class="rate-done-t">${t('谢谢你的评价', 'Thanks for the feedback')}</div>
+            <div class="rate-done-d">${rating >= 4
+              ? t('店里收到了。愿意的话，把这段话也发到 Google 地图上，能帮到更多想找店的人。', 'The salon has it. If you are up for it, sharing the same words on Google Maps helps others find the salon.')
+              : t('店里收到了，店长会私下联系你处理。这条不会公开显示。', 'The salon has it — the owner will follow up with you privately. This will not be shown publicly.')}</div>
+            ${rating >= 4 ? (publicPrompted
+              ? `<div class="hist-note" style="text-align:center;font-style:normal;color:var(--ink-muted)">${t('（演示到此为止：真实系统这一步会跳到门店的 Google 评价页，并把你写的内容带过去）', '(Demo stops here: the real system opens the salon\'s Google review page with your text prefilled.)')}</div>`
+              : `<button class="rate-ghost" onclick="Profile.gotoPublic()">${t('去 Google 发同样一段', 'Post it on Google')}</button>`) : ''}
+          </div>`;
+        return;
+      }
+      box.innerHTML = `
+        <div class="hist-item" style="padding-top:0;border:none;">
+          <img src="${HISTORY[0].photo}" alt="" loading="lazy" style="width:52px;height:52px;border-radius:10px;object-fit:cover;">
+          <div class="hist-body">
+            <div class="hist-svc">${esc(t(HISTORY[0].szh, HISTORY[0].sen))}</div>
+            <div class="hist-meta">${HISTORY[0].date} · ${t('技师 ', 'with ')}${esc(t(HISTORY[0].tzh, HISTORY[0].ten))}</div>
+          </div>
+        </div>
+        <div class="rate-row">
+          ${[1, 2, 3, 4, 5].map(n => `<button class="rate-star ${n <= rating ? 'on' : ''}" onclick="Profile.setRating(${n})" aria-label="${n}">${starSVG(n <= rating)}</button>`).join('')}
+        </div>
+        <textarea class="rate-input" id="reviewText" placeholder="${t('说说这次做得怎么样（可不填）', 'Tell us how it went (optional)')}"></textarea>
+        <button class="rate-btn" ${rating ? '' : 'disabled'} onclick="Profile.submit()">${rating ? t('提交评价', 'Submit') : t('先点个星星', 'Pick a rating first')}</button>`;
+    }
+    function setRating(n) {
+      const keep = document.getElementById('reviewText')?.value || '';
+      rating = n; renderReview();
+      const box = document.getElementById('reviewText');
+      if (box) box.value = keep;
+    }
+    function submit() { if (!rating) return; submitted = true; publicPrompted = false; renderReview(); }
+    function gotoPublic() { publicPrompted = true; renderReview(); }
+    function reset() { submitted = false; publicPrompted = false; rating = 0; renderReview(); }
+
+    function onLangChange(lang) {
+      currentLang = lang;
+      renderMe(); renderPrefs(); renderHistory(); renderReview();
+    }
+    function init() { renderMe(); renderPrefs(); renderHistory(); renderReview(); }
+    return { viewPhoto, setRating, submit, gotoPublic, reset, onLangChange, init };
   })();
 
   /* ══════════════ 卡包分段控制（namespace: Wallet） ══════════════ */
@@ -2205,6 +2464,7 @@
   Membership.init();
   Points.init();
   Coupons.init();
+  Profile.init();
   showPanel('store');
 </script>
 </body>
