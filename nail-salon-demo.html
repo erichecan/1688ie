@@ -123,6 +123,59 @@
   .nav-item .nav-icon { font-size: 1.3rem; display: block; margin-bottom: 2px; }
   .nav-item.active { color: var(--brand-dark); }
 
+  /* ══════════════ 预约增强：候补名单 / 押金 / 提醒时间轴（scope: #panelBooking） ══════════════ */
+  #panelBooking .slot-cell.full {
+    opacity: .55; text-decoration: line-through; position: relative;
+    pointer-events: auto; cursor: pointer; color: var(--ink-muted);
+  }
+  #panelBooking .slot-cell.full:hover { border-color: var(--brand); opacity: .75; }
+  #panelBooking .slot-cell.full::after {
+    content: attr(data-wait); position: absolute; top: -7px; right: -4px;
+    background: var(--brand-tint); color: var(--brand-dark); font-size: .58rem; font-weight: 800;
+    padding: 1px 6px; border-radius: 999px; text-decoration: none; letter-spacing: .02em;
+  }
+
+  #panelBooking .wait-card {
+    display: flex; align-items: flex-start; gap: 10px;
+    background: var(--brand-tint); border: 1.5px solid var(--brand); border-radius: var(--radius);
+    padding: 14px; margin-bottom: 14px; box-shadow: var(--shadow-sm);
+  }
+  #panelBooking .wait-icon { color: var(--brand-dark); flex: 0 0 auto; margin-top: 1px; }
+  #panelBooking .wait-body { flex: 1; min-width: 0; }
+  #panelBooking .wait-t { font-weight: 800; font-size: .86rem; color: var(--brand-dark); }
+  #panelBooking .wait-d { font-size: .76rem; color: var(--ink-body); margin-top: 3px; line-height: 1.5; }
+  #panelBooking .wait-cancel {
+    background: none; border: none; font-family: inherit; font-size: .74rem; font-weight: 700;
+    color: var(--ink-muted); cursor: pointer; padding: 4px 0; margin-top: 6px; text-decoration: underline;
+  }
+  #panelBooking .wait-cancel:hover { color: var(--danger); }
+
+  #panelBooking .deposit-row {
+    display: flex; align-items: flex-start; gap: 8px; font-size: .76rem; color: var(--ink-body);
+    background: var(--brand-light); border-radius: var(--radius-sm); padding: 10px 12px; margin-top: 12px; line-height: 1.5;
+  }
+  #panelBooking .deposit-row svg { flex: 0 0 auto; margin-top: 1px; color: var(--brand-dark); }
+  #panelBooking .deposit-row b { color: var(--brand-dark); font-weight: 800; }
+
+  #panelBooking .tl-title { font-weight: 700; font-size: .95rem; margin-bottom: 4px; }
+  #panelBooking .tl-sub { font-size: .76rem; color: var(--ink-muted); margin-bottom: 14px; }
+  #panelBooking .tl-item { display: flex; gap: 12px; position: relative; padding-bottom: 16px; }
+  #panelBooking .tl-item:last-child { padding-bottom: 0; }
+  #panelBooking .tl-item::before {
+    content: ''; position: absolute; left: 9px; top: 20px; bottom: 0; width: 1.5px;
+    background: var(--line);
+  }
+  #panelBooking .tl-item:last-child::before { display: none; }
+  #panelBooking .tl-dot {
+    width: 19px; height: 19px; border-radius: 50%; flex: 0 0 auto; margin-top: 1px; z-index: 1;
+    border: 2px solid var(--line); background: #fff;
+    display: flex; align-items: center; justify-content: center; color: #fff;
+  }
+  #panelBooking .tl-item.done .tl-dot { background: var(--brand-dark); border-color: var(--brand-dark); }
+  #panelBooking .tl-when { font-size: .7rem; font-weight: 800; color: var(--brand-dark); letter-spacing: .01em; }
+  #panelBooking .tl-text { font-size: .8rem; color: var(--ink); margin-top: 1px; line-height: 1.5; }
+  #panelBooking .tl-chan { font-size: .68rem; color: var(--ink-muted); margin-top: 2px; }
+
   /* ══════════════ 卡包：分段导航 + 次卡 + 礼品卡（scope: #panelWallet / #seg-pass / #seg-gift） ══════════════ */
   .seg-bar { display: flex; gap: 8px; overflow-x: auto; padding: 2px 2px 12px; scrollbar-width: none; }
   .seg-bar::-webkit-scrollbar { display: none; }
@@ -433,7 +486,7 @@
     background: var(--brand-light); color: var(--brand-dark); font-weight: 800;
     display: flex; align-items: center; justify-content: center; font-size: 1rem;
   }
-  #panelBooking .staff-name { font-size: 0.74rem; font-weight: 600; }
+  #panelBooking .staff-name { font-size: 0.74rem; font-weight: 600; line-height: 1.3; min-height: 1.9em; }
   #panelBooking .staff-photo { object-fit: cover; border: 2px solid #fff; box-shadow: 0 0 0 1.5px var(--line); }
 
   #panelBooking .field { margin-bottom: 10px; }
@@ -757,6 +810,7 @@
 
   <!-- ══════════════ 模块①：预约 ══════════════ -->
   <div id="panelBooking">
+    <div id="waitlistBox"></div>
     <div class="steps">
       <div class="step-dot" data-step="1"></div>
       <div class="step-dot" data-step="2"></div>
@@ -805,6 +859,10 @@
       <div class="card">
         <div class="card-title"><span data-zh="预约摘要" data-en="Booking Summary">预约摘要</span></div>
         <div id="summaryBox"></div>
+        <div class="deposit-row">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M6 10V7.5a6 6 0 0112 0V10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><rect x="4.5" y="10" width="15" height="10" rx="2.5" stroke="currentColor" stroke-width="1.8"/></svg>
+          <span id="depositText"></span>
+        </div>
       </div>
       <button class="btn btn-primary" onclick="Booking.submitBooking()" data-zh="确认预约" data-en="Confirm Booking">确认预约</button>
       <button class="btn btn-ghost" onclick="Booking.goStep(2)" data-zh="上一步" data-en="Back">上一步</button>
@@ -817,6 +875,11 @@
         <div class="done-sub" data-zh="已发送短信提醒到您的手机" data-en="A reminder SMS has been sent to your phone">已发送短信提醒到您的手机</div>
         <div class="code-box" id="bookingCode"></div>
         <div id="finalSummary" style="text-align:left; margin-top:16px;"></div>
+      </div>
+      <div class="card" style="text-align:left;">
+        <div class="tl-title" data-zh="接下来系统会自动提醒你" data-en="What the system will remind you about">接下来系统会自动提醒你</div>
+        <div class="tl-sub" data-zh="不用店里手动打电话，也不用你记日子" data-en="No manual phone calls from the salon, nothing for you to remember">不用店里手动打电话，也不用你记日子</div>
+        <div id="reminderTimeline"></div>
       </div>
       <button class="btn btn-primary" onclick="Booking.resetBooking()" data-zh="再预约一次" data-en="Book Another">再预约一次</button>
     </section>
@@ -962,6 +1025,16 @@
     <button class="nav-item" id="nav-wallet" onclick="showPanel('wallet')">
       <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3.5 8.5a2 2 0 012-2h13a2 2 0 012 2v9a2 2 0 01-2 2h-13a2 2 0 01-2-2v-9z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M3.5 10.5h11a1.6 1.6 0 010 3.2h-11" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="17.3" cy="12.1" r="1" fill="currentColor"/></svg></span><span data-zh="卡包" data-en="Wallet">卡包</span>
     </button>
+  </div>
+</div>
+
+<!-- 候补名单弹窗 -->
+<div class="hidden" id="waitlistModal">
+  <div class="modal-box">
+    <div class="modal-title" data-zh="这个时段已约满" data-en="This time is fully booked">这个时段已约满</div>
+    <div class="modal-sub" id="waitlistModalSub"></div>
+    <button class="btn btn-primary" onclick="Booking.confirmWaitlist()" data-zh="加入候补名单" data-en="Join the Wait List">加入候补名单</button>
+    <button class="btn btn-ghost" onclick="Booking.closeWaitlist()" data-zh="换个时段" data-en="Pick another time">换个时段</button>
   </div>
 </div>
 
@@ -1467,7 +1540,7 @@
       { id: 's3', zh: '延长甲 + 手绘', en: 'Extensions + Nail Art', mins: 90, price: 68 },
     ];
     const STAFF = [
-      { id: 'p1', zh: '不指定', en: 'No preference', img: null },
+      { id: 'p1', zh: '不指定', en: 'Any', img: null },
       { id: 'p2', zh: '阿May', en: 'May', img: 'assets/nail/staff/s1.webp' },
       { id: 'p3', zh: 'Tina', en: 'Tina', img: 'assets/nail/staff/s2.webp' },
       { id: 'p4', zh: 'Coco', en: 'Coco', img: 'assets/nail/staff/s3.webp' },
@@ -1477,7 +1550,7 @@
     const FULL_SLOTS = ['12:00','16:30'];
 
     let currentLang = 'zh';
-    const state = { service: null, dateIdx: 0, slot: null, staff: STAFF[0].id, name: '', phone: '', code: null };
+    const state = { service: null, dateIdx: 0, slot: null, staff: STAFF[0].id, name: '', phone: '', code: null, waitlist: null };
     function t(zh, en) { return currentLang === 'zh' ? zh : en; }
 
     function renderServices() {
@@ -1518,8 +1591,11 @@
       const grid = document.getElementById('slotGrid');
       grid.innerHTML = SLOTS.map(s => {
         const full = FULL_SLOTS.includes(s);
+        /* 满档不再是死路：点进去可以加入候补名单（对标 Jane 的 Wait List） */
         return `<div class="slot-cell ${state.slot === s ? 'selected' : ''} ${full ? 'full' : ''}"
-                  ${full ? '' : 'role="button" tabindex="0"'} onclick="${full ? '' : `Booking.selectSlot('${s}')`}">${s}</div>`;
+                  ${full ? `data-wait="${t('候补', 'Wait')}"` : ''}
+                  role="button" tabindex="0"
+                  onclick="Booking.${full ? `openWaitlist('${s}')` : `selectSlot('${s}')`}">${s}</div>`;
       }).join('');
     }
     function selectSlot(s) { state.slot = s; renderSlots(); updateStep2Btn(); }
@@ -1562,7 +1638,7 @@
         dot.classList.toggle('done', i < n);
       });
       if (n === 2) { renderDates(); renderSlots(); renderStaff(); updateStep2Btn(); }
-      if (n === 3) { document.getElementById('summaryBox').innerHTML = summaryHTML(); }
+      if (n === 3) { document.getElementById('summaryBox').innerHTML = summaryHTML(); renderDeposit(); }
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
@@ -1579,6 +1655,7 @@
       state.code = 'BK' + Math.abs(hashCode(name + phone + state.slot)).toString().slice(0, 6);
       document.getElementById('bookingCode').textContent = t('预约码 ', 'Booking Code ') + state.code;
       document.getElementById('finalSummary').innerHTML = summaryHTML();
+      renderReminders();
       goStep(4);
     }
     function hashCode(str) {
@@ -1586,6 +1663,74 @@
       for (let i = 0; i < str.length; i++) { h = (h << 5) - h + str.charCodeAt(i); h |= 0; }
       return h;
     }
+    /* ── 押金：防鸽子，到店抵扣（对标 Jane 的 deposit / cancellation policy） ── */
+    const DEPOSIT = 10;
+    function renderDeposit() {
+      document.getElementById('depositText').innerHTML = t(
+        `确认时支付 <b>${SHOP.currency}${DEPOSIT}</b> 定金锁定位置，到店直接抵扣消费；提前 24 小时改期或取消可全额退回。`,
+        `Pay a <b>${SHOP.currency}${DEPOSIT}</b> deposit to hold the slot — it comes straight off your bill. Fully refundable if you reschedule or cancel 24h ahead.`
+      );
+    }
+
+    /* ── 候补名单：满档时段排队，有人取消自动通知 ── */
+    function renderWaitlist() {
+      const box = document.getElementById('waitlistBox');
+      if (!state.waitlist) { box.innerHTML = ''; return; }
+      const w = state.waitlist;
+      box.innerHTML = `
+        <div class="wait-card">
+          <span class="wait-icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.8"/><path d="M12 7.5V12l3 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <div class="wait-body">
+            <div class="wait-t">${t(`已加入候补 · ${w.dom} 日 ${w.slot}`, `On the wait list · ${ord(w.dom)}, ${w.slot}`)}</div>
+            <div class="wait-d">${t(`你排在第 <b>${w.pos}</b> 位。有人取消，系统会立刻发短信给你，第一个抢到的人算数。`, `You are number <b>${w.pos}</b> in line. If someone cancels you get an instant SMS — first to respond takes the slot.`)}</div>
+            <button class="wait-cancel" onclick="Booking.cancelWaitlist()">${t('退出候补', 'Leave the wait list')}</button>
+          </div>
+        </div>`;
+    }
+    function ord(n) {
+      const v = n % 100;
+      if (v >= 11 && v <= 13) return n + 'th';
+      return n + ({ 1: 'st', 2: 'nd', 3: 'rd' }[n % 10] || 'th');
+    }
+    let waitTarget = null;
+    function openWaitlist(slot) {
+      waitTarget = slot;
+      const d = DATES[state.dateIdx];
+      document.getElementById('waitlistModalSub').textContent =
+        t(`${d.dom} 日 ${slot} 已经约满。加入候补后，只要有人改期或取消，你会第一时间收到通知。`,
+          `${slot} on the ${ord(d.dom)} is fully booked. Join the wait list and you will be notified the moment someone reschedules or cancels.`);
+      document.getElementById('waitlistModal').classList.remove('hidden');
+    }
+    function closeWaitlist() { waitTarget = null; document.getElementById('waitlistModal').classList.add('hidden'); }
+    function confirmWaitlist() {
+      const d = DATES[state.dateIdx];
+      state.waitlist = { slot: waitTarget, dom: d.dom, pos: 2 };
+      closeWaitlist();
+      renderWaitlist();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    function cancelWaitlist() { state.waitlist = null; renderWaitlist(); }
+
+    /* ── 提醒时间轴：预约之后系统自动发的每一条（对标 Jane 的 Notifications & Reminders） ── */
+    const REMINDERS = [
+      { wzh: '现在',          wen: 'Now',              zh: '预约确认短信已发出，含地址与技师',       en: 'Confirmation SMS sent, with address and technician', czh: '短信', cen: 'SMS', done: true },
+      { wzh: '提前 24 小时',  wen: '24h before',       zh: '到店提醒，可一键改期或取消',             en: 'Reminder to come in — reschedule or cancel in one tap', czh: '短信 + 微信', cen: 'SMS + WeChat' },
+      { wzh: '提前 2 小时',   wen: '2h before',        zh: '出发提醒，附门店定位',                   en: 'Time-to-leave nudge with the salon location', czh: '短信', cen: 'SMS' },
+      { wzh: '服务后 3 天',   wen: '3 days after',     zh: '满意度回访，顺手邀请你留个评价',         en: 'Quick check-in, plus an invite to leave a review', czh: '微信', cen: 'WeChat' },
+      { wzh: '3 周后',        wen: '3 weeks later',    zh: '补甲周期到了，点一下就能约下一次',       en: 'Your refill window is here — rebook in one tap', czh: '短信', cen: 'SMS' },
+    ];
+    function renderReminders() {
+      document.getElementById('reminderTimeline').innerHTML = REMINDERS.map(r => `
+        <div class="tl-item ${r.done ? 'done' : ''}">
+          <span class="tl-dot">${r.done ? `<svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.5 4.5L19 7" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>` : ''}</span>
+          <div>
+            <div class="tl-when">${t(r.wzh, r.wen)}</div>
+            <div class="tl-text">${t(r.zh, r.en)}</div>
+            <div class="tl-chan">${t(r.czh, r.cen)}</div>
+          </div>
+        </div>`).join('');
+    }
+
     function resetBooking() {
       state.service = null; state.dateIdx = 0; state.slot = null; state.staff = STAFF[0]?.id || null; state.code = null;
       document.getElementById('custName').value = '';
@@ -1598,16 +1743,20 @@
       currentLang = lang;
       renderServices();
       if (!document.getElementById('step-2').classList.contains('hidden')) { renderDates(); renderSlots(); renderStaff(); }
-      if (!document.getElementById('step-3').classList.contains('hidden')) { document.getElementById('summaryBox').innerHTML = summaryHTML(); }
+      if (!document.getElementById('step-3').classList.contains('hidden')) { document.getElementById('summaryBox').innerHTML = summaryHTML(); renderDeposit(); }
       if (!document.getElementById('step-4').classList.contains('hidden')) {
         document.getElementById('bookingCode').textContent = t('预约码 ', 'Booking Code ') + state.code;
         document.getElementById('finalSummary').innerHTML = summaryHTML();
+        renderReminders();
       }
+      renderWaitlist();
+      if (!document.getElementById('waitlistModal').classList.contains('hidden') && waitTarget) openWaitlist(waitTarget);
     }
 
     function init() { renderServices(); goStep(1); }
 
-    return { selectService, selectDate, selectSlot, selectStaff, goStep, submitBooking, resetBooking, onLangChange, init };
+    return { selectService, selectDate, selectSlot, selectStaff, goStep, submitBooking, resetBooking,
+             openWaitlist, closeWaitlist, confirmWaitlist, cancelWaitlist, onLangChange, init };
   })();
 
   /* ══════════════ 模块②：会员 ══════════════ */
