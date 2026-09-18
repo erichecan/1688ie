@@ -19,3 +19,12 @@ _shot.html
 
 # 浏览器实测产生的截图/快照（本地 scratch，不入库）
 .playwright-mcp/
+
+# ── 内部文档不入库（本仓库为 public，2026-09-18 起）──
+# 决策台账 / 竞品分析 / 开发台账 / 销售话术 / 设计规范 都留在本地，
+# 文件仍在原路径，只是不再进 git。要恢复追踪先确认仓库可见性。
+/DEV-PLAN.md
+/DEV-REPORT.md
+/PROJECT.md
+/PRODUCT.md
+/docs/

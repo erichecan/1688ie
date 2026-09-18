@@ -6,7 +6,7 @@
   Analytics / Patient Profiles 三块（Jane 的核心价值其实在店家后台，不在客人端）。
 
   怎么改成具体客户：
-  1. 顶部 :root 的色板见 docs/20260917-美甲视觉规范.md，换行业改那份文档再同步过来
+  1. 顶部 :root 的色板见内部设计规范文档，换行业先改那份文档再同步过来
   2. SHOP 对象（脚本区最上面）改店名、货币符号
   3. 四个模块各自的 mock 数据（TODAY / SCHEDULE / CLIENTS / REPORT）按需替换
   4. 文案统一走 data-zh / data-en 双属性，改中文改 data-zh，改英文改 data-en，两个都要改
@@ -22,11 +22,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Noto+Serif+SC:wght@600;700&display=swap" rel="stylesheet">
 <title>示例美甲工作室 · 老板端</title>
 <style>
-  /* ── 设计 token：源真值表见 docs/20260917-美甲视觉规范.md ── */
+  /* ── 设计 token：源真值表见内部设计规范文档 ── */
   :root {
-    --brand: #33095c;        /* 参考站 --color-brand：主填充/主边框，白字 15.74:1 */
-    --brand-dark: #250352;   /* 参考站 --color-brand-deep：按钮底，白字 17.30:1 */
-    --brand-deep: #1b0450;   /* 参考站 --color-ink：渐变暗端/最深，白字 17.80:1 */
+    --brand: #33095c;        /* 主填充/主边框，白字 15.74:1 */
+    --brand-dark: #250352;   /* 按钮底，白字 17.30:1 */
+    --brand-deep: #1b0450;   /* 渐变暗端/最深，白字 17.80:1 */
     --brand-ink: #33095c;    /* 强调文字（白底 15.74:1）；填充与文字分开，见规范文档 */
     --brand-light: #fcfafe;
     --brand-tint: #ece8fd;
@@ -291,7 +291,7 @@
   #tab-reports .staff-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--brand) 0%, var(--brand-dark) 100%); }
   #tab-reports .staff-v { font-size: .78rem; font-weight: 800; color: var(--brand-ink); flex: 0 0 56px; text-align: right; font-variant-numeric: tabular-nums; }
 
-  /* ══════════════ 参考站 的强调方式 ══════════════
+  /* ══════════════ 强调方式 ══════════════
      当前页签用主紫下划线（对应它导航里的 Home 下划线）；图表峰值用主紫，其余用薰衣草。 */
   .nav-tab.active { border-bottom-color: var(--brand); }
   #tab-reports .bar-col.peak .bar { background: linear-gradient(180deg, var(--brand) 0%, var(--brand-deep) 100%); }

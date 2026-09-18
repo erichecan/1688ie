@@ -6,7 +6,7 @@
   四个 tab：门店（门面层）· 预约（含候补名单/定金/提醒时间轴）· 卡包（会员+积分+
   优惠券+次卡+礼品卡）· 档案（偏好/服务记录/评价邀请）。
   模块来源：components/ 下的 booking / membership / points / coupons / session-pass / gift-card。
-  视觉规范：docs/20260917-美甲视觉规范.md（色板与字体的唯一源真值表）
+  视觉规范：见内部设计规范文档（色板与字体的唯一源真值表）
 
   怎么改成具体客户：
   1. 顶部 :root 里的 --brand / --brand-light / --brand-dark 三个变量换成客户品牌色（现在是粉色系）
@@ -23,11 +23,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Noto+Serif+SC:wght@600;700&display=swap" rel="stylesheet">
 <title>示例美甲工作室 · 门店 · 预约 · 卡包 · 档案</title>
 <style>
-  /* ── 设计 token：源真值表见 docs/20260917-美甲视觉规范.md ── */
+  /* ── 设计 token：源真值表见内部设计规范文档 ── */
   :root {
-    --brand: #33095c;        /* 参考站 --color-brand：主填充/主边框，白字 15.74:1 */
-    --brand-dark: #250352;   /* 参考站 --color-brand-deep：按钮底，白字 17.30:1 */
-    --brand-deep: #1b0450;   /* 参考站 --color-ink：渐变暗端/最深，白字 17.80:1 */
+    --brand: #33095c;        /* 主填充/主边框，白字 15.74:1 */
+    --brand-dark: #250352;   /* 按钮底，白字 17.30:1 */
+    --brand-deep: #1b0450;   /* 渐变暗端/最深，白字 17.80:1 */
     --brand-ink: #33095c;    /* 强调文字（白底 15.74:1）；填充与文字分开，见规范文档 */
     --brand-light: #fcfafe;
     --brand-tint: #ece8fd;
@@ -800,7 +800,7 @@
   #redeemModal .btn-primary:active { filter: brightness(.96); }
   #redeemModal .btn-ghost:hover { color: var(--brand-ink); }
 
-  /* ══════════════ 参考站 的强调方式 ══════════════
+  /* ══════════════ 强调方式 ══════════════
      它的做法：深紫实心按钮（无描边）+ 薰衣草浅块做选中态 + 紫色下划线做当前态。
      金 #8a6c3c 只在白/surface 底上做字号牌与小字标签 —— 金压深紫只有 3.22:1，它本来就不这么用。 */
   #panelBooking .step-dot.active,

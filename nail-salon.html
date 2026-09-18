@@ -7,15 +7,15 @@
   <link rel="canonical" href="https://1688.ie/salon">
   <style>
     /* ── Color Tokens (A1 · 棉花糖粉) ── */
-    /* ── 设计 token：源真值表见 docs/20260917-美甲视觉规范.md ──
+    /* ── 设计 token：源真值表见内部设计规范文档 ──
        变量名沿用本文件原有的 --pl/--pm/--pb/--pc/--pt，只换值，避免全文重命名带来的风险 */
     :root {
-      --pl: #fcfafe;   /* 参考站 --color-surface：氛围底 */
-      --pm: #ece8fd;   /* 参考站 --color-lavender：浅紫块 */
-      --pb: #e8e0f8;   /* 参考站 --color-lavender-line：边框 */
-      --pc: #33095c;   /* 参考站 --color-brand：主色，压白字 15.74:1 */
-      --pt: #250352;   /* 参考站 --color-brand-deep：按钮底 17.30:1 */
-      --pd: #1b0450;   /* 参考站 --color-ink：渐变暗端 17.80:1 */
+      --pl: #fcfafe;   /* 氛围底 */
+      --pm: #ece8fd;   /* 浅紫块 */
+      --pb: #e8e0f8;   /* 边框 */
+      --pc: #33095c;   /* 主色，压白字 15.74:1 */
+      --pt: #250352;   /* 按钮底 17.30:1 */
+      --pd: #1b0450;   /* 渐变暗端 17.80:1 */
       --pc-ink: #33095c; /* 强调文字，白底 15.74:1 */
       --pg: #fcfafe;
       --gold: #8a6c3c;
@@ -23,9 +23,9 @@
       --white: #FFFFFF;
       --ink: #1b0450;
       --gray1: #f2eafd;
-      --gray2: #7566a8;  /* 参考站 --color-ink-soft，白底 4.97:1 */
-      --gray3: #57478b;  /* 参考站 --color-ink-muted，白底 7.84:1 */
-      --gray4: #3c2775;  /* 参考站 --color-ink-body，白底 12.07:1 */
+      --gray2: #7566a8;  /* 白底 4.97:1 */
+      --gray3: #57478b;  /* 白底 7.84:1 */
+      --gray4: #3c2775;  /* 白底 12.07:1 */
       --radius-sm: 10px;
       --radius-md: 14px;
       --radius-lg: 20px;
@@ -551,7 +551,7 @@
       .page { padding: 1rem; }
     }
 
-    /* ══════════════ 参考站 的强调方式 ══════════════
+    /* ══════════════ 强调方式 ══════════════
        金 #8a6c3c 只在白底用（4.89:1）：主推模块的边与角标。深紫块上一律不用金（3.22:1）。 */
     .module-card.lead { border-color: var(--gold); }
   </style>
