@@ -141,11 +141,16 @@
     color: var(--ink-soft); text-transform: uppercase; margin-bottom: 4px;
   }
   .step-title { font-size: 1.15rem; font-weight: 800; color: var(--ink); max-width: 220px; }
-  .auto-note {
-    display: inline-flex; align-items: center; gap: 6px; font-size: 0.82rem; font-weight: 700;
-    color: var(--ink-soft); background: var(--owner-tint); border-radius: 999px; padding: 7px 12px 7px 10px; max-width: 230px;
+  .side-card {
+    max-width: 236px; border-radius: 14px; padding: 13px 15px;
+    background: #fff; border: 1.5px solid var(--line); box-shadow: var(--shadow-sm);
   }
-  .auto-note svg { flex-shrink: 0; }
+  .side-card.auto { background: var(--owner-tint); border-color: color-mix(in srgb, var(--owner) 35%, transparent); }
+  .side-head { display: flex; align-items: center; gap: 7px; font-size: 0.82rem; font-weight: 800; color: var(--ink); }
+  .side-head svg { flex-shrink: 0; }
+  .side-card.auto .side-head { color: var(--owner); }
+  .side-card.customer .side-head { color: var(--customer); }
+  .side-desc { font-size: 0.8rem; color: var(--ink-soft); line-height: 1.55; margin-top: 6px; }
 
   .stage-center { display: flex; flex-direction: column; align-items: center; gap: 14px; }
   .role-pill {
@@ -166,7 +171,7 @@
   .phone-halo.owner::before { background: var(--owner); }
 
   .phone-frame {
-    position: relative; z-index: 1; width: 300px; aspect-ratio: 9 / 19.3;
+    position: relative; z-index: 1; width: 262px; aspect-ratio: 9 / 17.2;
     background: #14161a; border-radius: 38px; padding: 9px;
     box-shadow: 0 24px 60px -22px rgba(20,10,15,.4);
     border: 1.5px solid transparent; transition: border-color .2s;
@@ -185,7 +190,7 @@
     height: 30px; flex-shrink: 0; display: flex; align-items: center; justify-content: space-between;
     padding: 0 18px; font-size: 11px; font-weight: 700; color: #111;
   }
-  .phone-body { flex: 1; padding: 14px 16px 18px; overflow: hidden; display: flex; flex-direction: column; }
+  .phone-body { flex: 1; padding: 14px 16px 18px; overflow: hidden; display: flex; flex-direction: column; justify-content: center; }
 
   .screen-fade { animation: screenFade .28s ease; }
   @keyframes screenFade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
@@ -308,10 +313,7 @@
       </div>
 
       <div class="stage-side right">
-        <div class="auto-note hidden" id="autoNote">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-          <span>这一步系统自动做，您不用管</span>
-        </div>
+        <div class="side-card" id="sideCard"></div>
       </div>
     </div>
   </section>
@@ -401,6 +403,63 @@
           screen: { kind: 'balance', name: '新客人 · 收到的礼品卡', amount: '$50' } },
         { title: '消费后余额自动扣减，新客人成了熟客候选人', viewer: 'owner', auto: false,
           screen: { kind: 'deduct', label: '礼品卡余额', before: '$50', after: '$15' } }
+      ]
+    },
+    {
+      id: 'waitlist',
+      label: '满档的时段也别放客人走',
+      subtitle: '周末约满了，想来的客人问一句就走了，再也没回来',
+      punchline: '同一个位置，有人取消就自动卖第二次——您一个电话都不用打。',
+      steps: [
+        { title: '客人想约周六 12:00，已经满了', viewer: 'customer', auto: false,
+          note: '关键在这：满档不是句号。以前客人看到"约满"就走了，现在她可以排队。',
+          screen: { kind: 'booking', service: '光疗甲', date: '周六 · 已约满', time: '12:00' } },
+        { title: '她点"加入候补"，排在第 2 位', viewer: 'customer', auto: false,
+          screen: { kind: 'confirm', title: '周六 12:00 已约满', sub: '光疗甲 · 当前候补 1 人', options: [ '加入候补名单', '换个时段' ] } },
+        { title: '有人改期，12:00 空出来', viewer: 'owner', auto: true,
+          note: '空出来的一刻系统就知道了，不用您盯着本子。',
+          screen: { kind: 'auto-list', title: '候补名单', count: '2', unit: '位在等这个时段' } },
+        { title: '候补客人立刻收到短信，谁先点谁拿到', viewer: 'customer', auto: true,
+          screen: { kind: 'sms', body: '您候补的 周六12:00 空出来了，点这里 30 分钟内确认即可占位' } },
+        { title: '她确认，您的手机收到新预约', viewer: 'owner', auto: false,
+          note: '这一单本来是要丢掉的。',
+          screen: { kind: 'notify', title: '候补转成预约', line: '王小姐 · 光疗甲 · 周六12:00', amount: '+$45' } }
+      ]
+    },
+    {
+      id: 'deposit',
+      label: '放鸽子的人自己会掂量一下',
+      subtitle: '排了两小时的位置，人没来，那个下午就白空了',
+      punchline: '收了定金之后，放鸽子的比例从 9% 降到 2%——空掉的位置就是纯亏。',
+      steps: [
+        { title: '客人预约时，系统要一笔小定金', viewer: 'customer', auto: false,
+          note: '不是多收钱：$10 到店直接抵扣消费，提前 24 小时改期还能全额退。',
+          screen: { kind: 'offer', options: [ { name: '延长甲 · 90分钟', price: '定金 $10' } ] } },
+        { title: '她付了定金，位置才真正锁住', viewer: 'customer', auto: false,
+          screen: { kind: 'confirm', title: '周日 14:00 · 延长甲', sub: '定金 $10 · 到店抵扣，24 小时前可全退', options: [ '付定金锁定位置', '再想想' ] } },
+        { title: '您的手机收到：定金已到账', viewer: 'owner', auto: false,
+          screen: { kind: 'notify', title: '定金到账', line: '陈小姐 · 延长甲 · 周日14:00', amount: '+$10' } },
+        { title: '她到店，这 $10 直接从消费里扣掉', viewer: 'owner', auto: false,
+          note: '客人没有多花一分钱，您少空一个下午。',
+          screen: { kind: 'deduct', label: '陈小姐 · 本次消费 $68', before: '$68', after: '$58' } }
+      ]
+    },
+    {
+      id: 'rebook',
+      label: '到了该补甲的日子，系统替您开口',
+      subtitle: '三四周不来就淡了，可您总不好意思一个个催',
+      punchline: '不是群发广告，是掐着她自己的周期说话——所以她不烦，还会回来。',
+      steps: [
+        { title: '她上次做甲是 3 周前', viewer: 'owner', auto: true,
+          note: '每个客人的周期不一样，系统按她自己的记录算。',
+          screen: { kind: 'auto-list', title: '本周该回头的客人', count: '9', unit: '位到补甲周期' } },
+        { title: '到点了，系统自动发一条提醒', viewer: 'customer', auto: true,
+          screen: { kind: 'sms', body: '林小姐，您上次的光疗甲做了 21 天了，这周六下午还有位置，点这里直接约' } },
+        { title: '她点进去，上次做的款式还在', viewer: 'customer', auto: false,
+          note: '不用重新描述"我上次做的那个颜色"——档案里记着。',
+          screen: { kind: 'booking', service: '光疗甲 · 上次同款', date: '本周六', time: '15:30' } },
+        { title: '您什么都没做，多了一单', viewer: 'owner', auto: false,
+          screen: { kind: 'notify', title: '新预约', line: '林小姐 · 光疗甲 · 周六15:30', amount: '+$45' } }
       ]
     }
   ];
@@ -496,9 +555,10 @@
           '</div>' +
           '<div class="scr-btn">确认预约</div>';
       case 'confirm':
+        /* title/sub 可选：候补、定金这类场景的抬头跟"明天的预约"不是一回事 */
         return '' +
-          '<div class="scr-title">明天的预约</div>' +
-          '<div class="scr-card scr-muted">14:00 · 美甲</div>' +
+          '<div class="scr-title">' + (screen.title || '明天的预约') + '</div>' +
+          '<div class="scr-card scr-muted">' + (screen.sub || '14:00 · 美甲') + '</div>' +
           screen.options.map(function (t, i) {
             return '<div class="scr-btn' + (i === 0 ? '' : ' ghost') + '" style="margin-top:10px;">' + t + '</div>';
           }).join('');
@@ -523,7 +583,7 @@
   var $phoneHalo = document.getElementById('phoneHalo');
   var $phoneFrame = document.getElementById('phoneFrame');
   var $phoneBody = document.getElementById('phoneBody');
-  var $autoNote = document.getElementById('autoNote');
+  var $sideCard = document.getElementById('sideCard');
 
   function applyBrand() {
     document.documentElement.style.setProperty('--brand', BRAND.primary);
@@ -602,11 +662,21 @@
     $phoneHalo.className = 'phone-halo ' + role;
     $phoneFrame.className = 'phone-frame ' + role;
 
-    // 自动化提示
+    // 右栏说明：这一步谁在动手（原来只有 auto 步骤才有内容，整栏经常是空的）
+    var ICON_AUTO = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+    var ICON_HAND = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 11V5.5a1.5 1.5 0 013 0V11m0-1.5a1.5 1.5 0 013 0V12m0-1a1.5 1.5 0 013 0v5a5 5 0 01-5 5h-2.2a4 4 0 01-3-1.4L6 16.4a1.6 1.6 0 012.3-2.2L9 15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
     if (step.auto) {
-      $autoNote.classList.remove('hidden');
+      $sideCard.className = 'side-card auto';
+      $sideCard.innerHTML = '<div class="side-head">' + ICON_AUTO + '<span>系统自动做</span></div>' +
+        '<div class="side-desc">' + (step.note || '这一步不用您动手，系统到点自己发。') + '</div>';
     } else {
-      $autoNote.classList.add('hidden');
+      var who = step.viewer === 'customer' ? '客人自己点' : '您点一下';
+      var dflt = step.viewer === 'customer'
+        ? '客人在自己手机上完成，店里不用教她怎么用。'
+        : '您在自己手机上点一下就行，不用回柜台开电脑。';
+      $sideCard.className = 'side-card ' + step.viewer;
+      $sideCard.innerHTML = '<div class="side-head">' + ICON_HAND + '<span>' + who + '</span></div>' +
+        '<div class="side-desc">' + (step.note || dflt) + '</div>';
     }
 
     // 手机屏幕内容（带轻微过渡动画）
