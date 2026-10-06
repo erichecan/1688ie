@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 132 62" role="img" aria-label="Lumi Nail Studio">
+  <g fill="none" stroke="#69312c" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6 43C10 30 19 10 23 8c4-2-5 17-9 25L6 43c9-1 18-4 25-6"/>
+    <path d="M37 24c-2 5-7 14-5 16 3 3 13-10 15-15-3 7-5 14-2 15 3 1 7-5 9-8"/>
+    <path d="m58 26-6 15c4-7 13-18 16-16 2 1-4 11-4 15 5-8 12-16 15-14 2 2-4 11-2 13 3 2 8-4 10-7"/>
+    <path d="M92 25c-2 5-6 11-5 14 2 3 8-1 11-4M95 18l1-1"/>
+  </g>
+  <g stroke="#ff6b71" stroke-width="1.9" stroke-linecap="round"><path d="M115 10v4m0 10v4m-9-9h4m10 0h4m-15-6 3 3m6 6 3 3m0-12-3 3m-6 6-3 3"/></g>
+  <text x="35" y="55" fill="#535b70" font-family="Arial,sans-serif" font-weight="700" font-size="8.1" letter-spacing="2">NAIL STUDIO</text>
+</svg>
